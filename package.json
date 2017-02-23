@@ -1,0 +1,36 @@
+{
+  "name": "cobuy",
+  "version": "0.0.0",
+  "description": "Helping you buy good food at good prices, together.",
+  "main": "index.js",
+  "scripts": {
+    "start": "catstack server",
+    "dev": "catstack dev server",
+    "test": "catstack test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enspiral-root-systems/cobuy.git"
+  },
+  "keywords": [
+    "cooperative",
+    "food",
+    "coop",
+    "co-op",
+    "bulk",
+    "purchase",
+    "consumer",
+    "supplier",
+    "buying",
+    "group"
+  ],
+  "author": "Mikey <michael.williams@enspiral.com> (http://dinosaur.os)",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/enspiral-root-systems/cobuy/issues"
+  },
+  "homepage": "https://github.com/enspiral-root-systems/cobuy#readme",
+  "dependencies": {
+    "catstack": "^2.0.0-pre.4"
+  }
+}
