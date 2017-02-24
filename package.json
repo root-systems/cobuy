@@ -31,6 +31,6 @@
   },
   "homepage": "https://github.com/enspiral-root-systems/cobuy#readme",
   "dependencies": {
-    "catstack": "^2.0.0-pre.4"
+    "catstack": "^2.0.0-pre.7"
   }
 }

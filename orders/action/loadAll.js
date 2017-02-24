@@ -1,11 +1,11 @@
 module.exports = {
   needs: {
-    'orders.effects.fetchAll': 'first'
+    'orders.effect.fetchAll': 'first'
   },
   create: (api) => ({
     update: (model) => ({
       model,
-      effect: api.orders.effects.fetchAll()
+      effect: api.orders.effect.fetchAll()
     })
   })
 }
