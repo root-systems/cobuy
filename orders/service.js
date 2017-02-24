@@ -4,18 +4,6 @@ const { pull } = require('catstack')
 
 const data = {
   1: {
-    name: 'avocado'
-  },
-  2: {
-    name: 'apple'
-  },
-  3: {
-    name: 'plum'
-  }
-}
-/*
-const data = {
-  1: {
     currency: 'NZD',
     supplys: [{
       name: 'avocado',
@@ -59,7 +47,6 @@ const data = {
     }]
   }
 }
-*/
 
 module.exports = {
   manifest: {

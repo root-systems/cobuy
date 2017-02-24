@@ -11,25 +11,60 @@ module.exports = {
     }
   },
   create: (api) => {
-    /*
+
+    function renderQuantity (qty) {
+      return api.html.create`
+        <span>
+          ${qty.value}
+          ${qty.unit}
+        </span>
+      `
+    }
+
+    function renderCostStep (costStep) {
+      return api.html.create`
+        <li>
+          \$
+          ${costStep.pricePerBatch}
+          ${'@ >'}
+          ${costStep.minBatches} batches
+        </li>
+      `
+    }
+
+    const mapCostSteps = map(renderCostStep)
+
+    function renderCost (cost) {
+      return api.html.create`
+        <ul>
+          ${mapCostSteps(cost)}
+        </ul>
+      `
+    }
+
+    function renderSupply (supply) {
+      return api.html.create`
+        <li>
+          <h2>${supply.name}</h2>
+          <div>cost: ${renderCost(supply.costFunction)}</div>
+          <div>batch size: ${renderQuantity(supply.batchSize)}</div>
+        </li>
+      `
+    }
+
+    const mapSupplys = map(renderSupply)
+
+    const mapOrders = map(order => api.html.create`
+      <li>
+        <a href=${`/order/${order.id}`}>
+          <h1>${order.id}</h1>
+        </a>
+        <section>
           supplies:
           <ul>
             ${mapSupplys(order.supplys)}
           </ul>
-
-    const mapSupplys = map(supply = api.html.create`
-      <li>
-        <a href=${`/order/${order.id}`}>
-          ${order.name}
-        </a>
-      </li>
-    `)
-    */
-    const mapOrders = map(order => api.html.create`
-      <li>
-        <a href=${`/order/${order.id}`}>
-          ${order.name}
-        </a>
+        </section>
       </li>
     `)
 
