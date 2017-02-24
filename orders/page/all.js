@@ -76,6 +76,15 @@ module.exports = {
       `
     }
 
+    function render (props) {
+      return api.html.create`
+        <div>
+          <div>${props.me.name}</div>
+          ${renderOrders(props.orders)}
+        </div>
+      `
+    }
+
     function handleLoad (el) {
       api.inu.dispatch(api.orders.action.loadAll())
     }
@@ -84,9 +93,7 @@ module.exports = {
       route: '/orders',
       layout: api.app.layout,
       get: api.orders.get.allProps,
-      view: (props, dispatch) => {
-        return renderOrders(props.orders)
-      }
+      view: render
     }
   }
 }
