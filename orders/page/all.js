@@ -11,7 +11,6 @@ module.exports = {
     }
   },
   create: (api) => {
-
     function renderQuantity (qty) {
       return api.html.create`
         <span>
@@ -24,8 +23,8 @@ module.exports = {
     function renderCostStep (costStep) {
       return api.html.create`
         <li>
-          \$
           ${costStep.pricePerBatch}
+          ${costStep.currency}
           ${'@ >'}
           ${costStep.minBatches} batches
         </li>
@@ -62,7 +61,7 @@ module.exports = {
         <section>
           supplies:
           <ul>
-            ${mapSupplys(order.supplys)}
+            ${mapSupplys(order.supplierCommitments)}
           </ul>
         </section>
       </li>
@@ -77,10 +76,13 @@ module.exports = {
     }
 
     function render (props) {
+      console.log('props', props)
+      const { me, orders } = props
+
       return api.html.create`
         <div>
-          <div>${props.me.name}</div>
-          ${renderOrders(props.orders)}
+          <div>${me.name}</div>
+          ${renderOrders(orders)}
         </div>
       `
     }

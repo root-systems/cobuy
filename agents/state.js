@@ -2,7 +2,7 @@ module.exports = {
   create: () => ({
     init: () => ({
       model: {
-        1: {
+        agent1: {
           name: 'Alice'
         }
       }
