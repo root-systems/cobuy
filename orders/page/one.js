@@ -4,14 +4,17 @@ module.exports = {
   needs: {
     'html.create': 'first',
     'app.layout': 'first',
-    'orders.get.oneProps': 'first'
+    orders: {
+      'get.oneProps': 'first',
+      'element.orderPage': 'first'
+    }
   },
   create: (api) => ({
-    route: '/order/:orderId',
+    route: '/orders/:orderId',
     layout: api.app.layout,
     get: api.orders.get.oneProps,
-    view: (props) => api.html.create`
-      <h1>${props.order.name}!</h1>  
-    `
+    view: (props) => {
+      return api.orders.element.orderPage(props.order)
+    }
   })
 }

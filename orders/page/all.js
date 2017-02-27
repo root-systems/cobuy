@@ -7,65 +7,12 @@ module.exports = {
     'app.layout': 'first',
     orders: {
       'action.loadAll': 'first',
-      'get.allProps': 'first'
+      'get.allProps': 'first',
+      'element.orderTab': 'first'
     }
   },
   create: (api) => {
-    function renderQuantity (qty) {
-      return api.html.create`
-        <span>
-          ${qty.value}
-          ${qty.unit}
-        </span>
-      `
-    }
-
-    function renderCostStep (costStep) {
-      return api.html.create`
-        <li>
-          ${costStep.pricePerBatch}
-          ${costStep.currency}
-          ${'@ >'}
-          ${costStep.minBatches} batches
-        </li>
-      `
-    }
-
-    const mapCostSteps = map(renderCostStep)
-
-    function renderCost (cost) {
-      return api.html.create`
-        <ul>
-          ${mapCostSteps(cost)}
-        </ul>
-      `
-    }
-
-    function renderSupply (supply) {
-      return api.html.create`
-        <li>
-          <h2>${supply.name}</h2>
-          <div>cost: ${renderCost(supply.costFunction)}</div>
-          <div>batch size: ${renderQuantity(supply.batchSize)}</div>
-        </li>
-      `
-    }
-
-    const mapSupplys = map(renderSupply)
-
-    const mapOrders = map(order => api.html.create`
-      <li>
-        <a href=${`/order/${order.id}`}>
-          <h1>${order.id}</h1>
-        </a>
-        <section>
-          supplies:
-          <ul>
-            ${mapSupplys(order.supplierCommitments)}
-          </ul>
-        </section>
-      </li>
-    `)
+    const mapOrders = map(api.orders.element.orderTab)
 
     function renderOrders (orders) {
       return api.html.create`
@@ -76,7 +23,6 @@ module.exports = {
     }
 
     function render (props) {
-      console.log('props', props)
       const { me, orders } = props
 
       return api.html.create`
