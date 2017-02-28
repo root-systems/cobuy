@@ -14,6 +14,10 @@ module.exports = {
     layout: api.app.layout,
     get: api.orders.get.oneProps,
     view: (props) => {
+      // TODO: fix store router so router.params state is
+      // populated before the page is rendered.
+      // right now it happens after router.listen action
+      if (!props.order) return api.html.create`<div>loading</div>`
       return api.orders.element.orderPage(props.order)
     }
   })

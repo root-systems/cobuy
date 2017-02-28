@@ -2,7 +2,8 @@ module.exports = {
   create: () => ({
     init: () => ({
       model: {
-        agent1: {
+        consumerIntent1: {
+          agentId: 'agent1',
           orderId: 'order1',
           supplierCommitmentId: 'supplierCommitment1',
           minValue: 1,
