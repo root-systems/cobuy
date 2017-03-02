@@ -1,9 +1,11 @@
 const assign = require('lodash/fp/assign')
 const Cid = require('cuid')
-const { pull } = require('catstack')
 
 module.exports = {
-  needs: ['consumerIntents.action.set', 'first'],
+  needs: {
+    'pull.values': 'first',
+    'consumerIntents.action.set': 'first'
+  },
   create: (api) => ({
     run: (model, consumerIntent) => {
       if (!consumerIntent.id) {
@@ -12,7 +14,7 @@ module.exports = {
         })
       }
 
-      return pull.values([
+      return api.pull.values([
         api.consumerIntents.action.set(consumerIntent)
       ])
     }

@@ -1,14 +1,18 @@
-const { pull } = require('catstack')
-
 module.exports = {
   needs: {
-    'orders.service.all': 'first',
-    'orders.action.set': 'first',
+    pull: {
+      pipe: 'first',
+      map: 'first'
+    },
+    orders: {
+      'service.all': 'first',
+      'action.set': 'first'
+    }
   },
   create: (api) => ({
-    run: (model, order) => pull(
+    run: (model, order) => api.pull.pipe(
       api.orders.service.all(),
-      pull.map(api.orders.action.set)
+      api.pull.map(api.orders.action.set)
     )
   })
 }
