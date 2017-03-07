@@ -73,12 +73,12 @@ module.exports = {
               ${label}
             </label>
             <span
-              class=${styles.increment}
+              class=${styles.decrement}
               events=${{
-                click: handleChange(() => value + 1)
+                click: handleChange(() => value - 1)
               }}
             >
-              +
+              -
             </span>
             <input
               class=${styles.input}
@@ -93,12 +93,12 @@ module.exports = {
               }}
             />
             <span
-              class=${styles.decrement}
+              class=${styles.increment}
               events=${{
-                click: handleChange(() => value - 1)
+                click: handleChange(() => value + 1)
               }}
             >
-              -
+              +
             </span>
           </div>
         </fieldset>

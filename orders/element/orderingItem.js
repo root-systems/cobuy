@@ -55,17 +55,20 @@ module.exports = {
       })),
       nextMin: props => ({
         color: 'white',
-        backgroundColor: 'blue',
+        // traffic light green
+        backgroundColor: '#81C784',
         flexGrow: props.nextMin
       }),
       nextExtra: props => ({
         color: 'white',
-        backgroundColor: 'green',
+        // traffic light yellow
+        backgroundColor: '#FFB74D',
         flexGrow: props.nextExtra
       }),
       nextLeft: props => ({
         color: 'white',
-        backgroundColor: 'red',
+        // traffic light red
+        backgroundColor: '#E57373',
         flexGrow: props.nextLeft
       }),
       completed: {
