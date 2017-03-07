@@ -1,4 +1,5 @@
 const { get } = require('libnested')
+const assign = require('lodash/fp/assign')
 
 module.exports = {
   needs: {
@@ -18,7 +19,9 @@ module.exports = {
       // populated before the page is rendered.
       // right now it happens after router.listen action
       if (!props.order) return api.html.hx`<div>loading</div>`
-      return api.orders.element.orderPage(props.order)
+
+      const order = assign(props.order, { orderItems: props.orderItems })
+      return api.orders.element.orderPage(order)
     }
   })
 }

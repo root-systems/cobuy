@@ -35,45 +35,8 @@ module.exports = {
         const allConsumerIntents = consumerIntentsByOrder[orderId]
         const myConsumerIntents = filterToMe(consumerIntentsByOrder[orderId])
 
-        const orderItems = supplierCommitments.map(supplierCommitment => {
-          const orderItemAllConsumerIntents = filterToSupplierCommitment(supplierCommitment.id)(allConsumerIntents)
-          const orderItemMyConsumerIntent = filterToSupplierCommitment(supplierCommitment.id)(myConsumerIntents)[0] || {
-            agentId: whoami,
-            supplierCommitmentId: supplierCommitment.id,
-            orderId,
-            minValue: 0,
-            maxValue: 0
-          }
-          const { batchSize } = supplierCommitment
-
-          const totalMinValue = sumMinValue(orderItemAllConsumerIntents)
-          const totalMaxValue = sumMaxValue(orderItemAllConsumerIntents)
-          const totalMinBatches = Math.floor(totalMinValue / batchSize.value)
-          const totalMinRemainder = totalMinValue % batchSize.value
-          const totalExtraValue = totalMaxValue - totalMinValue
-          const didFillExtra = (totalMinRemainder + totalExtraValue) >= batchSize.value
-          const totalBatches = totalMinBatches + (didFillExtra ? 1 : 0)
-
-          const nextMin = didFillExtra ? 0 : totalMinRemainder
-          const nextExtra = didFillExtra ? 0 : totalExtraValue
-          const nextLeft = batchSize.value - nextExtra - nextMin
-
-          return {
-            supplierCommitment,
-            allConsumerIntents: orderItemAllConsumerIntents,
-            myConsumerIntent: orderItemMyConsumerIntent,
-            totalMinValue,
-            totalMaxValue,
-            totalBatches,
-            nextMin,
-            nextExtra,
-            nextLeft
-          }
-        })
-
         return assign(order, {
           id: orderId,
-          orderItems,
           supplierCommitments,
           allConsumerIntents,
           myConsumerIntents
@@ -82,6 +45,3 @@ module.exports = {
     }
   ]
 }
-
-const sumMinValue = sumBy('minValue')
-const sumMaxValue = sumBy('maxValue')
