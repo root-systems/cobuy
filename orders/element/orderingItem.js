@@ -1,36 +1,27 @@
 const map = require('lodash/fp/map')
 const assign = require('lodash/fp/assign')
-const assignAll = require('lodash/fp/assignAll')
-const StyleSheet = require('stilr')
-
-const row = {
-  display: 'flex',
-  flexDirection: 'row'
-}
-const col = {
-  display: 'flex',
-  flexDirection: 'column'
-}
-const field = {
-  border: 'none',
-  padding: '0rem'
-}
-const screenReaderOnly = {
-  clip: 'rect(1px, 1px, 1px, 1px)',
-  position: 'absolute',
-  height: '1px',
-  width: '1px',
-  overflow: 'hidden'
-}
-const bar = {
-}
+const mapValues = require('lodash/fp/mapValues')
+const { combineRules } = require('fela')
+const { StyleSheet } = require('fela-tools')
 
 module.exports = {
   needs: {
+    css: {
+      renderRule: 'first'
+      // combineRules: 'first'
+    },
     'inu.dispatch': 'first',
-    'html.create': 'first',
+    'html.hx': 'first',
+    'css.renderRule': 'first',
     app: {
       styles: 'first',
+      css: {
+        row: 'first',
+        column: 'first',
+        fieldset: 'first',
+        ul: 'first',
+        screenReaderOnly: 'first'
+      },
       'element.numberInput': 'first'
     },
     'consumerIntents.action.save': 'first',
@@ -40,40 +31,45 @@ module.exports = {
     }
   },
   create: (api) => {
-    const { colors, fonts, elements, mixins } = api.app.styles()
-    const styles = StyleSheet.create({
-      container: assignAll([mixins.column]),
-      header: assignAll([mixins.row, {
-        alignItems: 'center'
-      }]),
+    const { colors, fonts } = api.app.styles()
+
+    const styleSheet = StyleSheet.create({
+      container: combineRules(api.app.css.column, () => ({
+        paddingBottom: '0.5rem',
+        borderBottom: `1px solid ${colors.greyscale[3]}`
+      })),
+      header: combineRules(api.app.css.row, () => ({
+        alignItems: 'center',
+        height: '6rem'
+      })),
       name: {
         flexGrow: '1'
       },
-      minField: assignAll([elements.fieldset]),
-      minLabel: mixins.screenReaderOnly,
-      minInput: {
-
+      separator: {
+        height: '60%',
+        borderLeft: `2px dotted ${colors.greyscale[3]}`
       },
-      maxField: assignAll([elements.fieldset]),
-      maxLabel: mixins.screenReaderOnly,
-      maxInput: {
-
-      },
-      progress: assignAll([mixins.row]),
-      next: assignAll([mixins.row, {
-        flexGrow: '1'
-      }]),
-      nextMin: {
-        backgroundColor: 'blue'
-      },
-      nextExtra: {
-        backgroundColor: 'green'
-      },
-      nextLeft: {
-        backgroundColor: 'red'
-      },
+      progress: api.app.css.row,
+      next: combineRules(api.app.css.row, () => ({
+        flexGrow: 1
+      })),
+      nextMin: props => ({
+        color: 'white',
+        backgroundColor: 'blue',
+        flexGrow: props.nextMin
+      }),
+      nextExtra: props => ({
+        color: 'white',
+        backgroundColor: 'green',
+        flexGrow: props.nextExtra
+      }),
+      nextLeft: props => ({
+        color: 'white',
+        backgroundColor: 'red',
+        flexGrow: props.nextLeft
+      }),
       completed: {
-        
+        marginLeft: '1rem'
       }
     })
 
@@ -87,7 +83,14 @@ module.exports = {
         <div>cost: ${api.orders.element.cost(supplierCommitment.costFunction)}</div>
         <div>batch size: ${api.orders.element.quantity(supplierCommitment.batchSize)}</div>
       */
-      return api.html.create`
+
+      const renderStyles = mapValues(rule => {
+        return api.css.renderRule(rule, orderItem)
+      })
+
+      const styles = renderStyles(styleSheet)
+
+      return api.html.hx`
         <li class=${styles.container}>
           <header class=${styles.header}>
             <h2 class=${styles.name}>${supplierCommitment.name}</h2>
@@ -98,6 +101,7 @@ module.exports = {
               value: myConsumerIntent.minValue,
               onChange: handleConsumerIntentChange(myConsumerIntent, 'minValue')
             })}
+            <div class=${styles.separator}></div>
             ${api.app.element.numberInput({
               label: 'max',
               min: myConsumerIntent.minValue,
@@ -107,20 +111,19 @@ module.exports = {
           </header>
           <section class=${styles.progress}>
             <div class=${styles.next}>
-              <div
-                class=${styles.nextMin}
-                style='flex-grow: ${orderItem.nextMin}'
-              >${orderItem.nextMin}</div>
-              <div
-                class=${styles.nextExtra}
-                style='flex-grow: ${orderItem.nextExtra}'
-              >${orderItem.nextExtra}</div>
-              <div
-                class=${styles.nextLeft}
-                style='flex-grow: ${orderItem.nextLeft}'
-              >${orderItem.nextLeft}</div>
+              <div class=${styles.nextMin}>
+                ${orderItem.nextMin}
+              </div>
+              <div class=${styles.nextExtra}>
+                ${orderItem.nextExtra}
+              </div>
+              <div class=${styles.nextLeft}>
+                ${orderItem.nextLeft}
+              </div>
             </div>
-            <div class=${styles.completed}>${orderItem.totalBatches}</div>
+            <div class=${styles.completed}>
+              ${orderItem.totalBatches} total batches
+            </div>
           </section>
         </li>
       `

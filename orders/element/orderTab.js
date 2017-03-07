@@ -2,9 +2,9 @@ const formatDate = require('date-fns/format')
 
 module.exports = {
   needs: {
-    'html.create': 'first'
+    'html.hx': 'first'
   },
-  create: (api) => (order) => api.html.create`
+  create: (api) => (order) => api.html.hx`
     <a href='/orders/${order.id}'>
       <div>
         <h2>${order.name}</h2>

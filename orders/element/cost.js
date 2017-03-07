@@ -2,7 +2,7 @@ const map = require('lodash/fp/map')
 
 module.exports = {
   needs: {
-    'html.create': 'first'
+    'html.hx': 'first'
   },
   create: (api) => {
     const mapCostSteps = map(renderCostStep)
@@ -10,7 +10,7 @@ module.exports = {
     return renderCost
 
     function renderCost (cost) {
-      return api.html.create`
+      return api.html.hx`
         <ul>
           ${mapCostSteps(cost)}
         </ul>
@@ -18,7 +18,7 @@ module.exports = {
     }
 
     function renderCostStep (costStep) {
-      return api.html.create`
+      return api.html.hx`
         <li>
           ${costStep.pricePerBatch}
           ${costStep.currency}

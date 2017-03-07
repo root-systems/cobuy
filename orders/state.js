@@ -7,7 +7,7 @@ module.exports = {
           supplierCommitmentIds: [
             'supplierCommitment1',
             'supplierCommitment2',
-            'supplierCommitment3',
+            'supplierCommitment3'
           ],
           date: Date.now()
         }

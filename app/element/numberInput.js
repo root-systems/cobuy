@@ -1,37 +1,61 @@
-const StyleSheet = require('stilr')
+const { StyleSheet } = require('fela-tools')
+const mapValues = require('lodash/fp/mapValues')
+const { combineRules } = require('fela')
 
 module.exports = {
   needs: {
-    'html.create': 'first',
-    'app.styles': 'first'
+    'html.hx': 'first',
+    'css.renderRule': 'first',
+    app: {
+      styles: 'first',
+      css: {
+        row: 'first',
+        fieldset: 'first',
+        screenReaderOnly: 'first'
+      }
+    }
   },
   create: (api) => {
-    // OH FUCK api.app.styles loads after
-    // this module. we need some way to
-    // mark that module as 'important'.
-
-    var styles
+    var styleSheet
+    // this needs to happen _after_
+    // app.styles module is created.
     process.nextTick(() => {
-      const { elements, mixins } = api.app.styles()
-      styles = StyleSheet.create({
-        fieldset: elements.fieldset,
-        label: mixins.screenReaderOnly,
+      const { colors, fonts } = api.app.styles()
+      styleSheet = StyleSheet.create({
+        fieldset: api.app.css.fieldset,
+        row: api.app.css.row,
+        label: api.app.css.screenReaderOnly,
         increment: {
-
+          padding: '0.25rem',
+          cursor: 'default',
+          fontSize: '2rem'
         },
         input: {
-
+          width: '3rem',
+          padding: '0.25rem',
+          textAlign: 'center',
+          fontSize: '2rem',
+          // order of border css might be a problem?
+          // http://fela.js.org/docs/introduction/Drawbacks.html
+          // (2. Shorthand & Longhand Properties)
+          border: 'none',
+          borderBottom: `1px solid ${colors.primary}`
         },
         decrement: {
-
+          padding: '0.25rem',
+          cursor: 'default',
+          fontSize: '2rem'
         }
       })
     })
 
-    return render
-      
-    function render (options) {
+    const renderStyles = mapValues(rule => {
+      return api.css.renderRule(rule, {})
+    })
 
+    return render
+
+    function render (options) {
       const {
         label,
         value,
@@ -40,33 +64,43 @@ module.exports = {
         onChange
       } = options
 
-      return api.html.create`
+      const styles = renderStyles(styleSheet)
+
+      return api.html.hx`
         <fieldset class=${styles.fieldset}>
-          <label class=${styles.label}>
-            ${label}
-          </label>
-          <button
-            class=${styles.increment}
-            onclick=${handleChange(() => value + 1)}
-          >
-            +
-          </button>
-          <input
-            class=${styles.input}
-            type='number'
-            min=${min}
-            max=${max}
-            value=${value}
-            onchange=${handleChange((ev) => {
-              return ev.target.value
-            })}
-          />
-          <button
-            class=${styles.decrement}
-            onclick=${handleChange(() => value - 1)}
-          >
-            -
-          </button>
+          <div class=${styles.row}>
+            <label class=${styles.label}>
+              ${label}
+            </label>
+            <span
+              class=${styles.increment}
+              events=${{
+                click: handleChange(() => value + 1)
+              }}
+            >
+              +
+            </span>
+            <input
+              class=${styles.input}
+              type='number'
+              min=${min}
+              max=${max}
+              value=${value}
+              events=${{
+                click: handleChange((ev) => {
+                  return ev.target.value
+                })
+              }}
+            />
+            <span
+              class=${styles.decrement}
+              events=${{
+                click: handleChange(() => value - 1)
+              }}
+            >
+              -
+            </span>
+          </div>
         </fieldset>
       `
 
@@ -74,8 +108,9 @@ module.exports = {
         return (ev) => {
           const next = Number(handler())
           console.log(next, min, max)
-          if (next >= min && next <= max)
+          if (next >= min && next <= max) {
             onChange(next)
+          }
         }
       }
     }

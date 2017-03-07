@@ -1,12 +1,12 @@
 module.exports = {
   needs: {
-    'html.create': 'first'
+    'html.hx': 'first'
   },
   create: (api) => {
     return renderQuantity
 
     function renderQuantity (qty) {
-      return api.html.create`
+      return api.html.hx`
         <span>
           ${qty.value}
           ${qty.unit}

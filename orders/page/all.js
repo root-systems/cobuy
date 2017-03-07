@@ -1,8 +1,9 @@
 const map = require('lodash/fp/map')
+const onLoad = require('on-load')
 
 module.exports = {
   needs: {
-    'html.create': 'first',
+    'html.hx': 'first',
     'inu.dispatch': 'first',
     'app.layout': 'first',
     orders: {
@@ -15,17 +16,21 @@ module.exports = {
     const mapOrders = map(api.orders.element.orderTab)
 
     function renderOrders (orders) {
-      return api.html.create`
-        <ul onload=${handleLoad}>
+      var el = api.html.hx`
+        <ul>
           ${mapOrders(orders)}
         </ul>
       `
+
+      onLoad(el, handleLoad)
+
+      return el
     }
 
     function render (props) {
       const { me, orders } = props
 
-      return api.html.create`
+      return api.html.hx`
         <div>
           <div>${me.name}</div>
           ${renderOrders(orders)}
