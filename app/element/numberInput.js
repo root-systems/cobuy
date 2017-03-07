@@ -106,8 +106,7 @@ module.exports = {
 
       function handleChange (handler) {
         return (ev) => {
-          const next = Number(handler())
-          console.log(next, min, max)
+          const next = Number(handler(ev))
           if (next >= min && next <= max) {
             onChange(next)
           }
