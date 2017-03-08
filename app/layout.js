@@ -13,12 +13,20 @@ module.exports = {
     normalize.type = 'text/css'
     document.head.appendChild(normalize)
 
+    // TODO add way to add this to `catstack`
+    var roboto = document.createElement('link')
+    roboto.href = 'https://fonts.googleapis.com/css?family=Roboto:300'
+    roboto.rel = 'stylesheet'
+    roboto.type = 'text/css'
+    document.head.appendChild(roboto)
+
     // needs to happen after
     // css.renderStatic is loaded
     process.nextTick(() => {
-      const { colors } = api.app.styles()
+      const { colors, fonts } = api.app.styles()
       api.css.renderStatic({
-        color: colors.greyscale[9]
+        color: colors.greyscale[9],
+        fontFamily: fonts.sans
       }, 'html,body,input')
     })
 

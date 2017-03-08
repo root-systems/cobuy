@@ -17,7 +17,7 @@ module.exports = {
       ]
     },
     fonts: {
-      sans: 'Helvetica, Arial, sans-serif'
+      sans: '"Roboto", Helvetica, Arial, sans-serif'
     }
   })
 }

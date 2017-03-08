@@ -1,5 +1,6 @@
 const map = require('lodash/fp/map')
 const assign = require('lodash/fp/assign')
+const assignAll = require('lodash/fp/assignAll')
 const sumBy = require('lodash/fp/sumBy')
 const mapValues = require('lodash/fp/mapValues')
 const mapValuesWithKey = mapValues.convert({ cap: false })
@@ -58,18 +59,24 @@ module.exports = {
         const nextExtra = didFillExtra ? 0 : totalExtraValue
         const nextLeft = batchSize.value - nextExtra - nextMin
 
-        return assign(rawOrderingItem, {
-          id: orderingItemId,
-          supplierCommitment,
-          allConsumerIntents,
-          myConsumerIntent,
-          totalMinValue,
-          totalMaxValue,
-          totalBatches,
-          nextMin,
-          nextExtra,
-          nextLeft
-        })
+        return assignAll([
+          {
+            isExpanded: false
+          },
+          rawOrderingItem,
+          {
+            id: orderingItemId,
+            supplierCommitment,
+            allConsumerIntents,
+            myConsumerIntent,
+            totalMinValue,
+            totalMaxValue,
+            totalBatches,
+            nextMin,
+            nextExtra,
+            nextLeft
+          }
+        ])
       }
     }
   ]

@@ -26,8 +26,8 @@ module.exports = {
         row: api.app.css.row,
         label: api.app.css.screenReaderOnly,
         increment: {
-          padding: '0.25rem',
-          cursor: 'default',
+          padding: '0.5rem',
+          cursor: 'pointer',
           fontSize: '2rem'
         },
         input: {
@@ -42,8 +42,8 @@ module.exports = {
           borderBottom: `1px solid ${colors.primary}`
         },
         decrement: {
-          padding: '0.25rem',
-          cursor: 'default',
+          padding: '0.5rem',
+          cursor: 'pointer',
           fontSize: '2rem'
         }
       })
@@ -110,6 +110,9 @@ module.exports = {
           if (next >= min && next <= max) {
             onChange(next)
           }
+          // stop from propagating to parent
+          // element's extend click handler
+          ev.stopPropagation()
         }
       }
     }

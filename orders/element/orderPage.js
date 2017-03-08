@@ -40,7 +40,24 @@ module.exports = {
       body: combineRules(api.app.css.column, api.app.css.ul, props => ({
         width: '80vw',
         margin: '0 auto'
-      }))
+      })),
+      done: () => ({
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        textTransform: 'capitalize',
+        textAlign: 'center',
+        cursor: 'pointer',
+        color: colors.accent,
+        border: `1px solid ${colors.greyscale[4]}`,
+        fontSize: '2rem',
+        padding: '0.5rem',
+        transition: 'background-color 1s ease',
+        ':hover': {
+          backgroundColor: colors.greyscale[2]
+        }
+      })
     })
 
     const renderStyles = mapValues(rule => {
@@ -69,6 +86,9 @@ module.exports = {
           <ul class=${styles.body}>
             ${mapOrderItems(orderItems)}
           </ul>
+          <div class=${styles.done}>
+            done!
+          </div>
         </li>
       `
     }

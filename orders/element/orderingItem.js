@@ -28,7 +28,8 @@ module.exports = {
     'orders.element': {
       cost: 'first',
       quantity: 'first'
-    }
+    },
+    'ordering.action.toggleItem': 'first'
   },
   create: (api) => {
     const { colors, fonts } = api.app.styles()
@@ -49,7 +50,9 @@ module.exports = {
         height: '60%',
         borderLeft: `2px dotted ${colors.greyscale[3]}`
       },
-      progress: api.app.css.row,
+      progress: combineRules(api.app.css.row, () => ({
+        alignItems: 'center'
+      })),
       next: combineRules(api.app.css.row, () => ({
         flexGrow: 1
       })),
@@ -57,19 +60,22 @@ module.exports = {
         color: 'white',
         // traffic light green
         backgroundColor: '#81C784',
-        flexGrow: props.nextMin
+        flexGrow: props.nextMin,
+        padding: '0.5rem'
       }),
       nextExtra: props => ({
         color: 'white',
         // traffic light yellow
         backgroundColor: '#FFB74D',
-        flexGrow: props.nextExtra
+        flexGrow: props.nextExtra,
+        padding: '0.5rem'
       }),
       nextLeft: props => ({
         color: 'white',
         // traffic light red
         backgroundColor: '#E57373',
-        flexGrow: props.nextLeft
+        flexGrow: props.nextLeft,
+        padding: '0.5rem'
       }),
       completed: {
         marginLeft: '1rem'
@@ -94,7 +100,12 @@ module.exports = {
       const styles = renderStyles(styleSheet)
 
       return api.html.hx`
-        <li class=${styles.container}>
+        <li
+          class=${styles.container}
+          events=${{
+            click: handleExtendClick
+          }}
+        >
           <header class=${styles.header}>
             <h2 class=${styles.name}>${supplierCommitment.name}</h2>
             ${api.app.element.numberInput({
@@ -112,24 +123,33 @@ module.exports = {
               onChange: handleConsumerIntentChange(myConsumerIntent, 'maxValue')
             })}
           </header>
-          <section class=${styles.progress}>
-            <div class=${styles.next}>
-              <div class=${styles.nextMin}>
-                ${orderItem.nextMin}
+          ${orderItem.isExpanded ? api.html.hx`
+            <section class=${styles.progress}>
+              <div class=${styles.next}>
+                <div class=${styles.nextMin}>
+                  ${orderItem.nextMin} minimum over last batch
+                </div>
+                <div class=${styles.nextExtra}>
+                  ${orderItem.nextExtra} extra towards next batch
+                </div>
+                <div class=${styles.nextLeft}>
+                  ${orderItem.nextLeft} left to reach next batch
+                </div>
               </div>
-              <div class=${styles.nextExtra}>
-                ${orderItem.nextExtra}
+              <div class=${styles.completed}>
+                ${orderItem.totalBatches} total batches
               </div>
-              <div class=${styles.nextLeft}>
-                ${orderItem.nextLeft}
-              </div>
-            </div>
-            <div class=${styles.completed}>
-              ${orderItem.totalBatches} total batches
-            </div>
-          </section>
+            </section>
+          ` : null}
         </li>
       `
+
+      function handleExtendClick (ev) {
+        const action = api.ordering.action.toggleItem({
+          orderItemId: orderItem.id
+        })
+        api.inu.dispatch(action)
+      }
     }
 
     function handleConsumerIntentChange (previous, name) {
