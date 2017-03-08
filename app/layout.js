@@ -2,7 +2,11 @@ module.exports = {
   needs: {
     'html.hx': 'first',
     'css.renderStatic': 'first',
-    'app.styles': 'first'
+    'app.styles': 'first',
+    nav: {
+      'get.nav': 'first',
+      'element.nav': 'first'
+    }
   },
   create: (api) => {
     // insert normalize
@@ -31,13 +35,9 @@ module.exports = {
     })
 
     return (view) => {
-      return (model) => api.html.hx`
+      return (model) => console.log(model) || api.html.hx`
         <div>
-          <nav>
-            <a href='/'>home</a>
-            <a href=${`/orders`}>orders!</a>
-            <a href='/nope'>nope</a>
-          </nav>
+          ${api.nav.element.nav(api.nav.get.nav(model))}
           ${view(model)}
         </div>
       `
