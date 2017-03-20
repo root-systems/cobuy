@@ -1,41 +1,26 @@
-const map = require('lodash/fp/map')
 const onLoad = require('on-load')
 
 module.exports = {
   needs: {
     'html.hx': 'first',
     'inu.dispatch': 'first',
-    'app.layout': 'first',
+    app: {
+      'layout': 'first',
+      'element.pageHeader': 'first'
+    },
     orders: {
       'action.loadAll': 'first',
       'get.allProps': 'first',
-      'element.orderTab': 'first'
+      'element.ordersPage': 'first'
     }
   },
   create: (api) => {
-    const mapOrders = map(api.orders.element.orderTab)
-
-    function renderOrders (orders) {
-      var el = api.html.hx`
-        <ul>
-          ${mapOrders(orders)}
-        </ul>
-      `
+    function render ({ orders }) {
+      var el = api.orders.element.ordersPage(orders)
 
       onLoad(el, handleLoad)
 
       return el
-    }
-
-    function render (props) {
-      const { me, orders } = props
-
-      return api.html.hx`
-        <div>
-          <div>${me.name}</div>
-          ${renderOrders(orders)}
-        </div>
-      `
     }
 
     function handleLoad (el) {

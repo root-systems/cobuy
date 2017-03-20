@@ -12,7 +12,8 @@ module.exports = {
         a: 'first',
         column: 'first',
         ul: 'first'
-      }
+      },
+      'element.pageHeader': 'first'
     },
     'app.styles': 'first',
     'inu.dispatch': 'first',
@@ -75,14 +76,10 @@ module.exports = {
 
       return api.html.hx`
         <article class=${styles.container}>
-          <header class=${styles.header}>
-            <a
-              class=${styles.a}
-              href=${`/orders/${id}`}
-            >
-              <h1 class=${styles.title}>${name}</h1>
-            </a>
-          </header>
+          ${api.app.element.pageHeader({
+            link: `/orders/${id}`,
+            title: name
+          })}
           <ul class=${styles.body}>
             ${mapOrderItems(orderItems)}
           </ul>

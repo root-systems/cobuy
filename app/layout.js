@@ -9,20 +9,22 @@ module.exports = {
     }
   },
   create: (api) => {
-    // insert normalize
-    // TODO add to `catstack`
-    var normalize = document.createElement('link')
-    normalize.href = 'https://necolas.github.io/normalize.css/latest/normalize.css'
-    normalize.rel = 'stylesheet'
-    normalize.type = 'text/css'
-    document.head.appendChild(normalize)
+    if (process.browser) {
+      // insert normalize
+      // TODO add to `catstack`
+      var normalize = document.createElement('link')
+      normalize.href = 'https://necolas.github.io/normalize.css/latest/normalize.css'
+      normalize.rel = 'stylesheet'
+      normalize.type = 'text/css'
+      document.head.appendChild(normalize)
 
-    // TODO add way to add this to `catstack`
-    var roboto = document.createElement('link')
-    roboto.href = 'https://fonts.googleapis.com/css?family=Roboto:300'
-    roboto.rel = 'stylesheet'
-    roboto.type = 'text/css'
-    document.head.appendChild(roboto)
+      // TODO add way to add this to `catstack`
+      var roboto = document.createElement('link')
+      roboto.href = 'https://fonts.googleapis.com/css?family=Roboto:300'
+      roboto.rel = 'stylesheet'
+      roboto.type = 'text/css'
+      document.head.appendChild(roboto)
+    }
 
     // needs to happen after
     // css.renderStatic is loaded
@@ -35,7 +37,7 @@ module.exports = {
     })
 
     return (view) => {
-      return (model) => console.log(model) || api.html.hx`
+      return (model) => api.html.hx`
         <div>
           ${api.nav.element.nav(api.nav.get.nav(model))}
           ${view(model)}
