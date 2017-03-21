@@ -1,13 +1,14 @@
 module.exports = {
   needs: {
     'html.hx': 'first',
-    'app.layout': 'first'
+    app: {
+      layout: 'first',
+      'element.home': 'first'
+    }
   },
   create: (api) => ({
     route: '/',
     layout: api.app.layout,
-    view: (model) => api.html.hx`
-      <div>home!</div>  
-    `
+    view: api.app.element.home
   })
 }
