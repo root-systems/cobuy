@@ -4,6 +4,10 @@
 
 ## developer notes
 
+### numbers
+
+all numbers should be represented as strings and manipulated with [`bigmath`](https://github.com/ahdinosaur/bigmath)
+
 ### dependencies
 
 - [`git-lfs`](https://git-lfs.github.com/)

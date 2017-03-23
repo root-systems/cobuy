@@ -12,6 +12,7 @@ module.exports = {
             'supplierCommitment2',
             'supplierCommitment3'
           ],
+          currency: 'NZD',
           startDate: subDays(new Date(), 10),
           endDate: subDays(new Date(), 5)
         },
@@ -22,6 +23,7 @@ module.exports = {
             'supplierCommitment2',
             'supplierCommitment3'
           ],
+          currency: 'NZD',
           startDate: new Date(),
           endDate: addDays(new Date(), 10)
         },
@@ -32,6 +34,7 @@ module.exports = {
             'supplierCommitment2',
             'supplierCommitment3'
           ],
+          currency: 'NZD',
           startDate: addDays(new Date(), 5),
           endDate: addDays(new Date(), 12)
         },
@@ -42,6 +45,7 @@ module.exports = {
             'supplierCommitment2',
             'supplierCommitment3'
           ],
+          currency: 'NZD',
           startDate: addDays(new Date(), 15),
           endDate: addDays(new Date(), 20)
         }

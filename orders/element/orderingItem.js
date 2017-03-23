@@ -3,6 +3,7 @@ const assign = require('lodash/fp/assign')
 const mapValues = require('lodash/fp/mapValues')
 const { combineRules } = require('fela')
 const { StyleSheet } = require('fela-tools')
+const BigMath = require('bigmath')
 
 module.exports = {
   needs: {
@@ -36,50 +37,36 @@ module.exports = {
 
     const styleSheet = StyleSheet.create({
       container: combineRules(api.app.css.column, () => ({
-        paddingBottom: '0.5rem',
         borderBottom: `1px solid ${colors.greyscale[3]}`
       })),
-      header: combineRules(api.app.css.row, () => ({
-        alignItems: 'center',
-        height: '6rem'
-      })),
+      header: combineRules(api.app.css.row, () => {
+        // traffic light green
+        //backgroundColor: '#81C784',
+        // traffic light yellow
+        //backgroundColor: '#FFB74D',
+        // traffic light red
+        //backgroundColor: '#E57373',
+        return {
+          alignItems: 'baseline'
+        }
+      }),
       name: {
+      },
+      summary: {
+        fontSize: '1.4rem',
+        textAlign: 'center',
         flexGrow: '1'
       },
-      separator: {
-        height: '60%',
-        borderLeft: `2px dotted ${colors.greyscale[3]}`
+      detailed: {
+        fontSize: '1.2rem',
+        paddingBottom: '0.5rem'
       },
-      progress: combineRules(api.app.css.row, () => ({
-        alignItems: 'center'
-      })),
-      next: combineRules(api.app.css.row, () => ({
-        flexGrow: 1
-      })),
-      nextMin: props => ({
-        color: 'white',
-        // traffic light green
-        backgroundColor: '#81C784',
-        flexGrow: props.nextMin,
-        padding: '0.5rem'
-      }),
-      nextExtra: props => ({
-        color: 'white',
-        // traffic light yellow
-        backgroundColor: '#FFB74D',
-        flexGrow: props.nextExtra,
-        padding: '0.5rem'
-      }),
-      nextLeft: props => ({
-        color: 'white',
-        // traffic light red
-        backgroundColor: '#E57373',
-        flexGrow: props.nextLeft,
-        padding: '0.5rem'
-      }),
-      completed: {
-        marginLeft: '1rem'
-      }
+      myMin: {},
+      myMax: {},
+      groupMin: {},
+      groupMax: {},
+      totalBatches: {},
+      callToFillExtra: {}
     })
 
     return renderOrderingItem
@@ -108,38 +95,58 @@ module.exports = {
         >
           <header class=${styles.header}>
             <h2 class=${styles.name}>${supplierCommitment.name}</h2>
-            ${api.app.element.numberInput({
-              label: 'min',
-              min: 0,
-              max: myConsumerIntent.maxValue,
-              value: myConsumerIntent.minValue,
-              onChange: handleConsumerIntentChange(myConsumerIntent, 'minValue')
-            })}
-            <div class=${styles.separator}></div>
-            ${api.app.element.numberInput({
-              label: 'max',
-              min: myConsumerIntent.minValue,
-              value: myConsumerIntent.maxValue,
-              onChange: handleConsumerIntentChange(myConsumerIntent, 'maxValue')
-            })}
+            <div class=${styles.summary}>
+              I will receive
+              ${orderItem.expectedValue}
+              ${orderItem.batchSize.unit}
+              for
+              ${orderItem.expectedCost}
+              ${orderItem.currency}
+            </div>
           </header>
           ${orderItem.isExpanded ? api.html.hx`
-            <section class=${styles.progress}>
-              <div class=${styles.next}>
-                <div class=${styles.nextMin}>
-                  ${orderItem.nextMin} minimum over last batch
-                </div>
-                <div class=${styles.nextExtra}>
-                  ${orderItem.nextExtra} extra towards next batch
-                </div>
-                <div class=${styles.nextLeft}>
-                  ${orderItem.nextLeft} left to reach next batch
-                </div>
-              </div>
-              <div class=${styles.completed}>
-                ${orderItem.totalBatches} total batches
-              </div>
-            </section>
+            <ul class=${styles.detailed}>
+              <li class=${styles.myMin}>
+                I need at least
+                ${api.app.element.numberInput({
+                  label: 'min',
+                  min: 0,
+                  max: myConsumerIntent.maxValue,
+                  value: myConsumerIntent.minValue,
+                  onChange: handleConsumerIntentChange(myConsumerIntent, 'minValue')
+                })}
+                ${orderItem.minValue === 1 ? orderItem.name : orderItem.pluralName}
+              </li>
+              <li class=${styles.myMax}>
+                and I am prepared to receive up to
+                ${api.app.element.numberInput({
+                  label: 'max',
+                  min: myConsumerIntent.minValue,
+                  value: myConsumerIntent.maxValue,
+                  onChange: handleConsumerIntentChange(myConsumerIntent, 'maxValue')
+                })}
+                ${orderItem.maxValues === 1 ? orderItem.name : orderItem.pluralName}.
+              </li>
+              <li class=${styles.groupMin}>
+                The group wants at least ${orderItem.totalMinValue}
+                ${orderItem.totalMinValue === 1 ? orderItem.name : orderItem.pluralName}
+              </li>
+              <li class=${styles.groupMax}>
+                and is prepared to reecive up to ${orderItem.totalMaxValue}
+                ${orderItem.totalMaxValue === 1 ? orderItem.name : orderItem.pluralName}.
+              </li>
+              <li class=${styles.totalBatches}>
+                The group wants enough for ${orderItem.totalBatches}
+                batches of ${orderItem.batchSize.value} ${orderItem.batchSize.unit}.
+              </li>
+              ${(orderItem.didFillExtra || BigMath.equals(orderItem.nextMin, '0')) ? null : api.html.hx`
+                <li class=${styles.callToFillExtra}>
+                  If the group increases the max by ${orderItem.nextLeft}
+                  ${orderItem.nextLeft === 1 ? orderItem.name : orderItem.pluralName}
+                  then everyone will get their min.
+                </li>
+              `}
+            </ul>
           ` : null}
         </li>
       `

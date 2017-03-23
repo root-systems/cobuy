@@ -1,6 +1,7 @@
 const { StyleSheet } = require('fela-tools')
 const mapValues = require('lodash/fp/mapValues')
 const { combineRules } = require('fela')
+const BigMath = require('bigmath')
 
 module.exports = {
   needs: {
@@ -22,8 +23,12 @@ module.exports = {
     process.nextTick(() => {
       const { colors, fonts } = api.app.styles()
       styleSheet = StyleSheet.create({
-        fieldset: api.app.css.fieldset,
-        row: api.app.css.row,
+        fieldset: combineRules(api.app.css.fieldset, () => ({
+          display: 'inline-block'
+        })),
+        row: {
+          display: 'inline-flex'
+        },
         label: api.app.css.screenReaderOnly,
         increment: {
           padding: '0.5rem',
@@ -75,7 +80,7 @@ module.exports = {
             <span
               class=${styles.decrement}
               events=${{
-                click: handleChange(() => value - 1)
+                click: handleChange(() => BigMath.sub(value, 1))
               }}
             >
               -
@@ -95,7 +100,7 @@ module.exports = {
             <span
               class=${styles.increment}
               events=${{
-                click: handleChange(() => value + 1)
+                click: handleChange(() => BigMath.add(value, 1))
               }}
             >
               +
@@ -106,8 +111,11 @@ module.exports = {
 
       function handleChange (handler) {
         return (ev) => {
-          const next = Number(handler(ev))
-          if (next >= min && next <= max) {
+          const next = String(handler(ev))
+          if (
+            BigMath.greaterThanOrEqualTo(next, min) &&
+            BigMath.lessThanOrEqualTo(next, max)
+          ) {
             onChange(next)
           }
           // stop from propagating to parent
