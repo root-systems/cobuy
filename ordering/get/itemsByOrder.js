@@ -6,6 +6,9 @@ const mapValuesWithKey = mapValues.convert({ cap: false })
 const filter = require('lodash/fp/filter')
 const flow = require('lodash/fp/flow')
 const reduce = require('lodash/fp/reduce')
+const sortBy = require('lodash/fp/sortBy')
+const reverse = require('lodash/fp/reverse')
+const keyBy = require('lodash/fp/keyBy')
 const BigMath = require('bigmath')
 
 module.exports = {
@@ -27,9 +30,14 @@ module.exports = {
 
       function getItemsByOrder (order) {
         const { supplierCommitments } = order
-        const getItems = mapValues(supplierCommitment => {
-          return getItem({ order, supplierCommitment })
-        })
+        const getItems = flow(
+          map(supplierCommitment => {
+            return getItem({ order, supplierCommitment })
+          }),
+          sortBy('totalMinValue'),
+          reverse,
+          keyBy('id')
+        )
 
         return getItems(supplierCommitments)
       }
