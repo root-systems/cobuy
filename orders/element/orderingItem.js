@@ -73,12 +73,6 @@ module.exports = {
 
     function renderOrderingItem (orderItem) {
       const { supplierCommitment, allConsumerIntents, myConsumerIntent } = orderItem
-      console.log('orderItem', orderItem)
-      /*
-       TODO how to display:
-        <div>cost: ${api.orders.element.cost(supplierCommitment.costFunction)}</div>
-        <div>batch size: ${api.orders.element.quantity(supplierCommitment.batchSize)}</div>
-      */
 
       const renderStyles = mapValues(rule => {
         return api.css.renderRule(rule, orderItem)
@@ -100,7 +94,7 @@ module.exports = {
               ${orderItem.expectedValue}
               ${orderItem.batchSize.unit}
               for
-              ${orderItem.expectedCost}
+              ${BigMath.toFormat(orderItem.expectedCost, 2)}
               ${orderItem.currency}
             </div>
           </header>
