@@ -59,7 +59,7 @@ module.exports = {
         const { name, pluralName, batchSize } = supplierCommitment
 
         // TODO implement for real
-        const expectedValue = Math.floor(myConsumerIntent.minValue + ((myConsumerIntent.maxValue - myConsumerIntent.minValue) / 2))
+        const expectedValue = BigMath.floor(BigMath.add(myConsumerIntent.minValue, BigMath.div(BigMath.sub(myConsumerIntent.maxValue, myConsumerIntent.minValue), 2)))
         const expectedCost = supplierCommitment.costFunction({ value: expectedValue, currency }) || 0
 
         const totalMinValue = sumMinValue(allConsumerIntents)
