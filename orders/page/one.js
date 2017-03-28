@@ -21,7 +21,7 @@ module.exports = {
       if (!props.order) return api.html.hx`<div>loading</div>`
 
       const order = assign(props.order, { orderItems: props.orderItems })
-      return api.orders.element.orderPage(order)
+      return api.orders.element.orderPage({ order })
     }
   })
 }

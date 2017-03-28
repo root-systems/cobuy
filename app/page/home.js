@@ -1,6 +1,5 @@
 module.exports = {
   needs: {
-    'html.hx': 'first',
     app: {
       layout: 'first',
       'element.home': 'first'

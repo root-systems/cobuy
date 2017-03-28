@@ -1,31 +1,24 @@
 module.exports = {
-  needs: {
-    'html.hx': 'first',
-    'app.styles': 'first'
-  },
-  create: (api) => ({
-    html: (props, children) => {
+  create: (api) => {
+    const { Element } = api.css
+
+    const toggleStyles = ({ theme }) => ({
+      position: 'fixed',
+      cursor: 'pointer',
+      padding: '1rem',
+      fontSize: '2.25rem',
+      color: theme.colors.greyscale[0]
+    })
+    const Toggle = Element('div', toggleStyles)
+
+    return props => {
       const { onToggle } = props
 
-      return api.html.hx`
-        <div
-          events=${{
-            click: onToggle
-          }}
-        >
-          ${'≡'}
-        </div>
-      `
-    },
-    css: () => {
-      const { colors } = api.app.styles()
-      return {
-        position: 'fixed',
-        cursor: 'pointer',
-        padding: '1rem',
-        fontSize: '2.25rem',
-        color: colors.greyscale[0]
-      }
+      return Toggle({
+        events: {
+          click: onToggle
+        }
+      }, '≡')
     }
-  })
+  }
 }

@@ -1,18 +1,17 @@
-const { combineRules } = require('fela')
 
 module.exports = {
   needs: {
-    'html.hx': 'first',
     'app.css.ul': 'first'
   },
-  create: (api) => ({
-    html: (props, children) => api.html.hx`
-      <menu>
-        ${children}
-      </menu>
-    `,
-    css: combineRules(api.app.css.ul, () => ({
+  create: (api) => {
+    const { Element, combineRules } = api.css
+    const { ul } = api.app.css
+
+    const listStyle = combineRules(ul, () => ({
       listStyleType: 'none'
     }))
-  })
+    const List = Element('menu', listStyle)
+
+    return List
+  }
 }

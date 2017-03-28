@@ -1,8 +1,11 @@
 module.exports = {
   needs: {
     'html.hx': 'first',
-    'css.renderStatic': 'first',
-    'app.styles': 'first',
+    css: {
+      Element: 'first',
+      renderStatic: 'first'
+    },
+    'app.theme': 'reduce',
     nav: {
       'get.nav': 'first',
       'element.nav': 'first'
@@ -26,23 +29,27 @@ module.exports = {
       document.head.appendChild(roboto)
     }
 
-    // needs to happen after
-    // css.renderStatic is loaded
+    const { Element, renderStatic } = api.css
+
+    // must happen after app.theme
+    // TODO this should be something in catstack
     process.nextTick(() => {
-      const { colors, fonts } = api.app.styles()
-      api.css.renderStatic({
+      const { colors, fonts } = api.app.theme()
+      renderStatic({
         color: colors.greyscale[9],
         fontFamily: fonts.sans
       }, 'html,body,input')
     })
 
+    // TODO move to element?
+    const layoutStyles = (props) => ({})
+    const Layout = Element('div', layoutStyles)
+
     return (view) => {
-      return (model) => api.html.hx`
-        <div>
-          ${api.nav.element.nav(api.nav.get.nav(model))}
-          ${view(model)}
-        </div>
-      `
+      return (model) => Layout([
+        api.nav.element.nav(api.nav.get.nav(model)),
+        view(model)
+      ])
     }
   }
 }

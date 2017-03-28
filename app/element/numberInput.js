@@ -1,14 +1,10 @@
-const { StyleSheet } = require('fela-tools')
 const mapValues = require('lodash/fp/mapValues')
-const { combineRules } = require('fela')
 const BigMath = require('bigmath')
 
 module.exports = {
   needs: {
     'html.hx': 'first',
-    'css.renderRule': 'first',
     app: {
-      styles: 'first',
       css: {
         row: 'first',
         fieldset: 'first',
@@ -17,48 +13,40 @@ module.exports = {
     }
   },
   create: (api) => {
-    var styleSheet
-    // this needs to happen _after_
-    // app.styles module is created.
-    process.nextTick(() => {
-      const { colors, fonts } = api.app.styles()
-      styleSheet = StyleSheet.create({
-        fieldset: combineRules(api.app.css.fieldset, () => ({
-          display: 'inline-block'
-        })),
-        row: {
-          display: 'inline-flex'
-        },
-        label: api.app.css.screenReaderOnly,
-        increment: {
-          padding: '0.5rem',
-          cursor: 'pointer',
-          fontSize: '2rem'
-        },
-        input: {
-          width: '3rem',
-          padding: '0.25rem',
-          textAlign: 'center',
-          fontSize: '2rem',
-          // order of border css might be a problem?
-          // http://fela.js.org/docs/introduction/Drawbacks.html
-          // (2. Shorthand & Longhand Properties)
-          border: 'none',
-          borderBottom: `1px solid ${colors.primary}`
-        },
-        decrement: {
-          padding: '0.5rem',
-          cursor: 'pointer',
-          fontSize: '2rem'
-        }
-      })
+    const { connect, combineRules } = api.css
+
+    const Styles = props => renderRule => ({
+      fieldset: combineRules(api.app.css.fieldset, () => ({
+        display: 'inline-block'
+      })),
+      row: {
+        display: 'inline-flex'
+      },
+      label: api.app.css.screenReaderOnly,
+      increment: {
+        padding: '0.5rem',
+        cursor: 'pointer',
+        fontSize: '2rem'
+      },
+      input: ({ theme }) => ({
+        width: '3rem',
+        padding: '0.25rem',
+        textAlign: 'center',
+        fontSize: '2rem',
+        // order of border css might be a problem?
+        // http://fela.js.org/docs/introduction/Drawbacks.html
+        // (2. Shorthand & Longhand Properties)
+        border: 'none',
+        borderBottom: `1px solid ${theme.colors.primary}`
+      }),
+      decrement: {
+        padding: '0.5rem',
+        cursor: 'pointer',
+        fontSize: '2rem'
+      }
     })
 
-    const renderStyles = mapValues(rule => {
-      return api.css.renderRule(rule, {})
-    })
-
-    return render
+    return connect(Styles, render)
 
     function render (options) {
       const {
@@ -66,10 +54,9 @@ module.exports = {
         value,
         min = -Infinity,
         max = Infinity,
-        onChange
+        onChange,
+        styles
       } = options
-
-      const styles = renderStyles(styleSheet)
 
       return api.html.hx`
         <fieldset class=${styles.fieldset}>

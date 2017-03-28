@@ -56,11 +56,7 @@ module.exports = {
           maxValue: '0'
         }
         const { currency } = order
-        const { name, pluralName, batchSize } = supplierCommitment
-
-        // TODO implement for real
-        const expectedValue = BigMath.floor(BigMath.add(myConsumerIntent.minValue, BigMath.div(BigMath.sub(myConsumerIntent.maxValue, myConsumerIntent.minValue), 2)))
-        const expectedCost = supplierCommitment.costFunction({ value: expectedValue, currency }) || 0
+        const { name, pluralName, batchSize, minBatches } = supplierCommitment
 
         const totalMinValue = sumMinValue(allConsumerIntents)
         const totalMaxValue = sumMaxValue(allConsumerIntents)
@@ -74,6 +70,15 @@ module.exports = {
         const nextExtra = didFillExtra ? '0' : totalExtraValue
         const nextLeft = BigMath.sub(BigMath.sub(batchSize.value, nextExtra), nextMin)
 
+        // TODO implement for real
+        const expectedValue = BigMath.greaterThanOrEqualTo(totalBatches, '1')
+          ? BigMath.floor(BigMath.add(myConsumerIntent.minValue, BigMath.div(BigMath.sub(myConsumerIntent.maxValue, myConsumerIntent.minValue), 2)))
+          : '0'
+        const expectedCost = supplierCommitment.costFunction({ value: totalMinValue, currency }) || '0'
+
+        const shouldMeetMinBatches = BigMath.lessThan(totalBatches, minBatches)
+        const shouldFillExtraBatch = !(didFillExtra || BigMath.equals(nextMin, '0'))
+
         return assignAll([
           {
             isExpanded: false
@@ -85,6 +90,7 @@ module.exports = {
             name,
             pluralName,
             batchSize,
+            minBatches,
             allConsumerIntents,
             myConsumerIntent,
             expectedValue,
@@ -96,7 +102,9 @@ module.exports = {
             didFillExtra,
             nextMin,
             nextExtra,
-            nextLeft
+            nextLeft,
+            shouldMeetMinBatches,
+            shouldFillExtraBatch
           }
         ])
       }

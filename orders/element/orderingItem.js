@@ -1,21 +1,13 @@
 const map = require('lodash/fp/map')
 const assign = require('lodash/fp/assign')
 const mapValues = require('lodash/fp/mapValues')
-const { combineRules } = require('fela')
-const { StyleSheet } = require('fela-tools')
 const BigMath = require('bigmath')
 
 module.exports = {
   needs: {
-    css: {
-      renderRule: 'first'
-      // combineRules: 'first'
-    },
     'inu.dispatch': 'first',
     'html.hx': 'first',
-    'css.renderRule': 'first',
-    app: {
-      styles: 'first',
+    'app': {
       css: {
         row: 'first',
         column: 'first',
@@ -33,21 +25,25 @@ module.exports = {
     'ordering.action.toggleItem': 'first'
   },
   create: (api) => {
-    const { colors, fonts } = api.app.styles()
+    const { connect, combineRules } = api.css
 
-    const styleSheet = StyleSheet.create({
-      container: combineRules(api.app.css.column, () => ({
-        borderBottom: `1px solid ${colors.greyscale[3]}`
+    // traffic light green
+    const greenLight = '#81C784'
+    // traffic light yellow
+    const yellowLight = '#FFB74D'
+    // traffic light red
+    const redLight = '#E57373'
+
+    const Styles = props => renderRule => ({
+      container: combineRules(api.app.css.column, ({ theme }) => ({
+        borderBottom: `1px solid ${theme.colors.greyscale[3]}`
       })),
-      header: combineRules(api.app.css.row, () => {
-        // traffic light green
-        //backgroundColor: '#81C784',
-        // traffic light yellow
-        //backgroundColor: '#FFB74D',
-        // traffic light red
-        //backgroundColor: '#E57373',
+      header: combineRules(api.app.css.row, (props) => {
         return {
-          alignItems: 'baseline'
+          alignItems: 'baseline',
+          backgroundColor: props.shouldMeetMinBatches
+            ? redLight : props.shouldFillExtraBatch
+            ? yellowLight : greenLight
         }
       }),
       name: {
@@ -61,24 +57,23 @@ module.exports = {
         fontSize: '1.2rem',
         paddingBottom: '0.5rem'
       },
+      callToMeetMin: {
+        backGroundColor: redLight
+      },
       myMin: {},
       myMax: {},
       groupMin: {},
       groupMax: {},
       totalBatches: {},
-      callToFillExtra: {}
+      callToFillExtra: {
+        backGroundColor: yellowLight
+      }
     })
 
-    return renderOrderingItem
+    return connect(Styles, renderOrderingItem)
 
-    function renderOrderingItem (orderItem) {
+    function renderOrderingItem ({ styles, orderItem }) {
       const { supplierCommitment, allConsumerIntents, myConsumerIntent } = orderItem
-
-      const renderStyles = mapValues(rule => {
-        return api.css.renderRule(rule, orderItem)
-      })
-
-      const styles = renderStyles(styleSheet)
 
       return api.html.hx`
         <li
@@ -100,6 +95,11 @@ module.exports = {
           </header>
           ${orderItem.isExpanded ? api.html.hx`
             <ul class=${styles.detailed}>
+              ${orderItem.shouldMeetMinBatches ? null : api.html.hx`
+                <li class=${styles.callToMeetMin}>
+                  The group needs to buy at least ${orderItem.minBatches} batches of ${orderItem.batchSize.value} ${orderItem.batchSize.unit}.
+                </li>
+              `}
               <li class=${styles.myMin}>
                 I need at least
                 ${api.app.element.numberInput({
@@ -109,10 +109,10 @@ module.exports = {
                   value: myConsumerIntent.minValue,
                   onChange: handleConsumerIntentChange(myConsumerIntent, 'minValue')
                 })}
-                ${orderItem.minValue === 1 ? orderItem.name : orderItem.pluralName}
+                ${orderItem.minValue === 1 ? orderItem.name : orderItem.pluralName}.
               </li>
               <li class=${styles.myMax}>
-                and I am prepared to receive up to
+                I am prepared to receive up to
                 ${api.app.element.numberInput({
                   label: 'max',
                   min: myConsumerIntent.minValue,
@@ -123,23 +123,23 @@ module.exports = {
               </li>
               <li class=${styles.groupMin}>
                 The group wants at least ${orderItem.totalMinValue}
-                ${orderItem.totalMinValue === 1 ? orderItem.name : orderItem.pluralName}
+                ${orderItem.totalMinValue === 1 ? orderItem.name : orderItem.pluralName}.
               </li>
               <li class=${styles.groupMax}>
-                and is prepared to reecive up to ${orderItem.totalMaxValue}
+                The group is prepared to receive up to ${orderItem.totalMaxValue}
                 ${orderItem.totalMaxValue === 1 ? orderItem.name : orderItem.pluralName}.
               </li>
               <li class=${styles.totalBatches}>
                 The group wants enough for ${orderItem.totalBatches}
                 batches of ${orderItem.batchSize.value} ${orderItem.batchSize.unit}.
               </li>
-              ${(orderItem.didFillExtra || BigMath.equals(orderItem.nextMin, '0')) ? null : api.html.hx`
+              ${orderItem.shouldFixExtraBatch ? api.html.hx`
                 <li class=${styles.callToFillExtra}>
                   If the group increases the max by ${orderItem.nextLeft}
                   ${orderItem.nextLeft === 1 ? orderItem.name : orderItem.pluralName}
                   then everyone will get their min.
                 </li>
-              `}
+              ` : null}
             </ul>
           ` : null}
         </li>

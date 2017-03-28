@@ -1,10 +1,6 @@
-const { combineRules } = require('fela')
-
 module.exports = {
   needs: {
-    'html.hx': 'first',
     app: {
-      'styles': 'first',
       'css.column': 'first'
     },
     'nav.element': {
@@ -13,30 +9,26 @@ module.exports = {
       footer: 'first'
     }
   },
-  create: (api) => ({
-    html: (props, children) => {
-      const { header, body, footer } = api.nav.element
+  create: (api) => {
+    const { Element, combineRules } = api.css
+    const { column } = api.app.css
+    const { header: Header, body: Body, footer: Footer } = api.nav.element
 
-      return api.html.hx`
-        <nav>
-          ${[
-            header(props.header),
-            body(props.body),
-            footer(props.footer)
-          ]}
-        </nav>
-      `
-    },
-    css: combineRules(api.app.css.column, () => {
-      const { colors } = api.app.styles()
-      return {
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        bottom: 0,
-        zIndex: 100,
-        backgroundColor: colors.greyscale[2],
-      }
-    })
-  })
+    const drawerStyle = combineRules(column, ({ theme }) => ({
+      position: 'fixed',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      zIndex: 100,
+      backgroundColor: theme.colors.greyscale[2],
+    }))
+
+    const Drawer = Element('nav', drawerStyle)
+
+    return ({ header, body, footer }) => Drawer([
+      Header(header),
+      Body(body),
+      Footer(footer)
+    ])
+  }
 }

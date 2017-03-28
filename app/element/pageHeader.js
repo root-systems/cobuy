@@ -1,47 +1,33 @@
 const mapValues = require('lodash/fp/mapValues')
-const { StyleSheet } = require('fela-tools')
-const { combineRules } = require('fela')
 
 module.exports = {
   needs: {
     app: {
-      styles: 'first',
       css: {
         a: 'first'
       }
     },
-    'html.hx': 'first',
-    'css.renderRule': 'first'
+    'html.hx': 'first'
   },
   create: (api) => {
+    const { connect, combineRules } = api.css
 
-    // this needs to happen _after_
-    // app.styles module is created.
-    var styleSheet
-    process.nextTick(() => {
-      const { colors, fonts } = api.app.styles()
-      styleSheet = StyleSheet.create({
-        header: {
-          backgroundColor: colors.primary
-        },
-        a: api.app.css.a,
-        title: {
-          color: colors.brightest,
-          fontFamily: fonts.sans,
-          textAlign: 'center'
-        }
+    const Styles = props => renderRule => ({
+      header: ({ theme }) => ({
+        backgroundColor: theme.colors.primary
+      }),
+      a: api.app.css.a,
+      title: ({ theme }) => ({
+        color: theme.colors.brightest,
+        fontFamily: theme.fonts.sans,
+        textAlign: 'center'
       })
     })
 
-    const renderStyles = props => mapValues(rule => {
-      return api.css.renderRule(rule, props)
-    }, styleSheet)
-
-    return renderPageHeader
+    return connect(Styles, renderPageHeader)
 
     function renderPageHeader (props) {
-      const { title, link } = props
-      const styles = renderStyles(props)
+      const { styles, title, link } = props
 
       return api.html.hx`
         <header class=${styles.header}>

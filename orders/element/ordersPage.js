@@ -11,16 +11,15 @@ module.exports = {
       'element.orderTabs': 'first'
     }
   },
-  create: (api) => ({
-    html: (orders) => api.html.hx`
-      <div>
-        ${api.app.element.pageHeader({
-          title: 'orders', 
-          link: '/orders'
-        })}
-        ${api.orders.element.orderTabs(orders)}
-      </div>
-    `,
-    css: api.app.css.column
-  })
+  create: (api) => {
+    const Page = api.css.Element('div', api.app.css.column)
+
+    return ({ orders }) => Page([
+      api.app.element.pageHeader({
+        title: 'orders', 
+        link: '/orders'
+      }),
+      api.orders.element.orderTabs({ orders })
+    ])
+  }
 }

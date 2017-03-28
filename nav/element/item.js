@@ -1,25 +1,25 @@
 module.exports = {
-  needs: {
-    'html.hx': 'first'
-  },
-  create: (api) => ({
-    html: (props) => api.html.hx`
-      <a
-        href=${props.href}
-        events=${{
-          click: props.onNavigate
-        }}
-      >
-        ${props.label}
-      </a>
-    `,
-    css: () => {
-      return {
-        display: 'block',
-        padding: '1rem',
-        color: 'unset',
-        textDecoration: 'none'
-      }
+  create: (api) => {
+    const { Element } = api.css
+
+    const itemStyle = () => ({
+      display: 'block',
+      padding: '1rem',
+      color: 'unset',
+      textDecoration: 'none'
+    })
+    const Item = Element('a', itemStyle, {
+      passThrough: ['href']
+    })
+
+    return props => {
+      const { href, onNavigate, label } = props
+      return Item({
+        href,
+        events: {
+          click: onNavigate
+        }
+      }, label)
     }
-  })
+  }
 }

@@ -1,5 +1,5 @@
 module.exports = {
-  create: () => () => ({
+  create: () => (sofar) => ({
     colors: {
       primary: '#22d1aa',
       accent: '#ed800b',

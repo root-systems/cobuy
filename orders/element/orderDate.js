@@ -3,19 +3,23 @@ const formatDate = require('date-fns/format')
 
 module.exports = {
   needs: {
-    'html.hx': 'first',
-    'app.styles': 'first',
     'orders.helpers.orderStatus': 'first'
   },
-  create: (api) => ({
-    html: ({ startDate, endDate }) => {
+  create: (api) => {
+    const { Element } = api.css
+
+    const orderDateStyle = ({ theme }) => ({
+      color: theme.colors.greyscale[6]
+    })
+    const OrderDate = Element('div', orderDateStyle)
+
+    return ({ startDate, endDate }) => {
       const orderStatus = api.orders.helpers.orderStatus({ startDate, endDate })
       const orderDateRange = `
         ${formatDate(startDate, 'DD.MM.YYYY')}
         -
         ${formatDate(endDate, 'DD.MM.YYYY')}
       `
-
 
       var orderDateDistance
       switch (orderStatus) {
@@ -29,18 +33,13 @@ module.exports = {
           orderDateDistance = `closed ${distanceToNow(endDate)} ago`
           break
       }
-      return api.html.hx`
-        <div>
-          ${orderDateRange} (${orderDateDistance})
-        </div>
-      `
-    },
-    css: ({ startDate, endDate }) => {
-      const { colors } = api.app.styles()
-      const orderStatus = api.orders.helpers.orderStatus({ startDate, endDate })
-      return {
-        color: colors.greyscale[6]
-      }
+
+      return OrderDate([
+        orderDateRange,
+        ' (',
+        orderDateDistance,
+        ')'
+      ])
     }
-  })
+  }
 }

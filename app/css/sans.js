@@ -1,6 +1,5 @@
 module.exports = {
-  needs: ['app.styles', 'first'],
-  create: (api) => (props) => ({
-    fontFamily: api.app.styles().fonts.sans
+  create: (api) => ({ theme }) => ({
+    fontFamily: theme.fonts.sans
   })
 }

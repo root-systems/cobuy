@@ -4,7 +4,6 @@ const assign = require('lodash/fp/assign')
 module.exports = {
   needs: {
     'inu.dispatch': 'first',
-    'html.hx': 'first',
     //'nav.plugs.link': 'map'
     nav: {
       'action.toggle': 'first',
@@ -15,10 +14,14 @@ module.exports = {
       }
     }
   },
-  create: (api) => ({
-    html: (props) => {
-      const { toggle: Toggle, overlay: Overlay, drawer: Drawer } = api.nav.element
+  create: (api) => {
+    const { Element } = api.css
+    const { toggle: Toggle, overlay: Overlay, drawer: Drawer } = api.nav.element
 
+    const navStyle = () => ({})
+    const Nav = Element('div', navStyle)
+
+    return (props) => {
       const toggleOnNavigate = map(item => {
         return assign(item, { onNavigate: emitToggle })
       })
@@ -50,28 +53,24 @@ module.exports = {
         }
       }
 
-      return api.html.hx`
-        <div>
-          ${Toggle({
-            onToggle: emitToggle
-          })}
-          ${props.isExpanded
-            ? [
-              Drawer(drawer),
-              Overlay({
-                emitToggle
-              })
-            ]
-            : null
-          }
-        </div>
-      `
+      return Nav([
+        Toggle({
+          onToggle: emitToggle
+        }),
+        props.isExpanded
+          ? [
+            Drawer(drawer),
+            Overlay({
+              emitToggle
+            })
+          ]
+          : null
+      ])
 
       function emitToggle () {
         const action = api.nav.action.toggle()
         api.inu.dispatch(action)
       }
-    },
-    css: (props) => {}
-  })
+    }
+  }
 }

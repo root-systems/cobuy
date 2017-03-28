@@ -1,31 +1,31 @@
 const map = require('lodash/fp/map')
 
 module.exports = {
-  needs: {
-    'html.hx': 'first'
-  },
   create: (api) => {
+    const { Element } = api.css
+
+    const stepListStyles = () => ({})
+    const StepList = Element('ul', stepListStyles)
+
+    const stepItemStyles = () => ({})
+    const StepItem = Element('li', stepItemStyles)
+
     const mapCostSteps = map(renderCostStep)
 
     return renderCost
 
     function renderCost (cost) {
-      return api.html.hx`
-        <ul>
-          ${mapCostSteps(cost)}
-        </ul>
-      `
+      return StepList(mapCostSteps(cost))
     }
 
     function renderCostStep (costStep) {
-      return api.html.hx`
-        <li>
-          ${costStep.pricePerBatch}
-          ${costStep.currency}
-          ${'@ >'}
-          ${costStep.minBatches} batches
-        </li>
-      `
+      return StepItem([
+        costStep.pricePerBatch,
+        costStep.currency,
+        '@ >',
+        costStep.minBatches,
+        'batches'
+      ])
     }
   }
 }

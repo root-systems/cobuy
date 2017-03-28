@@ -15,8 +15,8 @@ module.exports = {
     }
   },
   create: (api) => {
-    function render ({ orders }) {
-      var el = api.orders.element.ordersPage(orders)
+    function view ({ orders }) {
+      var el = api.orders.element.ordersPage({ orders })
 
       onLoad(el, handleLoad)
 
@@ -31,7 +31,7 @@ module.exports = {
       route: '/orders',
       layout: api.app.layout,
       get: api.orders.get.allProps,
-      view: render
+      view
     }
   }
 }

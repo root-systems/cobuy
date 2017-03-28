@@ -1,25 +1,22 @@
 module.exports = {
   needs: {
-    'html.hx': 'first',
     'nav.element': {
       list: 'first',
       item: 'first'
     }
   },
-  create: (api) => ({
-    html: (props) => {
-      const { items } = props
-      const { list: List, item: Item } = api.nav.element
-      return api.html.hx`
-        <div>
-          ${List({}, [
-            items.map(Item)
-          ])}
-        </div>
-      `
-    },
-    css: () => ({
+  create: (api) => {
+    const { list: List, item: Item } = api.nav.element
+
+    const bodyStyles = (props) => ({
       flexGrow: 1
     })
-  })
+    const Body = api.css.Element('div', bodyStyles)
+
+    return ({ items }) => Body([
+      List([
+        items.map(Item)
+      ])
+    ])
+  }
 }

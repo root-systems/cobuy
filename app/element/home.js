@@ -1,30 +1,28 @@
-const { combineRules } = require('fela')
-
 module.exports = {
   needs: {
     'html.hx': 'first',
-    'css.renderRule': 'first',
     app: {
       'element.pageHeader': 'first',
       'css.column': 'first'
     }
   },
-  create: (api) => () => {
-    const { renderRule } = api.css
-    const styles = {
-      container: renderRule(
-        combineRules(
-          api.app.css.column, props => ({
+  create: (api) => {
+    const { connect, combineRules } = api.css
+
+    const Styles = props => renderRule => ({
+      container: combineRules(
+        api.app.css.column,
+        props => ({
           textAlign: 'center'
-        }))
+        })
       ),
-      title: renderRule(props => ({
+      title: {
         fontSize: '4rem'
-      })),
-      subtext: renderRule(props => ({
+      },
+      subtext: {
         fontSize: '2rem'
-      })),
-      background: renderRule(props => ({
+      },
+      background: {
         display: 'block',
         position: 'absolute',
         top: 0,
@@ -38,22 +36,27 @@ module.exports = {
         '@media all and (min-width: 400px)': {
           backgroundImage: "url('/app/images/background-large.jpg')"
         }
-      }))
+      }
+    })
+
+    return connect(Styles, Element)
+
+    function Element ({ styles }) {
+      return api.html.hx`
+        <div class=${styles.container}>
+          ${api.app.element.pageHeader({
+            title: 'home',
+            link: '/'
+          })}
+          <h1 class=${styles.title}>
+            Cobuy
+          </h1>
+          <p class=${styles.subtext}>
+            Helping you buy good food at good prices, together.
+          </p>
+          <div class=${styles.background}></div>
+        </div>
+      `
     }
-    return api.html.hx`
-      <div class=${styles.container}>
-        ${api.app.element.pageHeader({
-          title: 'home',
-          link: '/'
-        })}
-        <h1 class=${styles.title}>
-          Cobuy
-        </h1>
-        <p class=${styles.subtext}>
-          Helping you buy good food at good prices, together.
-        </p>
-        <div class=${styles.background}></div>
-      </div>
-    `
   }
 }

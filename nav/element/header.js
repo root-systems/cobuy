@@ -1,30 +1,26 @@
 module.exports = {
-  needs: {
-    'html.hx': 'first',
-    'app.styles': 'first'
-  },
-  create: (api) => ({
-    html: (props) => {
-      const { agent } = props
-      const { name, email } = agent
+  create: (api) => {
+    const { Element } = api.css
 
-      return api.html.hx`
-        <div>
-          <h1>${name}</h1>
-          <h2>${email}</h2>
-        </div>
-      `
-    },
-    css: () => {
-      const { colors } = api.app.styles()
-      return {
-        paddingTop: '3rem',
-        paddingLeft: '1rem',
-        paddingRight: '1rem',
-        paddingBottom: '1rem',
-        backgroundColor: colors.primary,
-        color: colors.greyscale[0]
-      }
-    }
-  })
+    const headerStyle = ({ theme }) => ({
+      paddingTop: '3rem',
+      paddingLeft: '1rem',
+      paddingRight: '1rem',
+      paddingBottom: '1rem',
+      backgroundColor: theme.colors.primary,
+      color: theme.colors.greyscale[0]
+    })
+    const Header = Element('div', headerStyle)
+
+    const nameStyle = () => ({})
+    const Name = Element('h1', nameStyle)
+
+    const emailStyle = () => ({})
+    const Email = Element('h2', emailStyle)
+
+    return ({ agent }) => Header({}, [
+      Name(agent.name),
+      Email(agent.email)
+    ])
+  }
 }

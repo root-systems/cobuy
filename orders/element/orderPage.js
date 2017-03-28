@@ -1,13 +1,10 @@
 const map = require('lodash/fp/map')
 const mapValues = require('lodash/fp/mapValues')
-const { StyleSheet } = require('fela-tools')
-const { combineRules } = require('fela')
 
 // TODO move to app style module
 module.exports = {
   needs: {
     app: {
-      styles: 'first',
       css: {
         a: 'first',
         column: 'first',
@@ -15,10 +12,8 @@ module.exports = {
       },
       'element.pageHeader': 'first'
     },
-    'app.styles': 'first',
     'inu.dispatch': 'first',
     'html.hx': 'first',
-    'css.renderRule': 'first',
     'orders.element': {
       orderingItem: 'first',
       cost: 'first',
@@ -26,23 +21,24 @@ module.exports = {
     }
   },
   create: (api) => {
-    const { colors, fonts } = api.app.styles()
-    const styleSheet = StyleSheet.create({
+    const { connect, combineRules } = api.css
+    
+    const Styles = props => renderRule => ({
       container: api.app.css.column,
-      header: {
-        backgroundColor: colors.primary
+      header: ({ theme }) => {
+        backgroundColor: theme.colors.primary
       },
       a: api.app.css.a,
-      title: {
-        color: colors.brightest,
-        fontFamily: fonts.sans,
+      title: ({ theme }) => ({
+        color: theme.colors.brightest,
+        fontFamily: theme.fonts.sans,
         textAlign: 'center'
-      },
+      }),
       body: combineRules(api.app.css.column, api.app.css.ul, props => ({
         width: '80vw',
         margin: '0 auto'
       })),
-      done: () => ({
+      done: ({ theme }) => ({
         position: 'fixed',
         bottom: 0,
         left: 0,
@@ -50,29 +46,25 @@ module.exports = {
         textTransform: 'capitalize',
         textAlign: 'center',
         cursor: 'pointer',
-        color: colors.accent,
-        border: `1px solid ${colors.greyscale[4]}`,
+        color: theme.colors.accent,
+        border: `1px solid ${theme.colors.greyscale[4]}`,
         fontSize: '2rem',
         padding: '0.5rem',
         transition: 'background-color 1s ease',
         ':hover': {
-          backgroundColor: colors.greyscale[2]
+          backgroundColor: theme.colors.greyscale[2]
         }
       })
     })
 
-    const renderStyles = mapValues(rule => {
-      return api.css.renderRule(rule, {})
+    const mapOrderItems = map(orderItem => {
+      return api.orders.element.orderingItem({ orderItem })
     })
 
-    const mapOrderItems = map(api.orders.element.orderingItem)
+    return connect(Styles, renderOrder)
 
-    return renderOrder
-
-    function renderOrder (order) {
+    function renderOrder ({ styles, order }) {
       const { id, name, orderItems } = order
-
-      const styles = renderStyles(styleSheet)
 
       return api.html.hx`
         <article class=${styles.container}>

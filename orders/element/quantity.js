@@ -1,17 +1,13 @@
 module.exports = {
-  needs: {
-    'html.hx': 'first'
-  },
   create: (api) => {
-    return renderQuantity
+    const quantityStyle = (props) => ({})
+    const Quantity = api.css.Element('span', quantityStyle)
 
-    function renderQuantity (qty) {
-      return api.html.hx`
-        <span>
-          ${qty.value}
-          ${qty.unit}
-        </span>
-      `
+    return (qty) => {
+      return Quantity([
+        qty.value,
+        qty.unit
+      ])
     }
   }
 }
