@@ -23,20 +23,20 @@ function getSupplierCommitment (supplierCommitment, supplierCommitmentId) {
   return assign(supplierCommitment, {
     id: supplierCommitmentId,
     costFunction: getCostFunction(supplierCommitment),
-    minBatches: getMinBatches(supplierCommitment),
+    minimumBatches: getMinimumBatches(supplierCommitment),
     pluralName: pluralize(supplierCommitment.name)
   })
 }
 
-const getMinBatches = flow(
+const getMinimumBatches = flow(
   get('costSteps'),
-  map('minBatches'),
+  map('minimumBatches'),
   BigMath.min
 )
 
 function getCostFunction ({ batchSize, costSteps }) {
   const findCostStep = numBatches => find(costStep => {
-    return BigMath.greaterThanOrEqualTo(numBatches, costStep.minBatches)
+    return BigMath.greaterThanOrEqualTo(numBatches, costStep.minimumBatches)
   })
 
   return function ({ value, currency }) {

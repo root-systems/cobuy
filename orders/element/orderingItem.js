@@ -38,14 +38,12 @@ module.exports = {
       container: combineRules(api.app.css.column, ({ theme }) => ({
         borderBottom: `1px solid ${theme.colors.greyscale[3]}`
       })),
-      header: combineRules(api.app.css.row, (props) => {
-        return {
-          alignItems: 'baseline',
-          backgroundColor: props.shouldMeetMinBatches
-            ? redLight : props.shouldFillExtraBatch
-            ? yellowLight : greenLight
-        }
-      }),
+      header: combineRules(api.app.css.row, (props) => ({
+        alignItems: 'baseline',
+        backgroundColor: props.orderItem.shouldMeetMinBatches
+          ? redLight : props.orderItem.shouldFillExtraBatch
+          ? yellowLight : greenLight
+      })),
       name: {
       },
       summary: {
@@ -58,7 +56,7 @@ module.exports = {
         paddingBottom: '0.5rem'
       },
       callToMeetMin: {
-        backGroundColor: redLight
+        backgroundColor: redLight
       },
       myMin: {},
       myMax: {},
@@ -66,7 +64,7 @@ module.exports = {
       groupMax: {},
       totalBatches: {},
       callToFillExtra: {
-        backGroundColor: yellowLight
+        backgroundColor: yellowLight
       }
     })
 
@@ -86,54 +84,69 @@ module.exports = {
             <h2 class=${styles.name}>${supplierCommitment.name}</h2>
             <div class=${styles.summary}>
               I will receive
-              ${orderItem.expectedValue}
+              ${orderItem.expectedMyValue}
               ${orderItem.batchSize.unit}
               for
-              ${BigMath.toFormat(orderItem.expectedCost, 2)}
+              ${BigMath.toFormat(orderItem.expectedMyCost, 2)}
               ${orderItem.currency}
             </div>
           </header>
           ${orderItem.isExpanded ? api.html.hx`
             <ul class=${styles.detailed}>
-              ${orderItem.shouldMeetMinBatches ? null : api.html.hx`
+              ${orderItem.didMeetMinimumBatches ? null : api.html.hx`
                 <li class=${styles.callToMeetMin}>
-                  The group needs to buy at least ${orderItem.minBatches} batches of ${orderItem.batchSize.value} ${orderItem.batchSize.unit}.
+                  The group needs to buy at least
+                  ${orderItem.minimumBatches}
+                  batches of
+                  ${orderItem.batchSize.value}
+                  ${orderItem.batchSize.unit} per batch.
                 </li>
               `}
               <li class=${styles.myMin}>
-                I need at least
+                I want to
                 ${api.app.element.numberInput({
-                  label: 'min',
-                  min: 0,
-                  max: myConsumerIntent.maxValue,
-                  value: myConsumerIntent.minValue,
-                  onChange: handleConsumerIntentChange(myConsumerIntent, 'minValue')
+                  label: 'desired',
+                  min: myConsumerIntent.minimumValue,
+                  max: myConsumerIntent.maximumValue,
+                  value: myConsumerIntent.desiredValue,
+                  onChange: handleConsumerIntentChange(myConsumerIntent, 'desiredValue')
                 })}
-                ${orderItem.minValue === 1 ? orderItem.name : orderItem.pluralName}.
+                ${orderItem.desiredValue === 1 ? orderItem.name : orderItem.pluralName}.
               </li>
               <li class=${styles.myMax}>
-                I am prepared to receive up to
+                I am prepared to receive between
                 ${api.app.element.numberInput({
-                  label: 'max',
-                  min: myConsumerIntent.minValue,
-                  value: myConsumerIntent.maxValue,
-                  onChange: handleConsumerIntentChange(myConsumerIntent, 'maxValue')
+                  label: 'minimum',
+                  min: 0,
+                  max: myConsumerIntent.maximumValue,
+                  value: myConsumerIntent.minimumValue,
+                  onChange: handleConsumerIntentChange(myConsumerIntent, 'minimumValue')
                 })}
-                ${orderItem.maxValues === 1 ? orderItem.name : orderItem.pluralName}.
+                and
+                ${api.app.element.numberInput({
+                  label: 'maximum',
+                  min: myConsumerIntent.minimumValue,
+                  value: myConsumerIntent.maximumValue,
+                  onChange: handleConsumerIntentChange(myConsumerIntent, 'maximumValue')
+                })}
+                ${orderItem.maximumValue === 1 ? orderItem.name : orderItem.pluralName}.
               </li>
               <li class=${styles.groupMin}>
-                The group wants at least ${orderItem.totalMinValue}
-                ${orderItem.totalMinValue === 1 ? orderItem.name : orderItem.pluralName}.
+                The group wants ${orderItem.totals.desiredValue}
+                ${orderItem.totals.desiredValue === 1 ? orderItem.name : orderItem.pluralName}.
               </li>
               <li class=${styles.groupMax}>
-                The group is prepared to receive up to ${orderItem.totalMaxValue}
-                ${orderItem.totalMaxValue === 1 ? orderItem.name : orderItem.pluralName}.
+                The group is prepared to receive between
+                ${orderItem.totals.minimumValue}
+                and
+                ${orderItem.totals.maximumValue}
+                ${orderItem.totals.maximumValue === 1 ? orderItem.name : orderItem.pluralName}.
               </li>
               <li class=${styles.totalBatches}>
-                The group wants enough for ${orderItem.totalBatches}
-                batches of ${orderItem.batchSize.value} ${orderItem.batchSize.unit}.
+                The group wants enough for ${orderItem.totals.desiredBatchs}
+                batches of ${orderItem.batchSize.value} ${orderItem.batchSize.unit} per batch.
               </li>
-              ${orderItem.shouldFixExtraBatch ? api.html.hx`
+              ${orderItem.didMeetIntentRanges ? api.html.hx`
                 <li class=${styles.callToFillExtra}>
                   If the group increases the max by ${orderItem.nextLeft}
                   ${orderItem.nextLeft === 1 ? orderItem.name : orderItem.pluralName}
@@ -155,9 +168,14 @@ module.exports = {
 
     function handleConsumerIntentChange (previous, name) {
       return (value) => {
-        const next = assign(previous, {
+        var next = assign(previous, {
           [name]: value
         })
+        if (name === 'maximumValue' && BigMath.greaterThan(previous.desiredValue, value)) {
+          next.desiredValue = value
+        } else if (name === 'minimumValue' && BigMath.lessThan(previous.desiredValue, value)) {
+          next.desiredValue = value
+        }
         const action = api.consumerIntents.action.save(next)
         api.inu.dispatch(action)
       }

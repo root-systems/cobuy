@@ -2,7 +2,6 @@ const map = require('lodash/fp/map')
 const assign = require('lodash/fp/assign')
 const assignAll = require('lodash/fp/assignAll')
 const mapValues = require('lodash/fp/mapValues')
-const mapValuesWithKey = mapValues.convert({ cap: false })
 const filter = require('lodash/fp/filter')
 const flow = require('lodash/fp/flow')
 const reduce = require('lodash/fp/reduce')
@@ -13,7 +12,14 @@ const BigMath = require('bigmath')
 
 module.exports = {
   needs: {
-    'ordering.get.rawOrderingItems': 'first',
+    ordering: {
+      'get.rawOrderingItems': 'first',
+      util: {
+        totalsForItem: 'first',
+        expectedsForItem: 'first'
+      }
+    },
+    'app.util.sumBy': 'first',
     'auth.get.whoami': 'first',
     'orders.get.orders': 'first',
     'supplierCommitments.get.supplierCommitments': 'first'
@@ -25,6 +31,7 @@ module.exports = {
     (orderingItems, orders, whoami) => {
       const getItemsByOrders = mapValues(getItemsByOrder)
       const filterToSupplierCommitment = id => filter(o => o.supplierCommitmentId === id)
+      const sumByValue = api.app.util.sumBy('value')
 
       return getItemsByOrders(orders)
 
@@ -52,32 +59,35 @@ module.exports = {
           agentId: whoami,
           supplierCommitmentId: supplierCommitment.id,
           orderId,
-          minValue: '0',
-          maxValue: '0'
+          desiredValue: '0',
+          minimumValue: '0',
+          maximumValue: '0'
         }
         const { currency } = order
-        const { name, pluralName, batchSize, minBatches } = supplierCommitment
+        const { name, pluralName, batchSize, minimumBatches } = supplierCommitment
 
-        const totalMinValue = sumMinValue(allConsumerIntents)
-        const totalMaxValue = sumMaxValue(allConsumerIntents)
-        const totalMinBatches = BigMath.floor(BigMath.div(totalMinValue, batchSize.value))
-        const totalMinRemainder = BigMath.mod(totalMinValue, batchSize.value)
-        const totalExtraValue = BigMath.sub(totalMaxValue, totalMinValue)
-        const didFillExtra = BigMath.greaterThanOrEqualTo(BigMath.add(totalMinRemainder, totalExtraValue), batchSize.value)
-        const totalBatches = BigMath.add(totalMinBatches, (didFillExtra ? '1' : '0'))
+        const totals = api.ordering.util.totalsForItem({ allConsumerIntents, batchSize })
 
-        const nextMin = didFillExtra ? '0' : totalMinRemainder
-        const nextExtra = didFillExtra ? '0' : totalExtraValue
-        const nextLeft = BigMath.sub(BigMath.sub(batchSize.value, nextExtra), nextMin)
+        const didMeetMinimumBatches = BigMath.greaterThanOrEqualTo(totals.minimumBatchs, minimumBatches)
 
-        // TODO implement for real
-        const expectedValue = BigMath.greaterThanOrEqualTo(totalBatches, '1')
-          ? BigMath.floor(BigMath.add(myConsumerIntent.minValue, BigMath.div(BigMath.sub(myConsumerIntent.maxValue, myConsumerIntent.minValue), 2)))
+        const expectedConsumerCommitments = api.ordering.util.expectedsForItem({ allConsumerIntents, batchSize, didMeetMinimumBatches, totals })
+
+        const expectedGroupValue = sumByValue(expectedConsumerCommitments)
+        const expectedMyValue = expectedConsumerCommitments.length > 0
+          ? expectedConsumerCommitments.find(cc => cc.agentId === whoami).value
           : '0'
-        const expectedCost = supplierCommitment.costFunction({ value: totalMinValue, currency }) || '0'
 
-        const shouldMeetMinBatches = BigMath.lessThan(totalBatches, minBatches)
-        const shouldFillExtraBatch = !(didFillExtra || BigMath.equals(nextMin, '0'))
+        const expectedGroupCost = supplierCommitment.costFunction({ value: expectedGroupValue, currency }) || '0'
+        const expectedMyCost = expectedGroupCost === '0' ? '0' : BigMath.mul(expectedGroupCost, BigMath.div(expectedMyValue, expectedGroupValue))
+
+        const didMeetIntentRanges = reduce((sofar, nextExpected) => {
+          if (sofar === false) return sofar
+          const consumerIntent = allConsumerIntents.find(ci => ci.id === nextExpected.consumerIntentId)
+          return sofar && (
+            BigMath.greaterThanOrEqualTo(consumerIntent.minimumValue, nextExpected.value)
+            && BigMath.lessThanOrEqualTo(nextExpected.value, consumerIntent.maximumValue)
+          )
+        }, true)
 
         return assignAll([
           {
@@ -90,21 +100,17 @@ module.exports = {
             name,
             pluralName,
             batchSize,
-            minBatches,
+            currency,
+            minimumBatches,
             allConsumerIntents,
             myConsumerIntent,
-            expectedValue,
-            expectedCost,
-            currency,
-            totalMinValue,
-            totalMaxValue,
-            totalBatches,
-            didFillExtra,
-            nextMin,
-            nextExtra,
-            nextLeft,
-            shouldMeetMinBatches,
-            shouldFillExtraBatch
+            totals,
+            expectedGroupValue,
+            expectedMyValue,
+            expectedGroupCost,
+            expectedMyCost,
+            didMeetMinimumBatches,
+            didMeetIntentRanges
           }
         ])
       }
@@ -112,16 +118,6 @@ module.exports = {
   ]
 }
 
-const sumMinValue = sumBy('minValue')
-const sumMaxValue = sumBy('maxValue')
-
 function OrderingItemId ({ order, supplierCommitment }) {
   return `${order.id}_${supplierCommitment.id}`
-}
-
-function sumBy (name) {
-  return flow(
-    map(name),
-    reduce(BigMath.add, '0')
-  )
 }

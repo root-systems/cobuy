@@ -10,11 +10,11 @@ module.exports = {
             unit: 'kg'
           },
           costSteps: [{
-            minBatches: '2',
+            minimumBatches: '2',
             pricePerBatch: '20',
             currency: 'NZD'
           }, {
-            minBatches: '5',
+            minimumBatches: '5',
             pricePerBatch: '15',
             currency: 'NZD'
           }]
@@ -27,11 +27,11 @@ module.exports = {
             unit: 'kg'
           },
           costSteps: [{
-            minBatches: '3',
+            minimumBatches: '3',
             pricePerBatch: '10',
             currency: 'NZD'
           }, {
-            minBatches: '10',
+            minimumBatches: '10',
             pricePerBatch: '7',
             currency: 'NZD'
           }]
@@ -44,11 +44,11 @@ module.exports = {
             unit: 'kg'
           },
           costSteps: [{
-            minBatches: '4',
+            minimumBatches: '4',
             pricePerBatch: '12',
             currency: 'NZD'
           }, {
-            minBatches: '8',
+            minimumBatches: '8',
             pricePerBatch: '10',
             currency: 'NZD'
           }]

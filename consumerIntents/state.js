@@ -6,8 +6,9 @@ module.exports = {
           agentId: 'agent1',
           orderId: 'order1',
           supplierCommitmentId: 'supplierCommitment1',
-          minValue: '1',
-          maxValue: '3'
+          desiredValue: '2',
+          minimumValue: '1',
+          maximumValue: '3'
         }
       }
     })
