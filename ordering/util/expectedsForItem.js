@@ -72,7 +72,20 @@ module.exports = {
       // if it's not possible to meet the minimum order batches with desired intents,
       const possibleToMeetMinimumBatchsWithDesiredIntents = BigMath.greaterThanOrEqualTo(totals.desiredBatchs, minimumBatchs)
       if (!possibleToMeetMinimumBatchsWithDesiredIntents) {
+        const minimumBatchsValue = BigMath.mul(minimumBatchs, batchSize.value)
         // run one round of the solver going up
+        result = satisfyConstraints({
+          desiredTotal: minimumBatchsValue,
+          direction: '1',
+          initialValues,
+          constraints
+        })
+        // if done return
+        if (result.isSatisfied) return valuesToCommitments(result.values)
+      } else {
+        // else
+        // find closest batch value to total desired value, respecting min and max constaints
+        // run first round of the solver towards closest batch value, respecting min and max constraints
         result = satisfyConstraints({
           desiredTotal: closestGroupValue,
           direction: directionToNextBatch,
@@ -81,38 +94,27 @@ module.exports = {
         })
         // if done return
         if (result.isSatisfied) return valuesToCommitments(result.values)
+        const firstRoundValues = result.values
+
+        // run second round of the solver towards next closest batch value, respecting min and max constraints
+        result = satisfyConstraints({
+          desiredTotal: nextClosestGroupValue,
+          direction: BigMath.mul(directionToNextBatch, '-1'),
+          initialValues,
+          constraints
+        })
+        // if done return
+        if (result.isSatisfied) return valuesToCommitments(result.values)
+
+        // run third round of the solver towards closest batch value, go wild without constraints
+        result = satisfyConstraints({
+          desiredTotal: closestGroupValue,
+          direction: directionToNextBatch,
+          initialValues: firstRoundValues
+        })
+        // if done return
+        if (result.isSatisfied) return valuesToCommitments(result.values)
       }
-      // else
-      // find closest batch value to total desired value, respecting min and max constaints
-      // run first round of the solver towards closest batch value, respecting min and max constraints
-      result = satisfyConstraints({
-        desiredTotal: closestGroupValue,
-        direction: directionToNextBatch,
-        initialValues,
-        constraints
-      })
-      // if done return
-      if (result.isSatisfied) return valuesToCommitments(result.values)
-      const firstRoundValues = result.values
-
-      // run second round of the solver towards next closest batch value, respecting min and max constraints
-      result = satisfyConstraints({
-        desiredTotal: nextClosestGroupValue,
-        direction: BigMath.mul(directionToNextBatch, '-1'),
-        initialValues,
-        constraints
-      })
-      // if done return
-      if (result.isSatisfied) return valuesToCommitments(result.values)
-
-      // run third round of the solver towards closest batch value, go wild without constraints
-      result = satisfyConstraints({
-        desiredTotal: closestGroupValue,
-        direction: directionToNextBatch,
-        initialValues: firstRoundValues
-      })
-      // if done return
-      if (result.isSatisfied) return valuesToCommitments(result.values)
     }
 
     function satisfyConstraints (options) {

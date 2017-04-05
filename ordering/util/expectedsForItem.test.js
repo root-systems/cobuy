@@ -327,7 +327,7 @@ exports['3 people, minimum batchs = 1'] = (assert) => {
     consumerIntentId: 'consumerIntent3',
     agentId: 'agent3',
     orderId: 'order1',
-    value: '16'
+    value: '6'
   }]
   const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
   assert.deepEqual(actual, expected)
@@ -387,7 +387,7 @@ exports['4 people, minimum batchs > 1'] = (assert) => {
     consumerIntentId: 'consumerIntent4',
     agentId: 'agent4',
     orderId: 'order1',
-    value: '9'
+    value: '8'
   }]
   const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
   assert.deepEqual(actual, expected)
