@@ -1,5 +1,3 @@
-const assign = require('lodash/fp/assign')
-
 module.exports = {
   needs: ['consumerIntents.effect.save', 'first'],
   create: (api) => ({

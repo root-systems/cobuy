@@ -1,5 +1,4 @@
 const map = require('lodash/fp/map')
-const assign = require('lodash/fp/assign')
 const assignAll = require('lodash/fp/assignAll')
 const mapValues = require('lodash/fp/mapValues')
 const filter = require('lodash/fp/filter')
@@ -68,9 +67,9 @@ module.exports = {
 
         const totals = api.ordering.util.totalsForItem({ allConsumerIntents, batchSize })
 
-        const didMeetMinimumBatches = BigMath.greaterThanOrEqualTo(totals.minimumBatchs, minimumBatches)
+        const didMeetMinimumBatches = BigMath.greaterThanOrEqualTo(totals.maximumBatchs, minimumBatches)
 
-        const expectedConsumerCommitments = api.ordering.util.expectedsForItem({ allConsumerIntents, batchSize, didMeetMinimumBatches, totals })
+        const expectedConsumerCommitments = api.ordering.util.expectedsForItem({ allConsumerIntents, batchSize, minimumBatchs: minimumBatches, totals })
 
         const expectedGroupValue = sumByValue(expectedConsumerCommitments)
         const expectedMyValue = expectedConsumerCommitments.length > 0
@@ -84,8 +83,8 @@ module.exports = {
           if (sofar === false) return sofar
           const consumerIntent = allConsumerIntents.find(ci => ci.id === nextExpected.consumerIntentId)
           return sofar && (
-            BigMath.greaterThanOrEqualTo(consumerIntent.minimumValue, nextExpected.value)
-            && BigMath.lessThanOrEqualTo(nextExpected.value, consumerIntent.maximumValue)
+            BigMath.greaterThanOrEqualTo(consumerIntent.minimumValue, nextExpected.value) &&
+            BigMath.lessThanOrEqualTo(nextExpected.value, consumerIntent.maximumValue)
           )
         }, true)
 

@@ -1,5 +1,3 @@
-const onLoad = require('on-load')
-
 module.exports = {
   needs: {
     'html.hx': 'first',
@@ -16,7 +14,7 @@ module.exports = {
 
     return ({ orders }) => Page([
       api.app.element.pageHeader({
-        title: 'orders', 
+        title: 'orders',
         link: '/orders'
       }),
       api.orders.element.orderTabs({ orders })

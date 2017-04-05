@@ -30,15 +30,27 @@ module.exports = {
 
     return (options) => {
       const {
-        didMeetMinimumBatches,
+        minimumBatchs,
         batchSize,
         totals,
         allConsumerIntents
       } = options
 
-      if (!didMeetMinimumBatches || allConsumerIntents.length === 0) {
+      // if it's not possible to meet the minimum order batches with maximum intents, then early return with all zero
+      const possibleToMeetMinimumBatchs = BigMath.greaterThanOrEqualTo(totals.maximumBatchs, minimumBatchs)
+      if (!possibleToMeetMinimumBatchs || allConsumerIntents.length === 0) {
         return getZeroCommitments(allConsumerIntents)
       }
+
+      // if it's not possible to meet the minimum order batches with desired intents,
+        // run one round of the solver going up
+      // else
+        // find closest batch value to total desired value, respecting min and max constaints
+        // run first round of the solver towards closest batch value, respecting min and max constraints
+        // if done return
+        // run second round of the solver towards next closest batch value, respecting min and max constraints
+        // if done return
+        // run third round of the solver towards closest batch value, go wild without constraints
 
       // find closest batch value to total desired value
       const nextMoreBatchValue = BigMath.mul(BigMath.add(totals.desiredBatchs, '1'), batchSize.value)

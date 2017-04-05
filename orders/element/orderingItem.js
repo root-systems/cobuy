@@ -1,6 +1,4 @@
-const map = require('lodash/fp/map')
 const assign = require('lodash/fp/assign')
-const mapValues = require('lodash/fp/mapValues')
 const BigMath = require('bigmath')
 
 module.exports = {
@@ -71,7 +69,7 @@ module.exports = {
     return connect(Styles, renderOrderingItem)
 
     function renderOrderingItem ({ styles, orderItem }) {
-      const { supplierCommitment, allConsumerIntents, myConsumerIntent } = orderItem
+      const { supplierCommitment, myConsumerIntent } = orderItem
 
       return api.html.hx`
         <li

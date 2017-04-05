@@ -1,5 +1,3 @@
-const mapValues = require('lodash/fp/mapValues')
-
 module.exports = {
   needs: {
     app: {
@@ -10,7 +8,7 @@ module.exports = {
     'html.hx': 'first'
   },
   create: (api) => {
-    const { connect, combineRules } = api.css
+    const { connect } = api.css
 
     const Styles = props => renderRule => ({
       header: ({ theme }) => ({

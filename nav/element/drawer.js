@@ -20,7 +20,7 @@ module.exports = {
       top: 0,
       bottom: 0,
       zIndex: 100,
-      backgroundColor: theme.colors.greyscale[2],
+      backgroundColor: theme.colors.greyscale[2]
     }))
 
     const Drawer = Element('nav', drawerStyle)

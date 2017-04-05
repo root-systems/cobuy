@@ -1,6 +1,5 @@
 const map = require('lodash/fp/map')
 const assign = require('lodash/fp/assign')
-const sumBy = require('lodash/fp/sumBy')
 const mapValues = require('lodash/fp/mapValues')
 const mapValuesWithKey = mapValues.convert({ cap: false })
 const filter = require('lodash/fp/filter')
@@ -24,7 +23,6 @@ module.exports = {
 
       const getOrders = mapValuesWithKey(getOrder)
       const filterToMe = filter(o => o.agentId === whoami)
-      const filterToSupplierCommitment = id => filter(o => o.supplierCommitmentId === id)
 
       return getOrders(orders)
 

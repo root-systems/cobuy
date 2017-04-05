@@ -6,7 +6,7 @@ module.exports = {
     const now = new Date()
     if (isBefore(now, startDate)) {
       return 'pending'
-    } else if (isAfter(now, startDate) && isBefore(now, endDate)) { 
+    } else if (isAfter(now, startDate) && isBefore(now, endDate)) {
       return 'open'
     } else if (isAfter(now, endDate)) {
       return 'closed'

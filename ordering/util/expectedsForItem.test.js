@@ -1,9 +1,12 @@
 const sumBy = require('../../app/util/sumBy').create()
 const expectedsForItem = require('./expectedsForItem').create({
-    app: { util: { sumBy } }
+  app: { util: { sumBy } }
+})
+const totalsForItem = require('./totalsForItem').create({
+  app: { util: { sumBy } }
 })
 
-exports['1 person at 2x batch size'] = (assert, cb) => {
+exports['1 person at 2x batch size'] = (assert) => {
   const allConsumerIntents = [{
     id: 'consumerIntent1',
     agentId: 'agent1',
@@ -15,23 +18,19 @@ exports['1 person at 2x batch size'] = (assert, cb) => {
   const batchSize = {
     value: '5'
   }
-  const didMeetMinimumBatches = true
-  const totals = {
-    desiredValue: '10',
-    desiredBatchs: '2'
-  }
+  const minimumBatchs = '1'
+  const totals = totalsForItem({ allConsumerIntents, batchSize })
   const expected = [{
     agentId: 'agent1',
     orderId: 'order1',
     consumerIntentId: 'consumerIntent1',
     value: '10'
   }]
-  const actual = expectedsForItem({ didMeetMinimumBatches, allConsumerIntents, batchSize, totals })
+  const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
   assert.deepEqual(actual, expected)
-  cb()
 }
 
-exports['1 person at 2.2x batch size'] = (assert, cb) => {
+exports['1 person at 2.2x batch size'] = (assert) => {
   const allConsumerIntents = [{
     id: 'consumerIntent1',
     agentId: 'agent1',
@@ -43,23 +42,19 @@ exports['1 person at 2.2x batch size'] = (assert, cb) => {
   const batchSize = {
     value: '5'
   }
-  const didMeetMinimumBatches = true
-  const totals = {
-    desiredValue: '11',
-    desiredBatchs: '2'
-  }
+  const minimumBatchs = '1'
+  const totals = totalsForItem({ allConsumerIntents, batchSize })
   const expected = [{
     agentId: 'agent1',
     orderId: 'order1',
     consumerIntentId: 'consumerIntent1',
     value: '10'
   }]
-  const actual = expectedsForItem({ didMeetMinimumBatches, allConsumerIntents, batchSize, totals })
+  const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
   assert.deepEqual(actual, expected)
-  cb()
 }
 
-exports['1 person at 1.5x batch size'] = (assert, cb) => {
+exports['1 person at 1.5x batch size'] = (assert) => {
   const allConsumerIntents = [{
     id: 'consumerIntent1',
     agentId: 'agent1',
@@ -71,27 +66,22 @@ exports['1 person at 1.5x batch size'] = (assert, cb) => {
   const batchSize = {
     value: '10'
   }
-  const didMeetMinimumBatches = true
-  const totals = {
-    desiredValue: '15',
-    desiredBatchs: '1'
-  }
+  const minimumBatchs = '1'
+  const totals = totalsForItem({ allConsumerIntents, batchSize })
   const expected = [{
     agentId: 'agent1',
     orderId: 'order1',
     consumerIntentId: 'consumerIntent1',
     value: '20'
   }]
-  const actual = expectedsForItem({ didMeetMinimumBatches, allConsumerIntents, batchSize, totals })
+  const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
   assert.deepEqual(actual, expected)
-  cb()
 }
 
-exports['4 people, steps in correct order'] = (assert, cb) => {
-  cb()
+exports['4 people, steps in correct order'] = (assert) => {
 }
 
-exports['4 people, 2 hit edge of min and max'] = (assert, cb) => {
+exports['4 people, 2 hit edge of min and max'] = (assert) => {
   const allConsumerIntents = [{
     id: 'consumerIntent1',
     agentId: 'agent1',
@@ -124,11 +114,8 @@ exports['4 people, 2 hit edge of min and max'] = (assert, cb) => {
   const batchSize = {
     value: '25'
   }
-  const didMeetMinimumBatches = true
-  const totals = {
-    desiredValue: '41',
-    desiredBatchs: '1'
-  }
+  const minimumBatchs = '1'
+  const totals = totalsForItem({ allConsumerIntents, batchSize })
   const expected = [{
     consumerIntentId: 'consumerIntent1',
     agentId: 'agent1',
@@ -150,12 +137,11 @@ exports['4 people, 2 hit edge of min and max'] = (assert, cb) => {
     orderId: 'order1',
     value: '11'
   }]
-  const actual = expectedsForItem({ didMeetMinimumBatches, allConsumerIntents, batchSize, totals })
+  const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
   assert.deepEqual(actual, expected)
-  cb()
 }
 
-exports['4 people, breaks min and max'] = (assert, cb) => {
+exports['4 people, breaks min and max'] = (assert) => {
   const allConsumerIntents = [{
     id: 'consumerIntent1',
     agentId: 'agent1',
@@ -188,11 +174,8 @@ exports['4 people, breaks min and max'] = (assert, cb) => {
   const batchSize = {
     value: '25'
   }
-  const didMeetMinimumBatches = true
-  const totals = {
-    desiredValue: '35',
-    desiredBatchs: '1'
-  }
+  const minimumBatchs = '1'
+  const totals = totalsForItem({ allConsumerIntents, batchSize })
   const expected = [{
     consumerIntentId: 'consumerIntent1',
     agentId: 'agent1',
@@ -214,12 +197,11 @@ exports['4 people, breaks min and max'] = (assert, cb) => {
     orderId: 'order1',
     value: '6'
   }]
-  const actual = expectedsForItem({ didMeetMinimumBatches, allConsumerIntents, batchSize, totals })
+  const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
   assert.deepEqual(actual, expected)
-  cb()
 }
 
-exports['4 people, does other direction to satisfy min and max'] = (assert, cb) => {
+exports['4 people, does other direction to satisfy min and max'] = (assert) => {
   const allConsumerIntents = [{
     id: 'consumerIntent1',
     agentId: 'agent1',
@@ -252,11 +234,8 @@ exports['4 people, does other direction to satisfy min and max'] = (assert, cb) 
   const batchSize = {
     value: '25'
   }
-  const didMeetMinimumBatches = true
-  const totals = {
-    desiredValue: '35',
-    desiredBatchs: '1'
-  }
+  const minimumBatchs = '1'
+  const totals = totalsForItem({ allConsumerIntents, batchSize })
   const expected = [{
     consumerIntentId: 'consumerIntent1',
     agentId: 'agent1',
@@ -278,7 +257,138 @@ exports['4 people, does other direction to satisfy min and max'] = (assert, cb) 
     orderId: 'order1',
     value: '10'
   }]
-  const actual = expectedsForItem({ didMeetMinimumBatches, allConsumerIntents, batchSize, totals })
+  const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
   assert.deepEqual(actual, expected)
-  cb()
+}
+
+exports['not possible to meet minimum quantity given total maximum value'] = (assert) => {
+  const allConsumerIntents = [{
+    id: 'consumerIntent1',
+    agentId: 'agent1',
+    orderId: 'order1',
+    desiredValue: '8',
+    minimumValue: '7',
+    maximumValue: '14'
+  }]
+  const batchSize = {
+    value: '15'
+  }
+  const minimumBatchs = '1'
+  const totals = totalsForItem({ allConsumerIntents, batchSize })
+  const expected = [{
+    consumerIntentId: 'consumerIntent1',
+    agentId: 'agent1',
+    orderId: 'order1',
+    value: '0'
+  }]
+  const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
+  assert.deepEqual(actual, expected)
+}
+
+exports['3 people, minimum batchs = 1'] = (assert) => {
+  const allConsumerIntents = [{
+    id: 'consumerIntent1',
+    agentId: 'agent1',
+    orderId: 'order1',
+    desiredValue: '4',
+    minimumValue: '1',
+    maximumValue: '8'
+  }, {
+    id: 'consumerIntent2',
+    agentId: 'agent2',
+    orderId: 'order1',
+    desiredValue: '3',
+    minimumValue: '1',
+    maximumValue: '15'
+  }, {
+    id: 'consumerIntent3',
+    agentId: 'agent3',
+    orderId: 'order1',
+    desiredValue: '4',
+    minimumValue: '2',
+    maximumValue: '6'
+  }]
+  const batchSize = {
+    value: '25'
+  }
+  const minimumBatchs = '1'
+  const totals = totalsForItem({ allConsumerIntents, batchSize })
+  const expected = [{
+    consumerIntentId: 'consumerIntent1',
+    agentId: 'agent1',
+    orderId: 'order1',
+    value: '8'
+  }, {
+    consumerIntentId: 'consumerIntent2',
+    agentId: 'agent2',
+    orderId: 'order1',
+    value: '11'
+  }, {
+    consumerIntentId: 'consumerIntent3',
+    agentId: 'agent3',
+    orderId: 'order1',
+    value: '16'
+  }]
+  const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
+  assert.deepEqual(actual, expected)
+}
+
+exports['4 people, minimum batchs > 1'] = (assert) => {
+  const allConsumerIntents = [{
+    id: 'consumerIntent1',
+    agentId: 'agent1',
+    orderId: 'order1',
+    desiredValue: '5',
+    minimumValue: '2',
+    maximumValue: '7'
+  }, {
+    id: 'consumerIntent2',
+    agentId: 'agent2',
+    orderId: 'order1',
+    desiredValue: '9',
+    minimumValue: '3',
+    maximumValue: '15'
+  }, {
+    id: 'consumerIntent3',
+    agentId: 'agent3',
+    orderId: 'order1',
+    desiredValue: '3',
+    minimumValue: '1',
+    maximumValue: '5'
+  }, {
+    id: 'consumerIntent4',
+    agentId: 'agent4',
+    orderId: 'order1',
+    desiredValue: '6',
+    minimumValue: '4',
+    maximumValue: '9'
+  }]
+  const batchSize = {
+    value: '4'
+  }
+  const minimumBatchs = '8'
+  const totals = totalsForItem({ allConsumerIntents, batchSize })
+  const expected = [{
+    consumerIntentId: 'consumerIntent1',
+    agentId: 'agent1',
+    orderId: 'order1',
+    value: '7'
+  }, {
+    consumerIntentId: 'consumerIntent2',
+    agentId: 'agent2',
+    orderId: 'order1',
+    value: '12'
+  }, {
+    consumerIntentId: 'consumerIntent3',
+    agentId: 'agent3',
+    orderId: 'order1',
+    value: '5'
+  }, {
+    consumerIntentId: 'consumerIntent4',
+    agentId: 'agent4',
+    orderId: 'order1',
+    value: '9'
+  }]
+  const actual = expectedsForItem({ minimumBatchs, allConsumerIntents, batchSize, totals })
+  assert.deepEqual(actual, expected)
 }

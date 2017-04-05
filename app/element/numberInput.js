@@ -1,4 +1,3 @@
-const mapValues = require('lodash/fp/mapValues')
 const BigMath = require('bigmath')
 
 module.exports = {

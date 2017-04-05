@@ -4,7 +4,7 @@ const assign = require('lodash/fp/assign')
 module.exports = {
   needs: {
     'inu.dispatch': 'first',
-    //'nav.plugs.link': 'map'
+    // 'nav.plugs.link': 'map'
     nav: {
       'action.toggle': 'first',
       element: {

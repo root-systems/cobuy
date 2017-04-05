@@ -1,5 +1,4 @@
 const map = require('lodash/fp/map')
-const mapValues = require('lodash/fp/mapValues')
 
 // TODO move to app style module
 module.exports = {
@@ -22,12 +21,12 @@ module.exports = {
   },
   create: (api) => {
     const { connect, combineRules } = api.css
-    
+
     const Styles = props => renderRule => ({
       container: api.app.css.column,
-      header: ({ theme }) => {
+      header: ({ theme }) => ({
         backgroundColor: theme.colors.primary
-      },
+      }),
       a: api.app.css.a,
       title: ({ theme }) => ({
         color: theme.colors.brightest,

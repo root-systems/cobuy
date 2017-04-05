@@ -1,4 +1,3 @@
-const { get } = require('libnested')
 const assign = require('lodash/fp/assign')
 
 module.exports = {
