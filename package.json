@@ -1,13 +1,28 @@
 {
   "name": "cobuy",
-  "version": "0.0.0",
-  "description": "Helping you buy good food at good prices, together.",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "Helping people buy good food at good prices, together.",
   "scripts": {
-    "start": "catstack server",
-    "dev": "catstack dev server",
-    "test": "catstack test",
-    "lint": "catstack lint"
+    "start": "dog server",
+    "dev": "dog dev server",
+    "lint": "dog lint",
+    "test": "dog test",
+    "deps": "dependency-check . client.js epic.js layout.js root.js routes.js server.js store.js style.js updater.js  --detective precinct && dependency-check . client.js epic.js layout.js root.js routes.js server.js store.js style.js updater.js --extra --no-dev --detective precinct -i babelify -i babel-preset-es2015 -i babel-preset-react -i babel-plugin-ramda -i pg",
+    "db": "dog db"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react"
+    ],
+    "plugins": [
+      "ramda"
+    ]
   },
   "repository": {
     "type": "git",
@@ -25,18 +40,41 @@
     "buying",
     "group"
   ],
-  "author": "Mikey <michael.williams@enspiral.com> (http://dinosaur.is)",
+  "author": "Root Systems <hello@rootsystems.nz> (http://rootsystems.nz)",
   "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/enspiral-root-systems/cobuy/issues"
   },
   "homepage": "https://github.com/enspiral-root-systems/cobuy#readme",
   "dependencies": {
-    "bigmath": "^1.0.2",
-    "catstack": "^2.0.0-pre.20",
-    "cuid": "^1.3.8",
-    "date-fns": "^1.27.2",
-    "on-load": "^3.2.0",
-    "plur": "^2.1.2"
+    "@ahdinosaur/react-fela": "^4.3.5",
+    "babel-plugin-ramda": "^1.2.0",
+    "dog-names": "^1.0.2",
+    "dogstack": "^0.2.2",
+    "dogstack-agents": "^0.1.2",
+    "feathers-action": "^2.2.0",
+    "feathers-action-react": "ahdinosaur/feathers-action-react#cancel",
+    "feathers-errors": "^2.6.2",
+    "feathers-hooks-common": "^3.0.0",
+    "feathers-knex": "^2.6.3",
+    "pg": "^6.1.5",
+    "ramda": "^0.23.0",
+    "react": "^15.5.4",
+    "react-redux": "^4.4.5",
+    "react-router-dom": "^4.1.1",
+    "react-router-redux": "^5.0.0-alpha.6",
+    "redux-form": "^6.6.0",
+    "redux-fp": "^0.2.0",
+    "redux-observable": "^0.14.1",
+    "reselect": "^3.0.0"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.3.0",
+    "deep-freeze": "^0.0.1",
+    "dependency-check": "^2.8.0",
+    "precinct": "^3.6.0",
+    "sqlite3": "^3.1.8"
   }
 }
