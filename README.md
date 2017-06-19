@@ -35,6 +35,10 @@ npm run dev
 - Postgres
 - [`git-lfs`](https://git-lfs.github.com/)
 
+## Stack
+
+[`dogstack`](https://dogstack.js.org)! :dog: :dog: :dog:
+
 ## Folder Structure
 
 We're following the [dogstack folder structure convention](https://dogstack.js.org/conventions/file-structure.html).
