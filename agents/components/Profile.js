@@ -3,10 +3,9 @@ import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
 import { flow } from 'lodash'
+import { TextField } from 'redux-form-material-ui'
 
 import styles from '../styles/Profile'
-
-import TextField from '../../app/components/TextField'
 
 function Profile (props) {
   const { styles, profile, handleSubmit } = props
@@ -14,14 +13,14 @@ function Profile (props) {
   return (
     <form className={styles.container}>
       <Field
-        label='Name'
         name='name'
+        floatingLabelText='Name'
         component={TextField}
         value={name}
       />
       <Field
-        label='Description'
         name='description'
+        floatingLabelText='Description'
         component={TextField}
         value={description}
       />

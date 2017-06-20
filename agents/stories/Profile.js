@@ -7,9 +7,11 @@ import Profile from '../components/Profile'
 
 import initFelaStorybook from '../../app/helpers/initFelaStorybook'
 import initFormStorybook from '../../app/helpers/initFormStorybook'
+import initMuiStorybook from '../../app/helpers/initMuiStorybook'
 
 const FelaProvider = initFelaStorybook()
 const FormProvider = initFormStorybook()
+const MuiProvider = initMuiStorybook()
 
 const alice = {
   name: 'Alice',
@@ -19,6 +21,7 @@ const alice = {
 storiesOf('agents.Profile', module)
   .addDecorator(FelaProvider)
   .addDecorator(FormProvider)
+  .addDecorator(MuiProvider)
   .add('basic', () => (
     <Profile profile={alice} />
   ))

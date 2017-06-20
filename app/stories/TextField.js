@@ -3,33 +3,21 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { reduxForm, Field } from 'redux-form'
 
-import TextField from '../components/TextField'
+import { TextField } from 'redux-form-material-ui'
 
 import initFelaStorybook from '../helpers/initFelaStorybook'
 import initFormStorybook from '../helpers/initFormStorybook'
+import initMuiStorybook from '../helpers/initMuiStorybook'
 
 const FelaProvider = initFelaStorybook()
 const FormProvider = initFormStorybook()
+const MuiProvider = initMuiStorybook()
 
-const defaultTextFieldInput = {
-  name: 'name',
-  onBlur: action('blur'),
-  onChange: action('change'),
-  onDragStart: action('dragStart'),
-  onDrop: action('drop'),
-  onFocus: action('focus'),
-  value: 'Alice'
-}
-const defaultTextFieldMeta = {
-  touched: false,
-  error: null,
-  warning: null
-}
 const TextForm = props => {
   const { handleSubmit } = props
   return (
     <form onSubmit={ handleSubmit }>
-      <Field name='name' label='Name' component={TextField} />
+      <Field name='name' floatingLabelText='Name' component={TextField} />
     </form>
   )
 }
@@ -38,13 +26,7 @@ const ConnectedTextForm = reduxForm({ form: 'text' })(TextForm)
 storiesOf('app.TextField', module)
   .addDecorator(FelaProvider)
   .addDecorator(FormProvider)
-  .add('raw', () => (
-    <TextField
-      label='Name'
-      input={defaultTextFieldInput}
-      meta={defaultTextFieldMeta}
-    />
-  ))
+  .addDecorator(MuiProvider)
   .add('default', () => (
     <ConnectedTextForm />
   ))
