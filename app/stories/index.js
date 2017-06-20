@@ -9,7 +9,7 @@ import initFelaStorybook from '../helpers/initFelaStorybook'
 
 const FelaProvider = initFelaStorybook()
 
-storiesOf('Button', module)
+storiesOf('app.Button', module)
   .addDecorator(FelaProvider)
   .add('with text', () => (
     <Button onClick={action('clicked')}>

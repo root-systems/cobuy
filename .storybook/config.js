@@ -5,6 +5,7 @@ import { configure } from '@storybook/react';
 function loadStories() {
   // add any topic stories here!
   require('../app/stories')
+  require('../agents/stories')
 }
 
 configure(loadStories, module);
