@@ -63,6 +63,7 @@
     "ramda": "^0.23.0",
     "react": "^15.5.4",
     "react-fela": "^5.0.3",
+    "react-input-autosize": "^1.1.4",
     "react-redux": "^4.4.5",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "^5.0.0-alpha.6",

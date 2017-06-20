@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-fela'
+import AutosizeInput from 'react-input-autosize'
 
 import styles from '../styles/TextField'
 
@@ -15,8 +16,9 @@ function TextField (props) {
         {label}
       </label>
       <div className={styles.inputContainer}>
-        <input
-          className={styles.input}
+        <AutosizeInput
+          className={styles.autosizeContainer}
+          inputClassName={styles.input}
           {...input}
           placeholder={label}
           type='text'
