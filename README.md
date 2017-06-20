@@ -43,11 +43,19 @@ npm run dev
 
 We're following the [dogstack folder structure convention](https://dogstack.js.org/conventions/file-structure.html).
 
+Entry files:
+
+- stories.js
+
 Topics:
 
 - app
 
-TODO
+Types:
+
+- containers
+- components
+- helpers
 
 ### Available Scripts
 
@@ -65,6 +73,14 @@ Starts development server
 
 ```shell
 npm run dev
+```
+
+### `npm run storybook`
+
+Starts [storybook](https://storybook.js.org) server
+
+```shell
+npm run storybook
 ```
 
 ### `npm test`
@@ -115,6 +131,20 @@ TODO organize all the miscy mushy magic
 ```shell
 heroku run npm run db migrate:latest --app=cobuy
 ```
+
+### How to [storybook](https://storybook.js.org)
+
+So you want to tell a story about dumb React components, ey?
+
+Start storybook with [`npm run storybook`](#npm-run-storybook)
+
+The configuration for storybook lives in `.storybook/`.
+
+The stories are in `${topic}/stories/index.js`. The dumb components are in `${topic}/components/${name}.js`
+
+If you add a ["story"](https://storybook.js.org), please add your topic story to `.storybook/config.js`
+
+Check out [`app/stories/index.js`](./app/stories/index.js) for example stories, which you can copy into a new topic.
 
 ### Numbers
 
