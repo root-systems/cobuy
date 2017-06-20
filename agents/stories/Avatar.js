@@ -5,14 +5,9 @@ import { linkTo } from '@storybook/addon-links'
 
 import Avatar from '../components/Avatar'
 
-import initFelaStorybook from '../../app/helpers/initFelaStorybook'
-
-const FelaProvider = initFelaStorybook()
-
 const alice = { name: 'Alice' }
 
 storiesOf('agents.Avatar', module)
-  .addDecorator(FelaProvider)
   .add('default', () => (
     <Avatar agent={alice} />
   ))

@@ -5,12 +5,6 @@ import { reduxForm, Field } from 'redux-form'
 
 import AvatarField from '../components/AvatarField'
 
-import initFelaStorybook from '../helpers/initFelaStorybook'
-import initFormStorybook from '../helpers/initFormStorybook'
-
-const FelaProvider = initFelaStorybook()
-const FormProvider = initFormStorybook()
-
 const AvatarForm = props => {
   const { handleSubmit } = props
   return (
@@ -27,8 +21,6 @@ const ConnectedAvatarForm = reduxForm({
 })(AvatarForm)
 
 storiesOf('app.AvatarField', module)
-  .addDecorator(FelaProvider)
-  .addDecorator(FormProvider)
   .add('default', () => (
     <ConnectedAvatarForm />
   ))
