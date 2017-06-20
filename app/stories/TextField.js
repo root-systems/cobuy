@@ -29,7 +29,7 @@ const TextForm = props => {
   const { handleSubmit } = props
   return (
     <form onSubmit={ handleSubmit }>
-      <Field label='Name' component={TextField} />
+      <Field name='name' label='Name' component={TextField} />
     </form>
   )
 }
