@@ -5,7 +5,12 @@ import { linkTo } from '@storybook/addon-links'
 
 import Avatar from '../components/Avatar'
 
-const alice = { name: 'Alice' }
+const alice = {
+  profile: {
+    name: 'Alice',
+    image: 'http://random.cat/i/cute_animals_show_feeling_06.jpg'
+  }
+}
 
 storiesOf('agents.Avatar', module)
   .add('default', () => (
