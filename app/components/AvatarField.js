@@ -7,6 +7,7 @@ import Slider from 'material-ui/Slider'
 import styles from '../styles/AvatarField'
 
 import Button from './Button'
+import Avatar from '../../agents/components/Avatar'
 
 // TODO move somewhere better
 class FileInput extends React.Component {
@@ -38,7 +39,8 @@ class AvatarEditor extends React.Component {
     super(props, context)
     this.state = {
       image: props.image,
-      scale: 1
+      scale: 1,
+      isEditing: false,
     }
   }
 
@@ -62,6 +64,10 @@ class AvatarEditor extends React.Component {
     const { onChange } = this.props
     const nextImage = this.editor.getImage().toDataURL()
     onChange(nextImage)
+    this.setState({
+      isEditing: false,
+      scale: 1
+    })
   }
 
   setEditorRef = (editor) => {
@@ -71,37 +77,44 @@ class AvatarEditor extends React.Component {
   render () {
     const canvasStyle = styles.canvas(this.props) // we can't use special fela magic here
     const { editor } = this.props
-    const { image, scale } = this.state
+    const { image, scale, isEditing } = this.state
+
+    if (isEditing) {
+      return (
+        <div>
+          <AvatarEditorCanvas
+            ref={this.setEditorRef}
+            style={canvasStyle}
+            {...editor}
+            image={image}
+            scale={scale}
+            crossOrigin={'anonymous'}
+          />
+          <Slider
+            name='zoom'
+            value={scale}
+            defaultValue={scale}
+            min={0}
+            max={2}
+            onChange={(evt, newVal) => this.handleScaleChange(newVal)}
+          />
+          <FileInput
+            onChange={dataUrl => this.handleFileChange(dataUrl)}
+          />
+          <Button onClick={() => { this.handleSaveImage() }} type='button'>Save</Button>
+        </div>
+      )
+    }
 
     return (
       <div>
-        <AvatarEditorCanvas
-          ref={this.setEditorRef}
-          style={canvasStyle}
-          {...editor}
+        <Avatar
           image={image}
-          scale={scale}
-          crossOrigin={'anonymous'}
         />
-        <Slider
-          name='zoom'
-          value={scale}
-          defaultValue={scale}
-          min={0}
-          max={2}
-          onChange={(evt, newVal) => this.handleScaleChange(newVal)}
-        />
-        <FileInput
-          onChange={dataUrl => this.handleFileChange(dataUrl)}
-        />
-        <Button
-          onClick={() => { this.handleSaveImage() }}
-          type='button'
-        >
-          Save
-        </ Button>
+        <Button type='button' onClick={() => { this.setState({ isEditing: true }) }}>Edit</Button>
       </div>
     )
+
   }
 }
 
