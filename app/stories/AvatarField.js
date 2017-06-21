@@ -22,5 +22,6 @@ const ConnectedAvatarForm = reduxForm({
 
 storiesOf('app.AvatarField', module)
   .add('default', () => (
-    <ConnectedAvatarForm />
+    <ConnectedAvatarForm
+    />
   ))

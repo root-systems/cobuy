@@ -6,6 +6,8 @@ import Slider from 'material-ui/Slider'
 
 import styles from '../styles/AvatarField'
 
+import Button from './Button'
+
 // TODO move somewhere better
 class FileInput extends React.Component {
   render () {
@@ -56,10 +58,8 @@ class AvatarEditor extends React.Component {
     this.setState({ scale })
   }
 
-  handleImageChange () {
+  handleSaveImage () {
     const { onChange } = this.props
-    // TODO try to figure out original source type (png or jpeg)
-    // to pass to .toDataURL(type)
     const nextImage = this.editor.getImage().toDataURL()
     onChange(nextImage)
   }
@@ -81,7 +81,6 @@ class AvatarEditor extends React.Component {
           {...editor}
           image={image}
           scale={scale}
-          onImageChange={() => this.handleImageChange()}
           crossOrigin={'anonymous'}
         />
         <Slider
@@ -95,6 +94,12 @@ class AvatarEditor extends React.Component {
         <FileInput
           onChange={dataUrl => this.handleFileChange(dataUrl)}
         />
+        <Button
+          onClick={() => { this.handleSaveImage() }}
+          type='button'
+        >
+          Save
+        </ Button>
       </div>
     )
   }
