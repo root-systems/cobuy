@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-fela'
+import { Field } from 'redux-form'
 import AvatarEditorCanvas from 'react-avatar-editor'
+import Slider from 'material-ui/Slider'
 
 import styles from '../styles/AvatarField'
 
@@ -34,7 +36,8 @@ class AvatarEditor extends React.Component {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      image: props.image
+      image: props.image,
+      scale: 0.5
     }
   }
 
@@ -50,10 +53,14 @@ class AvatarEditor extends React.Component {
     this.setState({ image })
   }
 
+  handleScaleChange (scale) {
+    this.setState({ scale })
+  }
+
   render () {
     const canvasStyle = styles.canvas(this.props) // we can't use special fela magic here
     const { editor } = this.props
-    const { image } = this.state
+    const { image, scale } = this.state
 
     return (
       <div>
@@ -61,6 +68,13 @@ class AvatarEditor extends React.Component {
           style={canvasStyle}
           {...editor}
           image={image}
+          scale={scale}
+        />
+        <Slider
+          name='zoom'
+          value={scale}
+          defaultValue={0.5}
+          onChange={(evt, newVal) => this.handleScaleChange(newVal)}
         />
         <FileInput
           onChange={dataUrl => this.handleFileChange(dataUrl)}
