@@ -37,7 +37,7 @@ class AvatarEditor extends React.Component {
     super(props, context)
     this.state = {
       image: props.image,
-      scale: 0.5
+      scale: 1
     }
   }
 
@@ -73,7 +73,9 @@ class AvatarEditor extends React.Component {
         <Slider
           name='zoom'
           value={scale}
-          defaultValue={0.5}
+          defaultValue={scale}
+          min={0}
+          max={2}
           onChange={(evt, newVal) => this.handleScaleChange(newVal)}
         />
         <FileInput
