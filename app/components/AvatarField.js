@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-fela'
-import { Field } from 'redux-form'
 import AvatarEditorCanvas from 'react-avatar-editor'
 import Slider from 'material-ui/Slider'
 
@@ -58,7 +57,11 @@ class AvatarEditor extends React.Component {
   }
 
   handleImageChange () {
-    const currentImage = this.editor.getImage().toBlob((blob) => { console.log(blob) })
+    const { onChange } = this.props
+    // TODO try to figure out original source type (png or jpeg)
+    // to pass to .toDataURL(type)
+    const nextImage = this.editor.getImage().toDataURL()
+    onChange(nextImage)
   }
 
   setEditorRef = (editor) => {
@@ -79,6 +82,7 @@ class AvatarEditor extends React.Component {
           image={image}
           scale={scale}
           onImageChange={() => this.handleImageChange()}
+          crossOrigin={'anonymous'}
         />
         <Slider
           name='zoom'
@@ -99,7 +103,7 @@ class AvatarEditor extends React.Component {
 // http://redux-form.com/6.8.0/examples/fieldLevelValidation/
 function AvatarField (props) {
   const { input, label, type, meta, editor } = props
-  const { name, value } = input
+  const { name, value, onChange } = input
   const { touched, error, warning } = meta
 
   return (
@@ -110,6 +114,7 @@ function AvatarField (props) {
       <AvatarEditor
         editor={editor}
         image={value}
+        onChange={onChange}
       />
       {
         touched
