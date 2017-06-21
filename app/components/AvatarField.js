@@ -57,6 +57,14 @@ class AvatarEditor extends React.Component {
     this.setState({ scale })
   }
 
+  handleImageChange () {
+    const currentImage = this.editor.getImage().toBlob((blob) => { console.log(blob) })
+  }
+
+  setEditorRef = (editor) => {
+    this.editor = editor
+  }
+
   render () {
     const canvasStyle = styles.canvas(this.props) // we can't use special fela magic here
     const { editor } = this.props
@@ -65,10 +73,12 @@ class AvatarEditor extends React.Component {
     return (
       <div>
         <AvatarEditorCanvas
+          ref={this.setEditorRef}
           style={canvasStyle}
           {...editor}
           image={image}
           scale={scale}
+          onImageChange={() => this.handleImageChange()}
         />
         <Slider
           name='zoom'
