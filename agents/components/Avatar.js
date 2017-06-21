@@ -16,7 +16,7 @@ function Avatar (props) {
   const {
     size,
     styles,
-    agent: { profile: { name, image } }
+    image
   } = props
   return (
     <span className={styles.container}>
@@ -30,10 +30,7 @@ function Avatar (props) {
 }
 
 Avatar.propTypes = {
-  agent: PropTypes.shape({
-    name: PropTypes.string,
-    image: PropTypes.string
-  }).isRequired,
+  image: PropTypes.string,
   size: PropTypes.oneOf(['small', 'medium', 'large'])
 }
 

@@ -5,24 +5,18 @@ import { linkTo } from '@storybook/addon-links'
 
 import Avatar from '../components/Avatar'
 
-const alice = {
-  profile: {
-    name: 'Alice',
-    image: 'http://random.cat/i/cute_animals_show_feeling_06.jpg'
-  }
-}
+const catz = 'http://random.cat/i/cute_animals_show_feeling_06.jpg'
 
 storiesOf('agents.Avatar', module)
   .add('default', () => (
-    <Avatar agent={alice} />
+    <Avatar image={catz} />
   ))
   .add('small', () => (
-    <Avatar size={'small'} agent={alice} />
+    <Avatar size={'small'} image={catz} />
   ))
   .add('medium', () => (
-    <Avatar size={'medium'} agent={alice} />
+    <Avatar size={'medium'} image={catz} />
   ))
   .add('large', () => (
-    <Avatar size={'large'} agent={alice} />
+    <Avatar size={'large'} image={catz} />
   ))
-
