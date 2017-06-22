@@ -152,4 +152,8 @@ function AvatarField (props) {
   )
 }
 
+AvatarField.defaultProps = {
+  isEditingProfile: true
+}
+
 export default connect(styles)(AvatarField)

@@ -26,15 +26,14 @@ class Profile extends React.Component {
 
   render () {
     const { isEditing } = this.state
-    const { styles, profile } = this.props
-    const { name, description } = profile
+    const { styles, agent, agent: { profile: { name, description } } } = this.props
     return (
       <form className={styles.container}>
         <Field
           name='avatar'
-          label='Avatar'
           component={AvatarField}
           isEditingProfile={isEditing}
+          agent={agent}
         />
         <Field
           name='name'

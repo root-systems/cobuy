@@ -6,11 +6,13 @@ import { reduxForm, Field } from 'redux-form'
 import Profile from '../components/Profile'
 
 const alice = {
-  name: 'Alice',
-  description: 'a cool cat',
-  image: null
+  profile: {
+    name: 'Alice',
+    description: 'a cool cat',
+    image: 'http://dinosaur.is/images/mikey-small.jpg'
+  }
 }
 storiesOf('agents.Profile', module)
   .add('basic', () => (
-    <Profile profile={alice} />
+    <Profile agent={alice} />
   ))
