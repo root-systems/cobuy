@@ -1,26 +1,36 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-fela'
+import MuiAvatar from 'material-ui/Avatar'
 
 import styles from '../styles/Avatar'
 
+const sizeInPx = {
+  small: 40,
+  medium: 60,
+  large: 80
+}
+
 // https://ant.design/components/avatar/
 function Avatar (props) {
-  const { styles, agent } = props
-  const { name } = agent
+  const {
+    size,
+    styles,
+    avatar
+  } = props
   return (
-    <div className={styles.container}>
-      <div className={styles.name}>
-        {name}
-      </div>
-    </div>
+    <span className={styles.container}>
+      <MuiAvatar
+        className={styles.image}
+        size={sizeInPx[size]}
+        src={avatar}
+      />
+    </span>
   )
 }
 
 Avatar.propTypes = {
-  agent: PropTypes.shape({
-    name: PropTypes.string.isRequired
-  }).isRequired,
+  avatar: PropTypes.string,
   size: PropTypes.oneOf(['small', 'medium', 'large'])
 }
 

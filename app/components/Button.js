@@ -4,7 +4,7 @@ import { createComponent } from 'react-fela'
 
 import styles from '../styles/Button'
 
-const Button = createComponent(styles, 'button', ['onClick'])
+const Button = createComponent(styles, 'button', ['onClick', 'type'])
 
 Button.propTypes = {
   children: PropTypes.string.isRequired,
@@ -12,7 +12,8 @@ Button.propTypes = {
 }
 
 Button.defaultProps = {
-  onClick: () => {}
+  onClick: () => {},
+  type: 'button'
 }
 
 export default Button

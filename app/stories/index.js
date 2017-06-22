@@ -1,23 +1,18 @@
-import React from 'react'
-import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
-import { linkTo } from '@storybook/addon-links'
-
-import Button from '../components/Button'
+import { configure, addDecorator } from '@storybook/react'
 
 import initFelaStorybook from '../helpers/initFelaStorybook'
+import initFormStorybook from '../helpers/initFormStorybook'
+import initMuiStorybook from '../helpers/initMuiStorybook'
 
 const FelaProvider = initFelaStorybook()
+const FormProvider = initFormStorybook()
+const MuiProvider = initMuiStorybook()
 
-storiesOf('app.Button', module)
-  .addDecorator(FelaProvider)
-  .add('with text', () => (
-    <Button onClick={action('clicked')}>
-      Hello Button
-    </Button>
-  ))
-  .add('with some emoji', () => (
-    <Button onClick={action('clicked')}>
-      😀 😎 👍 💯
-    </Button>
-  ))
+// global decorators applied to all stories
+addDecorator(FelaProvider)
+addDecorator(FormProvider)
+addDecorator(MuiProvider)
+
+require('./Button')
+require('./TextField')
+require('./AvatarField')
