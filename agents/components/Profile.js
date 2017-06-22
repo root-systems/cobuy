@@ -6,35 +6,63 @@ import { flow } from 'lodash'
 import { TextField } from 'redux-form-material-ui'
 
 import styles from '../styles/Profile'
+
+import Button from '../../app/components/Button'
 import AvatarField from '../../app/components/AvatarField'
 
-function Profile (props) {
-  const { styles, profile, handleSubmit } = props
-  const { name, description } = profile
-  return (
-    <form className={styles.container}>
-      <Field
-        name='avatar'
-        label='Avatar'
-        component={AvatarField}
-      />
-      <Field
-        name='name'
-        floatingLabelText='Name'
-        component={TextField}
-        value={name}
-      />
-      <Field
-        name='description'
-        floatingLabelText='Description'
-        component={TextField}
-        value={description}
-        multiLine={true}
-        maxWidth={true}
-        rows={3}
-      />
-    </form>
-  )
+class Profile extends React.Component {
+  constructor (props, context) {
+    super(props, context)
+    this.state = {
+      isEditing: false
+    }
+  }
+
+  toggleEdit () {
+    this.setState({
+      isEditing: this.state.isEditing ? false : true
+    })
+  }
+
+  render () {
+    const { isEditing } = this.state
+    const { styles, profile } = this.props
+    const { name, description } = profile
+    return (
+      <form className={styles.container}>
+        <Field
+          name='avatar'
+          label='Avatar'
+          component={AvatarField}
+          isEditingProfile={isEditing}
+        />
+        <Field
+          name='name'
+          floatingLabelText='Name'
+          component={TextField}
+          value={name}
+          disabled={!isEditing}
+        />
+        <Field
+          name='description'
+          floatingLabelText='Description'
+          component={TextField}
+          value={description}
+          multiLine={true}
+          rows={3}
+          disabled={!isEditing}
+        />
+        <Button type='button' onClick={() => { this.toggleEdit() }}>
+          {
+            isEditing
+            ? 'Save Profile'
+            : 'Edit Profile'
+          }
+        </Button>
+      </form>
+    )
+  }
+
 }
 
 Profile.propTypes = {

@@ -76,7 +76,7 @@ class AvatarEditor extends React.Component {
 
   render () {
     const canvasStyle = styles.canvas(this.props) // we can't use special fela magic here
-    const { editor } = this.props
+    const { editor, isEditingProfile } = this.props
     const { image, scale, isEditing } = this.state
 
     if (isEditing) {
@@ -111,7 +111,11 @@ class AvatarEditor extends React.Component {
         <Avatar
           image={image}
         />
-        <Button type='button' onClick={() => { this.setState({ isEditing: true }) }}>Edit</Button>
+        {
+          isEditingProfile
+          ? <Button type='button' onClick={() => { this.setState({ isEditing: true }) }}>Edit</Button>
+          : null
+        }
       </div>
     )
 
@@ -120,7 +124,7 @@ class AvatarEditor extends React.Component {
 
 // http://redux-form.com/6.8.0/examples/fieldLevelValidation/
 function AvatarField (props) {
-  const { input, label, type, meta, editor } = props
+  const { input, label, type, meta, editor, isEditingProfile } = props
   const { name, value, onChange } = input
   const { touched, error, warning } = meta
 
@@ -133,6 +137,7 @@ function AvatarField (props) {
         editor={editor}
         image={value}
         onChange={onChange}
+        isEditingProfile={isEditingProfile}
       />
       {
         touched
