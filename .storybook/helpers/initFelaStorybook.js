@@ -3,11 +3,12 @@ import React from 'react'
 import { createRenderer } from 'fela'
 import { Provider } from 'react-fela'
 
+import rootConfig from '../../root'
+import styleConfig from '../../style'
+
 const renderer = createRenderer()
-const ss = document.createElement('style')
-ss.id = 'stylesheet'
-document.body.appendChild(ss)
-const stylesheet = document.querySelector('#stylesheet')
+const stylesheet = document.querySelector(rootConfig.styleNode)
+styleConfig.setup(renderer)
 
 export default () =>
   story => {
