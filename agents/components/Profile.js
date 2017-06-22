@@ -29,6 +29,9 @@ function Profile (props) {
         floatingLabelText='Description'
         component={TextField}
         value={description}
+        multiLine={true}
+        maxWidth={true}
+        rows={3}
       />
     </form>
   )
