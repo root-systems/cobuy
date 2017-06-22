@@ -10,22 +10,28 @@ import FontIcon from 'material-ui/FontIcon'
 
 import styles from '../styles/SignIn'
 
+// https://blog.codinghorror.com/the-god-login/
+
 const remoteAuthenticationMethods = [
   {
     label: 'with Google',
-    icon: 'fa-google'
+    icon: 'fa fa-google',
+    backgroundColor: '4285F44'
   },
   {
     label: 'with Facebook',
-    icon: 'fa-facebook'
+    icon: 'fa fa-facebook',
+    backgroundColor: '#3b5998'
   },
   {
     label: 'with Twitter',
-    icon: 'fa-twitter'
+    icon: 'fa fa-twitter',
+    backgroundColor: '#00bced'
   },
   {
     label: 'with GitHub',
-    icon: 'fa-github'
+    icon: 'fa fa-github',
+    backgroundColor: '#6d6d6d'
   }
 ]
 
@@ -37,12 +43,14 @@ function LocalAuthenticationForm (props) {
       <Field
         name='email'
         floatingLabelText='Email'
+        fullWidth={true}
         component={TextField}
       />
       <Field
         name='password'
         type='password'
         floatingLabelText='Password'
+        fullWidth={true}
         component={TextField}
       />
       <div className={styles.actions}>
@@ -70,15 +78,22 @@ function SignIn (props) {
   const { styles } = props
   return (
     <div className={styles.container}>
-      <div className={styles.remotes}>
+      <p className={styles.intro}>
+        Sign in with...
+      </p>
+      <ul className={styles.remotes}>
         {map(remoteAuthenticationMethods, method => (
-          <FlatButton
-            label={method.label}
-            icon={<FontIcon className={method.icon} />}
-            className={styles.remote}
-          />
+          <li className={styles.remote}>
+            <FlatButton
+              label={method.label}
+              icon={<FontIcon className={method.icon} />}
+              backgroundColor={method.backgroundColor}
+              hoverColor={method.hoverColor}
+              fullWidth={true}
+            />
+          </li>
         ))}
-      </div>
+      </ul>
       <LocalAuthenticationForm
         styles={styles}
       />
