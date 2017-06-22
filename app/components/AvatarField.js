@@ -38,22 +38,22 @@ class AvatarEditor extends React.Component {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      image: props.image,
+      avatar: props.avatar,
       scale: 1,
       isEditing: false,
     }
   }
 
   componentWillReceiveProps (nextProps) {
-    const { image: nextImage } = nextProps
-    const { image: prevImage } = this.state
-    if (nextImage !== prevImage) {
-      this.setState({ image: nextImage })
+    const { avatar: nextAvatar } = nextProps
+    const { avatar: prevAvatar } = this.state
+    if (nextAvatar !== prevAvatar) {
+      this.setState({ avatar: nextAvatar })
     }
   }
 
-  handleFileChange (image) {
-    this.setState({ image })
+  handleFileChange (avatar) {
+    this.setState({ avatar })
   }
 
   handleScaleChange (scale) {
@@ -62,8 +62,8 @@ class AvatarEditor extends React.Component {
 
   handleSaveImage () {
     const { onChange } = this.props
-    const nextImage = this.editor.getImage().toDataURL()
-    onChange(nextImage)
+    const nextAvatar = this.editor.getImage().toDataURL()
+    onChange(nextAvatar)
     this.setState({
       isEditing: false,
       scale: 1
@@ -77,7 +77,7 @@ class AvatarEditor extends React.Component {
   render () {
     const canvasStyle = styles.canvas(this.props) // we can't use special fela magic here
     const { editor, isEditingProfile } = this.props
-    const { image, scale, isEditing } = this.state
+    const { avatar, scale, isEditing } = this.state
 
     if (isEditing) {
       return (
@@ -86,7 +86,7 @@ class AvatarEditor extends React.Component {
             ref={this.setEditorRef}
             style={canvasStyle}
             {...editor}
-            image={image}
+            image={avatar}
             scale={scale}
             crossOrigin={'anonymous'}
           />
@@ -101,7 +101,7 @@ class AvatarEditor extends React.Component {
           <FileInput
             onChange={dataUrl => this.handleFileChange(dataUrl)}
           />
-          <Button onClick={() => { this.handleSaveImage() }} type='button'>Save</Button>
+          <Button onClick={() => { this.handleSaveImage() }} type='button'>Save Avatar</Button>
         </div>
       )
     }
@@ -109,11 +109,11 @@ class AvatarEditor extends React.Component {
     return (
       <div>
         <Avatar
-          image={image}
+          avatar={avatar}
         />
         {
           isEditingProfile
-          ? <Button type='button' onClick={() => { this.setState({ isEditing: true }) }}>Edit</Button>
+          ? <Button type='button' onClick={() => { this.setState({ isEditing: true }) }}>Edit Avatar</Button>
           : null
         }
       </div>
@@ -130,12 +130,9 @@ function AvatarField (props) {
 
   return (
     <div className={styles.container}>
-      <label className={styles.label}>
-        {label}
-      </label>
       <AvatarEditor
         editor={editor}
-        image={value}
+        avatar={value}
         onChange={onChange}
         isEditingProfile={isEditingProfile}
       />

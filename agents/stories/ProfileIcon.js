@@ -7,7 +7,7 @@ import ProfileIcon from '../components/ProfileIcon'
 
 const alice = {
   profile: {
-    image: 'http://random.cat/i/cute_animals_show_feeling_06.jpg',
+    avatar: 'http://random.cat/i/cute_animals_show_feeling_06.jpg',
     name: 'Alice',
     description: 'a cool cat'
   }

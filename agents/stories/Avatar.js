@@ -9,14 +9,14 @@ const catz = 'http://random.cat/i/cute_animals_show_feeling_06.jpg'
 
 storiesOf('agents.Avatar', module)
   .add('default', () => (
-    <Avatar image={catz} />
+    <Avatar avatar={catz} />
   ))
   .add('small', () => (
-    <Avatar size={'small'} image={catz} />
+    <Avatar size={'small'} avatar={catz} />
   ))
   .add('medium', () => (
-    <Avatar size={'medium'} image={catz} />
+    <Avatar size={'medium'} avatar={catz} />
   ))
   .add('large', () => (
-    <Avatar size={'large'} image={catz} />
+    <Avatar size={'large'} avatar={catz} />
   ))

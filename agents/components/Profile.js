@@ -26,14 +26,15 @@ class Profile extends React.Component {
 
   render () {
     const { isEditing } = this.state
-    const { styles, agent, agent: { profile: { name, description } } } = this.props
+    const { styles, agent, agent: { profile: { name, description, avatar } } } = this.props
+
     return (
       <form className={styles.container}>
         <Field
           name='avatar'
           component={AvatarField}
           isEditingProfile={isEditing}
-          agent={agent}
+          value={avatar}
         />
         <Field
           name='name'
@@ -65,9 +66,13 @@ class Profile extends React.Component {
 }
 
 Profile.propTypes = {
-  profile: PropTypes.shape({
-    name: PropTypes.string.isRequired
-  }).isRequired
+  agent: PropTypes.shape({
+    profile: PropTypes.shape({
+      avatar: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired
+  })
 }
 
 Profile.defaultProps = {

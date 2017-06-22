@@ -9,7 +9,7 @@ const alice = {
   profile: {
     name: 'Alice',
     description: 'a cool cat',
-    image: 'http://dinosaur.is/images/mikey-small.jpg'
+    avatar: 'http://dinosaur.is/images/mikey-small.jpg'
   }
 }
 storiesOf('agents.Profile', module)

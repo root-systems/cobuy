@@ -16,21 +16,21 @@ function Avatar (props) {
   const {
     size,
     styles,
-    image
+    avatar
   } = props
   return (
     <span className={styles.container}>
       <MuiAvatar
         className={styles.image}
         size={sizeInPx[size]}
-        src={image}
+        src={avatar}
       />
     </span>
   )
 }
 
 Avatar.propTypes = {
-  image: PropTypes.string,
+  avatar: PropTypes.string,
   size: PropTypes.oneOf(['small', 'medium', 'large'])
 }
 
