@@ -14,22 +14,22 @@ import styles from '../styles/SignIn'
 
 const remoteAuthenticationMethods = [
   {
-    label: 'with Google',
+    label: 'Google',
     icon: 'fa fa-google',
-    backgroundColor: '4285F44'
+    backgroundColor: '#ffffff'
   },
   {
-    label: 'with Facebook',
+    label: 'Facebook',
     icon: 'fa fa-facebook',
     backgroundColor: '#3b5998'
   },
   {
-    label: 'with Twitter',
+    label: 'Twitter',
     icon: 'fa fa-twitter',
     backgroundColor: '#00bced'
   },
   {
-    label: 'with GitHub',
+    label: 'GitHub',
     icon: 'fa fa-github',
     backgroundColor: '#6d6d6d'
   }
@@ -83,8 +83,10 @@ function SignIn (props) {
       </p>
       <ul className={styles.remotes}>
         {map(remoteAuthenticationMethods, method => (
-          <li className={styles.remote}>
-            <FlatButton
+          <li
+            className={styles.remote}
+          >
+            <RaisedButton
               label={method.label}
               icon={<FontIcon className={method.icon} />}
               backgroundColor={method.backgroundColor}
