@@ -1,17 +1,27 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { connect as connectRedux } from 'react-redux'
 import { connect as connectFela } from 'react-fela'
-import { Field, FieldArray, reduxForm as connectForm } from 'redux-form'
+import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
 import { flow } from 'lodash'
 import { TextField } from 'redux-form-material-ui'
 
 import styles from '../styles/MemberInvites'
 import Button from '../../app/components/Button'
 
-function renderMembers ({ fields, meta: { error, submitFailed } }) {
+function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
+  const { memberVals } = formProps
+  if (memberVals) {
+    const memberKeys = Object.keys(memberVals)
+    if (memberKeys.length > 0) {
+      const lastMember = memberVals[memberKeys[memberKeys.length - 1]]
+      if (Object.keys(lastMember).length > 0) {
+        fields.push({})
+      }
+    }
+  }
   return (
     <div>
-      <Button type='button' onClick={() => fields.push({})}>Add Member</Button>
       {submitFailed && error && <span>{error}</span>}
       {fields.map((member, index) => (
         <div key={index}>
@@ -32,7 +42,9 @@ function renderMembers ({ fields, meta: { error, submitFailed } }) {
           />
           <Button type='button' onClick={() => fields.remove(index)}>Remove Member</Button>
         </div>
-      ))}
+      )
+    )}
+      <Button type='button' onClick={() => fields.push({})}>Add Member</Button>
     </div>
   )
 }
@@ -46,14 +58,21 @@ function MemberInvites (props) {
         component={TextField}
         floatingLabelText='Group Name'
       />
-      <FieldArray name='members' component={renderMembers} />
+      <FieldArray name='members' component={renderMembers} formProps={props} />
     </form>
   )
 }
+
+const selector = formValueSelector('memberInvites')
 
 export default flow(
   connectFela(styles),
   connectForm({
     form: 'memberInvites'
-  })
+  }),
+  connectRedux(
+    state => ({
+      memberVals: selector(state, 'members')
+    })
+  )
 )(MemberInvites)
