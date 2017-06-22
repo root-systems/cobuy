@@ -19,32 +19,28 @@ class MemberInvite extends React.Component {
 
   render () {
     const { name, email, role } = this.state
-    const { isEditing } = this.props
 
     return (
-      <form className={styles.container}>
+      <div className={styles.container}>
         <Field
           name='name'
           floatingLabelText='Name'
           component={TextField}
           value={name}
-          disabled={!isEditing}
         />
         <Field
           name='email'
           floatingLabelText='Email'
           component={TextField}
           value={email}
-          disabled={!isEditing}
         />
         <Field
           name='role'
           floatingLabelText='Role'
           component={TextField}
           value={role}
-          disabled={!isEditing}
         />
-      </form>
+      </div>
     )
   }
 }
