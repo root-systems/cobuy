@@ -13,6 +13,12 @@ class MemberInvites extends React.Component {
   render () {
     return (
       <form className={styles.container}>
+        <Field
+          name='groupName'
+          type='text'
+          component={TextField}
+          floatingLabelText='Group Name'
+        />
         <MemberInvite />
         <MemberInvite />
         <MemberInvite />
