@@ -7,12 +7,11 @@ export default {
         height: '100%',
         margin: 0,
         padding: 0,
-        fontFamily: 'Lato'
+        fontFamily: 'Roboto'
       },
       'html,body,#app'
     )
-    renderer.renderStatic({ display: 'flex' }, 'div')
-    renderer.renderFont('Lato', [
+    renderer.renderFont('Roboto', [
       'https://fonts.gstatic.com/s/lato/v11/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff'
     ])
   }
