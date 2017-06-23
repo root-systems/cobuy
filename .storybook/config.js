@@ -5,6 +5,7 @@ import { configure, addDecorator } from '@storybook/react'
 import initFelaStorybook from './helpers/initFelaStorybook'
 import initFormStorybook from './helpers/initFormStorybook'
 import initMuiStorybook from './helpers/initMuiStorybook'
+import initIntlStorybook from './helpers/initIntlStorybook'
 
 function loadStories() {
   // add any topic stories here!
@@ -15,10 +16,12 @@ function loadStories() {
 const FelaProvider = initFelaStorybook()
 const FormProvider = initFormStorybook()
 const MuiProvider = initMuiStorybook()
+const IntlProvider = initIntlStorybook()
 
 // global decorators applied to all stories
 addDecorator(FelaProvider)
 addDecorator(FormProvider)
 addDecorator(MuiProvider)
+addDecorator(IntlProvider)
 
 configure(loadStories, module);
