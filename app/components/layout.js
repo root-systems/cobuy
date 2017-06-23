@@ -9,7 +9,7 @@ import Nav from './nav'
 
 const Container = createComponent(styles.container, 'div')
 
-export default function Layout (props) {
+function Layout (props) {
   const { routes, navigationRoutes } = props
   const pages = mapRoutePages(routes)
 
@@ -34,3 +34,16 @@ const mapRoutePages = map(route => {
     <Route path={path} key={key} exact={exact} component={Component} />
   )
 })
+
+// TODO move this to some config for dogstack
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { IntlProvider } from 'react-intl'
+export default (props) => {
+  return (
+    <MuiThemeProvider>
+      <IntlProvider locale='en'>
+        <Layout {...props} />
+      </IntlProvider>
+    </MuiThemeProvider>
+  )
+}

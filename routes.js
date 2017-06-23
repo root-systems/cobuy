@@ -4,10 +4,11 @@ import React from 'react'
 // Top Level Containers
 import Home from './app/containers/home'
 
+import Register from './agents/containers/Register'
+
 import {
   SignIn,
-  SignOut,
-  Register
+  SignOut
 } from 'dogstack-agents/components'
 import {
   UserIsAuthenticated,
@@ -39,11 +40,11 @@ export default [
     }
   },
   {
-    name: 'sign-out',
-    path: '/sign-out',
+    name: 'log-out',
+    path: '/log-out',
     Component: UserIsAuthenticatedOrHome(SignOut),
     navigation: {
-      title: 'Sign out',
+      title: 'Log out',
       selector: getIsAuthenticated
     }
   },

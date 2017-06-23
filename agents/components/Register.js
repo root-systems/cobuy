@@ -74,6 +74,7 @@ function LocalAuthenticationForm (props) {
       />
       <div className={styles.actions}>
         <RaisedButton
+          type='submit'
           label='Create new account'
           primary={true}
           className={styles.registerAction}
@@ -94,7 +95,7 @@ LocalAuthenticationForm = flow(
 )(LocalAuthenticationForm)
 
 function Register (props) {
-  const { styles } = props
+  const { styles, actions } = props
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
@@ -117,6 +118,7 @@ function Register (props) {
       </ul>
       <LocalAuthenticationForm
         styles={styles}
+        onSubmit={actions.authentication.register}
       />
     </div>
   )

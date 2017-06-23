@@ -13,11 +13,11 @@ module.exports = {
   },
   auth: {
     secret: 'CHANGE-ME',
-    service: 'accounts',
-    entity: 'account',
+    service: 'credentials',
+    entity: 'credential',
     local: {
-      service: 'accounts',
-      entity: 'account'
+      service: 'credentials',
+      entity: 'credential'
     }
   }
 }

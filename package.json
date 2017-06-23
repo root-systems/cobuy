@@ -52,7 +52,7 @@
     "babel-plugin-ramda": "^1.2.0",
     "dog-names": "^1.0.2",
     "dogstack": "^0.2.2",
-    "dogstack-agents": "^0.1.2",
+    "dogstack-agents": "dogstack/dogstack-agents#better-agents",
     "feathers-action": "^2.2.0",
     "feathers-action-react": "ahdinosaur/feathers-action-react#cancel",
     "feathers-errors": "^2.6.2",
