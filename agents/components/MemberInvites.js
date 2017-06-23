@@ -11,6 +11,8 @@ import Button from '../../app/components/Button'
 
 function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
   const { memberVals } = formProps
+  // TODO: currently this is an anti-pattern as it occurs within the render cycle
+  // TODO: mikey's idea was to not push state until the first edit to the empty row
   if (memberVals) {
     const memberKeys = Object.keys(memberVals)
     if (memberKeys.length > 0) {
