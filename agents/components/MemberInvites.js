@@ -5,76 +5,95 @@ import { connect as connectFela } from 'react-fela'
 import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
 import { flow } from 'lodash'
 import { TextField } from 'redux-form-material-ui'
+import MuiTextField from 'material-ui/TextField'
 
 import styles from '../styles/MemberInvites'
 import Button from '../../app/components/Button'
 
-function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
-  const { memberVals } = formProps
-  // TODO: currently this is an anti-pattern as it occurs within the render cycle
-  // TODO: mikey's idea was to not push state until the first edit to the empty row
-  if (memberVals) {
-    const memberKeys = Object.keys(memberVals)
-    if (memberKeys.length > 0) {
-      const lastMember = memberVals[memberKeys[memberKeys.length - 1]]
-      if (Object.keys(lastMember).length > 0) {
-        fields.push({})
-      }
+class MemberInviteFields extends React.Component {
+  render () {
+    const { fields } = this.props
+    return (
+      <div ref='members'>
+        {fields.map((member, index) => (
+          <div key={index} className='member'>
+            <Field
+              name={`${member}.name`}
+              className='name'
+              floatingLabelText='Name'
+              component={TextField}
+            />
+            <Field
+              name={`${member}.email`}
+              className='email'
+              floatingLabelText='Email'
+              component={TextField}
+            />
+            <Field
+              name={`${member}.role`}
+              className='role'
+              floatingLabelText='Role'
+              component={TextField}
+            />
+            <Button type='button' onClick={() => fields.remove(index)}>Remove Member</Button>
+          </div>
+        ))}
+        <div key={fields.length}>
+          <MuiTextField
+            floatingLabelText='Name'
+            onChange={this.pushNext('name')}
+          />
+          <MuiTextField
+            floatingLabelText='Email'
+            onChange={this.pushNext('email')}
+          />
+          <MuiTextField
+            floatingLabelText='Role'
+            onChange={this.pushNext('role')}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  pushNext (fieldName) {
+    const { fields } = this.props
+    return (ev, value) => {
+      fields.push({ [fieldName]: value })
+      const { members } = this.refs
+      // HACK (mw) how can we clean this up?
+      // keep focus after we push next member field
+      // because react elements will change underneath.
+      // also there's enough of a stutter that when
+      // typing you will lose some characters.
+      setTimeout(() => {
+        const memberElements = members.querySelectorAll('.member')
+        const lastMemberElement = memberElements[memberElements.length - 1]
+        lastMemberElement.querySelector('.' + fieldName + ' input').focus()
+      })
     }
   }
+}
+function MemberInvites ({ fields, meta: { error, submitFailed } }) {
   return (
     <div>
       {submitFailed && error && <span>{error}</span>}
-      {fields.map((member, index) => (
-        <div key={index}>
-          <Field
-            name={`${member}.name`}
-            floatingLabelText='Name'
-            component={TextField}
-          />
-          <Field
-            name={`${member}.email`}
-            floatingLabelText='Email'
-            component={TextField}
-          />
-          <Field
-            name={`${member}.role`}
-            floatingLabelText='Role'
-            component={TextField}
-          />
-          <Button type='button' onClick={() => fields.remove(index)}>Remove Member</Button>
-        </div>
-      )
-    )}
-      <Button type='button' onClick={() => fields.push({})}>Add Member</Button>
+      <MemberInviteFields fields={fields} />
     </div>
   )
 }
 
-function MemberInvites (props) {
+function MemberInvitesForm (props) {
   return (
     <form className={styles.container}>
-      <Field
-        name='groupName'
-        type='text'
-        component={TextField}
-        floatingLabelText='Group Name'
-      />
-      <FieldArray name='members' component={renderMembers} formProps={props} />
+      <FieldArray name='members' component={MemberInvites} />
     </form>
   )
 }
-
-const selector = formValueSelector('memberInvites')
 
 export default flow(
   connectFela(styles),
   connectForm({
     form: 'memberInvites'
-  }),
-  connectRedux(
-    state => ({
-      memberVals: selector(state, 'members')
-    })
-  )
-)(MemberInvites)
+  })
+)(MemberInvitesForm)
