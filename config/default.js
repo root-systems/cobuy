@@ -12,12 +12,34 @@ module.exports = {
     body: `<div id='app'></div>`,
   },
   auth: {
-    secret: 'CHANGE-ME',
+    strategies: [
+      'local',
+      'jwt',
+      'oauth2'
+    ],
     service: 'credentials',
     entity: 'credential',
     local: {
       service: 'credentials',
       entity: 'credential'
+    },
+    remote: {
+      google: {
+        label: 'Google',
+        icon: 'fa fa-google',
+        backgroundColor: '#ffffff'
+      },
+      facebook: {
+        label: 'Facebook',
+        icon: 'fa fa-facebook',
+        backgroundColor: '#3b5998'
+      },
+      github: {
+        type: 'oauth2',
+        label: 'GitHub',
+        icon: 'fa fa-github',
+        backgroundColor: '#6d6d6d'
+      }
     }
   }
 }

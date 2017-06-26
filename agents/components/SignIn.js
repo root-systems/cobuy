@@ -2,38 +2,17 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
-import { map, assign, flow } from 'lodash'
+import { mapObjIndexed, merge, pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 
 import styles from '../styles/SignIn'
+import config from '../../config/default'
+const remoteAuthenticationMethods = config.auth.remote
 
 // https://blog.codinghorror.com/the-god-login/
-
-const remoteAuthenticationMethods = [
-  {
-    label: 'Google',
-    icon: 'fa fa-google',
-    backgroundColor: '#ffffff'
-  },
-  {
-    label: 'Facebook',
-    icon: 'fa fa-facebook',
-    backgroundColor: '#3b5998'
-  },
-  {
-    label: 'Twitter',
-    icon: 'fa fa-twitter',
-    backgroundColor: '#00bced'
-  },
-  {
-    label: 'GitHub',
-    icon: 'fa fa-github',
-    backgroundColor: '#6d6d6d'
-  }
-]
 
 function LocalAuthenticationForm (props) {
   const { styles, handleSubmit, signIn, navigateToRegister } = props
@@ -70,11 +49,11 @@ function LocalAuthenticationForm (props) {
   )
 
   function localAuth (payload) {
-    signIn(assign(payload, { strategy: 'local' }))
+    signIn(merge(payload, { strategy: 'local' }))
   }
 }
 
-LocalAuthenticationForm = flow(
+LocalAuthenticationForm = pipe(
   connectForm({
     form: 'localAuthenticationForm'
   })
@@ -82,25 +61,29 @@ LocalAuthenticationForm = flow(
 
 function SignIn (props) {
   const { styles, error, actions } = props
+
+  const mapRemoteAuthenticationMethods = mapObjIndexed((method, name) => (
+    <li
+      className={styles.remote}
+    >
+      <RaisedButton
+        label={method.label}
+        icon={<FontIcon className={method.icon} />}
+        backgroundColor={method.backgroundColor}
+        hoverColor={method.hoverColor}
+        fullWidth={true}
+        href={`/auth/${name}`}
+      />
+    </li>
+  ))
+
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
         Sign in with...
       </p>
       <ul className={styles.remotes}>
-        {map(remoteAuthenticationMethods, method => (
-          <li
-            className={styles.remote}
-          >
-            <RaisedButton
-              label={method.label}
-              icon={<FontIcon className={method.icon} />}
-              backgroundColor={method.backgroundColor}
-              hoverColor={method.hoverColor}
-              fullWidth={true}
-            />
-          </li>
-        ))}
+        {mapRemoteAuthenticationMethods(remoteAuthenticationMethods)}
       </ul>
       {error && (
         <div className={styles.error}>
@@ -126,6 +109,6 @@ SignIn.propTypes = {
 SignIn.defaultProps = {
 }
 
-export default flow(
+export default pipe(
   connectFela(styles)
 )(SignIn)
