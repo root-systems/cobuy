@@ -6,11 +6,12 @@ import { flow } from 'lodash'
 import styles from '../styles/LogOut'
 
 function LogOut (props) {
-  const { styles } = props
+  const { styles, actions } = props
   return (
     <FlatButton
       className={styles.container}
       backgroundColor='#ddd'
+      onClick={actions.authentication.logOut}
     >
       Log Out
     </FlatButton>

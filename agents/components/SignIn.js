@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
-import { map, flow } from 'lodash'
+import { map, assign, flow } from 'lodash'
 import { TextField } from 'redux-form-material-ui'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -36,10 +36,10 @@ const remoteAuthenticationMethods = [
 ]
 
 function LocalAuthenticationForm (props) {
-  const { styles, handleSubmit } = props
+  const { styles, handleSubmit, signIn, navigateToRegister } = props
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit(localAuth)} className={styles.form}>
       <Field
         name='email'
         floatingLabelText='Email'
@@ -55,6 +55,7 @@ function LocalAuthenticationForm (props) {
       />
       <div className={styles.actions}>
         <RaisedButton
+          type='submit'
           label='Sign In'
           primary={true}
           className={styles.signInAction}
@@ -62,10 +63,15 @@ function LocalAuthenticationForm (props) {
         <FlatButton
           label='Create new account'
           className={styles.registerAction}
+          onClick={navigateToRegister}
         />
       </div>
     </form>
   )
+
+  function localAuth (payload) {
+    signIn(assign(payload, { strategy: 'local' }))
+  }
 }
 
 LocalAuthenticationForm = flow(
@@ -75,7 +81,7 @@ LocalAuthenticationForm = flow(
 )(LocalAuthenticationForm)
 
 function SignIn (props) {
-  const { styles } = props
+  const { styles, error, actions } = props
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
@@ -96,11 +102,22 @@ function SignIn (props) {
           </li>
         ))}
       </ul>
+      {error && (
+        <div className={styles.error}>
+          {error.message}
+        </div>
+      )}
       <LocalAuthenticationForm
         styles={styles}
+        signIn={actions.authentication.signIn}
+        navigateToRegister={navigateToRegister}
       />
     </div>
   )
+
+  function navigateToRegister () {
+    actions.router.push('/register')
+  }
 }
 
 SignIn.propTypes = {

@@ -37,7 +37,7 @@ const remoteAuthenticationMethods = [
 ]
 
 function LocalAuthenticationForm (props) {
-  const { styles, handleSubmit } = props
+  const { styles, handleSubmit, navigateToSignIn } = props
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
@@ -82,6 +82,7 @@ function LocalAuthenticationForm (props) {
         <FlatButton
           label='Sign In'
           className={styles.signInAction}
+          onClick={navigateToSignIn}
         />
       </div>
     </form>
@@ -95,7 +96,7 @@ LocalAuthenticationForm = flow(
 )(LocalAuthenticationForm)
 
 function Register (props) {
-  const { styles, actions } = props
+  const { styles, error, actions } = props
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
@@ -116,12 +117,22 @@ function Register (props) {
           </li>
         ))}
       </ul>
+      {error && (
+        <div className={styles.error}>
+          {error.message}
+        </div>
+      )}
       <LocalAuthenticationForm
         styles={styles}
         onSubmit={actions.authentication.register}
+        navigateToSignIn={navigateToSignIn}
       />
     </div>
   )
+
+  function navigateToSignIn () {
+    actions.router.push('/sign-in')
+  }
 }
 
 Register.propTypes = {

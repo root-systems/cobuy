@@ -5,10 +5,10 @@ import { assign, flow } from 'lodash'
 import { push } from 'react-router-redux'
 
 import { authentication } from 'dogstack-agents/actions'
-const { register } = authentication
-import { getRegisterProps } from 'dogstack-agents/getters'
+const { signIn } = authentication
+import { getSignInProps } from 'dogstack-agents/getters'
 
-import Register from '../components/Register'
+import SignIn from '../components/SignIn'
 
 export default flow(
   // we want to pass router.push action down.
@@ -24,8 +24,8 @@ export default flow(
     })
   ),
   connectFeathers({
-    selector: getRegisterProps,
-    actions: { authentication: { register } },
+    selector: getSignInProps,
+    actions: { authentication: { signIn } },
     query: []
   })
-)(Register)
+)(SignIn)

@@ -1,7 +1,7 @@
 import React from 'react'
 import { createComponent } from '@ahdinosaur/react-fela'
 import { Route, Switch } from 'react-router-dom'
-import { pipe, map, values } from 'ramda'
+import { pipe, map, values, isNil } from 'ramda'
 
 import styles from '../styles/layout'
 
@@ -27,6 +27,8 @@ const mapRoutePages = map(route => {
     exact,
     Component
   } = route
+
+  if (isNil(Component)) return null
 
   const key = path || '404'
 
