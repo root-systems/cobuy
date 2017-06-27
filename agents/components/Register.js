@@ -10,8 +10,7 @@ import FontIcon from 'material-ui/FontIcon'
 import { required, email, length, confirmation } from 'redux-form-validators'
 
 import styles from '../styles/Register'
-import config from '../../config/default'
-const remoteAuthenticationMethods = config.auth.remote
+import RemoteAuthenticationMethods from './RemoteAuthenticationButtons'
 
 // https://blog.codinghorror.com/the-god-login/
 
@@ -78,28 +77,15 @@ LocalAuthenticationForm = pipe(
 function Register (props) {
   const { styles, error, actions } = props
 
-  const mapRemoteAuthenticationMethods = mapObjIndexed((method, name) => (
-    <li
-      className={styles.remote}
-    >
-      <RaisedButton
-        label={method.label}
-        icon={<FontIcon className={method.icon} />}
-        backgroundColor={method.backgroundColor}
-        hoverColor={method.hoverColor}
-        fullWidth={true}
-        href={`/auth/${name}`}
-      />
-    </li>
-  ))
-
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
         Hey, welcome to Cobuy!
       </p>
       <ul className={styles.remotes}>
-        {mapRemoteAuthenticationMethods(remoteAuthenticationMethods)}
+        <RemoteAuthenticationMethods
+          styles={styles}
+        />
       </ul>
       {error && (
         <div className={styles.error}>

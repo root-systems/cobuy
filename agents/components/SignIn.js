@@ -9,8 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 
 import styles from '../styles/SignIn'
-import config from '../../config/default'
-const remoteAuthenticationMethods = config.auth.remote
+import RemoteAuthenticationMethods from './RemoteAuthenticationButtons'
 
 // https://blog.codinghorror.com/the-god-login/
 
@@ -62,29 +61,16 @@ LocalAuthenticationForm = pipe(
 function SignIn (props) {
   const { styles, error, actions } = props
 
-  const mapRemoteAuthenticationMethods = mapObjIndexed((method, name) => (
-    <li
-      className={styles.remote}
-    >
-      <RaisedButton
-        label={method.label}
-        icon={<FontIcon className={method.icon} />}
-        backgroundColor={method.backgroundColor}
-        hoverColor={method.hoverColor}
-        fullWidth={true}
-        href={`/auth/${name}`}
-      />
-    </li>
-  ))
-
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
         Sign in with...
       </p>
-      <ul className={styles.remotes}>
-        {mapRemoteAuthenticationMethods(remoteAuthenticationMethods)}
-      </ul>
+      <div className={styles.remotes}>
+        <RemoteAuthenticationMethods
+          styles={styles}
+        />
+      </div>
       {error && (
         <div className={styles.error}>
           {error.message}

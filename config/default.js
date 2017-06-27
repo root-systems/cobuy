@@ -11,7 +11,7 @@ module.exports = {
     `,
     body: `<div id='app'></div>`,
   },
-  auth: {
+  authentication: {
     strategies: [
       'local',
       'jwt',
