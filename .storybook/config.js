@@ -11,6 +11,7 @@ function loadStories() {
   // add any topic stories here!
   require('../app/stories')
   require('../agents/stories')
+  require('../offerings/stories')
 }
 
 const FelaProvider = initFelaStorybook()
@@ -23,5 +24,9 @@ addDecorator(FelaProvider)
 addDecorator(FormProvider)
 addDecorator(MuiProvider)
 addDecorator(IntlProvider)
+
+// Needed for onTouchTap
+import injectTapEventPlugin from 'react-tap-event-plugin'
+injectTapEventPlugin()
 
 configure(loadStories, module);
