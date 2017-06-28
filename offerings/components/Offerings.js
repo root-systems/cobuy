@@ -19,17 +19,37 @@ class ChildOffering extends React.Component {
   }
 
   render () {
+    const { fields, offering, index, isChild } = this.props
     return (
-      <div className={styles.container}>
-        <Field name='quantity' floatingLabelText='Quantity' component={TextField} />
-        <Field name='unit' floatingLabelText='Unit' component={SelectField} >
+      <div key={index}>
+        {
+          isChild
+          ? null
+          : <Button type='button' title='Remove Offering' onClick={() => fields.remove(index)}>
+              Remove Offering
+            </Button>
+        }
+        <Field
+          name={ isChild ? 'quantity' : `${offering}.quantity` }
+          floatingLabelText='Quantity'
+          component={TextField}
+        />
+        <Field
+          name={ isChild ? 'unit' : `${offering}.unit`}
+          floatingLabelText='Unit'
+          component={SelectField}
+        >
           <MenuItem value='kg' primaryText='Kg' />
           <MenuItem value='litres' primaryText='Litres' />
           <MenuItem value='ea' primaryText='Each (Discrete)' />
         </Field>
-        <Field name='resource' floatingLabelText='Product Name' component={TextField} />
         <Field
-          name='hasChild'
+          name={ isChild ? 'resource' : `${offering}.resource`}
+          floatingLabelText='Product Name'
+          component={TextField}
+        />
+        <Field
+          name={ isChild ? 'hasNested' : `${offering}.hasNested`}
           component={Toggle}
           label='which contains'
           labelPosition='left'
@@ -39,7 +59,9 @@ class ChildOffering extends React.Component {
         />
         {
           this.state.hasChildOffering
-          ? <FormSection name='offering'><ChildOffering /></FormSection>
+          ? <FormSection name={ isChild ? 'offering' : `${offering}.offering`}>
+              <ChildOffering isChild={true} key={index} />
+            </FormSection>
           : null
         }
       </div>
@@ -48,55 +70,12 @@ class ChildOffering extends React.Component {
 }
 
 class OfferingList extends React.Component {
-  constructor (props, context) {
-    super(props, context)
-    this.state = {
-      hasChildOffering: false
-    }
-  }
   render () {
     const { fields } = this.props
     return (
       <div>
         {fields.map((offering, index) =>
-          <div key={index}>
-            <Button type='button' title='Remove Offering' onClick={() => fields.remove(index)}>
-              Remove Offering
-            </Button>
-            <Field
-              name={`${offering}.quantity`}
-              floatingLabelText='Quantity'
-              component={TextField}
-            />
-            <Field
-              name={`${offering}.unit`}
-              floatingLabelText='Unit'
-              component={SelectField}
-            >
-              <MenuItem value='kg' primaryText='Kg' />
-              <MenuItem value='litres' primaryText='Litres' />
-              <MenuItem value='ea' primaryText='Each (Discrete)' />
-            </Field>
-            <Field
-              name={`${offering}.resource`}
-              floatingLabelText='Product Name'
-              component={TextField}
-            />
-            <Field
-              name={`${offering}.hasChild`}
-              component={Toggle}
-              label='which contains'
-              labelPosition='left'
-              defaultToggled={false}
-              value={this.state.hasChildOffering}
-              onChange={(e, val) => { this.setState({ hasChildOffering: val }) }}
-            />
-            {
-              this.state.hasChildOffering
-              ? <FormSection name={`${offering}.offering`}><ChildOffering /></FormSection>
-              : null
-            }
-          </div>
+          <ChildOffering key={index} fields={fields} offering={offering} index={index} isChild={false} />
         )}
         <Button type='button' onClick={() => fields.push({})}>Add Offering</Button>
       </div>
