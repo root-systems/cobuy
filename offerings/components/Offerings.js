@@ -10,7 +10,7 @@ import styles from '../styles/Offerings'
 
 import Button from '../../app/components/Button'
 
-class ChildOffering extends React.Component {
+class Offering extends React.Component {
   constructor (props, context) {
     super(props, context)
     this.state = {
@@ -60,7 +60,7 @@ class ChildOffering extends React.Component {
         {
           this.state.hasChildOffering
           ? <FormSection name={ isChild ? 'offering' : `${offering}.offering`}>
-              <ChildOffering isChild={true} key={index} />
+              <Offering isChild={true} key={index} />
             </FormSection>
           : null
         }
@@ -75,7 +75,7 @@ class OfferingList extends React.Component {
     return (
       <div>
         {fields.map((offering, index) =>
-          <ChildOffering key={index} fields={fields} offering={offering} index={index} isChild={false} />
+          <Offering key={index} fields={fields} offering={offering} index={index} isChild={false} />
         )}
         <Button type='button' onClick={() => fields.push({})}>Add Offering</Button>
       </div>
