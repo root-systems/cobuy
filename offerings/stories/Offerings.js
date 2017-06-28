@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import Offerings from '../components/Offerings'
 
-storiesOf('offerrings.Offerings', module)
+storiesOf('offerings.Offerings', module)
   .add('basic', () => (
     <Offerings />
   ))
