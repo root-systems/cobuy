@@ -12,7 +12,7 @@ function RemoteAuthenticationMethod (props) {
     icon,
     backgroundColor,
     hoverColor,
-    //signIn
+    signIn
   } = props
 
   return (
@@ -43,8 +43,8 @@ function RemoteAuthenticationMethod (props) {
         token = popup.token
       } catch (err) {}
       if (token && token.accessToken) {
-        console.log('token', token)
-        //signIn({ strategy: 'token', token })
+        const { accessToken } = token
+        signIn({ strategy: 'jwt', accessToken })
         popup.close()
       } else {
         setTimeout(() => listenSignInPopup(popup), 0)

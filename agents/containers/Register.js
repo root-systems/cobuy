@@ -5,7 +5,7 @@ import { assign, flow } from 'lodash'
 import { push } from 'react-router-redux'
 
 import { authentication } from 'dogstack-agents/actions'
-const { register } = authentication
+const { register, signIn } = authentication
 import { getRegisterProps } from 'dogstack-agents/getters'
 
 import Register from '../components/Register'
@@ -25,7 +25,7 @@ export default flow(
   ),
   connectFeathers({
     selector: getRegisterProps,
-    actions: { authentication: { register } },
+    actions: { authentication: { register, signIn } },
     query: []
   })
 )(Register)

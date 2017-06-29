@@ -85,6 +85,7 @@ function Register (props) {
       <ul className={styles.remotes}>
         <RemoteAuthenticationMethods
           styles={styles}
+          signIn={actions.authentication.signIn}
         />
       </ul>
       {error && (

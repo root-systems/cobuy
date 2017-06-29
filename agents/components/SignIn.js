@@ -69,6 +69,7 @@ function SignIn (props) {
       <div className={styles.remotes}>
         <RemoteAuthenticationMethods
           styles={styles}
+          signIn={actions.authentication.signIn}
         />
       </div>
       {error && (
