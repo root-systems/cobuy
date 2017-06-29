@@ -5,24 +5,18 @@ import { merge } from 'ramda'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
-const defaultValue = {
-  minimum: 1,
-  desired: 3,
-  maximum: 5
-}
+export default MemberIntentField
 
-export default (props) => {
+function MemberIntentField (props) {
   const { input: { value, onChange } } = props
-  const controls = value == ""
-    ? <PreIntent onChange={onChange} />
-    : <Intent onChange={onChange} value={value} />
+  const Controls = value == false ? PreIntent : Intent
 
   return (
     <div>
       <div>
         current value: {JSON.stringify(value)}
       </div>
-      {controls}
+      <Controls onChange={onChange} value={value} />
     </div>
   )
 }
@@ -50,11 +44,20 @@ function Intent (props) {
 
   return (
     <div>
-      <Slider onChange={handleChange('minimum')} value={value.minimum} />
-      <Slider onChange={handleChange('desired')} value={value.desired} />
-      <Slider onChange={handleChange('maximum')} value={value.maximum} />
+      {renderSlider('minimum')}
+      {renderSlider('desired')}
+      {renderSlider('maximum')}
     </div>
   )
+
+  function renderSlider (key) {
+    return (
+      <Slider
+        onChange={handleChange(key)}
+        value={value[key]}
+      />
+    )
+  }
 
   function handleChange (key) {
     return (ev, newValue) => {
