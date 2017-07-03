@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm, FormSection, FieldArray } from 'redux-form'
-import { flow } from 'lodash'
+import { pipe } from 'ramda'
 import { SelectField, TextField, Toggle } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 
@@ -94,7 +94,7 @@ class Offerings extends React.Component {
   }
 }
 
-export default flow(
+export default pipe(
   connectFela(styles),
   connectForm({
     form: 'offerings'
