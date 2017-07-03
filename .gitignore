@@ -3,4 +3,7 @@ npm-debug.log*
 
 dev.sqlite3
 
+/config/development*
+/config/production*
+
 /browserify-cache.json

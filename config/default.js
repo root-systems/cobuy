@@ -1,4 +1,6 @@
-module.exports = {
+const mergeAll = require('ramda/src/mergeAll')
+
+const config = {
   port: 3000,
   favicon: 'app/favicon.ico',
   assets: 'assets',
@@ -10,14 +12,10 @@ module.exports = {
       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     `,
     body: `<div id='app'></div>`,
-  },
-  auth: {
-    secret: 'CHANGE-ME',
-    service: 'accounts',
-    entity: 'account',
-    local: {
-      service: 'accounts',
-      entity: 'account'
-    }
   }
 }
+
+module.exports = mergeAll([
+  config,
+  require('dogstack-agents/config')
+])

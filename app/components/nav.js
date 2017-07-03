@@ -1,7 +1,7 @@
 import React from 'react'
 import { createComponent } from '@ahdinosaur/react-fela'
 import { NavLink } from 'react-router-dom'
-import { pipe, map, values } from 'ramda'
+import { pipe, map, values, isNil } from 'ramda'
 
 import styles from '../styles/nav'
 
@@ -20,14 +20,18 @@ const mapRouteLinks = pipe(
     const {
       path,
       name = path,
-      title = name,
-      Component
+      navigation
     } = route
 
+    const {
+      Link = NavLink,
+      title = name
+    } = navigation
+
     return (
-      <NavLink to={path} key={name}>
-        {title}
-      </NavLink>
+      <Link to={path} key={name}>
+        {navigation.title}
+      </Link>
     )
   }),
   values

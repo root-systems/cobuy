@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
-import { map, flow } from 'lodash'
+import { mapObjIndexed, pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -10,34 +10,12 @@ import FontIcon from 'material-ui/FontIcon'
 import { required, email, length, confirmation } from 'redux-form-validators'
 
 import styles from '../styles/Register'
+import RemoteAuthenticationMethods from './RemoteAuthenticationButtons'
 
 // https://blog.codinghorror.com/the-god-login/
 
-const remoteAuthenticationMethods = [
-  {
-    label: 'Google',
-    icon: 'fa fa-google',
-    backgroundColor: '#ffffff'
-  },
-  {
-    label: 'Facebook',
-    icon: 'fa fa-facebook',
-    backgroundColor: '#3b5998'
-  },
-  {
-    label: 'Twitter',
-    icon: 'fa fa-twitter',
-    backgroundColor: '#00bced'
-  },
-  {
-    label: 'GitHub',
-    icon: 'fa fa-github',
-    backgroundColor: '#6d6d6d'
-  }
-]
-
 function LocalAuthenticationForm (props) {
-  const { styles, handleSubmit } = props
+  const { styles, handleSubmit, navigateToSignIn } = props
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
@@ -74,6 +52,7 @@ function LocalAuthenticationForm (props) {
       />
       <div className={styles.actions}>
         <RaisedButton
+          type='submit'
           label='Create new account'
           primary={true}
           className={styles.registerAction}
@@ -81,45 +60,50 @@ function LocalAuthenticationForm (props) {
         <FlatButton
           label='Sign In'
           className={styles.signInAction}
+          onClick={navigateToSignIn}
         />
       </div>
     </form>
   )
 }
 
-LocalAuthenticationForm = flow(
+LocalAuthenticationForm = pipe(
   connectForm({
     form: 'localAuthenticationForm'
   })
 )(LocalAuthenticationForm)
 
+
 function Register (props) {
-  const { styles } = props
+  const { styles, error, actions } = props
+
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
         Hey, welcome to Cobuy!
       </p>
       <ul className={styles.remotes}>
-        {map(remoteAuthenticationMethods, method => (
-          <li
-            className={styles.remote}
-          >
-            <RaisedButton
-              label={method.label}
-              icon={<FontIcon className={method.icon} />}
-              backgroundColor={method.backgroundColor}
-              hoverColor={method.hoverColor}
-              fullWidth={true}
-            />
-          </li>
-        ))}
+        <RemoteAuthenticationMethods
+          styles={styles}
+          signIn={actions.authentication.signIn}
+        />
       </ul>
+      {error && (
+        <div className={styles.error}>
+          {error.message}
+        </div>
+      )}
       <LocalAuthenticationForm
         styles={styles}
+        onSubmit={actions.authentication.register}
+        navigateToSignIn={navigateToSignIn}
       />
     </div>
   )
+
+  function navigateToSignIn () {
+    actions.router.push('/sign-in')
+  }
 }
 
 Register.propTypes = {
@@ -128,6 +112,6 @@ Register.propTypes = {
 Register.defaultProps = {
 }
 
-export default flow(
+export default pipe(
   connectFela(styles)
 )(Register)

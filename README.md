@@ -126,6 +126,16 @@ Anything that a developer working on Cobuy should know about.
 
 TODO organize all the miscy mushy magic
 
+### How to get private development config
+
+Our development config is stored in a private repository:
+
+```shell
+cd ../
+git clone git@github.com:Enspiral-Pods-Swarm/cobuy-config
+cp cobuy-config/*.js cobuy/config
+```
+
 ### After deploy: migrate on heroku!
 
 ```shell
