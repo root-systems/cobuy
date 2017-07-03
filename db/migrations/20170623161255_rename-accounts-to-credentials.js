@@ -1,1 +1,0 @@
-../../node_modules/dogstack-agents/db/migrations/20170623161255_rename-accounts-to-credentials.js

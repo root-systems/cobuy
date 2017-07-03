@@ -1,1 +1,0 @@
-../../node_modules/dogstack-agents/db/migrations/20170405113830_create-accounts-table.js

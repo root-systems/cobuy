@@ -3,8 +3,8 @@ import { pipe, map, mapObjIndexed, values, mergeAll } from 'ramda'
 
 import RemoteAuthenticationButton from './RemoteAuthenticationButton'
 
-import config from '../../config/default'
-const remoteAuthenticationMethods = config.authentication.remote
+// TODO get this config from the redux store
+const remoteAuthenticationMethods = window.config.authentication.remote
 
 function RemoteAuthenticationButtons (allProps) {
   const { styles } = allProps

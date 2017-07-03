@@ -2,6 +2,7 @@ import { createSelector, createStructuredSelector } from 'reselect'
 import { pipe, not, isNil, map, filter, prop, propOr, indexBy, nthArg, uncurryN } from 'ramda'
 
 export const getState = state => state
+export const getConfig = prop('config')
 
 export const getHomeProps = (state) => ({})
 

@@ -1,0 +1,1 @@
+../../node_modules/dogstack-agents/db/migrations/20170628135420_add-remote-auth-to-credentials.js
