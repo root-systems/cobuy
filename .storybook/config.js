@@ -11,7 +11,7 @@ function loadStories() {
   // add any topic stories here!
   require('../app/stories')
   require('../agents/stories')
-  require('../offerings/stories')
+  require('../supply/stories')
 }
 
 const FelaProvider = initFelaStorybook()
