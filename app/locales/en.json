@@ -1,5 +1,8 @@
 {
   "app.name": "Cobuy",
   "agents.nameLabel": "name",
-  "agents.descriptionLabel": "description"
+  "agents.descriptionLabel": "description",
+  "agents.logout": "log out",
+  "agents.email": "Email",
+  "agents.role": "Role"
 }
