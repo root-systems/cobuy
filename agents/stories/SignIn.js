@@ -5,7 +5,12 @@ import { linkTo } from '@storybook/addon-links'
 
 import SignIn from '../components/SignIn'
 
+const actions = {
+  authentication: { signIn: () => {}, register: () => {} },
+  router: { push: () => {} }
+}
+
 storiesOf('agents.SignIn', module)
   .add('default', () => (
-    <SignIn />
+    <SignIn actions={actions} />
   ))
