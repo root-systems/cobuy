@@ -157,6 +157,8 @@ If you add a ["story"](https://storybook.js.org), please add your topic story to
 
 Check out [`app/stories/index.js`](./app/stories/index.js) for example stories, which you can copy into a new topic.
 
+NOTE: At the moment, hot-reload does not work when changing messages in `app/locales/*.json`.
+
 ### Numbers
 
 All numbers should be represented as strings and manipulated with [`bigmath`](https://github.com/ahdinosaur/bigmath).

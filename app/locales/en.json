@@ -1,3 +1,5 @@
 {
-  "app.name": "Cobuy"
+  "app.name": "Cobuy",
+  "agents.nameLabel": "name",
+  "agents.descriptionLabel": "description"
 }
