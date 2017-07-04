@@ -28,7 +28,8 @@ export default {
     desktop: '64em',
     desktopLarge: '97.6em'
   },
-  fontSize: '15px',
+  em: '1em',
+  rem: '1rem',
   fontSize1: '.875rem',
   fontSize2: '1rem',
   fontSize3: '1.25rem',
@@ -44,17 +45,13 @@ export default {
   weightMedium: 500,
   weightBold: 700,
   weightBlack: 900,
-  em: '1em',
-  rem: '1rem',
-  borderRadius: '2px',
-  zIndexMax: 1000,
-  primary1Color: teal500,
-  primary2Color: teal600,
-  primary3Color: teal700,
-  accent1Color: deepPurple500,
-  accent2Color: deepPurple600,
-  accent3Color: deepPurple700,
-  greyScale: [
+  colorPrimary1: teal500,
+  colorPrimary2: teal600,
+  colorPrimary3: teal700,
+  colorAccent1: deepPurple500,
+  colorAccent2: deepPurple600,
+  colorAccent3: deepPurple700,
+  colorGreys: [
     grey50,
     grey100,
     grey200,
@@ -66,6 +63,11 @@ export default {
     grey800,
     grey900
   ],
+  colorText: white,
+  colorAlternateText: darkBlack,
+  colorCanvas: white,
+  colorBorder: grey300,
+  colorShadow: fullBlack,
   spacingNone: 0,
   spacingExtraSmall: '.25rem',
   spacingSmall: '.5rem',
@@ -74,9 +76,6 @@ export default {
   spacingExtraLarge: '4rem',
   spacingExtraExtraLarge: '8rem',
   spacingExtraExtraExtraLarge: '16rem',
-  textColor: white,
-  alternateTextColor: darkBlack,
-  canvasColor: white,
-  borderColor: grey300,
-  shadowColor: fullBlack
+  borderRadius: '2px',
+  zIndexMax: 1000
 }
