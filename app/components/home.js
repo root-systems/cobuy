@@ -1,5 +1,6 @@
 import React from 'react'
 import { createComponent } from '@ahdinosaur/react-fela'
+import { FormattedMessage } from 'react-intl'
 
 import styles from '../styles/home'
 
@@ -9,6 +10,6 @@ export default function Home (props) {
   const { routes } = props
 
   return <Container>
-    Cobuy!
+    <FormattedMessage id='app.name' />
   </Container>
 }

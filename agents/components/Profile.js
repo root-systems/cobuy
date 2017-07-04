@@ -4,6 +4,7 @@ import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
 import { flow } from 'lodash'
 import { TextField } from 'redux-form-material-ui'
+import { FormattedMessage } from 'react-intl'
 
 import styles from '../styles/Profile'
 
@@ -38,14 +39,14 @@ class Profile extends React.Component {
         />
         <Field
           name='name'
-          floatingLabelText='Name'
+          floatingLabelText={<FormattedMessage id='agents.nameLabel' />}
           component={TextField}
           value={name}
           disabled={!isEditing}
         />
         <Field
           name='description'
-          floatingLabelText='Description'
+          floatingLabelText={<FormattedMessage id='agents.descriptionLabel' />}
           component={TextField}
           value={description}
           multiLine={true}
