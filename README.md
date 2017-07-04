@@ -26,6 +26,7 @@ Before we start, please [install `node@8` and `npm@5`](https://dogstack.js.org/g
 git clone git@github.com:root-systems/cobuy
 cd cobuy
 npm install
+(see 'How to get private development config' section below)
 npm run db migrate:latest
 npm run dev
 ```
