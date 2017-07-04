@@ -7,6 +7,8 @@ import initFormStorybook from './helpers/initFormStorybook'
 import initMuiStorybook from './helpers/initMuiStorybook'
 import initIntlStorybook from './helpers/initIntlStorybook'
 
+window.config = require('../config/default').browser
+
 function loadStories() {
   // add any topic stories here!
   require('../app/stories')
