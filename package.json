@@ -10,7 +10,8 @@
     "test": "dog test",
     "deps": "dependency-check . client.js epic.js layout.js root.js routes.js server.js store.js style.js updater.js  --detective precinct && dependency-check . client.js epic.js layout.js root.js routes.js server.js store.js style.js updater.js --extra --no-dev --detective precinct -i babelify -i babel-preset-es2015 -i babel-preset-react -i babel-plugin-ramda -i pg",
     "db": "dog db",
-    "storybook": "start-storybook -p 6006"
+    "storybook": "start-storybook -p 6006",
+    "burnthemall": "rm -rf package-lock.json node_modules; npm i"
   },
   "browserify": {
     "transform": [
