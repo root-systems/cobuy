@@ -39,11 +39,24 @@ const mapRoutePages = map(route => {
 
 // TODO move this to some config for dogstack
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import { IntlProvider } from 'react-intl'
+import { IntlProvider, addLocaleData } from 'react-intl'
+import en from 'react-intl/locale-data/en'
+import getLocaleMessages from '../helpers/getLocaleMessages'
+
+const locale = navigator.language
+addLocaleData([...en])
+const messagesByLocale = {
+  en: require('../locales/en')
+}
+const messages = getLocaleMessages(messagesByLocale, locale)
+
 export default (props) => {
   return (
     <MuiThemeProvider>
-      <IntlProvider locale='en'>
+      <IntlProvider
+        locale={locale}
+        messages={messages}
+      >
         <Layout {...props} />
       </IntlProvider>
     </MuiThemeProvider>
