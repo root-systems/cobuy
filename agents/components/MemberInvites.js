@@ -13,7 +13,7 @@ import styles from '../styles/MemberInvites'
 import Button from '../../app/components/Button'
 
 function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
-  const { memberVals } = formProps
+  const { memberVals, styles } = formProps
   // TODO: currently this is an anti-pattern as it occurs within the render cycle
   // TODO: mikey's idea was to not push state until the first edit to the empty row
   if (memberVals) {
@@ -80,6 +80,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
 }
 
 function MemberInvites (props) {
+  const { styles } = props
   return (
     <form className={styles.container}>
       <Field
