@@ -22,7 +22,7 @@ class Profile extends React.Component {
 
   toggleEdit () {
     this.setState({
-      isEditing: this.state.isEditing ? false : true
+      isEditing: !this.state.isEditing
     })
   }
 
