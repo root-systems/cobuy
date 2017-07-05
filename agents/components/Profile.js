@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
-import { flow } from 'lodash'
+import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
 import { FormattedMessage } from 'react-intl'
 
@@ -96,7 +96,7 @@ Profile.propTypes = {
 Profile.defaultProps = {
 }
 
-export default flow(
+export default pipe(
   connectFela(styles),
   connectForm({
     form: 'profile',

@@ -3,7 +3,7 @@ import React from 'react'
 import { connect as connectRedux } from 'react-redux'
 import { connect as connectFela } from 'react-fela'
 import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
-import { flow } from 'lodash'
+import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
 import { FormattedMessage } from 'react-intl'
 
@@ -100,7 +100,7 @@ function MemberInvites (props) {
 
 const selector = formValueSelector('memberInvites')
 
-export default flow(
+export default pipe(
   connectFela(styles),
   connectForm({
     form: 'memberInvites'
