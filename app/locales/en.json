@@ -5,9 +5,14 @@
   "agents.logout": "log out",
   "agents.email": "email",
   "agents.role": "role",
+  "agents.password": "password",
+  "agents.confirmPassword": "confirm password",
   "agents.groupName": "group name",
   "agents.addMember": "add member",
   "agents.removeMember": "remove member",
   "agents.editProfile": "edit profile",
-  "agents.saveProfile": "save profile"
+  "agents.saveProfile": "save profile",
+  "agents.createAccount": "create new account",
+  "agents.signIn": "sign in",
+  "agents.welcome": "hey, welcome to cobuy!"
 }

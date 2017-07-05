@@ -8,9 +8,11 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 import { required, email, length, confirmation } from 'redux-form-validators'
+import { FormattedMessage } from 'react-intl'
 
 import styles from '../styles/Register'
 import RemoteAuthenticationMethods from './RemoteAuthenticationButtons'
+import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
 
 // https://blog.codinghorror.com/the-god-login/
 
@@ -21,7 +23,12 @@ function LocalAuthenticationForm (props) {
     <form onSubmit={handleSubmit} className={styles.form}>
       <Field
         name='name'
-        floatingLabelText='Name'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.nameLabel'
+            {...classifyIntlMessage(styles.labelText)}
+          />
+        }
         fullWidth={true}
         component={TextField}
         validate={required()}
@@ -29,7 +36,12 @@ function LocalAuthenticationForm (props) {
       <Field
         name='email'
         type='email'
-        floatingLabelText='Email'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.email'
+            {...classifyIntlMessage(styles.labelText)}
+          />
+        }
         fullWidth={true}
         component={TextField}
         validate={email()}
@@ -37,7 +49,12 @@ function LocalAuthenticationForm (props) {
       <Field
         name='password'
         type='password'
-        floatingLabelText='Password'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.password'
+            {...classifyIntlMessage(styles.labelText)}
+          />
+        }
         fullWidth={true}
         component={TextField}
         validate={length({ min: 8 })}
@@ -45,7 +62,12 @@ function LocalAuthenticationForm (props) {
       <Field
         name='passwordConfirm'
         type='password'
-        floatingLabelText='Confirm Password'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.confirmPassword'
+            {...classifyIntlMessage(styles.labelText)}
+          />
+        }
         fullWidth={true}
         component={TextField}
         validate={confirmation({ field: 'password', fieldLabel: 'Password' })}
@@ -53,12 +75,22 @@ function LocalAuthenticationForm (props) {
       <div className={styles.actions}>
         <RaisedButton
           type='submit'
-          label='Create new account'
+          label={
+            <FormattedMessage
+              id='agents.createAccount'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           primary={true}
           className={styles.registerAction}
         />
         <FlatButton
-          label='Sign In'
+          label={
+            <FormattedMessage
+              id='agents.signIn'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           className={styles.signInAction}
           onClick={navigateToSignIn}
         />
@@ -80,7 +112,10 @@ function Register (props) {
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
-        Hey, welcome to Cobuy!
+        <FormattedMessage
+          id='agents.welcome'
+          {...classifyIntlMessage(styles.labelText)}
+        />
       </p>
       <ul className={styles.remotes}>
         <RemoteAuthenticationMethods
