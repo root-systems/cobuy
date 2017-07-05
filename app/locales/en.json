@@ -7,5 +7,7 @@
   "agents.role": "role",
   "agents.groupName": "group name",
   "agents.addMember": "add member",
-  "agents.removeMember": "remove member"
+  "agents.removeMember": "remove member",
+  "agents.editProfile": "edit profile",
+  "agents.saveProfile": "save profile"
 }

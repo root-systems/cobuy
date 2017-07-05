@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl'
 
 import styles from '../styles/Profile'
 
+import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
 import Button from '../../app/components/Button'
 import AvatarField from '../../app/components/AvatarField'
 
@@ -39,14 +40,24 @@ class Profile extends React.Component {
         />
         <Field
           name='name'
-          floatingLabelText={<FormattedMessage id='agents.nameLabel' />}
+          floatingLabelText={
+            <FormattedMessage
+              id='agents.nameLabel'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           component={TextField}
           value={name}
           disabled={!isEditing}
         />
         <Field
           name='description'
-          floatingLabelText={<FormattedMessage id='agents.descriptionLabel' />}
+          floatingLabelText={
+            <FormattedMessage
+              id='agents.descriptionLabel'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           component={TextField}
           value={description}
           multiLine={true}
@@ -56,8 +67,14 @@ class Profile extends React.Component {
         <Button type='button' onClick={() => { this.toggleEdit() }}>
           {
             isEditing
-            ? 'Save Profile'
-            : 'Edit Profile'
+            ? <FormattedMessage
+                id='agents.saveProfile'
+                {...classifyIntlMessage(styles.labelText)}
+              />
+            : <FormattedMessage
+                id='agents.editProfile'
+                {...classifyIntlMessage(styles.labelText)}
+              />
           }
         </Button>
       </form>
