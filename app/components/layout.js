@@ -42,6 +42,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { IntlProvider, addLocaleData } from 'react-intl'
 import en from 'react-intl/locale-data/en'
 import getLocaleMessages from '../helpers/getLocaleMessages'
+import MuiThemeHelper from '../helpers/MuiThemeHelper'
+import baseTheme from '../themes/base'
 
 const locale = navigator.language
 addLocaleData([...en])
@@ -52,7 +54,7 @@ const messages = getLocaleMessages(messagesByLocale, locale)
 
 export default (props) => {
   return (
-    <MuiThemeProvider>
+    <MuiThemeProvider muiTheme={MuiThemeHelper(baseTheme)}>
       <IntlProvider
         locale={locale}
         messages={messages}
