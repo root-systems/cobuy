@@ -36,7 +36,8 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
               <FormattedMessage
                 id='agents.nameLabel'
                 {...classifyIntlMessage(styles.labelText)}
-              />}
+              />
+            }
             component={TextField}
           />
           <Field
@@ -45,7 +46,8 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
               <FormattedMessage
                 id='agents.email'
                 {...classifyIntlMessage(styles.labelText)}
-              />}
+              />
+            }
             component={TextField}
           />
           <Field
@@ -54,14 +56,15 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
               <FormattedMessage
                 id='agents.role'
                 {...classifyIntlMessage(styles.labelText)}
-              />}
+              />
+            }
             component={TextField}
           />
           <Button type='button' onClick={() => fields.remove(index)}>
             <FormattedMessage
               id='agents.removeMember'
               {...classifyIntlMessage(styles.buttonText)}
-            />}
+            />
           </Button>
         </div>
       )
@@ -70,7 +73,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
         <FormattedMessage
           id='agents.addMember'
           {...classifyIntlMessage(styles.buttonText)}
-        />}
+        />
       </Button>
     </div>
   )
@@ -87,7 +90,8 @@ function MemberInvites (props) {
           <FormattedMessage
             id='agents.groupName'
             {...classifyIntlMessage(styles.labelText)}
-          />}
+          />
+          }
       />
       <FieldArray name='members' component={renderMembers} formProps={props} />
     </form>
