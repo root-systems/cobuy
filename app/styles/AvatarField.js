@@ -3,5 +3,8 @@ export default {
   label: () => ({}),
   canvas: () => ({}),
   error: () => ({}),
-  warning: () => ({})
+  warning: () => ({}),
+  buttonText: () => ({
+    textTransform: 'capitalize'
+  })
 }

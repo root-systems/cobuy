@@ -3,11 +3,13 @@ import React from 'react'
 import { connect } from 'react-fela'
 import AvatarEditorCanvas from 'react-avatar-editor'
 import Slider from 'material-ui/Slider'
+import { FormattedMessage } from 'react-intl'
 
 import styles from '../styles/AvatarField'
 
 import Button from './Button'
 import Avatar from '../../agents/components/Avatar'
+import classifyIntlMessage from '../helpers/classifyIntlMessage'
 
 // TODO move somewhere better
 class FileInput extends React.Component {
@@ -101,7 +103,12 @@ class AvatarEditor extends React.Component {
           <FileInput
             onChange={dataUrl => this.handleFileChange(dataUrl)}
           />
-          <Button onClick={() => { this.handleSaveImage() }} type='button'>Save Avatar</Button>
+          <Button onClick={() => { this.handleSaveImage() }} type='button'>
+            <FormattedMessage
+              id='agents.saveAvatar'
+              {...classifyIntlMessage(this.props.styles.buttonText)}
+            />
+          </Button>
         </div>
       )
     }
@@ -113,7 +120,12 @@ class AvatarEditor extends React.Component {
         />
         {
           isEditingProfile
-          ? <Button type='button' onClick={() => { this.setState({ isEditing: true }) }}>Edit Avatar</Button>
+          ? <Button type='button' onClick={() => { this.setState({ isEditing: true }) }}>
+              <FormattedMessage
+                id='agents.editAvatar'
+                {...classifyIntlMessage(this.props.styles.buttonText)}
+              />
+            </Button>
           : null
         }
       </div>
@@ -124,7 +136,7 @@ class AvatarEditor extends React.Component {
 
 // http://redux-form.com/6.8.0/examples/fieldLevelValidation/
 function AvatarField (props) {
-  const { input, label, type, meta, editor, isEditingProfile } = props
+  const { input, label, type, meta, editor, isEditingProfile, styles } = props
   const { name, value, onChange } = input
   const { touched, error, warning } = meta
 
@@ -135,6 +147,7 @@ function AvatarField (props) {
         avatar={value}
         onChange={onChange}
         isEditingProfile={isEditingProfile}
+        styles={styles}
       />
       {
         touched

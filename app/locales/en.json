@@ -15,5 +15,7 @@
   "agents.createAccount": "create new account",
   "agents.signIn": "sign in",
   "agents.welcome": "hey, welcome to cobuy!",
-  "agents.signInWith": "sign in with..."
+  "agents.signInWith": "sign in with...",
+  "agents.saveAvatar": "save avatar",
+  "agents.editAvatar": "edit avatar"
 }
