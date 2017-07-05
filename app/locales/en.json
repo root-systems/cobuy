@@ -17,5 +17,14 @@
   "agents.welcome": "hey, welcome to cobuy!",
   "agents.signInWith": "sign in with...",
   "agents.saveAvatar": "save avatar",
-  "agents.editAvatar": "edit avatar"
+  "agents.editAvatar": "edit avatar",
+  "supply.removeOffering": "remove offering",
+  "supply.addOffering": "add offering",
+  "supply.quantity": "quantity",
+  "supply.unit": "unit",
+  "supply.litres": "litres",
+  "supply.kg": "kg",
+  "supply.each": "each (discrete)",
+  "supply.resource": "product name",
+  "supply.contains": "which contains"
 }

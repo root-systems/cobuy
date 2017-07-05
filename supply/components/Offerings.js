@@ -5,10 +5,11 @@ import { Field, reduxForm as connectForm, FormSection, FieldArray } from 'redux-
 import { pipe } from 'ramda'
 import { SelectField, TextField, Toggle } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
+import { FormattedMessage } from 'react-intl'
 
 import styles from '../styles/Offerings'
-
 import Button from '../../app/components/Button'
+import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
 
 class Offering extends React.Component {
   constructor (props, context) {
@@ -19,39 +20,86 @@ class Offering extends React.Component {
   }
 
   render () {
-    const { fields, offering, index, isChild } = this.props
+    const { fields, offering, index, isChild, styles } = this.props
     return (
       <div key={index}>
         {
           isChild
           ? null
           : <Button type='button' title='Remove Offering' onClick={() => fields.remove(index)}>
-              Remove Offering
+              <FormattedMessage
+                id='supply.removeOffering'
+                {...classifyIntlMessage(styles.buttonText)}
+              />
             </Button>
         }
         <Field
           name={ isChild ? 'quantity' : `${offering}.quantity` }
-          floatingLabelText='Quantity'
+          floatingLabelText={
+            <FormattedMessage
+              id='supply.quantity'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           component={TextField}
         />
         <Field
           name={ isChild ? 'unit' : `${offering}.unit`}
-          floatingLabelText='Unit'
+          floatingLabelText={
+            <FormattedMessage
+              id='supply.unit'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           component={SelectField}
         >
-          <MenuItem value='kg' primaryText='Kg' />
-          <MenuItem value='litres' primaryText='Litres' />
-          <MenuItem value='ea' primaryText='Each (Discrete)' />
+          <MenuItem
+            value='kg'
+            primaryText={
+              <FormattedMessage
+                id='supply.kg'
+                {...classifyIntlMessage(styles.labelText)}
+              />
+            }
+          />
+          <MenuItem
+            value='litres'
+            primaryText={
+              <FormattedMessage
+                id='supply.litres'
+                {...classifyIntlMessage(styles.labelText)}
+              />
+            }
+          />
+          <MenuItem
+            value='ea'
+            primaryText={
+              <FormattedMessage
+                id='supply.each'
+                {...classifyIntlMessage(styles.labelText)}
+              />
+            }
+          />
         </Field>
         <Field
           name={ isChild ? 'resource' : `${offering}.resource`}
-          floatingLabelText='Product Name'
+          floatingLabelText={
+            <FormattedMessage
+              id='supply.resource'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           component={TextField}
         />
         <Field
           name={ isChild ? 'hasNested' : `${offering}.hasNested`}
           component={Toggle}
-          label='which contains'
+          label={
+            <FormattedMessage
+              id='supply.unit'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           labelPosition='left'
           defaultToggled={false}
           value={this.state.hasChildOffering}
@@ -71,13 +119,18 @@ class Offering extends React.Component {
 
 class OfferingList extends React.Component {
   render () {
-    const { fields } = this.props
+    const { fields, styles } = this.props
     return (
       <div>
         {fields.map((offering, index) =>
-          <Offering key={index} fields={fields} offering={offering} index={index} isChild={false} />
+          <Offering key={index} fields={fields} offering={offering} index={index} isChild={false} styles={styles} />
         )}
-        <Button type='button' onClick={() => fields.push({})}>Add Offering</Button>
+        <Button type='button' onClick={() => fields.push({})}>
+          <FormattedMessage
+            id='supply.addOffering'
+            {...classifyIntlMessage(styles.buttonText)}
+          />
+        </Button>
       </div>
     )
   }
@@ -85,10 +138,10 @@ class OfferingList extends React.Component {
 
 class Offerings extends React.Component {
   render () {
-    const { handleSubmit } = this.props
+    const { handleSubmit, styles } = this.props
     return (
       <form onSubmit={handleSubmit}>
-        <FieldArray name='offerings' component={OfferingList} />
+        <FieldArray name='offerings' component={OfferingList} styles={styles} />
       </form>
     )
   }
