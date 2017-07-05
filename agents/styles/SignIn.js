@@ -35,4 +35,7 @@ export default {
   }),
   signInAction: () => ({}),
   registerAction: () => ({}),
+  labelText: () => ({
+    textTransform: 'capitalize'
+  })
 }

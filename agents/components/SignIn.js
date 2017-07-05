@@ -7,9 +7,11 @@ import { TextField } from 'redux-form-material-ui'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
+import { FormattedMessage } from 'react-intl'
 
 import styles from '../styles/SignIn'
 import RemoteAuthenticationMethods from './RemoteAuthenticationButtons'
+import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
 
 // https://blog.codinghorror.com/the-god-login/
 
@@ -20,26 +22,46 @@ function LocalAuthenticationForm (props) {
     <form onSubmit={handleSubmit(localAuth)} className={styles.form}>
       <Field
         name='email'
-        floatingLabelText='Email'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.email'
+            {...classifyIntlMessage(styles.labelText)}
+          />
+        }
         fullWidth={true}
         component={TextField}
       />
       <Field
         name='password'
         type='password'
-        floatingLabelText='Password'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.password'
+            {...classifyIntlMessage(styles.labelText)}
+          />
+        }
         fullWidth={true}
         component={TextField}
       />
       <div className={styles.actions}>
         <RaisedButton
           type='submit'
-          label='Sign In'
+          label={
+            <FormattedMessage
+              id='agents.signIn'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           primary={true}
           className={styles.signInAction}
         />
         <FlatButton
-          label='Create new account'
+          label={
+            <FormattedMessage
+              id='agents.createAccount'
+              {...classifyIntlMessage(styles.labelText)}
+            />
+          }
           className={styles.registerAction}
           onClick={navigateToRegister}
         />
@@ -64,7 +86,10 @@ function SignIn (props) {
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
-        Sign in with...
+        <FormattedMessage
+          id='agents.signInWith'
+          {...classifyIntlMessage(styles.labelText)}
+        />
       </p>
       <div className={styles.remotes}>
         <RemoteAuthenticationMethods
