@@ -3,6 +3,9 @@
   "agents.nameLabel": "name",
   "agents.descriptionLabel": "description",
   "agents.logout": "log out",
-  "agents.email": "Email",
-  "agents.role": "Role"
+  "agents.email": "email",
+  "agents.role": "role",
+  "agents.groupName": "group name",
+  "agents.addMember": "add member",
+  "agents.removeMember": "remove member"
 }

@@ -5,6 +5,9 @@ import { connect as connectFela } from 'react-fela'
 import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
 import { flow } from 'lodash'
 import { TextField } from 'redux-form-material-ui'
+import { FormattedMessage } from 'react-intl'
+
+import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
 
 import styles from '../styles/MemberInvites'
 import Button from '../../app/components/Button'
@@ -29,24 +32,46 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
         <div key={index}>
           <Field
             name={`${member}.name`}
-            floatingLabelText='Name'
+            floatingLabelText={
+              <FormattedMessage
+                id='agents.nameLabel'
+                {...classifyIntlMessage(styles.labelText)}
+              />}
             component={TextField}
           />
           <Field
             name={`${member}.email`}
-            floatingLabelText='Email'
+            floatingLabelText={
+              <FormattedMessage
+                id='agents.email'
+                {...classifyIntlMessage(styles.labelText)}
+              />}
             component={TextField}
           />
           <Field
             name={`${member}.role`}
-            floatingLabelText='Role'
+            floatingLabelText={
+              <FormattedMessage
+                id='agents.role'
+                {...classifyIntlMessage(styles.labelText)}
+              />}
             component={TextField}
           />
-          <Button type='button' onClick={() => fields.remove(index)}>Remove Member</Button>
+          <Button type='button' onClick={() => fields.remove(index)}>
+            <FormattedMessage
+              id='agents.removeMember'
+              {...classifyIntlMessage(styles.buttonText)}
+            />}
+          </Button>
         </div>
       )
     )}
-      <Button type='button' onClick={() => fields.push({})}>Add Member</Button>
+      <Button type='button' onClick={() => fields.push({})}>
+        <FormattedMessage
+          id='agents.addMember'
+          {...classifyIntlMessage(styles.buttonText)}
+        />}
+      </Button>
     </div>
   )
 }
@@ -58,7 +83,11 @@ function MemberInvites (props) {
         name='groupName'
         type='text'
         component={TextField}
-        floatingLabelText='Group Name'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.groupName'
+            {...classifyIntlMessage(styles.labelText)}
+          />}
       />
       <FieldArray name='members' component={renderMembers} formProps={props} />
     </form>
