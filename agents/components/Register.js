@@ -9,6 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 import { required, email, length, confirmation } from 'redux-form-validators'
 
+import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/Register'
 import RemoteAuthenticationMethods from './RemoteAuthenticationButtons'
 
@@ -21,7 +22,12 @@ function LocalAuthenticationForm (props) {
     <form onSubmit={handleSubmit} className={styles.form}>
       <Field
         name='name'
-        floatingLabelText='Name'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.nameLabel'
+            className={styles.labelText}
+          />
+        }
         fullWidth={true}
         component={TextField}
         validate={required()}
@@ -29,7 +35,12 @@ function LocalAuthenticationForm (props) {
       <Field
         name='email'
         type='email'
-        floatingLabelText='Email'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.email'
+            className={styles.labelText}
+          />
+        }
         fullWidth={true}
         component={TextField}
         validate={email()}
@@ -37,7 +48,12 @@ function LocalAuthenticationForm (props) {
       <Field
         name='password'
         type='password'
-        floatingLabelText='Password'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.password'
+            className={styles.labelText}
+          />
+        }
         fullWidth={true}
         component={TextField}
         validate={length({ min: 8 })}
@@ -45,7 +61,12 @@ function LocalAuthenticationForm (props) {
       <Field
         name='passwordConfirm'
         type='password'
-        floatingLabelText='Confirm Password'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.confirmPassword'
+            className={styles.labelText}
+          />
+        }
         fullWidth={true}
         component={TextField}
         validate={confirmation({ field: 'password', fieldLabel: 'Password' })}
@@ -53,12 +74,22 @@ function LocalAuthenticationForm (props) {
       <div className={styles.actions}>
         <RaisedButton
           type='submit'
-          label='Create new account'
+          label={
+            <FormattedMessage
+              id='agents.createAccount'
+              className={styles.labelText}
+            />
+          }
           primary={true}
           className={styles.registerAction}
         />
         <FlatButton
-          label='Sign In'
+          label={
+            <FormattedMessage
+              id='agents.signIn'
+              className={styles.labelText}
+            />
+          }
           className={styles.signInAction}
           onClick={navigateToSignIn}
         />
@@ -80,7 +111,10 @@ function Register (props) {
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
-        Hey, welcome to Cobuy!
+        <FormattedMessage
+          id='agents.welcome'
+          className={styles.labelText}
+        />
       </p>
       <ul className={styles.remotes}>
         <RemoteAuthenticationMethods

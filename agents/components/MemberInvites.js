@@ -3,14 +3,15 @@ import React from 'react'
 import { connect as connectRedux } from 'react-redux'
 import { connect as connectFela } from 'react-fela'
 import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
-import { flow } from 'lodash'
+import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
 
+import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/MemberInvites'
 import Button from '../../app/components/Button'
 
 function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
-  const { memberVals } = formProps
+  const { memberVals, styles } = formProps
   // TODO: currently this is an anti-pattern as it occurs within the render cycle
   // TODO: mikey's idea was to not push state until the first edit to the empty row
   if (memberVals) {
@@ -29,36 +30,67 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
         <div key={index}>
           <Field
             name={`${member}.name`}
-            floatingLabelText='Name'
+            floatingLabelText={
+              <FormattedMessage
+                id='agents.nameLabel'
+                className={styles.labelText}
+              />
+            }
             component={TextField}
           />
           <Field
             name={`${member}.email`}
-            floatingLabelText='Email'
+            floatingLabelText={
+              <FormattedMessage
+                id='agents.email'
+                className={styles.labelText}
+              />
+            }
             component={TextField}
           />
           <Field
             name={`${member}.role`}
-            floatingLabelText='Role'
+            floatingLabelText={
+              <FormattedMessage
+                id='agents.role'
+                className={styles.labelText}
+              />
+            }
             component={TextField}
           />
-          <Button type='button' onClick={() => fields.remove(index)}>Remove Member</Button>
+          <Button type='button' onClick={() => fields.remove(index)}>
+            <FormattedMessage
+              id='agents.removeMember'
+              className={styles.buttonText}
+            />
+          </Button>
         </div>
       )
     )}
-      <Button type='button' onClick={() => fields.push({})}>Add Member</Button>
+      <Button type='button' onClick={() => fields.push({})}>
+        <FormattedMessage
+          id='agents.addMember'
+          className={styles.buttonText}
+        />
+      </Button>
     </div>
   )
 }
 
 function MemberInvites (props) {
+  const { styles } = props
   return (
     <form className={styles.container}>
       <Field
         name='groupName'
         type='text'
         component={TextField}
-        floatingLabelText='Group Name'
+        floatingLabelText={
+          <FormattedMessage
+            id='agents.groupName'
+            className={styles.labelText}
+          />
+          }
       />
       <FieldArray name='members' component={renderMembers} formProps={props} />
     </form>
@@ -67,7 +99,7 @@ function MemberInvites (props) {
 
 const selector = formValueSelector('memberInvites')
 
-export default flow(
+export default pipe(
   connectFela(styles),
   connectForm({
     form: 'memberInvites'

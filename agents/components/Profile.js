@@ -2,12 +2,11 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
-import { flow } from 'lodash'
+import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
-import { FormattedMessage } from 'react-intl'
 
+import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/Profile'
-
 import Button from '../../app/components/Button'
 import AvatarField from '../../app/components/AvatarField'
 
@@ -21,7 +20,7 @@ class Profile extends React.Component {
 
   toggleEdit () {
     this.setState({
-      isEditing: this.state.isEditing ? false : true
+      isEditing: !this.state.isEditing
     })
   }
 
@@ -39,14 +38,24 @@ class Profile extends React.Component {
         />
         <Field
           name='name'
-          floatingLabelText={<FormattedMessage id='agents.nameLabel' />}
+          floatingLabelText={
+            <FormattedMessage
+              id='agents.nameLabel'
+              className={styles.labelText}
+            />
+          }
           component={TextField}
           value={name}
           disabled={!isEditing}
         />
         <Field
           name='description'
-          floatingLabelText={<FormattedMessage id='agents.descriptionLabel' />}
+          floatingLabelText={
+            <FormattedMessage
+              id='agents.descriptionLabel'
+              className={styles.labelText}
+            />
+          }
           component={TextField}
           value={description}
           multiLine={true}
@@ -56,8 +65,14 @@ class Profile extends React.Component {
         <Button type='button' onClick={() => { this.toggleEdit() }}>
           {
             isEditing
-            ? 'Save Profile'
-            : 'Edit Profile'
+            ? <FormattedMessage
+                id='agents.saveProfile'
+                className={styles.labelText}
+              />
+            : <FormattedMessage
+                id='agents.editProfile'
+                className={styles.labelText}
+              />
           }
         </Button>
       </form>
@@ -79,7 +94,7 @@ Profile.propTypes = {
 Profile.defaultProps = {
 }
 
-export default flow(
+export default pipe(
   connectFela(styles),
   connectForm({
     form: 'profile',

@@ -163,6 +163,10 @@ NOTE: At the moment, hot-reload does not work when changing messages in `app/loc
 
 All numbers should be represented as strings and manipulated with [`bigmath`](https://github.com/ahdinosaur/bigmath).
 
+### Spelling in the code
+
+Developers should be using British spelling in the codebase
+
 ## License
 
 AGPL-3.0

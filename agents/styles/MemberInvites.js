@@ -1,3 +1,9 @@
 export default {
-  container: () => ({})
+  container: () => ({}),
+  labelText: () => ({
+    textTransform: 'capitalize'
+  }),
+  buttonText: () => ({
+    textTransform: 'capitalize'
+  })
 }
