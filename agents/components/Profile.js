@@ -4,11 +4,9 @@ import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
 import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
-import { FormattedMessage } from 'react-intl'
 
+import { FormattedMessage } from '../../../cobuy/lib/Intl'
 import styles from '../styles/Profile'
-
-import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
 import Button from '../../app/components/Button'
 import AvatarField from '../../app/components/AvatarField'
 
@@ -43,7 +41,7 @@ class Profile extends React.Component {
           floatingLabelText={
             <FormattedMessage
               id='agents.nameLabel'
-              {...classifyIntlMessage(styles.labelText)}
+              className={styles.labelText}
             />
           }
           component={TextField}
@@ -55,7 +53,7 @@ class Profile extends React.Component {
           floatingLabelText={
             <FormattedMessage
               id='agents.descriptionLabel'
-              {...classifyIntlMessage(styles.labelText)}
+              className={styles.labelText}
             />
           }
           component={TextField}
@@ -69,11 +67,11 @@ class Profile extends React.Component {
             isEditing
             ? <FormattedMessage
                 id='agents.saveProfile'
-                {...classifyIntlMessage(styles.labelText)}
+                className={styles.labelText}
               />
             : <FormattedMessage
                 id='agents.editProfile'
-                {...classifyIntlMessage(styles.labelText)}
+                className={styles.labelText}
               />
           }
         </Button>

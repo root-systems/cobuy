@@ -5,10 +5,8 @@ import { connect as connectFela } from 'react-fela'
 import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
 import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
-import { FormattedMessage } from 'react-intl'
 
-import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
-
+import { FormattedMessage } from '../../../cobuy/lib/Intl'
 import styles from '../styles/MemberInvites'
 import Button from '../../app/components/Button'
 
@@ -35,7 +33,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
             floatingLabelText={
               <FormattedMessage
                 id='agents.nameLabel'
-                {...classifyIntlMessage(styles.labelText)}
+                className={styles.labelText}
               />
             }
             component={TextField}
@@ -45,7 +43,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
             floatingLabelText={
               <FormattedMessage
                 id='agents.email'
-                {...classifyIntlMessage(styles.labelText)}
+                className={styles.labelText}
               />
             }
             component={TextField}
@@ -55,7 +53,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
             floatingLabelText={
               <FormattedMessage
                 id='agents.role'
-                {...classifyIntlMessage(styles.labelText)}
+                className={styles.labelText}
               />
             }
             component={TextField}
@@ -63,7 +61,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
           <Button type='button' onClick={() => fields.remove(index)}>
             <FormattedMessage
               id='agents.removeMember'
-              {...classifyIntlMessage(styles.buttonText)}
+              className={styles.buttonText}
             />
           </Button>
         </div>
@@ -72,7 +70,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
       <Button type='button' onClick={() => fields.push({})}>
         <FormattedMessage
           id='agents.addMember'
-          {...classifyIntlMessage(styles.buttonText)}
+          className={styles.buttonText}
         />
       </Button>
     </div>
@@ -90,7 +88,7 @@ function MemberInvites (props) {
         floatingLabelText={
           <FormattedMessage
             id='agents.groupName'
-            {...classifyIntlMessage(styles.labelText)}
+            className={styles.labelText}
           />
           }
       />

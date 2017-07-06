@@ -5,11 +5,10 @@ import { Field, reduxForm as connectForm, FormSection, FieldArray } from 'redux-
 import { pipe } from 'ramda'
 import { SelectField, TextField, Toggle } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
-import { FormattedMessage } from 'react-intl'
 
+import { FormattedMessage } from '../../../cobuy/lib/Intl'
 import styles from '../styles/Offerings'
 import Button from '../../app/components/Button'
-import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
 
 class Offering extends React.Component {
   constructor (props, context) {
@@ -29,7 +28,7 @@ class Offering extends React.Component {
           : <Button type='button' title='Remove Offering' onClick={() => fields.remove(index)}>
               <FormattedMessage
                 id='supply.removeOffering'
-                {...classifyIntlMessage(styles.buttonText)}
+                className={styles.buttonText}
               />
             </Button>
         }
@@ -38,7 +37,7 @@ class Offering extends React.Component {
           floatingLabelText={
             <FormattedMessage
               id='supply.quantity'
-              {...classifyIntlMessage(styles.labelText)}
+              className={styles.labelText}
             />
           }
           component={TextField}
@@ -48,7 +47,7 @@ class Offering extends React.Component {
           floatingLabelText={
             <FormattedMessage
               id='supply.unit'
-              {...classifyIntlMessage(styles.labelText)}
+              className={styles.labelText}
             />
           }
           component={SelectField}
@@ -58,7 +57,7 @@ class Offering extends React.Component {
             primaryText={
               <FormattedMessage
                 id='supply.kg'
-                {...classifyIntlMessage(styles.labelText)}
+                className={styles.labelText}
               />
             }
           />
@@ -67,7 +66,7 @@ class Offering extends React.Component {
             primaryText={
               <FormattedMessage
                 id='supply.litres'
-                {...classifyIntlMessage(styles.labelText)}
+                className={styles.labelText}
               />
             }
           />
@@ -76,7 +75,7 @@ class Offering extends React.Component {
             primaryText={
               <FormattedMessage
                 id='supply.each'
-                {...classifyIntlMessage(styles.labelText)}
+                className={styles.labelText}
               />
             }
           />
@@ -86,7 +85,7 @@ class Offering extends React.Component {
           floatingLabelText={
             <FormattedMessage
               id='supply.resource'
-              {...classifyIntlMessage(styles.labelText)}
+              className={styles.labelText}
             />
           }
           component={TextField}
@@ -97,7 +96,7 @@ class Offering extends React.Component {
           label={
             <FormattedMessage
               id='supply.unit'
-              {...classifyIntlMessage(styles.labelText)}
+              className={styles.labelText}
             />
           }
           labelPosition='left'
@@ -128,7 +127,7 @@ class OfferingList extends React.Component {
         <Button type='button' onClick={() => fields.push({})}>
           <FormattedMessage
             id='supply.addOffering'
-            {...classifyIntlMessage(styles.buttonText)}
+            className={styles.buttonText}
           />
         </Button>
       </div>

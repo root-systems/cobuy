@@ -8,11 +8,10 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 import { required, email, length, confirmation } from 'redux-form-validators'
-import { FormattedMessage } from 'react-intl'
 
+import { FormattedMessage } from '../../../cobuy/lib/Intl'
 import styles from '../styles/Register'
 import RemoteAuthenticationMethods from './RemoteAuthenticationButtons'
-import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
 
 // https://blog.codinghorror.com/the-god-login/
 
@@ -26,7 +25,7 @@ function LocalAuthenticationForm (props) {
         floatingLabelText={
           <FormattedMessage
             id='agents.nameLabel'
-            {...classifyIntlMessage(styles.labelText)}
+            className={styles.labelText}
           />
         }
         fullWidth={true}
@@ -39,7 +38,7 @@ function LocalAuthenticationForm (props) {
         floatingLabelText={
           <FormattedMessage
             id='agents.email'
-            {...classifyIntlMessage(styles.labelText)}
+            className={styles.labelText}
           />
         }
         fullWidth={true}
@@ -52,7 +51,7 @@ function LocalAuthenticationForm (props) {
         floatingLabelText={
           <FormattedMessage
             id='agents.password'
-            {...classifyIntlMessage(styles.labelText)}
+            className={styles.labelText}
           />
         }
         fullWidth={true}
@@ -65,7 +64,7 @@ function LocalAuthenticationForm (props) {
         floatingLabelText={
           <FormattedMessage
             id='agents.confirmPassword'
-            {...classifyIntlMessage(styles.labelText)}
+            className={styles.labelText}
           />
         }
         fullWidth={true}
@@ -78,7 +77,7 @@ function LocalAuthenticationForm (props) {
           label={
             <FormattedMessage
               id='agents.createAccount'
-              {...classifyIntlMessage(styles.labelText)}
+              className={styles.labelText}
             />
           }
           primary={true}
@@ -88,7 +87,7 @@ function LocalAuthenticationForm (props) {
           label={
             <FormattedMessage
               id='agents.signIn'
-              {...classifyIntlMessage(styles.labelText)}
+              className={styles.labelText}
             />
           }
           className={styles.signInAction}
@@ -114,7 +113,7 @@ function Register (props) {
       <p className={styles.intro}>
         <FormattedMessage
           id='agents.welcome'
-          {...classifyIntlMessage(styles.labelText)}
+          className={styles.labelText}
         />
       </p>
       <ul className={styles.remotes}>

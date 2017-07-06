@@ -3,13 +3,11 @@ import React from 'react'
 import { connect } from 'react-fela'
 import AvatarEditorCanvas from 'react-avatar-editor'
 import Slider from 'material-ui/Slider'
-import { FormattedMessage } from 'react-intl'
 
+import { FormattedMessage } from '../../../cobuy/lib/Intl'
 import styles from '../styles/AvatarField'
-
 import Button from './Button'
 import Avatar from '../../agents/components/Avatar'
-import classifyIntlMessage from '../helpers/classifyIntlMessage'
 
 // TODO move somewhere better
 class FileInput extends React.Component {
@@ -106,7 +104,7 @@ class AvatarEditor extends React.Component {
           <Button onClick={() => { this.handleSaveImage() }} type='button'>
             <FormattedMessage
               id='agents.saveAvatar'
-              {...classifyIntlMessage(this.props.styles.buttonText)}
+              className={this.props.styles.buttonText}
             />
           </Button>
         </div>
@@ -123,7 +121,7 @@ class AvatarEditor extends React.Component {
           ? <Button type='button' onClick={() => { this.setState({ isEditing: true }) }}>
               <FormattedMessage
                 id='agents.editAvatar'
-                {...classifyIntlMessage(this.props.styles.buttonText)}
+                className={this.props.styles.buttonText}
               />
             </Button>
           : null
