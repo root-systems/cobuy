@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 
-import { FormattedMessage } from '../../../cobuy/lib/Intl'
+import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/SignIn'
 import RemoteAuthenticationMethods from './RemoteAuthenticationButtons'
 

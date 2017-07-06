@@ -6,7 +6,7 @@ import { pipe } from 'ramda'
 import { SelectField, TextField, Toggle } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 
-import { FormattedMessage } from '../../../cobuy/lib/Intl'
+import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/Offerings'
 import Button from '../../app/components/Button'
 

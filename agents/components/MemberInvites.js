@@ -6,7 +6,7 @@ import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from '
 import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
 
-import { FormattedMessage } from '../../../cobuy/lib/Intl'
+import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/MemberInvites'
 import Button from '../../app/components/Button'
 

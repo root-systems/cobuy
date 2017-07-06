@@ -4,7 +4,7 @@ import { connect } from 'react-fela'
 import AvatarEditorCanvas from 'react-avatar-editor'
 import Slider from 'material-ui/Slider'
 
-import { FormattedMessage } from '../../../cobuy/lib/Intl'
+import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/AvatarField'
 import Button from './Button'
 import Avatar from '../../agents/components/Avatar'
