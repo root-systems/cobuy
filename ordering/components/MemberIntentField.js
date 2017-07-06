@@ -84,12 +84,9 @@ function Intent (props) {
           update.maximum = newValue
         }
       } else if (key == 'desired') {
-        if (newValue < value.minimum) {
-          update.minimum = newValue
-        }
-        if (newValue > value.maximum) {
-          update.maximum = newValue
-        }
+        const diff = newValue - value.desired
+        update.minimum = Math.max(0, value.minimum + diff)
+        update.maximum = Math.min(10, value.maximum + diff)
       } else if (key == 'maximum') {
         if (newValue < value.desired) {
           update.desired = newValue
