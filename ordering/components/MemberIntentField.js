@@ -2,9 +2,6 @@ import React from 'react'
 import Slider from 'material-ui/Slider'
 import { merge } from 'ramda'
 
-import injectTapEventPlugin from 'react-tap-event-plugin'
-injectTapEventPlugin()
-
 export default MemberIntentField
 
 function MemberIntentField (props) {

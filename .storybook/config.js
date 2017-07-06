@@ -14,6 +14,7 @@ function loadStories() {
   require('../app/stories')
   require('../agents/stories')
   require('../supply/stories')
+  require('../ordering/stories')
 }
 
 const FelaProvider = initFelaStorybook()
