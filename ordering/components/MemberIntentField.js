@@ -74,19 +74,31 @@ function Intent (props) {
 
   function handleChange (key) {
     return (ev, newValue) => {
+      var update = { [key]: newValue }
+
       if (key == 'minimum') {
-        // minimum can't be more than desired
-        newValue = Math.min(newValue, value.desired)
+        if (newValue > value.desired) {
+          update.desired = newValue
+        }
+        if (newValue > value.maximum) {
+          update.maximum = newValue
+        }
       } else if (key == 'desired') {
-        // desired can't be less than minimum
-        newValue = Math.max(newValue, value.minimum)
-        // desired can't be more than maximum
-        newValue = Math.min(newValue, value.maximum)
+        if (newValue < value.minimum) {
+          update.minimum = newValue
+        }
+        if (newValue > value.maximum) {
+          update.maximum = newValue
+        }
       } else if (key == 'maximum') {
-        // maximum can't be less than desired
-        newValue = Math.max(newValue, value.desired)
+        if (newValue < value.desired) {
+          update.desired = newValue
+        }
+        if (newValue < value.minimum) {
+          update.minimum = newValue
+        }
       }
-      onChange(merge(value, { [key]: newValue }))
+      onChange(merge(value, update))
     }
   }
 }
