@@ -2,7 +2,7 @@ import React from 'react'
 import FlatButton from 'material-ui/FlatButton'
 import { connect as connectFela } from 'react-fela'
 import { pipe } from 'ramda'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage } from '../../../cobuy/lib/Intl'
 
 import classifyIntlMessage from '../../app/helpers/classifyIntlMessage'
 
@@ -18,7 +18,7 @@ function LogOut (props) {
     >
       <FormattedMessage
         id='agents.logout'
-        {...classifyIntlMessage(styles.buttonText)}
+        className={styles.buttonText}
       />
     </FlatButton>
   )
