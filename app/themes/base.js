@@ -63,8 +63,8 @@ export default {
     grey800,
     grey900
   ],
-  colorText: white,
-  colorAlternateText: darkBlack,
+  colorText: darkBlack,
+  colorAlternateText: white,
   colorCanvas: white,
   colorBorder: grey300,
   colorShadow: fullBlack,

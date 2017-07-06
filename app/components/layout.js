@@ -48,7 +48,8 @@ import baseTheme from '../themes/base'
 const locale = navigator.language
 addLocaleData([...en])
 const messagesByLocale = {
-  en: require('../locales/en')
+  'en': require('../locales/en'),
+  'en-US': require('../locales/en-US')
 }
 const messages = getLocaleMessages(messagesByLocale, locale)
 
