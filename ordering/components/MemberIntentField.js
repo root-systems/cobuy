@@ -15,20 +15,20 @@ function MemberIntentField (props) {
       <div>
         current value: {JSON.stringify(value)}
       </div>
-      <Controls onChange={onChange} value={value} />
+      <Controls onChange={onChange} value={value} min={0} max={10} step={1} />
     </div>
   )
 }
 
 function PreIntent (props) {
-  const { onChange } = props
+  const { onChange, min, max, step } = props
 
   return (
     <Slider
       onChange={handleChange}
-      min={0}
-      max={10}
-      step={1}
+      min={min}
+      max={max}
+      step={step}
     />
   )
 

@@ -6,7 +6,7 @@ import { connect as connectFela } from 'react-fela'
 import styles from '../styles/Intent'
 
 function Intent (props) {
-  const { onChange, value, styles } = props
+  const { onChange, value, styles, min, max, step } = props
 
   return (
     <div className={styles.container}>
@@ -28,9 +28,9 @@ function Intent (props) {
       <Slider
         onChange={handleChange(name)}
         value={value[name]}
-        min={0}
-        max={10}
-        step={1}
+        min={min}
+        max={max}
+        step={step}
       />
     )
   }
