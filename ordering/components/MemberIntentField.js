@@ -34,9 +34,9 @@ function PreIntent (props) {
 
   function handleChange (ev, newValue) {
     onChange({
-      minimum: newValue,
+      minimum: newValue - step,
       desired: newValue,
-      maximum: newValue
+      maximum: newValue + step
     })
   }
 }
