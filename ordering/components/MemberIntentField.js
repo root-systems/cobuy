@@ -1,6 +1,5 @@
 import React from 'react'
 import Slider from 'material-ui/Slider'
-import { merge } from 'ramda'
 
 import Intent from './Intent'
 

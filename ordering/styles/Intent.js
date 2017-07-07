@@ -8,7 +8,7 @@ export default {
   }),
   minLine: () => ({
     stroke: '#555555',
-    'stroke-width': 1
+    'stroke-width': 5
   }),
   maxLineContainer: ({ value, min, max }) => ({
     position: 'absolute',
@@ -18,6 +18,6 @@ export default {
   maxLine: () => ({
     position: 'absolute',
     stroke: '#555555',
-    'stroke-width': 1
+    'stroke-width': 5
   })
 }
