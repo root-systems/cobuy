@@ -19,5 +19,13 @@ export default {
     position: 'absolute',
     stroke: '#555555',
     'stroke-width': 5
+  }),
+  slider: () => ({
+    '> div:nth-child(1) > div:nth-child(1) > div:nth-child(2)': {
+      backgroundColor: 'pink !important'
+    },
+    '> div:nth-child(1) > div:nth-child(1) > div:nth-child(1)': {
+      backgroundColor: 'purple !important'
+    }
   })
 }

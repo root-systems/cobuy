@@ -1,5 +1,7 @@
 import React from 'react'
 import Slider from 'material-ui/Slider'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { merge, pipe } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 
@@ -24,14 +26,27 @@ function Intent (props) {
 
   function renderSlider (options) {
     const { name } = options
+    const selectionColourBySliderName = {
+      'minimum': 'skyblue',
+      'desired': 'green',
+      'maximum': 'purple'
+    }
+    const sliderTheme = getMuiTheme({
+      slider: {
+        trackSize: 12
+      }
+    })
     return (
-      <Slider
-        onChange={handleChange(name)}
-        value={value[name]}
-        min={min}
-        max={max}
-        step={step}
-      />
+      <MuiThemeProvider muiTheme={sliderTheme}>
+        <Slider
+          onChange={handleChange(name)}
+          value={value[name]}
+          min={min}
+          max={max}
+          step={step}
+          className={styles.slider}
+        />
+      </MuiThemeProvider>
     )
   }
 
