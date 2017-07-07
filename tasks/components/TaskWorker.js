@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
-import { pipe, length, gt, all, prop, propOr, either, complement, not } from 'ramda'
+import { pipe, length, gt, all, prop, propOr, path, either, complement, not, isNil } from 'ramda'
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
@@ -16,6 +16,7 @@ const getIsTaskComplete = pipe(prop('taskWork'), Boolean)
 const getAreAllSubTasksComplete = pipe(getSubTaskPlans, all(getIsTaskComplete))
 const getHasSubTasks = pipe(getSubTaskPlans, subTaskPlans => gt(length(subTaskPlans), 0))
 const getIsTaskReadyToComplete = either(complement(getHasSubTasks), getAreAllSubTasksComplete)
+const getTaskComponent = path(['taskRecipe', 'Component'])
 
 function TaskWorker (props) {
   const { styles, taskPlan, onNavigate, onComplete, onCancel } = props
@@ -26,9 +27,10 @@ function TaskWorker (props) {
   const hasSubTasks = getHasSubTasks(taskPlan)
   const isTaskComplete = getIsTaskComplete(taskPlan)
   const isTaskReadyToComplete = getIsTaskReadyToComplete(taskPlan)
-  const Component = hasSubTasks
+  const taskComponent = getTaskComponent(taskPlan)
+  const Component = isNil(taskComponent)
     ? TaskWorkerTree
-    : () => <div>COMPONENT</div>
+    : taskComponent
 
   const statusIconName = isTaskComplete
     ? 'check-circle'

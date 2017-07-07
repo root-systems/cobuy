@@ -2,8 +2,11 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 
+import Profile from '../../agents/components/Profile'
 
 import TaskWorker from '../components/TaskWorker'
+
+import { finishPrereqs, setupGroup, setupSupplier } from '../data/recipes'
 
 const agent = {
   id: 1,
@@ -14,16 +17,12 @@ const agent = {
 const taskPlan = {
   id: 1,
   agent,
-  taskRecipe: {
-    id: 'finish-prereqs'
-  },
+  taskRecipe: finishPrereqs,
   subTaskPlans: [
     {
       id: 2,
       agent,
-      taskRecipe: {
-        id: 'setup-group',
-      },
+      taskRecipe: setupGroup,
       taskWork: {
         id: 1,
         agent
@@ -32,9 +31,7 @@ const taskPlan = {
     {
       id: 3,
       agent,
-      taskRecipe: {
-        id: 'setup-supplier'
-      }
+      taskRecipe: setupSupplier
     }
   ]
 }
