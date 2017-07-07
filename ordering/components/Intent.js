@@ -11,10 +11,10 @@ function Intent (props) {
   return (
     <div className={styles.container}>
       <svg className={styles.minLineContainer}>
-        <line className={styles.minLine} x1='20' y1='20' x2='20' y2='200' />
+        <line className={styles.minLine} x1='0' y1='20' x2='0' y2='200' />
       </svg>
       <svg className={styles.maxLineContainer}>
-        <line className={styles.maxLine} x1='20' y1='20' x2='20' y2='200' />
+        <line className={styles.maxLine} x1='0' y1='20' x2='0' y2='200' />
       </svg>
       {renderSlider({ name: 'minimum' })}
       {renderSlider({ name: 'desired' })}
