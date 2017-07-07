@@ -4,6 +4,9 @@ export default {
     display: 'flex',
     alignItems: 'center'
   }),
+  statusIcon: () => ({
+    padding: '0.5rem'
+  }),
   taskName: () => ({
     flexGrow: '1'
   }),

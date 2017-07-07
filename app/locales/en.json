@@ -37,7 +37,7 @@
   "tasks.tasks": "tasks",
   "tasks.completeTask": "done",
   "tasks.cancelTask": "cancel",
-  "tasks.recipes.finish-prereqs": "finish pre-requisites for ordering",
-  "tasks.recipes.setup-group": "setup group profile and members",
-  "tasks.recipes.setup-supplier": "setup supplier profile and products"
+  "tasks.recipes.finishPrereqs": "finish pre-requisites for ordering",
+  "tasks.recipes.setupGroup": "setup group profile and members",
+  "tasks.recipes.setupSupplier": "setup supplier profile and products"
 }

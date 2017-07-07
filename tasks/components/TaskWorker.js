@@ -5,6 +5,7 @@ import { pipe, length, gt, all, prop, propOr, either, complement, not } from 'ra
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
+import FontIcon from 'material-ui/FontIcon'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/TaskWorker'
@@ -23,10 +24,15 @@ function TaskWorker (props) {
   const subTaskPlans = getSubTaskPlans(taskPlan)
 
   const hasSubTasks = getHasSubTasks(taskPlan)
+  const isTaskComplete = getIsTaskComplete(taskPlan)
   const isTaskReadyToComplete = getIsTaskReadyToComplete(taskPlan)
   const Component = hasSubTasks
     ? TaskWorkerTree
     : () => <div>COMPONENT</div>
+
+  const statusIconName = isTaskComplete
+    ? 'check-circle'
+    : 'circle-o'
 
   return (
     <div className={styles.container}>
@@ -34,6 +40,9 @@ function TaskWorker (props) {
         className={styles.header}
         zDepth={2}
       >
+        <FontIcon
+          className={`${styles.statusIcon} fa fa-${statusIconName}`}
+        />
         <h2 className={styles.taskName}>
           <FormattedMessage
             id={`tasks.recipes.${taskRecipeId}`}
