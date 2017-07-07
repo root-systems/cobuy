@@ -22,16 +22,16 @@ const taskPlan = {
     {
       id: 2,
       agent,
-      taskRecipe: setupGroup,
-      taskWork: {
-        id: 1,
-        agent
-      }
+      taskRecipe: setupGroup
     },
     {
       id: 3,
       agent,
-      taskRecipe: setupSupplier
+      taskRecipe: setupSupplier,
+      taskWork: {
+        id: 1,
+        agent
+      }
     }
   ]
 }
@@ -45,7 +45,7 @@ storiesOf('tasks.TaskWorker', module)
       onCancel={action('cancel')}
     />
   ))
-  .add('leaf task, complete', () => (
+  .add('leaf task, not complete', () => (
     <TaskWorker
       taskPlan={taskPlan.subTaskPlans[0]}
       onNavigate={action('navigate')}
@@ -53,7 +53,7 @@ storiesOf('tasks.TaskWorker', module)
       onCancel={action('cancel')}
     />
   ))
-  .add('leaf task, not complete', () => (
+  .add('leaf task, complete', () => (
     <TaskWorker
       taskPlan={taskPlan.subTaskPlans[1]}
       onNavigate={action('navigate')}
