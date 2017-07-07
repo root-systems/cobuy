@@ -7,7 +7,7 @@ import Intent from './Intent'
 export default MemberIntentField
 
 function MemberIntentField (props) {
-  const { input: { value, onChange } } = props
+  const { input: { value, onChange }, min, max, step } = props
   const Controls = value == false ? PreIntent : Intent
 
   return (
@@ -15,7 +15,7 @@ function MemberIntentField (props) {
       <div>
         current value: {JSON.stringify(value)}
       </div>
-      <Controls onChange={onChange} value={value} min={0} max={10} step={1} />
+      <Controls onChange={onChange} value={value} min={min} max={max} step={step} />
     </div>
   )
 }

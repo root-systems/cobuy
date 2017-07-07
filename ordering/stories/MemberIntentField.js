@@ -9,7 +9,7 @@ const IntentForm = props => {
   const { handleSubmit } = props
   return (
     <form onSubmit={ handleSubmit }>
-      <Field name='intent' component={MemberIntentField} />
+      <Field name='intent' component={MemberIntentField} min={0} max={10} step={1} />
     </form>
   )
 }
