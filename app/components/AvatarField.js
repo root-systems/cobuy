@@ -3,6 +3,7 @@ import React from 'react'
 import { connect } from 'react-fela'
 import AvatarEditorCanvas from 'react-avatar-editor'
 import Slider from 'material-ui/Slider'
+import RaisedButton from 'material-ui/RaisedButton'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/AvatarField'
@@ -81,7 +82,7 @@ class AvatarEditor extends React.Component {
 
     if (isEditing) {
       return (
-        <div>
+        <div className={this.props.styles.container}>
           <AvatarEditorCanvas
             ref={this.setEditorRef}
             style={canvasStyle}
@@ -89,41 +90,49 @@ class AvatarEditor extends React.Component {
             image={avatar}
             scale={scale}
             crossOrigin={'anonymous'}
+            height={80}
+            width={80}
           />
-          <Slider
-            name='zoom'
-            value={scale}
-            defaultValue={scale}
-            min={0}
-            max={2}
-            onChange={(evt, newVal) => this.handleScaleChange(newVal)}
-          />
-          <FileInput
-            onChange={dataUrl => this.handleFileChange(dataUrl)}
-          />
-          <Button onClick={() => { this.handleSaveImage() }} type='button'>
+          <div className={this.props.styles.inputContainer}>
+            <FileInput
+              onChange={dataUrl => this.handleFileChange(dataUrl)}
+            />
+          </div>
+          <div className={this.props.styles.sliderContainer}>
+            <Slider
+              name='zoom'
+              value={scale}
+              defaultValue={scale}
+              min={0}
+              max={2}
+              onChange={(evt, newVal) => this.handleScaleChange(newVal)}
+              sliderStyle={{ padding: 0, margin: 0 }}
+            />
+          </div>
+          <RaisedButton onClick={() => { this.handleSaveImage() }} type='button'>
             <FormattedMessage
               id='agents.saveAvatar'
               className={this.props.styles.buttonText}
             />
-          </Button>
+          </RaisedButton>
         </div>
       )
     }
 
     return (
-      <div>
+      <div className={this.props.styles.container}>
         <Avatar
           avatar={avatar}
+          size={'large'}
         />
         {
           isEditingProfile
-          ? <Button type='button' onClick={() => { this.setState({ isEditing: true }) }}>
+          ? <RaisedButton type='button' onClick={() => { this.setState({ isEditing: true }) }}>
               <FormattedMessage
                 id='agents.editAvatar'
                 className={this.props.styles.buttonText}
               />
-            </Button>
+            </RaisedButton>
           : null
         }
       </div>

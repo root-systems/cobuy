@@ -2,8 +2,6 @@ import {
   teal500,
   teal600,
   teal700,
-  white,
-  darkBlack,
   deepPurple500,
   deepPurple600,
   deepPurple700,
@@ -17,65 +15,59 @@ import {
   grey700,
   grey800,
   grey900,
-  fullBlack
+  darkBlack,
+  fullBlack,
+  white
 } from 'material-ui/styles/colors'
 
+// GK: theme structure following https://github.com/jxnblk/styled-system/blob/master/README.md
+
 export default {
-  breakpoints: {
-    mobile: '13.6em',
-    mobileWide: '30.4em',
-    tablet: '47.2em',
-    desktop: '64em',
-    desktopLarge: '97.6em'
+  breakpoints: [
+    32, 48, 64
+  ],
+  space: [
+    0, 6, 12, 18, 24
+  ],
+  fontSizes: [
+    12, 16, 18, 24, 36, 72
+  ],
+  colors: {
+    primary1: teal500,
+    primary2: teal600,
+    primary3: teal700,
+    accent1: deepPurple500,
+    accent2: deepPurple600,
+    accent3: deepPurple700,
+    greys: [
+      grey50,
+      grey100,
+      grey200,
+      grey300,
+      grey400,
+      grey500,
+      grey600,
+      grey700,
+      grey800,
+      grey900
+    ],
+    text: darkBlack,
+    alternateText: white,
+    canvas: white,
+    border: grey300,
+    shadow: fullBlack
+  },
+  fontWeights: {
+    thin: 100,
+    light: 300,
+    regular: 400,
+    medium: 500,
+    bold: 700,
+    black: 900
   },
   em: '1em',
   rem: '1rem',
-  fontSize1: '.875rem',
-  fontSize2: '1rem',
-  fontSize3: '1.25rem',
-  fontSize4: '1.5rem',
-  fontSize5: '2.25rem',
-  fontSize6: '3rem',
-  fontSize7: '5rem',
-  fontSize8: '6rem',
   fontFamily: 'Roboto, sans-serif',
-  weightThin: 100,
-  weightLight: 300,
-  weightRegular: 400,
-  weightMedium: 500,
-  weightBold: 700,
-  weightBlack: 900,
-  colorPrimary1: teal500,
-  colorPrimary2: teal600,
-  colorPrimary3: teal700,
-  colorAccent1: deepPurple500,
-  colorAccent2: deepPurple600,
-  colorAccent3: deepPurple700,
-  colorGreys: [
-    grey50,
-    grey100,
-    grey200,
-    grey300,
-    grey400,
-    grey500,
-    grey600,
-    grey700,
-    grey800,
-    grey900
-  ],
-  colorText: darkBlack,
-  colorAlternateText: white,
-  colorCanvas: white,
-  colorBorder: grey300,
-  colorShadow: fullBlack,
-  spacingNone: 0,
-  spacingExtraSmall: '.25rem',
-  spacingSmall: '.5rem',
-  spacingMedium: '1rem',
-  spacingLarge: '2rem',
-  spacingExtraLarge: '4rem',
-  spacingExtraExtraLarge: '8rem',
-  spacingExtraExtraExtraLarge: '16rem',
   borderRadius: '2px',
   zIndexMax: 1000
 }
