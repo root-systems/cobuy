@@ -69,5 +69,5 @@ export default {
   rem: '1rem',
   fontFamily: 'Roboto, sans-serif',
   borderRadius: '2px',
-  zIndexMax: 100
+  zIndexMax: 1000
 }
