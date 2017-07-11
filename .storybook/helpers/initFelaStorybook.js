@@ -6,6 +6,7 @@ import { StyleProvider as VeelProvider } from 'veel'
 
 import rootConfig from '../../root'
 import styleConfig from '../../style'
+import baseTheme from '../../app/themes/base'
 
 const renderer = createRenderer()
 const stylesheet = document.querySelector(rootConfig.styleNode)
@@ -15,7 +16,7 @@ export default () =>
   story => {
     return (
       <FelaProvider renderer={renderer} mountNode={stylesheet}>
-        <VeelProvider renderer={renderer}>
+        <VeelProvider renderer={renderer} config={baseTheme}>
           {story()}
         </VeelProvider>
       </FelaProvider>
