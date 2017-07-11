@@ -4,6 +4,8 @@ import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
 import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/Profile'
@@ -30,39 +32,45 @@ class Profile extends React.Component {
 
     return (
       <form className={styles.container}>
-        <Field
-          name='avatar'
-          component={AvatarField}
-          isEditingProfile={isEditing}
-          value={avatar}
-        />
-        <Field
-          name='name'
-          floatingLabelText={
-            <FormattedMessage
-              id='agents.nameLabel'
-              className={styles.labelText}
+        <div className={styles.innerContainer}>
+          <div className={styles.avatarContainer}>
+            <Field
+              name='avatar'
+              component={AvatarField}
+              isEditingProfile={isEditing}
+              value={avatar}
             />
-          }
-          component={TextField}
-          value={name}
-          disabled={!isEditing}
-        />
-        <Field
-          name='description'
-          floatingLabelText={
-            <FormattedMessage
-              id='agents.descriptionLabel'
-              className={styles.labelText}
+          </div>
+          <div className={styles.infoContainer}>
+            <Field
+              name='name'
+              floatingLabelText={
+                <FormattedMessage
+                  id='agents.nameLabel'
+                  className={styles.labelText}
+                />
+              }
+              component={TextField}
+              value={name}
+              disabled={!isEditing}
             />
-          }
-          component={TextField}
-          value={description}
-          multiLine={true}
-          rows={3}
-          disabled={!isEditing}
-        />
-        <Button type='button' onClick={() => { this.toggleEdit() }}>
+            <Field
+              name='description'
+              floatingLabelText={
+                <FormattedMessage
+                  id='agents.descriptionLabel'
+                  className={styles.labelText}
+                />
+              }
+              component={TextField}
+              value={description}
+              multiLine={true}
+              rowsMax={5}
+              disabled={!isEditing}
+            />
+          </div>
+        </div>
+        <RaisedButton type='button' onClick={() => { this.toggleEdit() }}>
           {
             isEditing
             ? <FormattedMessage
@@ -74,7 +82,7 @@ class Profile extends React.Component {
                 className={styles.labelText}
               />
           }
-        </Button>
+        </RaisedButton>
       </form>
     )
   }
