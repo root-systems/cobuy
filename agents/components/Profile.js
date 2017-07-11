@@ -4,7 +4,6 @@ import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
 import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
-import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import { FormattedMessage } from '../../lib/Intl'

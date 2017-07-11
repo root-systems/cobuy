@@ -1,8 +1,9 @@
 export default {
   container: () => ({
+    width: '50%',
+    minWidth: '3rem',
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    flexDirection: 'column'
   }),
   innerContainer: () => ({
     display: 'flex',

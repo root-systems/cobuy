@@ -1,5 +1,12 @@
 export default {
-  container: () => ({}),
+  container: () => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  }),
+  sliderContainer: () => ({
+    width: '50%'
+  }),
   label: () => ({}),
   canvas: () => ({}),
   error: () => ({}),
