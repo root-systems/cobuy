@@ -38,6 +38,9 @@ const mapRoutePages = map(route => {
 })
 
 // TODO move this to some config for dogstack
+import PropTypes from 'prop-types'
+import { Provider as FelaProvider, ThemeProvider as FelaThemeProvider } from 'react-fela'
+import { StyleProvider as VeelProvider } from 'veel'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { IntlProvider, addLocaleData } from 'react-intl'
 import en from 'react-intl/locale-data/en'
@@ -49,19 +52,27 @@ const locale = navigator.language
 addLocaleData([...en])
 const messagesByLocale = {
   'en': require('../locales/en'),
-  'en-US': require('../locales/en-US')
+  'en-US': require('../locales/en-us')
 }
 const messages = getLocaleMessages(messagesByLocale, locale)
 
-export default (props) => {
+const Root = (props, context) => {
   return (
-    <MuiThemeProvider muiTheme={MuiThemeHelper(baseTheme)}>
-      <IntlProvider
-        locale={locale}
-        messages={messages}
-      >
-        <Layout {...props} />
-      </IntlProvider>
-    </MuiThemeProvider>
+    <FelaThemeProvider theme={baseTheme}>
+      <VeelProvider renderer={context.renderer} config={baseTheme}>
+        <MuiThemeProvider muiTheme={MuiThemeHelper(baseTheme)}>
+          <IntlProvider
+            locale={locale}
+            messages={messages}
+          >
+            <Layout {...props} />
+          </IntlProvider>
+        </MuiThemeProvider>
+      </VeelProvider>
+    </FelaThemeProvider>
   )
 }
+
+Root.contextTypes = { renderer: PropTypes.object }
+
+export default Root
