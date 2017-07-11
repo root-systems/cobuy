@@ -1,41 +1,46 @@
 import React from 'react'
-import Slider from 'material-ui/Slider'
+import { merge, pipe } from 'ramda'
+import { connect as connectFela } from 'react-fela'
+import BigMath from 'bigmath'
 
-import Intent from './Intent'
+import { FormattedMessage } from '../../lib/Intl'
+import MemberIntentControl from './MemberIntentControl'
+import MemberPreIntentControl from './MemberPreIntentControl'
+import getOrderableFromOffering from '../helpers/getOrderableFromOffering'
 
-export default MemberIntentField
+import styles from '../styles/MemberIntentField'
 
 function MemberIntentField (props) {
-  const { input: { value, onChange }, min, max, step } = props
-  const Controls = value == false ? PreIntent : Intent
+  const { styles, input: { value, onChange }, offering } = props
+  const Controls = value == false ? MemberPreIntentControl : MemberIntentControl
+
+  const { resourceType, unit, step } = getOrderableFromOffering(offering)
+  const { name } = resourceType
+  const min = '0'
+  const increment = BigMath.mul(step, '2')
+  const max = value == false
+    ? increment
+    : BigMath.add(value.maximum, increment)
 
   return (
-    <div>
-      <div>
-        current value: {JSON.stringify(value)}
-      </div>
-      <Controls onChange={onChange} value={value} min={min} max={max} step={step} />
+    <div className={styles.container}>
+      <span className={styles.title}>
+        <FormattedMessage
+          id='ordering.intentTitle'
+          values={{ name, step, unit }}
+        />
+      </span>
+      <Controls
+        onChange={onChange}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+      />
     </div>
   )
 }
 
-function PreIntent (props) {
-  const { onChange, min, max, step } = props
-
-  return (
-    <Slider
-      onChange={handleChange}
-      min={min}
-      max={max}
-      step={step}
-    />
-  )
-
-  function handleChange (ev, newValue) {
-    onChange({
-      minimum: newValue - step,
-      desired: newValue,
-      maximum: newValue + step
-    })
-  }
-}
+export default pipe(
+  connectFela(styles)
+)(MemberIntentField)
