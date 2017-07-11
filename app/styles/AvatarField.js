@@ -5,7 +5,11 @@ export default {
     alignItems: 'center'
   }),
   sliderContainer: () => ({
-    width: '50%'
+    width: '50%',
+    padding: '10px'
+  }),
+  inputContainer: () => ({
+    padding: '10px'
   }),
   label: () => ({}),
   canvas: () => ({}),

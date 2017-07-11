@@ -93,9 +93,11 @@ class AvatarEditor extends React.Component {
             height={80}
             width={80}
           />
-          <FileInput
-            onChange={dataUrl => this.handleFileChange(dataUrl)}
-          />
+          <div className={this.props.styles.inputContainer}>
+            <FileInput
+              onChange={dataUrl => this.handleFileChange(dataUrl)}
+            />
+          </div>
           <div className={this.props.styles.sliderContainer}>
             <Slider
               name='zoom'
@@ -104,6 +106,7 @@ class AvatarEditor extends React.Component {
               min={0}
               max={2}
               onChange={(evt, newVal) => this.handleScaleChange(newVal)}
+              sliderStyle={{ padding: 0, margin: 0 }}
             />
           </div>
           <RaisedButton onClick={() => { this.handleSaveImage() }} type='button'>
