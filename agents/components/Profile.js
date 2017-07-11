@@ -31,6 +31,12 @@ class Profile extends React.Component {
 
     return (
       <form className={styles.container}>
+        <p className={styles.intro}>
+          <FormattedMessage
+            id='agents.profile'
+            className={styles.labelText}
+          />
+        </p>
         <div className={styles.innerContainer}>
           <div className={styles.avatarContainer}>
             <Field
@@ -50,6 +56,7 @@ class Profile extends React.Component {
                 />
               }
               component={TextField}
+              fullWidth={true}
               value={name}
               disabled={!isEditing}
             />
@@ -63,25 +70,28 @@ class Profile extends React.Component {
               }
               component={TextField}
               value={description}
+              fullWidth={true}
               multiLine={true}
               rowsMax={5}
               disabled={!isEditing}
             />
           </div>
         </div>
-        <RaisedButton type='button' onClick={() => { this.toggleEdit() }}>
-          {
-            isEditing
-            ? <FormattedMessage
-                id='agents.saveProfile'
-                className={styles.labelText}
-              />
-            : <FormattedMessage
-                id='agents.editProfile'
-                className={styles.labelText}
-              />
-          }
-        </RaisedButton>
+        <div className={styles.buttonContainer}>
+          <RaisedButton className={styles.button} type='button' onClick={() => { this.toggleEdit() }}>
+            {
+              isEditing
+              ? <FormattedMessage
+                  id='agents.saveProfile'
+                  className={styles.labelText}
+                />
+              : <FormattedMessage
+                  id='agents.editProfile'
+                  className={styles.labelText}
+                />
+            }
+          </RaisedButton>
+        </div>
       </form>
     )
   }
