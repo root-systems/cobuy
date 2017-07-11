@@ -1,6 +1,6 @@
 /* global document */
 import React from 'react'
-import { createRenderer } from 'fela'
+import { createRenderer } from 'veel'
 import { Provider } from 'react-fela'
 
 import rootConfig from '../../root'
@@ -16,5 +16,5 @@ export default () =>
       <Provider renderer={renderer} mountNode={stylesheet}>
         {story()}
       </Provider>
-    );
+    )
   }
