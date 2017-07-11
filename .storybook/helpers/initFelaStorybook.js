@@ -1,7 +1,8 @@
 /* global document */
 import React from 'react'
-import { createRenderer } from 'veel'
-import { Provider } from 'react-fela'
+import { createRenderer } from 'fela'
+import { Provider as FelaProvider } from 'react-fela'
+import { StyleProvider as VeelProvider } from 'veel'
 
 import rootConfig from '../../root'
 import styleConfig from '../../style'
@@ -13,8 +14,10 @@ styleConfig.setup(renderer)
 export default () =>
   story => {
     return (
-      <Provider renderer={renderer} mountNode={stylesheet}>
-        {story()}
-      </Provider>
+      <FelaProvider renderer={renderer} mountNode={stylesheet}>
+        <VeelProvider renderer={renderer}>
+          {story()}
+        </VeelProvider>
+      </FelaProvider>
     )
   }
