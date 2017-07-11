@@ -81,6 +81,12 @@ function MemberInvites (props) {
   const { styles } = props
   return (
     <form className={styles.container}>
+      <p className={styles.intro}>
+        <FormattedMessage
+          id='agents.memberInvites'
+          className={styles.labelText}
+        />
+      </p>
       <Field
         name='groupName'
         type='text'
