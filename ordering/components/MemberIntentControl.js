@@ -1,6 +1,6 @@
 import React from 'react'
 import Slider from 'material-ui/Slider'
-import { merge, pipe } from 'ramda'
+import { merge, pipe, isNil } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import BigMath from 'bigmath'
 import TextField from 'material-ui/TextField'
@@ -9,8 +9,7 @@ import DebounceInput from 'react-debounce-input'
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/MemberIntentControl'
 
-// - BUG found bug with BigNumber(number) is not number?
-// - IDEA inputs as labels that hover over
+// IDEA: inputs as labels that hover over
 
 function MemberIntentControl (props) {
   const { onChange, value, styles, min, max, step } = props
@@ -70,8 +69,8 @@ function MemberIntentControl (props) {
 
   function handleChange (key) {
     return (ev, newValue) => {
-      newValue = newValue || ev.target.value
-      var update = { [key]: String(newValue) }
+      newValue = isNil(newValue) ? String(ev.target.value) : String(newValue)
+      var update = { [key]: newValue }
 
       if (key == 'minimum') {
         if (BigMath.greaterThan(newValue, value.desired)) {
@@ -81,7 +80,7 @@ function MemberIntentControl (props) {
           update.maximum = newValue
         }
       } else if (key == 'desired') {
-        const diff = newValue - value.desired
+        const diff = BigMath.sub(newValue, value.desired)
         update.minimum = BigMath.max(min, BigMath.add(value.minimum, diff))
         update.maximum = BigMath.min(max, BigMath.add(value.maximum, diff))
       } else if (key == 'maximum') {
