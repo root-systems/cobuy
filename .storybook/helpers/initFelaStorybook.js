@@ -1,7 +1,7 @@
 /* global document */
 import React from 'react'
 import { createRenderer } from 'fela'
-import { Provider as FelaProvider } from 'react-fela'
+import { Provider as FelaProvider, ThemeProvider as FelaThemeProvider } from 'react-fela'
 import { StyleProvider as VeelProvider } from 'veel'
 
 import rootConfig from '../../root'
@@ -16,9 +16,11 @@ export default () =>
   story => {
     return (
       <FelaProvider renderer={renderer} mountNode={stylesheet}>
-        <VeelProvider renderer={renderer} config={baseTheme}>
-          {story()}
-        </VeelProvider>
+        <FelaThemeProvider theme={baseTheme}>
+          <VeelProvider renderer={renderer} config={baseTheme}>
+            {story()}
+          </VeelProvider>
+        </FelaThemeProvider>
       </FelaProvider>
     )
   }
