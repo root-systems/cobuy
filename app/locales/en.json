@@ -29,5 +29,9 @@
   "supply.each": "each (discrete)",
   "supply.resource": "product name",
   "supply.contains": "which contains",
-  "supply.offerings": "offerings"
+  "supply.offerings": "offerings",
+  "ordering.minimum": "minimum",
+  "ordering.desired": "desired",
+  "ordering.maximum": "maximum",
+  "ordering.intentTitle": "{name} per {step, number} {unit}"
 }
