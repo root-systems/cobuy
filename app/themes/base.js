@@ -21,16 +21,34 @@ import {
 } from 'material-ui/styles/colors'
 
 // GK: theme structure following https://github.com/jxnblk/styled-system/blob/master/README.md
+// and https://github.com/cloudflare/cf-ui/blob/master/packages/cf-style-const/src/variables.js
 
 export default {
   breakpoints: [
-    32, 48, 64
+    '13.6em',
+    '30.4em',
+    '47.2em',
+    '64em',
+    '97.6em'
   ],
   space: [
-    0, 6, 12, 18, 24
+    '0.25rem',
+    '0.5rem',
+    '1rem',
+    '2rem',
+    '4rem',
+    '8rem',
+    '16rem',
   ],
   fontSizes: [
-    12, 16, 18, 24, 36, 72
+    '0.875rem',
+    '1rem',
+    '1.25rem',
+    '1.5rem',
+    '2.25rem',
+    '3rem',
+    '5rem',
+    '6rem'
   ],
   colors: {
     primary1: teal500,
