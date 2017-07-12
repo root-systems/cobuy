@@ -5,10 +5,10 @@ import { connect as connectFela } from 'react-fela'
 import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
 import { pipe } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
+import RaisedButton from 'material-ui/RaisedButton'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/MemberInvites'
-import Button from '../../app/components/Button'
 
 function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
   const { memberVals, styles } = formProps
@@ -24,10 +24,10 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
     }
   }
   return (
-    <div>
+    <div className={styles.fieldsContainer}>
       {submitFailed && error && <span>{error}</span>}
       {fields.map((member, index) => (
-        <div key={index}>
+        <div key={index} className={styles.rowContainer}>
           <Field
             name={`${member}.name`}
             floatingLabelText={
@@ -58,21 +58,25 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
             }
             component={TextField}
           />
-          <Button type='button' onClick={() => fields.remove(index)}>
-            <FormattedMessage
-              id='agents.removeMember'
-              className={styles.buttonText}
-            />
-          </Button>
+          <div className={styles.removeButtonContainer}>
+            <RaisedButton type='button' className={styles.button} onClick={() => fields.remove(index)}>
+              <FormattedMessage
+                id='agents.removeMember'
+                className={styles.buttonText}
+              />
+            </RaisedButton>
+          </div>
         </div>
       )
     )}
-      <Button type='button' onClick={() => fields.push({})}>
-        <FormattedMessage
-          id='agents.addMember'
-          className={styles.buttonText}
-        />
-      </Button>
+      <div className={styles.addButtonContainer}>
+        <RaisedButton type='button' className={styles.button} onClick={() => fields.push({})}>
+          <FormattedMessage
+            id='agents.addMember'
+            className={styles.buttonText}
+          />
+        </RaisedButton>
+      </div>
     </div>
   )
 }
@@ -81,17 +85,12 @@ function MemberInvites (props) {
   const { styles } = props
   return (
     <form className={styles.container}>
-      <Field
-        name='groupName'
-        type='text'
-        component={TextField}
-        floatingLabelText={
-          <FormattedMessage
-            id='agents.groupName'
-            className={styles.labelText}
-          />
-          }
-      />
+      <p className={styles.intro}>
+        <FormattedMessage
+          id='agents.memberInvites'
+          className={styles.labelText}
+        />
+      </p>
       <FieldArray name='members' component={renderMembers} formProps={props} />
     </form>
   )
