@@ -23,7 +23,8 @@ export default {
   rowContainer: () => ({
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    flexWrap: 'wrap'
   }),
   addButtonContainer: () => ({
     paddingTop: '2rem'

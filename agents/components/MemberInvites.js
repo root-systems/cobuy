@@ -91,19 +91,6 @@ function MemberInvites (props) {
           className={styles.labelText}
         />
       </p>
-      <div className={styles.groupNameContainer}>
-        <Field
-          name='groupName'
-          type='text'
-          component={TextField}
-          floatingLabelText={
-            <FormattedMessage
-              id='agents.groupName'
-              className={styles.labelText}
-            />
-            }
-        />
-      </div>
       <FieldArray name='members' component={renderMembers} formProps={props} />
     </form>
   )
