@@ -21,15 +21,11 @@ export default {
     flexDirection: 'column',
     alignItems: 'center'
   }),
-  offeringContainer: () => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  }),
   rowContainer: () => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
+    flexWrap: 'wrap',
     width: '100%'
   }),
   switchContainer: () => ({
