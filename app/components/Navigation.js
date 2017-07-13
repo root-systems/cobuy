@@ -1,10 +1,15 @@
 import React from 'react'
+import { connect as connectFela } from 'react-fela'
+import { pipe } from 'ramda'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
 
-export default class Navigation extends React.Component {
+import styles from '../styles/Navigation'
+import { FormattedMessage } from '../../lib/Intl'
+
+class Navigation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,10 +22,16 @@ export default class Navigation extends React.Component {
   }
 
   render () {
+    const { styles } = this.props
     return (
       <div>
         <AppBar
-          title="Cobuy"
+          title={
+            <FormattedMessage
+              id='app.name'
+              className={styles.labelText}
+            />
+          }
           onLeftIconButtonTouchTap={this.handleDrawerToggle}
         />
         <Drawer open={this.state.drawerOpen}>
@@ -30,7 +41,10 @@ export default class Navigation extends React.Component {
             }
             onTouchTap={this.handleDrawerToggle}
           >
-            Close Menu
+            <FormattedMessage
+              id='app.closeMenu'
+              className={styles.labelText}
+            />
           </MenuItem>
           <Divider />
           <MenuItem
@@ -38,7 +52,10 @@ export default class Navigation extends React.Component {
               <i className="fa fa-tachometer" aria-hidden="true" />
             }
           >
-            Dashboard
+            <FormattedMessage
+              id='app.dashboard'
+              className={styles.labelText}
+            />
           </MenuItem>
           <Divider />
           <MenuItem
@@ -46,7 +63,10 @@ export default class Navigation extends React.Component {
               <i className="fa fa-sign-out" aria-hidden="true" />
             }
           >
-            Log Out
+            <FormattedMessage
+              id='app.logOut'
+              className={styles.labelText}
+            />
           </MenuItem>
           <Divider />
         </Drawer>
@@ -55,4 +75,6 @@ export default class Navigation extends React.Component {
   }
 }
 
-// export default Navigation
+export default pipe(
+  connectFela(styles)
+)(Navigation)

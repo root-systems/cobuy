@@ -1,3 +1,6 @@
 export default {
-  container: (props) => ({})
+  container: (props) => ({}),
+  labelText: () => ({
+    textTransform: 'capitalize'
+  })
 }
