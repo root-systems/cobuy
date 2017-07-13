@@ -1,5 +1,8 @@
 {
   "app.name": "Cobuy",
+  "app.closeMenu": "close menu",
+  "app.dashboard": "dashboard",
+  "app.logOut": "log out",
   "agents.nameLabel": "name",
   "agents.descriptionLabel": "description",
   "agents.logout": "log out",
