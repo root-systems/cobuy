@@ -1,12 +1,7 @@
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { pipe } from 'ramda'
-import AppBar from 'material-ui/AppBar'
-import Drawer from 'material-ui/Drawer'
-import MenuItem from 'material-ui/MenuItem'
-import Divider from 'material-ui/Divider'
 import RaisedButton from 'material-ui/RaisedButton'
-import { withState, withHandlers, compose } from 'recompose'
 
 import styles from '../styles/Dashboard'
 import { FormattedMessage } from '../../lib/Intl'
