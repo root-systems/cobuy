@@ -9,41 +9,34 @@ export default class Navigation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      drawerOpen: false
     }
   }
 
-  handleToggle = () => this.setState({ open: !this.state.open })
+  handleDrawerToggle = () => {
+    this.setState({ drawerOpen: !this.state.drawerOpen })
+  }
 
-//   render() {
-//     return (
-//       <div>
-//         <RaisedButton
-//           label="Toggle Drawer"
-//           onTouchTap={this.handleToggle}
-//         />
-//         <Drawer open={this.state.open}>
-//           <MenuItem>Menu Item</MenuItem>
-//           <MenuItem>Menu Item 2</MenuItem>
-//         </Drawer>
-//       </div>
-//     );
-//   }
-// }
-
-render () {
-  return (
-    <div>
-      <AppBar
-        title="Cobuy"
-        iconElementRight={<i className="fa fa-bars" aria-hidden="true" onClick={this.handleToggle}></i>}
-      />
-      <Drawer open={this.state.open}>
-        <MenuItem>Menu Item</MenuItem>
-        <MenuItem>Menu Item 2</MenuItem>
-      </Drawer>
-    </div>
-  )
+  render () {
+    return (
+      <div>
+        <AppBar
+          title="Cobuy"
+          onLeftIconButtonTouchTap={this.handleDrawerToggle}
+        />
+        <Drawer open={this.state.drawerOpen}>
+          <MenuItem
+            leftIcon={
+              <i className="fa fa-bars" aria-hidden="true"/>
+            }
+            onTouchTap={this.handleDrawerToggle}
+          />
+          <MenuItem>Menu Item</MenuItem>
+          <MenuItem>Menu Item 2</MenuItem>
+        </Drawer>
+      </div>
+    )
+  }
 }
 
 // export default Navigation
