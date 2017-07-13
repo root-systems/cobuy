@@ -13,7 +13,7 @@ export const setupSupplier = {
 
 export const finishPrereqs = {
   id: 'finishPrereqs',
-  taskRecipes: [
+  childTaskRecipes: [
     setupGroup,
     setupSupplier
   ]

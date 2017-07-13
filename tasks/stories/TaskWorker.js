@@ -18,7 +18,7 @@ const taskPlan = {
   id: 1,
   agent,
   taskRecipe: finishPrereqs,
-  subTaskPlans: [
+  childTaskPlans: [
     {
       id: 2,
       agent,
@@ -47,7 +47,7 @@ storiesOf('tasks.TaskWorker', module)
   ))
   .add('leaf task, not complete', () => (
     <TaskWorker
-      taskPlan={taskPlan.subTaskPlans[0]}
+      taskPlan={taskPlan.childTaskPlans[0]}
       onNavigate={action('navigate')}
       onComplete={action('complete')}
       onCancel={action('cancel')}
@@ -55,7 +55,7 @@ storiesOf('tasks.TaskWorker', module)
   ))
   .add('leaf task, complete', () => (
     <TaskWorker
-      taskPlan={taskPlan.subTaskPlans[1]}
+      taskPlan={taskPlan.childTaskPlans[1]}
       onNavigate={action('navigate')}
       onComplete={action('complete')}
       onCancel={action('cancel')}

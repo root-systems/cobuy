@@ -11,10 +11,10 @@ import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/TaskWorker'
 import TaskWorkerTree from './TaskWorkerTree'
 
-const getSubTaskPlans = propOr([], 'subTaskPlans')
+const getSubTaskPlans = propOr([], 'childTaskPlans')
 const getIsTaskComplete = pipe(prop('taskWork'), Boolean)
 const getAreAllSubTasksComplete = pipe(getSubTaskPlans, all(getIsTaskComplete))
-const getHasSubTasks = pipe(getSubTaskPlans, subTaskPlans => gt(length(subTaskPlans), 0))
+const getHasSubTasks = pipe(getSubTaskPlans, childTaskPlans => gt(length(childTaskPlans), 0))
 const getIsTaskReadyToComplete = either(complement(getHasSubTasks), getAreAllSubTasksComplete)
 const getTaskComponent = path(['taskRecipe', 'Component'])
 
@@ -22,7 +22,7 @@ function TaskWorker (props) {
   const { styles, taskPlan, onNavigate, onComplete, onCancel } = props
   const { taskRecipe } = taskPlan
   const { id: taskRecipeId } = taskRecipe
-  const subTaskPlans = getSubTaskPlans(taskPlan)
+  const childTaskPlans = getSubTaskPlans(taskPlan)
 
   const hasSubTasks = getHasSubTasks(taskPlan)
   const isTaskComplete = getIsTaskComplete(taskPlan)
@@ -77,7 +77,7 @@ function TaskWorker (props) {
       <div className={styles.component}>
         <Component
           taskPlan={taskPlan}
-          subTaskPlans={subTaskPlans}
+          childTaskPlans={childTaskPlans}
           onNavigate={onNavigate}
           onComplete={onComplete}
           onCancel={onCancel}

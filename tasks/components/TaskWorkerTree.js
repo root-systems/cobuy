@@ -13,43 +13,43 @@ import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/TaskWorkerTree'
 
 function TaskWorkerTree (props) {
-  const { styles, subTaskPlans, onNavigate } = props
+  const { styles, childTaskPlans, onNavigate } = props
 
-  const mapSubTasks = map(subTaskPlan => {
-    const { taskRecipe: subTaskRecipe, taskWork: subTaskWork } = subTaskPlan
-    const { id: subTaskRecipeId } = subTaskRecipe
+  const mapSubTasks = map(childTaskPlan => {
+    const { taskRecipe: childTaskRecipe, taskWork: childTaskWork } = childTaskPlan
+    const { id: childTaskRecipeId } = childTaskRecipe
     return (
-      <ListItem className={styles.subTaskItem}>
+      <ListItem className={styles.childTaskItem}>
         <Checkbox
           label={
             <FormattedMessage
-              id={`tasks.recipes.${subTaskRecipeId}`}
-              className={styles.subTaskNameText}
+              id={`tasks.recipes.${childTaskRecipeId}`}
+              className={styles.childTaskNameText}
             />
           }
-          checked={not(isNil(subTaskWork))}
-          className={styles.subTaskCheckbox}
-          onCheck={handleNavigate(subTaskPlan)}
+          checked={not(isNil(childTaskWork))}
+          className={styles.childTaskCheckbox}
+          onCheck={handleNavigate(childTaskPlan)}
         />
       </ListItem>
     )
   })
 
   return (
-    <List className={styles.subTaskList}>
-      <Subheader className={styles.subTasksHeader}>
+    <List className={styles.childTaskList}>
+      <Subheader className={styles.childTasksHeader}>
         <FormattedMessage
           id='tasks.tasks'
-          className={styles.subTasksHeaderText}
+          className={styles.childTasksHeaderText}
         />
       </Subheader>
-      {mapSubTasks(subTaskPlans)}
+      {mapSubTasks(childTaskPlans)}
     </List>
   )
 
-  function handleNavigate (subTaskPlan) {
+  function handleNavigate (childTaskPlan) {
     return (ev) => {
-      onNavigate(subTaskPlan)
+      onNavigate(childTaskPlan)
     }
   }
 }
