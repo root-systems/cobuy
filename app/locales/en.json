@@ -33,5 +33,13 @@
   "ordering.minimum": "minimum",
   "ordering.desired": "desired",
   "ordering.maximum": "maximum",
-  "ordering.intentTitle": "{name} per {step, number} {unit}"
+  "ordering.intentTitle": "{name} per {step, number} {unit}",
+  "tasks.tasks": "tasks",
+  "tasks.completeTask": "done",
+  "tasks.cancelTask": "cancel",
+  "tasks.recipes.finishPrereqs": "finish pre-requisites for ordering",
+  "tasks.recipes.setupGroup": "setup group profile and members",
+  "tasks.steps.groupProfile": "enter your group profile information",
+  "tasks.steps.memberInvites": "invite group members",
+  "tasks.recipes.setupSupplier": "setup supplier profile and products"
 }
