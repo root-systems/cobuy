@@ -10,8 +10,8 @@ import styles from '../styles/Navigation'
 import { FormattedMessage } from '../../lib/Intl'
 
 class Navigation extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       drawerOpen: false
     }
