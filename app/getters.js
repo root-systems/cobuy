@@ -6,9 +6,18 @@ export const getConfig = prop('config')
 
 export const getHomeProps = (state) => ({})
 
-export const getRoutes = pipe(
+export const getAllRoutes = pipe(
   nthArg(1),
   propOr(null, 'routes')
+)
+
+export const getRoutes = createSelector(
+  getState,
+  getAllRoutes,
+  uncurryN(2, state => filter(route => {
+    const { selector } = route
+    return isNil(selector) || selector(state)
+  }))
 )
 
 const indexByName = indexBy(prop('name'))

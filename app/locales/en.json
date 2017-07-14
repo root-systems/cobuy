@@ -2,6 +2,7 @@
   "app.name": "Cobuy",
   "app.closeMenu": "close menu",
   "app.home": "home",
+  "app.dashboard": "dashboard",
   "app.startOrder": "start order",
   "agents.nameLabel": "name",
   "agents.descriptionLabel": "description",

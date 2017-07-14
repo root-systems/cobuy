@@ -3,6 +3,7 @@ import React from 'react'
 
 // Top Level Containers
 import Home from './app/containers/home'
+import Dashboard from './app/components/Dashboard.js'
 
 import Register from './agents/containers/Register'
 import SignIn from './agents/containers/SignIn'
@@ -27,9 +28,21 @@ export default [
     path: '/',
     exact: true,
     Component: Home,
+    selector: getIsNotAuthenticated,
     navigation: {
       title: 'app.home',
       icon: 'fa fa-home'
+    }
+  },
+  {
+    name: 'dashboard',
+    path: '/',
+    exact: true,
+    Component: Dashboard,
+    selector: getIsAuthenticated,
+    navigation: {
+      title: 'app.dashboard',
+      icon: 'fa fa-dashboard'
     }
   },
   {
