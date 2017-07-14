@@ -2,7 +2,7 @@ import { connect } from 'feathers-action-react'
 
 import Dashboard from '../components/Dashboard'
 
-import { actions as taskPlanActions } from '../../tasks/plans'
+import { actions as taskPlanActions } from '../../tasks/dux/plans'
 
 import { getDashboardProps } from '../getters'
 
