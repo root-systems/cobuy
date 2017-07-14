@@ -7,7 +7,7 @@ import styles from '../styles/Dashboard'
 import { FormattedMessage } from '../../lib/Intl'
 
 function Dashboard (props) {
-  const { styles, startOrder } = props
+  const { styles, actions } = props
 
   return (
     <div className={styles.container}>
@@ -18,7 +18,11 @@ function Dashboard (props) {
         />
       </p>
       <div className={styles.buttonContainer}>
-        <RaisedButton className={styles.button} type='button' onClick={startOrder}>
+        <RaisedButton
+          className={styles.button}
+          type='button'
+          onClick={actions.ordering.startOrder}
+        >
           <FormattedMessage
             id='app.startOrder'
             className={styles.labelText}
