@@ -62,7 +62,7 @@
     "bigmath": "^1.0.3",
     "dog-names": "^1.0.2",
     "dogstack": "^0.4.0",
-    "dogstack-agents": "^0.3.1",
+    "dogstack-agents": "^0.3.2",
     "feathers-action": "^2.2.0",
     "feathers-action-react": "github:ahdinosaur/feathers-action-react#cancel",
     "feathers-errors": "^2.6.2",
