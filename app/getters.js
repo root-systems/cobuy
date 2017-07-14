@@ -1,5 +1,6 @@
 import { createSelector, createStructuredSelector } from 'reselect'
 import { pipe, not, isNil, map, filter, prop, propOr, indexBy, nthArg, uncurryN } from 'ramda'
+import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
 
 export const getState = state => state
 export const getConfig = prop('config')
@@ -38,6 +39,7 @@ export const getNavigationRoutes = createSelector(
 )
 
 export const getLayoutProps = createStructuredSelector({
+  currentAgent: getCurrentAgent,
   routes: getRoutes,
   navigationRoutes: getNavigationRoutes
 })
