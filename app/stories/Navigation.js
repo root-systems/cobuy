@@ -5,5 +5,5 @@ import Navigation from '../components/Navigation'
 
 storiesOf('app.Navigation', module)
   .add('default', () => (
-    <Navigation />
+    <Navigation navigationRoutes={[]} />
   ))

@@ -53,6 +53,7 @@
   "homepage": "https://github.com/enspiral-root-systems/cobuy#readme",
   "dependencies": {
     "@ahdinosaur/react-fela": "^4.3.5",
+    "@f/create-action": "^1.1.1",
     "babel-plugin-ramda": "^1.2.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
@@ -62,7 +63,7 @@
     "bigmath": "^1.0.3",
     "dog-names": "^1.0.2",
     "dogstack": "^0.4.0",
-    "dogstack-agents": "^0.3.2",
+    "dogstack-agents": "^0.3.3",
     "feathers-action": "^2.2.0",
     "feathers-action-react": "github:ahdinosaur/feathers-action-react#cancel",
     "feathers-errors": "^2.6.2",
