@@ -3,7 +3,7 @@ import React from 'react'
 
 // Top Level Containers
 import Home from './app/containers/home'
-import Dashboard from './app/components/Dashboard.js'
+import Dashboard from './app/containers/Dashboard'
 
 import Register from './agents/containers/Register'
 import SignIn from './agents/containers/SignIn'
