@@ -1,9 +1,11 @@
 import { combineEpics } from 'redux-observable'
 
 import { epic as agents } from 'dogstack-agents'
-import { epic as taskPlans } from './tasks/plans'
+import { epic as taskPlans } from './tasks/dux/plans'
+import { epic as taskWorks } from './tasks/dux/works'
 
 export default combineEpics(
   agents,
-  taskPlans
+  taskPlans,
+  taskWorks
 )
