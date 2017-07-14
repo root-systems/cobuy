@@ -28,7 +28,8 @@ export default [
     exact: true,
     Component: Home,
     navigation: {
-      title: 'Home'
+      title: 'app.home',
+      icon: 'fa fa-home'
     }
   },
   {
@@ -36,15 +37,17 @@ export default [
     path: '/sign-in',
     Component: UserIsNotAuthenticated(SignIn),
     navigation: {
-      title: 'Sign in',
-      selector: getIsNotAuthenticated
+      title: 'agents.signIn',
+      selector: getIsNotAuthenticated,
+      icon: 'fa fa-sign-in'
     }
   },
   {
     name: 'logOut',
     navigation: {
-      Link: LogOut,
-      selector: getIsAuthenticated
+      Component: LogOut,
+      selector: getIsAuthenticated,
+      icon: 'fa fa-sign-out'
     }
   },
   {
@@ -52,8 +55,9 @@ export default [
     path: '/register',
     Component: UserIsNotAuthenticated(Register),
     navigation: {
-      title: 'Register',
-      selector: getIsNotAuthenticated
+      title: 'agents.register',
+      selector: getIsNotAuthenticated,
+      icon: 'fa fa-heart'
     }
   }
 ]

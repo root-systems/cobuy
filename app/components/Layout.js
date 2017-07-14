@@ -3,9 +3,9 @@ import { createComponent } from '@ahdinosaur/react-fela'
 import { Route, Switch } from 'react-router-dom'
 import { pipe, map, values, isNil } from 'ramda'
 
-import styles from '../styles/layout'
+import styles from '../styles/Layout'
 
-import Nav from './nav'
+import Nav from './Navigation'
 
 const Container = createComponent(styles.container, 'div')
 
