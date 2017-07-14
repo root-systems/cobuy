@@ -43,3 +43,10 @@ export const getLayoutProps = createStructuredSelector({
   routes: getRoutes,
   navigationRoutes: getNavigationRoutes
 })
+
+// GK: just temporary so i can see that shit is flowing
+export const getTaskPlans = (state) => state.taskPlans
+
+export const getDashboardProps = createStructuredSelector({
+  taskPlans: getTaskPlans
+})
