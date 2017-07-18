@@ -3,6 +3,7 @@ import React from 'react'
 
 // Top Level Containers
 import Home from './app/containers/home'
+import Dashboard from './app/containers/Dashboard'
 
 import Register from './agents/containers/Register'
 import SignIn from './agents/containers/SignIn'
@@ -27,8 +28,21 @@ export default [
     path: '/',
     exact: true,
     Component: Home,
+    selector: getIsNotAuthenticated,
     navigation: {
-      title: 'Home'
+      title: 'app.home',
+      icon: 'fa fa-home'
+    }
+  },
+  {
+    name: 'dashboard',
+    path: '/',
+    exact: true,
+    Component: Dashboard,
+    selector: getIsAuthenticated,
+    navigation: {
+      title: 'app.dashboard',
+      icon: 'fa fa-dashboard'
     }
   },
   {
@@ -36,15 +50,17 @@ export default [
     path: '/sign-in',
     Component: UserIsNotAuthenticated(SignIn),
     navigation: {
-      title: 'Sign in',
-      selector: getIsNotAuthenticated
+      title: 'agents.signIn',
+      selector: getIsNotAuthenticated,
+      icon: 'fa fa-sign-in'
     }
   },
   {
     name: 'logOut',
     navigation: {
-      Link: LogOut,
-      selector: getIsAuthenticated
+      Component: LogOut,
+      selector: getIsAuthenticated,
+      icon: 'fa fa-sign-out'
     }
   },
   {
@@ -52,8 +68,9 @@ export default [
     path: '/register',
     Component: UserIsNotAuthenticated(Register),
     navigation: {
-      title: 'Register',
-      selector: getIsNotAuthenticated
+      title: 'agents.register',
+      selector: getIsNotAuthenticated,
+      icon: 'fa fa-heart'
     }
   }
 ]

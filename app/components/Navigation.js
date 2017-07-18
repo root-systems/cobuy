@@ -1,17 +1,63 @@
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
-import { not } from 'ramda'
+import { not, pipe, map, values, isNil } from 'ramda'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
 import { withState, withHandlers, compose } from 'recompose'
+import { NavLink } from 'react-router-dom'
 
 import styles from '../styles/Navigation'
 import { FormattedMessage } from '../../lib/Intl'
+import LogOut from '../../agents/containers/LogOut'
 
 function Navigation (props) {
-  const { styles, isDrawerOpen, toggleDrawer } = props
+  const { styles, isDrawerOpen, toggleDrawer, navigationRoutes } = props
+
+  const mapRouteItems = pipe(
+    map(route => {
+      const {
+        path,
+        name = path,
+        navigation
+      } = route
+
+      const {
+        Component,
+        title = name,
+        icon
+      } = navigation
+
+      if (Component) {
+        return (
+          <Component
+            key={name}
+            as={MenuItem}
+            leftIcon={
+              <i className={icon} aria-hidden="true" />
+            }
+          />
+        )
+      }
+
+      return (
+        <NavLink to={path} key={name}>
+          <MenuItem
+            leftIcon={
+              <i className={icon} aria-hidden="true" />
+            }
+          >
+            <FormattedMessage
+              id={title}
+              className={styles.labelText}
+            />
+          </MenuItem>
+        </NavLink>
+      )
+    }),
+    values
+  )
 
   return (
     <div>
@@ -37,27 +83,7 @@ function Navigation (props) {
           />
         </MenuItem>
         <Divider />
-        <MenuItem
-          leftIcon={
-            <i className="fa fa-tachometer" aria-hidden="true" />
-          }
-        >
-          <FormattedMessage
-            id='app.dashboard'
-            className={styles.labelText}
-          />
-        </MenuItem>
-        <Divider />
-        <MenuItem
-          leftIcon={
-            <i className="fa fa-sign-out" aria-hidden="true" />
-          }
-        >
-          <FormattedMessage
-            id='app.logOut'
-            className={styles.labelText}
-          />
-        </MenuItem>
+        {mapRouteItems(navigationRoutes)}
         <Divider />
       </Drawer>
     </div>

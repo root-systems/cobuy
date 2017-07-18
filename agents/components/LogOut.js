@@ -7,18 +7,23 @@ import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/LogOut'
 
 function LogOut (props) {
-  const { styles, actions } = props
+  const {
+    styles,
+    actions,
+    as: Component = FlatButton,
+    ...moreProps
+  } = props
   return (
-    <FlatButton
+    <Component
       className={styles.container}
-      backgroundColor='#ddd'
       onClick={actions.authentication.logOut}
+      {...moreProps}
     >
       <FormattedMessage
-        id='agents.logout'
+        id='agents.logOut'
         className={styles.buttonText}
       />
-    </FlatButton>
+    </Component>
   )
 }
 

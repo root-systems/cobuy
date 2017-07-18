@@ -24,6 +24,8 @@
       "react"
     ],
     "plugins": [
+      "transform-object-rest-spread",
+      "transform-class-properties",
       "ramda"
     ]
   },
@@ -51,11 +53,17 @@
   "homepage": "https://github.com/enspiral-root-systems/cobuy#readme",
   "dependencies": {
     "@ahdinosaur/react-fela": "^4.3.5",
+    "@f/create-action": "^1.1.1",
     "babel-plugin-ramda": "^1.2.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.3.0",
     "bigmath": "^1.0.3",
     "dog-names": "^1.0.2",
     "dogstack": "^0.4.0",
-    "dogstack-agents": "^0.2.1",
+    "dogstack-agents": "^0.3.3",
     "feathers-action": "^2.2.0",
     "feathers-action-react": "github:ahdinosaur/feathers-action-react#cancel",
     "feathers-errors": "^2.6.2",
@@ -71,6 +79,7 @@
     "react-debounce-input": "^3.0.0",
     "react-dom": "^15.6.1",
     "react-fela": "^5.0.3",
+    "react-hyperscript": "^3.0.0",
     "react-intl": "^2.3.0",
     "react-redux": "^4.4.5",
     "react-router-dom": "^4.1.1",
@@ -89,9 +98,6 @@
     "@storybook/addon-actions": "^3.1.8",
     "@storybook/addon-links": "^3.1.6",
     "@storybook/react": "^3.1.3",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-react": "^6.5.0",
-    "babelify": "^7.3.0",
     "deep-freeze": "^0.0.1",
     "dependency-check": "^2.8.0",
     "precinct": "^3.6.0",

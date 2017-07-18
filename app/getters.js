@@ -1,14 +1,24 @@
 import { createSelector, createStructuredSelector } from 'reselect'
 import { pipe, not, isNil, map, filter, prop, propOr, indexBy, nthArg, uncurryN } from 'ramda'
+import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
 
 export const getState = state => state
 export const getConfig = prop('config')
 
 export const getHomeProps = (state) => ({})
 
-export const getRoutes = pipe(
+export const getAllRoutes = pipe(
   nthArg(1),
   propOr(null, 'routes')
+)
+
+export const getRoutes = createSelector(
+  getState,
+  getAllRoutes,
+  uncurryN(2, state => filter(route => {
+    const { selector } = route
+    return isNil(selector) || selector(state)
+  }))
 )
 
 const indexByName = indexBy(prop('name'))
@@ -29,6 +39,14 @@ export const getNavigationRoutes = createSelector(
 )
 
 export const getLayoutProps = createStructuredSelector({
+  currentAgent: getCurrentAgent,
   routes: getRoutes,
   navigationRoutes: getNavigationRoutes
+})
+
+// GK: just temporary so i can see that shit is flowing
+export const getTaskPlans = (state) => state.taskPlans
+
+export const getDashboardProps = createStructuredSelector({
+  taskPlans: getTaskPlans
 })

@@ -10,7 +10,7 @@ import LogOut from '../components/LogOut'
 
 export default flow(
   connectFeathers({
-    selector: (state) => ({}),
+    selector: (state, ownProps) => ownProps,
     actions: { authentication: { logOut } },
     query: []
   })
