@@ -2,6 +2,8 @@ import { createStructuredSelector } from 'reselect'
 
 import getTaskPlans from '../../tasks/getters/getTaskPlans'
 
-export const getDashboardProps = createStructuredSelector({
+const getDashboardProps = createStructuredSelector({
   taskPlans: getTaskPlans
 })
+
+export default getDashboardProps
