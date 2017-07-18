@@ -6,7 +6,7 @@ import BigMath from 'bigmath'
 import { FormattedMessage } from '../../lib/Intl'
 import MemberIntentControl from './MemberIntentControl'
 import MemberPreIntentControl from './MemberPreIntentControl'
-import getOrderableFromOffering from '../helpers/getOrderableFromOffering'
+import getOrderableFromOffering from '../util/getOrderableFromOffering'
 
 import styles from '../styles/MemberIntentField'
 
