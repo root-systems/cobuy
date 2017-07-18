@@ -1,23 +1,23 @@
 import { unnest } from 'ramda'
-export default function createTaskPlan (api, options) {
+
+export default function createTaskPlan (options) {
   const { assignee, taskRecipe } = options
   const { childTaskRecipes = [] } = taskRecipe
 
-  const taskPlansService = api.service('taskPlans')
-
-  const parentTaskPlan = taskPlansService.create({
+  const parentTaskPlan = {
     assignee,
     taskRecipeId: taskRecipe.id
-  })
+  }
+
   const childTaskPlans = childTaskRecipes.map(childTaskRecipe => {
-    return createTaskPlan(api, {
+    return createTaskPlan({
       assignee,
       taskRecipe: childTaskRecipe
     })
   })
 
-  return Promise.all([
+  return unnest([
     parentTaskPlan,
     ...childTaskPlans
-  ]).then(unnest)
+  ])
 }
