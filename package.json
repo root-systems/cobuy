@@ -86,6 +86,7 @@
     "react-router-redux": "^5.0.0-alpha.6",
     "react-tap-event-plugin": "^2.0.1",
     "recompose": "^0.24.0",
+    "redux-devtools-extension": "^2.13.2",
     "redux-form": "^6.6.0",
     "redux-form-material-ui": "^4.2.0",
     "redux-form-validators": "^1.0.2",
