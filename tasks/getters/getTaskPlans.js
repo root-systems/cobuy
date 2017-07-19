@@ -34,7 +34,7 @@ const getTaskPlanTree = createSelector(
 
     // 1. start with task plans with no children (tree leaf nodes)
     const taskPlanIdsWithNoChilds = Object.keys(taskPlansById).reduce((sofar, taskPlanId) => {
-      const childs = childTaskPlansByParentId[taskPlanId]
+      const childs = childTaskPlansByParentId[taskPlanId] || []
       const hasNoChilds = childs.length === 0
       return hasNoChilds
         ? [...sofar, taskPlanId]
