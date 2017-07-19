@@ -70,6 +70,10 @@ test('getRawTaskRecipes', t => {
   t.deepEqual(getRawTaskRecipes(mockState), mockTaskRecipes)
 })
 
+test('getRawTaskWorks', t => {
+  t.deepEqual(getRawTaskWorks(mockState), mockTaskWorks)
+})
+
 test('getEnhancedTaskPlans', t => {
   t.deepEqual(getEnhancedTaskPlans(mockState), mockEnhancedTaskPlans)
 })
