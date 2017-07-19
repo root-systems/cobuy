@@ -22,6 +22,7 @@ const taskPlan = {
 const taskWork = {
   id: 1,
   taskPlanId: 1,
+  taskRecipeId: 'finishPrereqs',
   agent
 }
 
