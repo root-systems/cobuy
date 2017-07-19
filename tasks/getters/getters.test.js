@@ -3,6 +3,7 @@ import test from 'ava'
 import getRawTaskPlans from './getRawTaskPlans'
 import getRawTaskRecipes from './getRawTaskRecipes'
 import getRawTaskWorks from './getRawTaskWorks'
+import getEnhancedTaskPlans from './getEnhancedTaskPlans'
 
 import { finishPrereqs } from '../data/recipes'
 
@@ -15,7 +16,7 @@ const agent = {
 
 const taskPlan = {
   id: 1,
-  agent,
+  assignee: 1,
   taskRecipeId: 'finishPrereqs'
 }
 
@@ -24,6 +25,10 @@ const taskWork = {
   taskPlanId: 1,
   taskRecipeId: 'finishPrereqs',
   agent
+}
+
+const mockAgents = {
+  1: agent
 }
 
 const mockTaskPlans = {
@@ -41,7 +46,20 @@ const mockTaskWorks = {
 const mockState = {
   taskPlans: mockTaskPlans,
   taskRecipes: mockTaskRecipes,
-  taskWorks: mockTaskWorks
+  taskWorks: mockTaskWorks,
+  agents: mockAgents
+}
+
+const mockEnhancedTaskPlans = {
+  1: {
+    id: 1,
+    assignee: agent,
+    taskRecipeId: 'finishPrereqs',
+    taskRecipe: {
+      id: 'finishPrereqs',
+      childTaskRecipes: finishPrereqs.childTaskRecipes
+    }
+  }
 }
 
 test('getRawTaskPlans', t => {
@@ -52,6 +70,6 @@ test('getRawTaskRecipes', t => {
   t.deepEqual(getRawTaskRecipes(mockState), mockTaskRecipes)
 })
 
-test('getRawTaskWorks', t => {
-  t.deepEqual(getRawTaskWorks(mockState), mockTaskWorks)
+test('getEnhancedTaskPlans', t => {
+  t.deepEqual(getEnhancedTaskPlans(mockState), mockEnhancedTaskPlans)
 })

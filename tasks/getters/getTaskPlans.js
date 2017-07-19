@@ -4,46 +4,7 @@ import { map, merge, pipe, values, groupBy, prop } from 'ramda'
 import getAgents from '../../agents/getters/getAgents'
 import getRawTaskPlans from './getRawTaskPlans'
 import getRawTaskRecipes from './getRawTaskRecipes'
-
-/*
-const populateTaskPlan3 = (rawTaskRecipes, agents) => {
-  return (rawTaskPlan) => {
-    const recipe = rawTaskRecipes[rawTaskPlan.taskRecipeId]
-    const assignee = agents[rawTaskPlan.assignee]
-    return merge(
-      rawTaskPlan, {
-        taskRecipe: recipe,
-        assignee: assignee,
-        childTaskPlans: map(recipe.childTaskRecipes, (childTaskRecipe) => {
-          return {
-            taskPlan:
-            taskRecipe: childTaskRecipe,
-            assignee: assignee,
-            childTaskPlans: childTaskRecipe.childTaskRecipes.length > 0 ? map(childTaskRecipe.childTaskRecipes, populateTaskPlan(rawTaskRecipes, agents)) : []
-          }
-        })
-      }
-    )
-  }
-*/
-
-
-const getEnhancedTaskPlans = createSelector(
-  getRawTaskPlans,
-  getRawTaskRecipes,
-  getAgents,
-  (taskPlans, taskRecipes, agents) => {
-    const enhanceTaskPlan = (taskPlan) => {
-      const taskRecipe = taskRecipes[taskPlan.taskRecipeId]
-      const assignee = agents[taskPlan.assignee]
-      return merge(taskPlan, {
-        taskRecipe,
-        assignee
-      })
-    }
-    return map(enhanceTaskPlan, taskPlans)
-  }
-)
+import getEnhancedTaskPlans from './getEnhancedTaskPlans'
 
 const getChildTaskPlansByParentId = createSelector(
   getEnhancedTaskPlans,
