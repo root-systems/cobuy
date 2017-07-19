@@ -4,8 +4,11 @@ import getRawTaskPlans from './getRawTaskPlans'
 import getRawTaskRecipes from './getRawTaskRecipes'
 import getRawTaskWorks from './getRawTaskWorks'
 import getEnhancedTaskPlans from './getEnhancedTaskPlans'
+import getChildTaskPlansByParentId from './getChildTaskPlansByParentId'
 
 import { finishPrereqs } from '../data/recipes'
+
+import { groupBy, values, prop } from 'ramda'
 
 const agent = {
   id: 1,
@@ -16,6 +19,7 @@ const agent = {
 
 const taskPlan = {
   id: 1,
+  parentTaskPlanId: 2,
   assignee: 1,
   taskRecipeId: 'finishPrereqs'
 }
@@ -53,6 +57,7 @@ const mockState = {
 const mockEnhancedTaskPlans = {
   1: {
     id: 1,
+    parentTaskPlanId: 2,
     assignee: agent,
     taskRecipeId: 'finishPrereqs',
     taskRecipe: {
@@ -60,6 +65,16 @@ const mockEnhancedTaskPlans = {
       childTaskRecipes: finishPrereqs.childTaskRecipes
     }
   }
+}
+
+const mockEnhancedTaskPlansByParentId = {
+  2: [ {
+    id: 1,
+    parentTaskPlanId: 2,
+    assignee: agent,
+    taskRecipeId: 'finishPrereqs',
+    taskRecipe: finishPrereqs
+  } ]
 }
 
 test('getRawTaskPlans', t => {
@@ -76,4 +91,8 @@ test('getRawTaskWorks', t => {
 
 test('getEnhancedTaskPlans', t => {
   t.deepEqual(getEnhancedTaskPlans(mockState), mockEnhancedTaskPlans)
+})
+
+test('getChildTaskPlansByParentId', t => {
+  t.deepEqual(getChildTaskPlansByParentId(mockState), mockEnhancedTaskPlansByParentId)
 })

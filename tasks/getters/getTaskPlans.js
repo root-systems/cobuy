@@ -1,18 +1,8 @@
 import { createSelector } from 'reselect'
-import { map, merge, pipe, values, groupBy, prop } from 'ramda'
+import { merge } from 'ramda'
 
-import getAgents from '../../agents/getters/getAgents'
-import getRawTaskPlans from './getRawTaskPlans'
-import getRawTaskRecipes from './getRawTaskRecipes'
 import getEnhancedTaskPlans from './getEnhancedTaskPlans'
-
-const getChildTaskPlansByParentId = createSelector(
-  getEnhancedTaskPlans,
-  pipe(
-    values,
-    groupBy(prop('parentTaskPlanId'))
-  )
-)
+import getChildTaskPlansByParentId from './getChildTaskPlansByParentId'
 
 const getTaskPlanTree = createSelector(
   getEnhancedTaskPlans,
