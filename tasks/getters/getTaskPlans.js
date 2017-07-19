@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { merge } from 'ramda'
+import { merge, complement, isNil } from 'ramda'
 
 import getEnhancedTaskPlans from './getEnhancedTaskPlans'
 import getChildTaskPlansByParentId from './getChildTaskPlansByParentId'
@@ -19,17 +19,18 @@ const getTaskPlanTree = createSelector(
       const taskPlan = taskPlansById[taskPlanId]
 
       // 4. resolve childs from tree (these MUST exist in tree, which is guaranteed by doing nodes with no childs first)
-      const childTaskPlans = childTaskPlansByParentId[taskPlanId].map(({ id }) => taskPlanTree[id])
+      const childTaskPlans = (childTaskPlansByParentId[taskPlanId] || []).map(({ id }) => taskPlanTree[id])
+
+      // (these MUST exist in tree, which is guaranteed by doing nodes with no childs first)
+      // if not, we can skip, because this parent will be queued by the last child eventually
+      if (childTaskPlans.some(isNil)) return
 
       // 5. set current node to tree
       taskPlanTree[taskPlanId] = merge(taskPlan, {
         childTaskPlans
       })
 
-      // 6. then, recurse to parent (go to 2)
-      if (taskPlan.parentId) {
-        populateTaskPlanNodes(taskPlan.parentId)
-      }
+      return taskPlan.parentTaskPlanId
     }
 
     // 1. start with task plans with no children (tree leaf nodes)
@@ -41,13 +42,19 @@ const getTaskPlanTree = createSelector(
         : sofar
     }, [])
 
-    taskPlanIdsWithNoChilds.forEach(populateTaskPlanNodes)
+    var nextChildIds = taskPlanIdsWithNoChilds
+    // 6. loop, breadth first search up starting at nodes with no children
+    while (nextChildIds.length !== 0) {
+      nextChildIds = nextChildIds
+        .map(populateTaskPlanNodes)
+        .filter(complement(isNil))
+    }
 
     // resolve parents as well
     Object.keys(taskPlansById).forEach(taskPlanId => {
       var taskPlan = taskPlanTree[taskPlanId]
-      if (taskPlan.parentId) {
-        taskPlan.parent = taskPlanTree[taskPlan.parentId]
+      if (taskPlan.parentTaskPlanId) {
+        taskPlan.parentTaskPlan = taskPlanTree[taskPlan.parentTaskPlanId]
       }
     })
 
