@@ -7,6 +7,7 @@ import getEnhancedTaskPlans from './getEnhancedTaskPlans'
 import getChildTaskPlansByParentId from './getChildTaskPlansByParentId'
 import getTaskPlans from './getTaskPlans'
 import getActiveTaskPlans from './getActiveTaskPlans'
+import getParentTaskPlans from './getParentTaskPlans'
 
 import { finishPrereqs, setupGroup, setupSupplier } from '../data/recipes'
 
@@ -189,4 +190,8 @@ test.skip('getTaskPlans might fail in the event of non-uniform child depth', t =
 
 test('getActiveTaskPlans', t => {
   t.deepEqual(getActiveTaskPlans(mockState), mockFullTaskPlansArray)
+})
+
+test('getParentTaskPlans', t => {
+  t.deepEqual(getParentTaskPlans(mockState), [ mockFullTaskPlanId1 ])
 })
