@@ -50,6 +50,28 @@ const getTaskPlanTree = createSelector(
         .filter(complement(isNil))
     }
 
+    // default any missing child plans where child recipes exist
+    Object.keys(taskPlansById).forEach(taskPlanId => {
+      var taskPlan = taskPlanTree[taskPlanId]
+      const { assignee, taskRecipe, childTaskPlans } = taskPlan
+      const childPlanRecipeIds = childTaskPlans
+        .map(({ taskRecipe: { id } }) => id)
+      const { childTaskRecipes = [] } = taskRecipe
+      const missingRecipes = childTaskRecipes
+        .filter(taskRecipe => {
+          return !childTaskPlans.find(taskPlan => {
+            return taskPlan.taskRecipe.id === taskRecipe.id
+          })
+        })
+      missingRecipes.forEach(taskRecipe => {
+        taskPlan.childTaskPlans.push({
+          taskRecipeId: taskRecipe.id,
+          taskRecipe,
+          assignee
+        })
+      })
+    })
+
     // resolve parents as well
     Object.keys(taskPlansById).forEach(taskPlanId => {
       var taskPlan = taskPlanTree[taskPlanId]
