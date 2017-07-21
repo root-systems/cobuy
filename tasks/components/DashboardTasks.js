@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
-import { pipe, map } from 'ramda'
+import { pipe, map, mapObjIndexed } from 'ramda'
 import RaisedButton from 'material-ui/RaisedButton'
+import {List, ListItem} from 'material-ui/List'
 
 import styles from '../styles/DashboardTasks'
 import { FormattedMessage } from '../../lib/Intl'
@@ -11,24 +12,27 @@ function DashboardTasks (props) {
 
   const renderChildTask = (childTaskPlan) => {
     return (
-      <div>
+      <ListItem
+        disabled={true}
+      >
         <FormattedMessage
           id={`tasks.recipes.${childTaskPlan.taskRecipeId}`}
           className={styles.taskNameText}
         />
-      </div>
+      </ListItem>
     )
   }
 
   const renderParentTask = (parentTaskPlan) => {
     return (
-      <div>
+      <ListItem
+        nestedItems={map(renderChildTask, parentTaskPlan.childTaskPlans)}
+      >
         <FormattedMessage
           id={`tasks.recipes.${parentTaskPlan.taskRecipeId}`}
           className={styles.taskNameText}
         />
-        {map(renderChildTask, parentTaskPlan.childTaskPlans)}
-      </div>
+      </ListItem>
     )
   }
 
@@ -40,7 +44,9 @@ function DashboardTasks (props) {
           className={styles.labelText}
         />
       </p>
-      {map(renderParentTask, taskPlans)}
+      <List>
+        {map(renderParentTask, taskPlans)}
+      </List>
     </div>
   )
 }

@@ -25,7 +25,7 @@ function Dashboard (props) {
       <div className={styles.ordersContainer}>
         <DashboardOrders actions={actions} />
       </div>
-      <Divider />
+      <Divider className={styles.divider} />
       <div className={styles.tasksContainer}>
         <DashboardTasks taskPlans={taskPlans} />
       </div>
