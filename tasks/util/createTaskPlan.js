@@ -13,13 +13,14 @@ export default function createTaskPlan (action$, cid, options) {
     parentTaskPlanId
   }
 
+  console.log('taskPlan', parentTaskPlan)
+
   var nextActions$ = Rx.Observable.of(taskPlans.create(cid, parentTaskPlan))
 
   if (childTaskRecipes.length > 0) {
-    const parentTaskPlanSet$ = action$.ofType(taskPlans.set.type).filter(onlyCid).skip(1).take(1)
+    const parentTaskPlanSet$ = action$.ofType(taskPlans.set.type).filter(onlyCid).take(1)
 
-    nextActions$ = Rx.Observable.concat(
-      nextActions$,
+    nextActions$ = nextActions$.concat(
       parentTaskPlanSet$.mergeMap(action => {
         return createChildTaskPlans(action.payload.data.id)
       })
