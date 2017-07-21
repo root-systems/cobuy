@@ -3,8 +3,7 @@ export default {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: '50%'
+    justifyContent: 'center'
   }),
   labelText: () => ({
     textTransform: 'capitalize'
