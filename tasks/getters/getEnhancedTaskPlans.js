@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 import { map, merge } from 'ramda'
 
-import getAgents from '../../agents/getters/getAgents'
+import { getAgents } from 'dogstack-agents/getters'
 import getRawTaskPlans from './getRawTaskPlans'
 import getRawTaskRecipes from './getRawTaskRecipes'
 

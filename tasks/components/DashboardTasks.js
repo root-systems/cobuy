@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
-import { pipe, map, mapObjIndexed } from 'ramda'
+import { pipe, map, values } from 'ramda'
 import RaisedButton from 'material-ui/RaisedButton'
 import { List, ListItem } from 'material-ui/List'
 import { Link } from 'react-router-dom'
@@ -9,7 +9,7 @@ import styles from '../styles/DashboardTasks'
 import { FormattedMessage } from '../../lib/Intl'
 
 function DashboardTasks (props) {
-  const { styles, taskPlans } = props
+  const { styles, taskPlans = {} } = props
 
   const renderChildTask = (childTaskPlan) => {
     return (
@@ -23,11 +23,12 @@ function DashboardTasks (props) {
       </ListItem>
     )
   }
+  const renderChildTasks = pipe(map(renderChildTask), values)
 
   const renderParentTask = (parentTaskPlan) => {
     return (
       <ListItem
-        nestedItems={map(renderChildTask, parentTaskPlan.childTaskPlans)}
+        nestedItems={renderChildTasks(parentTaskPlan.childTaskPlans)}
         containerElement={<Link to={`/tasks/${parentTaskPlan.id}`} />}
       >
         <FormattedMessage
@@ -37,6 +38,7 @@ function DashboardTasks (props) {
       </ListItem>
     )
   }
+  const renderParentTasks = pipe(map(renderParentTask), values)
 
   return (
     <div className={styles.container}>
@@ -47,7 +49,7 @@ function DashboardTasks (props) {
         />
       </p>
       <List>
-        {map(renderParentTask, taskPlans)}
+        {renderParentTasks(taskPlans)}
       </List>
     </div>
   )

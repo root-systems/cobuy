@@ -8,7 +8,8 @@ import MemberInvites from '../../agents/components/MemberInvites'
 
 export default (props) => {
   const { taskPlan } = props
-  const { agent } = taskPlan
+  // TODO this is wrong
+  const { assignee: agent } = taskPlan
 
   const steps = [
     {

@@ -1,4 +1,5 @@
 import h from 'react-hyperscript'
+import { isNil } from 'ramda'
 import { bindActionCreators } from 'redux'
 import { connect as connectRedux } from 'react-redux'
 import { connect as connectFeathers } from 'feathers-action-react'
@@ -48,13 +49,22 @@ export default compose(
     ]
   })
 )(props => {
-  const { currentTaskPlan: taskPlan, actions } = props
-  console.log('taskPlan', taskPlan)
+  const { currentTaskPlan: taskPlan, currentAgent: agent, actions } = props
+
   return h(TaskWorker, {
-    taskPlan
+    taskPlan,
+    onNavigate: handleNavigate,
+    onCancel: handleCancel
   })
 
   function handleNavigate (taskPlan) {
     actions.router.push(`/tasks/${taskPlan.id}`)
+  }
+
+  function handleCancel (taskPlan) {
+    const { parentTaskPlan } = taskPlan
+    const nextRoute = isNil(parentTaskPlan)
+      ? '/' : `/tasks/${parentTaskPlan.id}`
+    actions.router.push(nextRoute)
   }
 })
