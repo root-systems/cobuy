@@ -20,6 +20,7 @@ const getTaskComponent = path(['taskRecipe', 'Component'])
 
 function TaskWorker (props) {
   const { styles, taskPlan, onNavigate, onComplete, onCancel } = props
+  if (isNil(taskPlan)) return null
   const { taskRecipe } = taskPlan
   const { id: taskRecipeId } = taskRecipe
   const childTaskPlans = getSubTaskPlans(taskPlan)
