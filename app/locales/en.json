@@ -4,6 +4,8 @@
   "app.home": "home",
   "app.dashboard": "dashboard",
   "app.startOrder": "start order",
+  "app.dashboard.tasks": "your active tasks",
+  "app.dashboard.orders": "your orders",
   "agents.nameLabel": "name",
   "agents.descriptionLabel": "description",
   "agents.email": "email",

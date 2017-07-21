@@ -1,13 +1,18 @@
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { pipe } from 'ramda'
-import RaisedButton from 'material-ui/RaisedButton'
+import Divider from 'material-ui/Divider'
 
 import styles from '../styles/Dashboard'
 import { FormattedMessage } from '../../lib/Intl'
+import DashboardTasks from '../../tasks/components/DashboardTasks'
+import DashboardOrders from '../../ordering/components/DashboardOrders'
+
+import { mockFullParentTaskPlan } from '../../tasks/data/mock'
 
 function Dashboard (props) {
   const { styles, actions } = props
+  const taskPlans = [ mockFullParentTaskPlan ]
 
   return (
     <div className={styles.container}>
@@ -17,17 +22,12 @@ function Dashboard (props) {
           className={styles.labelText}
         />
       </p>
-      <div className={styles.buttonContainer}>
-        <RaisedButton
-          className={styles.button}
-          type='button'
-          onClick={actions.ordering.startOrder}
-        >
-          <FormattedMessage
-            id='app.startOrder'
-            className={styles.labelText}
-          />
-        </RaisedButton>
+      <div className={styles.ordersContainer}>
+        <DashboardOrders actions={actions} />
+      </div>
+      <Divider />
+      <div className={styles.tasksContainer}>
+        <DashboardTasks taskPlans={taskPlans} />
       </div>
     </div>
   )
