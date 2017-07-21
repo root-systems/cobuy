@@ -2,7 +2,8 @@ import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { pipe, map, mapObjIndexed } from 'ramda'
 import RaisedButton from 'material-ui/RaisedButton'
-import {List, ListItem} from 'material-ui/List'
+import { List, ListItem } from 'material-ui/List'
+import { Link } from 'react-router-dom'
 
 import styles from '../styles/DashboardTasks'
 import { FormattedMessage } from '../../lib/Intl'
@@ -27,6 +28,7 @@ function DashboardTasks (props) {
     return (
       <ListItem
         nestedItems={map(renderChildTask, parentTaskPlan.childTaskPlans)}
+        containerElement={<Link to={`/tasks/${parentTaskPlan.id}`} />}
       >
         <FormattedMessage
           id={`tasks.recipes.${parentTaskPlan.taskRecipeId}`}
