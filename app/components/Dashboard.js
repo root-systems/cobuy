@@ -11,8 +11,7 @@ import DashboardOrders from '../../ordering/components/DashboardOrders'
 import { mockFullParentTaskPlan } from '../../tasks/data/mock'
 
 function Dashboard (props) {
-  const { styles, actions } = props
-  const taskPlans = [ mockFullParentTaskPlan ]
+  const { styles, actions, taskPlans } = props
 
   return (
     <div className={styles.container}>
