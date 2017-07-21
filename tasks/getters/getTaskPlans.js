@@ -53,7 +53,7 @@ const getTaskPlanTree = createSelector(
     // resolve parents as well
     Object.keys(taskPlansById).forEach(taskPlanId => {
       var taskPlan = taskPlanTree[taskPlanId]
-      if (taskPlan.parentTaskPlanId) {
+      if (taskPlan && taskPlan.parentTaskPlanId) {
         taskPlan.parentTaskPlan = taskPlanTree[taskPlan.parentTaskPlanId]
       }
     })
