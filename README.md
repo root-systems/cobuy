@@ -33,6 +33,11 @@ npm run db seed:run
 npm run dev
 ```
 
+### System Dependencies
+
+- Postgres
+- [`git-lfs`](https://git-lfs.github.com/)
+
 ## How our stack works
 
 - Cobuy uses [`dogstack`](https://dogstack.js.org)
@@ -52,11 +57,6 @@ npm run dev
 - SQLite3 as dev db
 - [Dogstack-agents](https://github.com/dogstack/dogstack-agents) to manage users and credentials
 
-
-### System Dependencies
-
-- Postgres
-- [`git-lfs`](https://git-lfs.github.com/)
 
 ## Stack
 
