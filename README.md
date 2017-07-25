@@ -44,6 +44,7 @@ npm run dev
 - [Storybook](https://github.com/storybooks/storybook) for developing and testing our dumb components easily
 - Redux for state management, as per
 - [Redux-observable](redux-observable.js.org) for managing async operations
+- [Redux-form](http://redux-form.com/6.8.0/) to connect React forms to state
 - [Reselect](https://github.com/reactjs/reselect) for our getters
 - [Ramda](http://ramdajs.com/) as our general utility library with a strongly functional flavour
 - [Feathers](https://feathersjs.com/) for our backend API layer
