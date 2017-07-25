@@ -7,6 +7,7 @@
 ## Table of Contents
 
 - [Setup](#setup)
+- [How our stack works](#howourstackworks)
 - [Stack](#stack)
 - [Folder Structure](#folder-structure)
 - [Available Scripts](#available-scripts)
@@ -28,8 +29,28 @@ cd cobuy
 npm run burnthemall # TODO npm install
 # see 'How to get private development config' section below
 npm run db migrate:latest
+npm run db seed:run
 npm run dev
 ```
+
+## How our stack works
+
+- Cobuy uses [`dogstack`](https://dogstack.js.org)
+- React and JSX for DOM stuff, as per, but also [Hyperscript](https://github.com/mlmorg/react-hyperscript) as an alternative to JSX
+- [Recompose](https://github.com/acdlite/recompose) in our React components for purity
+- [Fela](https://github.com/rofrischmann/fela) to manage styles
+- [Material-UI](http://www.material-ui.com/) for ready-styled components
+- [React-intl](https://github.com/yahoo/react-intl) to manage internationalization
+- [Storybook](https://github.com/storybooks/storybook) for developing and testing our dumb components easily
+- Redux for state management, as per
+- [Redux-observable](redux-observable.js.org) for managing async operations
+- [Reselect](https://github.com/reactjs/reselect) for our getters
+- [Ramda](http://ramdajs.com/) as our general utility library with a strongly functional flavour
+- [Feathers](https://feathersjs.com/) for our backend API layer
+- [Feathers-action](https://github.com/ahdinosaur/feathers-action) to provide CRUD actions out of the box
+- SQLite3 as dev db
+- [Dogstack-agents](https://github.com/dogstack/dogstack-agents) to manage users and credentials
+
 
 ### System Dependencies
 
