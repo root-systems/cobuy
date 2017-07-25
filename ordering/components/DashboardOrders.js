@@ -21,7 +21,7 @@ function DashboardOrders (props) {
         <RaisedButton
           className={styles.button}
           type='button'
-          onClick={() => actions.orders.create()}
+          onClick={() => actions.orders.create({})}
         >
           <FormattedMessage
             id='app.startOrder'
