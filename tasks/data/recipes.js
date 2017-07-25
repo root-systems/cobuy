@@ -3,12 +3,14 @@ import SetupSupplierTask from '../components/SetupSupplierTask'
 
 export const setupGroup = {
   id: 'setupGroup',
-  Component: SetupGroupTask
+  Component: SetupGroupTask,
+  childTaskRecipes: []
 }
 
 export const setupSupplier = {
   id: 'setupSupplier',
-  Component: SetupSupplierTask
+  Component: SetupSupplierTask,
+  childTaskRecipes: []
 }
 
 export const finishPrereqs = {
