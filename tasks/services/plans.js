@@ -35,14 +35,15 @@ function createChildTaskPlans (hook) {
   const taskRecipe = taskRecipes[hook.data.taskRecipeId]
   const childTaskRecipes = taskRecipe.childTaskRecipes
   // TODO: can't get the parent taskPlanId - hook.data has no persisted id
-  return Promise.all(childTaskRecipes.map((childTaskRecipe) => {
-    return taskPlans.create({
-      parentTaskPlanId: hook.data.id,
-      assigneeId: hook.data.assigneeId,
-      taskRecipeId: childTaskRecipe.id,
-      params: hook.data.params
+  return Promise.all(
+    childTaskRecipes.map((childTaskRecipe) => {
+      return taskPlans.create({
+        parentTaskPlanId: hook.result.id,
+        assigneeId: hook.data.assigneeId,
+        taskRecipeId: childTaskRecipe.id,
+        params: hook.data.params
+      })
     })
-    .then(() => hook)
-  })
   )
+  .then(() => hook)
 }
