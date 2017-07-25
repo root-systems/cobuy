@@ -53,8 +53,16 @@ function hasOneOrder (hook) {
 function createPrereqTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
   const taskRecipeId = taskRecipes.finishPrereqs.id
-  const params = {
+
+  // TODO: add beforeAll hook to get agent
+  // const assigneeId = hook.params.agent.id
+
+  const assigneeId = hook.params.credential.agentId
+  const params = JSON.stringify({
     contextAgentId: hook.data.agentId
-  }
-  return taskPlans.create({ taskRecipeId, params })
+  })
+  return taskPlans.create({ taskRecipeId, params, assigneeId })
+  .then(() => {
+    return hook
+  })
 }
