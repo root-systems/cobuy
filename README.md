@@ -7,7 +7,7 @@
 ## Table of Contents
 
 - [Setup](#setup)
-- [How our stack works](#howourstackworks)
+- [How our stack works](#how-our-stack-works)
 - [Stack](#stack)
 - [Folder Structure](#folder-structure)
 - [Available Scripts](#available-scripts)
