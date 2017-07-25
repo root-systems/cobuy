@@ -12,7 +12,7 @@ const getEnhancedTaskPlans = createSelector(
   (taskPlans, taskRecipes, agents) => {
     const enhanceTaskPlan = (taskPlan) => {
       const taskRecipe = taskRecipes[taskPlan.taskRecipeId]
-      const assignee = agents[taskPlan.assignee]
+      const assignee = agents[taskPlan.assigneeId]
       return merge(taskPlan, {
         taskRecipe,
         assignee
