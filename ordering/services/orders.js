@@ -1,6 +1,7 @@
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
-import { isNil } from 'ramda'
+import { pipe, equals, length, isNil } from 'ramda'
+import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
   const app = this
@@ -19,7 +20,11 @@ const hooks = {
       iff(hasNoGroupAgent, createGroupAgent)
     ]
   },
-  after: {},
+  after: {
+    create: [
+      iff(hasOneOrder, createPrereqTaskPlan)
+    ]
+  },
   error: {}
 }
 
@@ -34,4 +39,22 @@ function createGroupAgent (hook) {
 
 function hasNoGroupAgent (hook) {
   return isNil(hook.data.agentId)
+}
+
+const hasLengthOne = pipe(length, equals(1))
+
+function hasOneOrder (hook) {
+  const orders = hook.app.service('orders')
+  const agentId = hook.data.agentId
+  return orders.find({ query: { agentId } })
+  .then(hasLengthOne)
+}
+
+function createPrereqTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const taskRecipeId = taskRecipes.finishPrereqs.id
+  const params = {
+    contextAgentId: hook.data.agentId
+  }
+  return taskPlans.create({ taskRecipeId, params })
 }
