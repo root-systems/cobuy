@@ -40,6 +40,8 @@ npm run dev
 
 ## How our stack works
 
+### Technical breakdown and references for/as examples
+
 - Cobuy uses [`dogstack`](https://dogstack.js.org)
 - React and JSX for DOM stuff, as per, but also [Hyperscript](https://github.com/mlmorg/react-hyperscript) as an alternative to JSX
 - [Recompose](https://github.com/acdlite/recompose) in our React components for purity
@@ -81,6 +83,23 @@ npm run dev
 - [Dogstack-agents](https://github.com/dogstack/dogstack-agents) to manage users and credentials
   - Files: `agents/containers/Register.js`
   - PRs: https://github.com/root-systems/cobuy/pull/59/files
+  
+### Basic relationships between things (very roughly)
+
+- Dumb components
+  - components && style files
+  - components && their local state
+- Higher-order components (HOC) or containers
+  - (container && getters && actions) && dumb component
+- Dataflow within the client
+  - from state to components
+    - state -> getters -> HOC components (containers) -> dumb components
+  - from components to state
+    - dumb components -> HOC components (containers) -> actions -> updaters && epics -> state
+- Dataflow between client and server
+  - actions -> services && hooks -> db
+   
+  
 
 
 ## Stack
