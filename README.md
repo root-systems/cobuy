@@ -96,6 +96,8 @@ npm run dev
     - state -> getters -> HOC components (containers) -> dumb components
   - from components to state
     - dumb components -> HOC components (containers) -> actions -> updaters && epics -> state
+  - from components to state with redux-form
+    - dumb components -> redux-form -> state
 - Dataflow between client and server
   - actions -> services && hooks -> db
    
