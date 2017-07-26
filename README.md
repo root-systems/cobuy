@@ -43,15 +43,25 @@ npm run dev
 - Cobuy uses [`dogstack`](https://dogstack.js.org)
 - React and JSX for DOM stuff, as per, but also [Hyperscript](https://github.com/mlmorg/react-hyperscript) as an alternative to JSX
 - [Recompose](https://github.com/acdlite/recompose) in our React components for purity
+  - Files: `app/components/Navigation.js`
+  - PRs: https://github.com/root-systems/cobuy/pull/100/files
 - [Fela](https://github.com/rofrischmann/fela) to manage styles
+  - Files: `<any dumb component and its style file>`
 - [Material-UI](http://www.material-ui.com/) for ready-styled components
+  - Files: `<any component that has buttons or text fields or sliders>`
 - [React-intl](https://github.com/yahoo/react-intl) to manage internationalization
   - Files: `app/locales/en.json`, `<any component with text>`
+  - https://github.com/root-systems/cobuy/pull/80
 - [Storybook](https://github.com/storybooks/storybook) for developing and testing our dumb components easily
   - Files: `.storybook/config.js`, `agents/stories/Profile.js`
   - PRs: https://github.com/root-systems/cobuy/pull/51/files
 - Redux for state management, as per
+- [Redux-fp](https://github.com/rvikmanis/redux-fp) for 'updaters' instead of 'reducers'
+  - Files: `*/updaters/*`
+  - PRs: https://github.com/root-systems/cobuy/pull/103/files
 - [Redux-observable](redux-observable.js.org) for managing async operations
+  - Files: `ordering/epic.js`, 
+  - PRs: https://github.com/root-systems/cobuy/pull/103/files
 - [Redux-form](http://redux-form.com/6.8.0/) to connect React forms to state
   - Files: `agents/components/SignIn.js`
   - PRs: https://github.com/root-systems/cobuy/pull/59/files
@@ -59,8 +69,15 @@ npm run dev
   - Files: `*/getters/*`
   - PRs: https://github.com/root-systems/cobuy/pull/104/files
 - [Ramda](http://ramdajs.com/) as our general utility library with a strongly functional flavour
+  - Files: `<almost any>`
 - [Feathers](https://feathersjs.com/) for our backend API layer
+  - PRs: https://github.com/root-systems/cobuy/pull/116
 - [Feathers-action](https://github.com/ahdinosaur/feathers-action) to provide CRUD actions out of the box
+  - Files: `*/dux/*`, `*/services/*`, `*/containers/*`, `server.js`, 
+  - PRs: https://github.com/root-systems/cobuy/pull/116
+- [Knex](http://knexjs.org/) for interfacing with DB
+  - Files: `db/migrations/*`
+  - PRs: https://github.com/root-systems/cobuy/pull/116/files
 - SQLite3 as dev db
 - [Dogstack-agents](https://github.com/dogstack/dogstack-agents) to manage users and credentials
 
