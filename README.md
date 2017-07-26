@@ -110,19 +110,28 @@ npm run dev
 
 We're following the [dogstack folder structure convention](https://dogstack.js.org/conventions/file-structure.html).
 
-Entry files:
-
-- stories.js
-
-Topics:
-
-- app
-
-Types:
-
-- containers
-- components
-- helpers
+- root
+  - actions.js (combines all actions)
+  - client.js
+  - epic.js (combines all epics)
+  - layout.js 
+  - package.json
+  - root.js
+  - routes.js
+  - server.js
+  - store.js (combines top-level epic and updater)
+  - style.js
+  - updater.js (combines all updaters)
+  - <topic> (e.g. `agents`)
+    - containers
+    - components
+    - helpers
+    - getters
+    - services
+    - dux
+    - styles
+    - stories
+    - util
 
 ### Available Scripts
 
