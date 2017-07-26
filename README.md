@@ -84,7 +84,7 @@ npm run dev
   - Files: `agents/containers/Register.js`
   - PRs: https://github.com/root-systems/cobuy/pull/59/files
   
-### Basic relationships between things (very roughly)
+### Basic relationships between things (very roughly and probably slightly incorrectly)
 
 - Dumb components
   - components && style files
