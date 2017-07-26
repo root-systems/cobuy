@@ -46,11 +46,18 @@ npm run dev
 - [Fela](https://github.com/rofrischmann/fela) to manage styles
 - [Material-UI](http://www.material-ui.com/) for ready-styled components
 - [React-intl](https://github.com/yahoo/react-intl) to manage internationalization
+  - Files: `app/locales/en.json`, `<any component with text>`
 - [Storybook](https://github.com/storybooks/storybook) for developing and testing our dumb components easily
+  - Files: `.storybook/config.js`, `agents/stories/Profile.js`
+  - PRs: https://github.com/root-systems/cobuy/pull/51/files
 - Redux for state management, as per
 - [Redux-observable](redux-observable.js.org) for managing async operations
 - [Redux-form](http://redux-form.com/6.8.0/) to connect React forms to state
+  - Files: `agents/components/SignIn.js`
+  - PRs: https://github.com/root-systems/cobuy/pull/59/files
 - [Reselect](https://github.com/reactjs/reselect) for our getters
+  - Files: `*/getters/*`
+  - PRs: https://github.com/root-systems/cobuy/pull/104/files
 - [Ramda](http://ramdajs.com/) as our general utility library with a strongly functional flavour
 - [Feathers](https://feathersjs.com/) for our backend API layer
 - [Feathers-action](https://github.com/ahdinosaur/feathers-action) to provide CRUD actions out of the box
