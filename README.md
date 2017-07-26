@@ -122,7 +122,7 @@ We're following the [dogstack folder structure convention](https://dogstack.js.o
   - store.js (combines top-level epic and updater)
   - style.js
   - updater.js (combines all updaters)
-  - <topic> (e.g. `agents`)
+  - `topic` (e.g. `agents`)
     - containers
     - components
     - helpers
