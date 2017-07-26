@@ -53,7 +53,7 @@ npm run dev
   - Files: `app/locales/en.json`, `<any component with text>`
   - https://github.com/root-systems/cobuy/pull/80
 - [Storybook](https://github.com/storybooks/storybook) for developing and testing our dumb components easily
-  - Files: `.storybook/config.js`, `agents/stories/Profile.js`
+  - Files: `.storybook/config.js`, `agents/stories/index.js`, `agents/stories/Profile.js`
   - PRs: https://github.com/root-systems/cobuy/pull/51/files
 - Redux for state management, as per
 - [Redux-fp](https://github.com/rvikmanis/redux-fp) for 'updaters' instead of 'reducers'
