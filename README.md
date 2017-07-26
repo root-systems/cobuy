@@ -78,8 +78,9 @@ npm run dev
 - [Knex](http://knexjs.org/) for interfacing with DB
   - Files: `db/migrations/*`
   - PRs: https://github.com/root-systems/cobuy/pull/116/files
-- SQLite3 as dev db
 - [Dogstack-agents](https://github.com/dogstack/dogstack-agents) to manage users and credentials
+  - Files: `agents/containers/Register.js`
+  - PRs: https://github.com/root-systems/cobuy/pull/59/files
 
 
 ## Stack
