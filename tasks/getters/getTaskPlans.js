@@ -17,7 +17,7 @@ const getTaskPlanTree = createSelector(
 
       // 3. resolve new node from soure list
       const taskPlan = taskPlansById[taskPlanId]
-
+      if (isNil(taskPlan)) return null
       // 4. resolve childs from tree (these MUST exist in tree, which is guaranteed by doing nodes with no childs first)
       const childTaskPlans = (childTaskPlansByParentId[taskPlanId] || []).map(({ id }) => taskPlanTree[id])
 

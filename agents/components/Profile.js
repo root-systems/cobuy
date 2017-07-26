@@ -1,118 +1,109 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
-import { pipe } from 'ramda'
+import { pipe, isNil, not } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
+import { compose, withState, withHandlers } from 'recompose'
+import h from 'react-hyperscript'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/Profile'
 import Button from '../../app/components/Button'
 import AvatarField from '../../app/components/AvatarField'
 
-class Profile extends React.Component {
-  constructor (props, context) {
-    super(props, context)
-    this.state = {
-      isEditing: false
-    }
-  }
+function Profile (props) {
+  const { styles, isEditing, toggleEdit, agent } = props
+  if (isNil(agent)) return null
+  const { profile } = agent
+  if (isNil(profile)) return null
+  const { name, description, avatar } = profile
 
-  toggleEdit () {
-    this.setState({
-      isEditing: !this.state.isEditing
-    })
-  }
-
-  render () {
-    const { isEditing } = this.state
-    const { styles, agent, agent: { profile: { name, description, avatar } } } = this.props
-
-    return (
-      <form className={styles.container}>
-        <p className={styles.intro}>
-          <FormattedMessage
-            id='agents.profile'
-            className={styles.labelText}
-          />
-        </p>
-        <div className={styles.innerContainer}>
-          <div className={styles.avatarContainer}>
-            <Field
-              name='avatar'
-              component={AvatarField}
-              isEditingProfile={isEditing}
-              value={avatar}
-            />
-          </div>
-          <div className={styles.infoContainer}>
-            <Field
-              name='name'
-              floatingLabelText={
-                <FormattedMessage
-                  id='agents.nameLabel'
-                  className={styles.labelText}
-                />
-              }
-              component={TextField}
-              fullWidth={true}
-              value={name}
-              disabled={!isEditing}
-            />
-            <Field
-              name='description'
-              floatingLabelText={
-                <FormattedMessage
-                  id='agents.descriptionLabel'
-                  className={styles.labelText}
-                />
-              }
-              component={TextField}
-              value={description}
-              fullWidth={true}
-              multiLine={true}
-              rowsMax={5}
-              disabled={!isEditing}
-            />
-          </div>
-        </div>
-        <div className={styles.buttonContainer}>
-          <RaisedButton className={styles.button} type='button' onClick={() => { this.toggleEdit() }}>
-            {
-              isEditing
-              ? <FormattedMessage
-                  id='agents.saveProfile'
-                  className={styles.labelText}
-                />
-              : <FormattedMessage
-                  id='agents.editProfile'
-                  className={styles.labelText}
-                />
-            }
-          </RaisedButton>
-        </div>
-      </form>
-    )
-  }
-
+  return h('form', {
+    className: styles.container
+  }, [
+    h('p', {
+      className: styles.intro
+    }, [
+      h(FormattedMessage, {
+        id: 'agents.profile',
+        className: styles.labelText
+      })
+    ]),
+    h('div', {
+      className: styles.innerContainer
+    }, [
+      h('div', {
+        className: styles.avatarContainer
+      }, [
+        h(Field, {
+          name: 'avatar',
+          component: AvatarField,
+          isEditingProfile: isEditing,
+          value: avatar
+        })
+      ]),
+      h('div', {
+        className: styles.infoContainer
+      }, [
+        h(Field, {
+          name: 'name',
+          floatingLabelText: (
+            h(FormattedMessage, {
+              id: 'agents.nameLabel',
+              className: styles.labelText
+            })
+          ),
+          component: TextField,
+          fullWidth: true,
+          value: name,
+          disabled: not(isEditing)
+        }),
+        h(Field, {
+          name: 'description',
+          floatingLabelText: (
+            h(FormattedMessage, {
+              id: 'agents.descriptionLabel',
+              className: styles.labelText
+            })
+          ),
+          component: TextField,
+          value: description,
+          fullWidth: true,
+          multiLine: true,
+          rowsMax: 5,
+          disabled: not(isEditing)
+        })
+      ])
+    ]),
+    h('div', {
+      className: styles.buttonContainer
+    }, [
+      h(RaisedButton, {
+        className: styles.button,
+        type: 'button',
+        onClick: () => toggleEdit()
+      }, [
+        isEditing
+          ? h(FormattedMessage, {
+            id: 'agents.saveProfile',
+            className: styles.labelText
+          })
+          : h(FormattedMessage, {
+            id: 'agents.editProfile',
+            className: styles.labelText
+          })
+      ])
+    ])
+  ])
 }
 
-Profile.propTypes = {
-  agent: PropTypes.shape({
-    profile: PropTypes.shape({
-      avatar: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired
-    }).isRequired
-  })
-}
-
-Profile.defaultProps = {
-}
-
-export default pipe(
+export default compose(
   connectFela(styles),
+  withState('isEditing', 'setEditing', false),
+  withHandlers({
+    toggleEdit: ({ setEditing }) => () => setEditing(not)
+  }),
   connectForm({
     form: 'profile',
     initialValues: {

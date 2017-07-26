@@ -9,6 +9,8 @@ import Register from './agents/containers/Register'
 import SignIn from './agents/containers/SignIn'
 import LogOut from './agents/containers/LogOut'
 
+import TaskWorker from './tasks/containers/TaskWorker'
+
 import {
   SignOut
 } from 'dogstack-agents/components'
@@ -72,5 +74,10 @@ export default [
       selector: getIsNotAuthenticated,
       icon: 'fa fa-heart'
     }
+  },
+  {
+    name: 'task',
+    path: '/tasks/:taskPlanId',
+    Component: UserIsAuthenticated(TaskWorker)
   }
 ]

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 import { map, merge } from 'ramda'
 
-import getAgents from '../../agents/getters/getAgents'
+import { getAgents } from 'dogstack-agents/getters'
 import getRawTaskPlans from './getRawTaskPlans'
 import getRawTaskRecipes from './getRawTaskRecipes'
 
@@ -12,7 +12,7 @@ const getEnhancedTaskPlans = createSelector(
   (taskPlans, taskRecipes, agents) => {
     const enhanceTaskPlan = (taskPlan) => {
       const taskRecipe = taskRecipes[taskPlan.taskRecipeId]
-      const assignee = agents[taskPlan.assignee]
+      const assignee = agents[taskPlan.assigneeId]
       return merge(taskPlan, {
         taskRecipe,
         assignee

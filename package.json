@@ -11,7 +11,8 @@
     "deps": "dependency-check . client.js epic.js layout.js root.js routes.js server.js store.js style.js updater.js  --detective precinct && dependency-check . client.js epic.js layout.js root.js routes.js server.js store.js style.js updater.js --extra --no-dev --detective precinct -i babelify -i babel-preset-es2015 -i babel-preset-react -i babel-plugin-ramda -i pg",
     "db": "dog db",
     "storybook": "start-storybook -p 6006",
-    "burnthemall": "rm -rf package-lock.json node_modules; npm i"
+    "burnthemall": "rm -rf package-lock.json node_modules; npm i",
+    "burnthedb": "rm db/dev.sqlite3; dog db migrate:latest; dog db seed:run"
   },
   "browserify": {
     "transform": [
@@ -63,7 +64,7 @@
     "bigmath": "^1.0.3",
     "dog-names": "^1.0.2",
     "dogstack": "^0.4.0",
-    "dogstack-agents": "^0.3.3",
+    "dogstack-agents": "^0.3.4",
     "feathers-action": "^2.2.0",
     "feathers-action-react": "github:ahdinosaur/feathers-action-react#cancel",
     "feathers-errors": "^2.6.2",

@@ -1,9 +1,9 @@
 import { createStructuredSelector } from 'reselect'
 
-import getTaskPlans from '../../tasks/getters/getTaskPlans'
+import getParentTaskPlans from '../../tasks/getters/getParentTaskPlans'
 
 const getDashboardProps = createStructuredSelector({
-  taskPlans: getTaskPlans
+  taskPlans: getParentTaskPlans
 })
 
 export default getDashboardProps
