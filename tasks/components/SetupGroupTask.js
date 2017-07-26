@@ -8,14 +8,13 @@ import MemberInvites from '../../agents/components/MemberInvites'
 
 export default (props) => {
   const { taskPlan } = props
-  // TODO this is wrong
-  const { assignee: agent } = taskPlan
+  const { params: { contextAgent } } = taskPlan
 
   const steps = [
     {
       id: 'tasks.steps.groupProfile',
       content: (
-        <Profile agent={agent} />
+        <Profile agent={contextAgent} />
       )
     },
     {
