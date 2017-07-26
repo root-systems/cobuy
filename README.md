@@ -90,19 +90,17 @@ npm run dev
   - components && style files
   - components && their local state
 - Higher-order components (HOC) or containers
-  - (container && getters && actions) && dumb component
+  - (container && getters && props && actions) && dumb component/s
 - Dataflow within the client
   - from state to components
     - state -> getters -> HOC components (containers) -> dumb components
   - from components to state
     - dumb components -> HOC components (containers) -> actions -> updaters && epics -> state
   - from components to state with redux-form
-    - dumb components -> redux-form -> state
+    - dumb components -> redux-form -> redux-form state
 - Dataflow between client and server
   - actions -> services && hooks -> db
-   
-  
-
+  - services && hooks && db tables
 
 ## Stack
 
