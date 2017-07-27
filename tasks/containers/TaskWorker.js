@@ -1,25 +1,18 @@
 import h from 'react-hyperscript'
-import { isNil, path } from 'ramda'
-import { bindActionCreators } from 'redux'
-import { connect as connectRedux } from 'react-redux'
+import { isNil } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 import { push } from 'react-router-redux'
 
-import { agents, profiles } from 'dogstack-agents/actions'
 import { actions as taskPlans } from '../dux/plans'
 import { actions as taskWorks } from '../dux/works'
 import getTaskWorkerProps from '../getters/getTaskWorkerProps'
 import TaskWorker from '../components/TaskWorker'
 
-const getContextAgentFromTaskPlan = path(['params', 'contextAgent'])
-
 export default compose(
   connectFeathers({
     selector: getTaskWorkerProps,
     actions: {
-      agents,
-      profiles,
       taskPlans,
       taskWorks,
       // `feathers-action-react` wraps every
@@ -56,23 +49,6 @@ export default compose(
         }
       ]
 
-      //  once we have the task plan, query for the context agent
-      const { taskPlan } = props.selected
-      if (taskPlan) {
-        queries.push({
-          service: 'agents',
-          id: taskPlan.params.contextAgentId
-        })
-        queries.push({
-          service: 'profiles',
-          params: {
-            query: {
-              agentId: taskPlan.params.contextAgentId
-            }
-          }
-        })
-      }
-
       // once we have the task work, query for the child task works
       const { taskWork } = taskPlan || {}
       if (taskWork) {
@@ -85,7 +61,7 @@ export default compose(
           }
         })
       }
-      
+
       return queries
     },
     shouldQueryAgain: (props, status) => {
@@ -96,11 +72,10 @@ export default compose(
       // wait for task plan before re-query
       if (isNil(taskPlan)) return false
 
-      // re-query when we haven't gotten back contextAgent or taskWork
-      const contextAgent = getContextAgentFromTaskPlan(taskPlan)
+      // re-query when we haven't gotten back taskWork
       const { taskWork } = taskPlan
 
-      if (isNil(contextAgent) || isNil(taskWork)) return true
+      if (isNil(taskWork)) return true
 
       return false
     }

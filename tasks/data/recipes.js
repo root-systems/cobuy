@@ -1,4 +1,4 @@
-import SetupGroupTask from '../components/SetupGroupTask'
+import SetupGroupTask from '../containers/SetupGroupTask'
 import SetupSupplierTask from '../components/SetupSupplierTask'
 
 export const setupGroup = {
