@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, merge } from 'ramda'
+import { isNil, merge, isEmpty } from 'ramda'
 
 import TaskStepper from './TaskStepper'
 import Profile from '../../agents/components/Profile'
@@ -26,7 +26,14 @@ export default (props) => {
     {
       id: 'tasks.steps.memberInvites',
       content: h(MemberInvites, {
-
+        agent: contextAgent,
+        createMembers: (membersData) => {
+          console.log(membersData)
+          return membersData.members.map((member) => {
+            if (isEmpty(member)) return null
+            actions.agents.create(member)
+          })
+        }
       })
     }
   ]

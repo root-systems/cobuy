@@ -82,9 +82,9 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
 }
 
 function MemberInvites (props) {
-  const { styles } = props
+  const { styles, createMembers, handleSubmit } = props
   return (
-    <form className={styles.container}>
+    <form className={styles.container} onSubmit={handleSubmit(createMembers)}>
       <p className={styles.intro}>
         <FormattedMessage
           id='agents.memberInvites'
@@ -92,6 +92,14 @@ function MemberInvites (props) {
         />
       </p>
       <FieldArray name='members' component={renderMembers} formProps={props} />
+      <div className={styles.addButtonContainer}>
+        <RaisedButton type='submit' className={styles.button}>
+          <FormattedMessage
+            id='agents.inviteMembers'
+            className={styles.buttonText}
+          />
+        </RaisedButton>
+      </div>
     </form>
   )
 }
