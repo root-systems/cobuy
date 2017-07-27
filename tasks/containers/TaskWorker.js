@@ -28,10 +28,10 @@ export default compose(
         push: (cid, ...args) => push(...args)
       }
     },
+    // TODO can optimize `feathers-action-react` to de-dupe
+    // new queries by checking if deepEqual
     query: (props) => {
       const { taskPlanId } = props.match.params
-
-      console.log('queerrryr', taskPlanId, props)
 
       var queries = [
         {
