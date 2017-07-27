@@ -20,7 +20,8 @@ export default compose(
     query: (props) => {
       var queries = []
       //  once we have the task plan, query for the context agent
-      const { taskPlan } = props.selected
+      const { taskPlan } = props
+
       if (taskPlan) {
         queries.push({
           service: 'agents',

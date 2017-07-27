@@ -1,1 +1,3 @@
-export default (state, props) => props.match.params.taskPlanId
+export default (state, props) => {
+  return props.match.params.taskPlanId
+}

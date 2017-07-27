@@ -25,7 +25,7 @@ export default compose(
     // new queries by checking if deepEqual
     query: (props) => {
       const { taskPlanId } = props.match.params
-
+      const { taskPlan } = props.selected
       var queries = [
         {
           service: 'taskPlans',
