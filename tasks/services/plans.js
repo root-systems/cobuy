@@ -17,7 +17,7 @@ module.exports = function () {
 const hooks = {
   before: {
     all: [
-      encodeParams
+      // encodeParams
     ]
   },
   after: {
