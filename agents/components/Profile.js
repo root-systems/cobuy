@@ -13,14 +13,16 @@ import Button from '../../app/components/Button'
 import AvatarField from '../../app/components/AvatarField'
 
 function Profile (props) {
-  const { styles, isEditing, toggleEdit, agent } = props
+  const { styles, isEditing, toggleEdit, agent, handleSubmit } = props
   if (isNil(agent)) return null
   const { profile } = agent
   if (isNil(profile)) return null
   const { name, description, avatar } = profile
 
+  console.log(handleSubmit)
   return h('form', {
-    className: styles.container
+    className: styles.container,
+    onSubmit: handleSubmit
   }, [
     h('p', {
       className: styles.intro
@@ -79,22 +81,28 @@ function Profile (props) {
     h('div', {
       className: styles.buttonContainer
     }, [
-      h(RaisedButton, {
+      isEditing
+      ? h(RaisedButton, {
+        className: styles.button,
+        type: 'submit'
+      }, [
+        h(FormattedMessage, {
+          id: 'agents.saveProfile',
+          className: styles.labelText
+        })
+      ])
+      : h(RaisedButton, {
         className: styles.button,
         type: 'button',
         onClick: () => toggleEdit()
       }, [
-        isEditing
-          ? h(FormattedMessage, {
-            id: 'agents.saveProfile',
-            className: styles.labelText
-          })
-          : h(FormattedMessage, {
-            id: 'agents.editProfile',
-            className: styles.labelText
-          })
+        h(FormattedMessage, {
+          id: 'agents.editProfile',
+          className: styles.labelText
+        })
       ])
     ])
+
   ])
 }
 
