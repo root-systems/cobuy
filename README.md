@@ -75,6 +75,7 @@ npm run dev
 - [Feathers](https://feathersjs.com/) for our backend API layer
   - PRs: https://github.com/root-systems/cobuy/pull/116
 - [Feathers-reactive](https://github.com/feathersjs/feathers-reactive)
+- [Feathers-action-react](https://github.com/ahdinosaur/feathers-action-react)
 - [Feathers-action](https://github.com/ahdinosaur/feathers-action) to provide CRUD actions out of the box
   - Files: `*/dux/*`, `*/services/*`, `*/containers/*`, `server.js`, 
   - PRs: https://github.com/root-systems/cobuy/pull/116
