@@ -9,20 +9,23 @@ import h from 'react-hyperscript'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/Profile'
-import Button from '../../app/components/Button'
 import AvatarField from '../../app/components/AvatarField'
 
 function Profile (props) {
-  const { styles, isEditing, toggleEdit, agent, handleSubmit } = props
+  const { styles, isEditing, toggleEdit, agent, updateProfile, handleSubmit } = props
   if (isNil(agent)) return null
   const { profile } = agent
   if (isNil(profile)) return null
   const { name, description, avatar } = profile
 
-  console.log(handleSubmit)
+  const updateProfileAndToggleEdit = (nextProfile) => {
+    toggleEdit()
+    updateProfile(nextProfile)
+  }
+
   return h('form', {
     className: styles.container,
-    onSubmit: handleSubmit
+    onSubmit: handleSubmit(updateProfileAndToggleEdit)
   }, [
     h('p', {
       className: styles.intro
@@ -94,7 +97,11 @@ function Profile (props) {
       : h(RaisedButton, {
         className: styles.button,
         type: 'button',
-        onClick: () => toggleEdit()
+        onClick: (ev) => {
+          // GK: not entirely clear why this is necessary considering the button type, but preventing default anyway
+          ev.preventDefault()
+          toggleEdit()
+        }
       }, [
         h(FormattedMessage, {
           id: 'agents.editProfile',
