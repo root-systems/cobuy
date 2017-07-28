@@ -4,7 +4,8 @@ import { connect as connectRedux } from 'react-redux'
 import { connect as connectFela } from 'react-fela'
 import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
 import { pipe } from 'ramda'
-import { TextField } from 'redux-form-material-ui'
+import { TextField, SelectField } from 'redux-form-material-ui'
+import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import { FormattedMessage } from '../../lib/Intl'
@@ -56,8 +57,27 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
                 className={styles.labelText}
               />
             }
-            component={TextField}
-          />
+            component={SelectField}
+          >
+            <MenuItem
+              value='member'
+              primaryText={
+                <FormattedMessage
+                  id='agents.member'
+                  className={styles.labelText}
+                />
+              }
+            />
+            <MenuItem
+              value='admin'
+              primaryText={
+                <FormattedMessage
+                  id='agents.admin'
+                  className={styles.labelText}
+                />
+              }
+            />
+          </Field>
           <div className={styles.removeButtonContainer}>
             <RaisedButton type='button' className={styles.button} onClick={() => fields.remove(index)}>
               <FormattedMessage
