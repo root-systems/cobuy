@@ -5,6 +5,11 @@ import TaskStepper from './TaskStepper'
 import Profile from '../../agents/components/Profile'
 import MemberInvites from '../../agents/components/MemberInvites'
 
+const roleToRelationships = {
+  member: [ { relationshipType: 'member' } ],
+  admin: [ { relationshipType: 'member' }, { relationshipType: 'admin' } ]
+}
+
 export default (props) => {
   const { taskPlan, actions } = props
   if (isNil(taskPlan)) return null
@@ -30,10 +35,6 @@ export default (props) => {
         createMembers: (membersData) => {
           return membersData.members.map((member) => {
             if (isEmpty(member)) return null
-            const roleToRelationships = {
-              member: [ { relationshipType: 'member' } ],
-              admin: [ { relationshipType: 'member' }, { relationshipType: 'admin' } ]
-            }
             const agentData = {
               type: 'person',
               credential: {
