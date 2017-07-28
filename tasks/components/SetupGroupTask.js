@@ -28,10 +28,22 @@ export default (props) => {
       content: h(MemberInvites, {
         agent: contextAgent,
         createMembers: (membersData) => {
-          console.log(membersData)
           return membersData.members.map((member) => {
             if (isEmpty(member)) return null
-            actions.agents.create(member)
+            const agentData = {
+              type: 'person',
+              credential: {
+                email: member.email
+              },
+              profile: {
+                name: member.name
+              },
+              relationship: {
+                relationshipType: 'member'
+              },
+              contextAgent
+            }
+            actions.agents.create(agentData)
           })
         }
       })
