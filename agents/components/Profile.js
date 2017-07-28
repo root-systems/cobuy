@@ -12,11 +12,7 @@ import styles from '../styles/Profile'
 import AvatarField from '../../app/components/AvatarField'
 
 function Profile (props) {
-  const { styles, isEditing, toggleEdit, agent, updateProfile, handleSubmit } = props
-  if (isNil(agent)) return null
-  const { profile } = agent
-  if (isNil(profile)) return null
-  const { name, description, avatar } = profile
+  const { styles, isEditing, toggleEdit, updateProfile, handleSubmit } = props
 
   const updateProfileAndToggleEdit = (nextProfile) => {
     toggleEdit()
@@ -44,8 +40,7 @@ function Profile (props) {
         h(Field, {
           name: 'avatar',
           component: AvatarField,
-          isEditingProfile: isEditing,
-          value: avatar
+          isEditingProfile: isEditing
         })
       ]),
       h('div', {
@@ -61,7 +56,6 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          value: name,
           disabled: not(isEditing)
         }),
         h(Field, {
@@ -73,7 +67,6 @@ function Profile (props) {
             })
           ),
           component: TextField,
-          value: description,
           fullWidth: true,
           multiLine: true,
           rowsMax: 5,
@@ -121,10 +114,6 @@ export default compose(
   }),
   connectForm({
     form: 'profile',
-    initialValues: {
-      avatar: 'http://dinosaur.is/images/mikey-small.jpg',
-      name: 'classic nixon',
-      description: "it's classic nixon"
-    }
+    enableReinitialize: true
   })
 )(Profile)
