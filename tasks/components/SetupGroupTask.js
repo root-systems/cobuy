@@ -16,13 +16,15 @@ export default (props) => {
   const { params: { contextAgent } } = taskPlan
   if (isNil(contextAgent)) return null
 
-  const { profile } = contextAgent
+  const { profile, sourceRelationships } = contextAgent
+
+  console.log(sourceRelationships)
 
   const steps = [
     {
       id: 'tasks.steps.groupProfile',
       content: h(Profile, {
-        agent: contextAgent,
+        initialValues: profile,
         updateProfile: (nextProfile) => {
           actions.profiles.update(profile.id, merge(nextProfile, { agentId: contextAgent.id }))
         }
