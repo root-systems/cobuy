@@ -30,6 +30,10 @@ export default (props) => {
         createMembers: (membersData) => {
           return membersData.members.map((member) => {
             if (isEmpty(member)) return null
+            const roleToRelationships = {
+              member: [ { relationshipType: 'member' } ],
+              admin: [ { relationshipType: 'member' }, { relationshipType: 'admin' } ]
+            }
             const agentData = {
               type: 'person',
               credential: {
@@ -38,9 +42,7 @@ export default (props) => {
               profile: {
                 name: member.name
               },
-              relationship: {
-                relationshipType: 'member'
-              },
+              relationships: roleToRelationships[member.role],
               contextAgent
             }
             actions.agents.create(agentData)
