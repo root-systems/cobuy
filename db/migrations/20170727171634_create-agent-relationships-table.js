@@ -2,8 +2,8 @@ exports.up = function (knex, Promise) {
   return knex.schema.createTableIfNotExists('relationships', function (table) {
     table.increments('id')
     table.string('relationshipType')
-    table.integer('source')
-    table.integer('target')
+    table.integer('sourceId').references('agents.id')
+    table.integer('targetId').references('agents.id')
   })
 }
 
