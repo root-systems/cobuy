@@ -1,5 +1,5 @@
 exports.up = function (knex, Promise) {
-  return knex.schema.createTableIfNotExists('agentRelationships', function (table) {
+  return knex.schema.createTableIfNotExists('relationships', function (table) {
     table.increments('id')
     table.string('relationshipType')
     table.integer('source')
@@ -8,5 +8,5 @@ exports.up = function (knex, Promise) {
 }
 
 exports.down = function (knex, Promise) {
-  return knex.schema.dropTableIfExists('agentRelationships')
+  return knex.schema.dropTableIfExists('relationships')
 }
