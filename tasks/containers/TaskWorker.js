@@ -6,7 +6,6 @@ import { push } from 'react-router-redux'
 
 import { actions as taskPlans } from '../dux/plans'
 import { actions as taskWorks } from '../dux/works'
-import { actions as agentRelationships } from '../../agents/dux/relationships'
 import getTaskWorkerProps from '../getters/getTaskWorkerProps'
 import TaskWorker from '../components/TaskWorker'
 
@@ -16,7 +15,6 @@ export default compose(
     actions: {
       taskPlans,
       taskWorks,
-      agentRelationships,
       // `feathers-action-react` wraps every
       //  action creator in a cid creator.
       router: {
