@@ -10,10 +10,16 @@ function Home (props) {
 
   return (
     <div className={styles.container}>
-      <FormattedMessage
-        id='app.name'
-        className={styles.titleText}
-      />
+      <div className={styles.titleContainer}>
+        <h1 className={styles.titleText}>
+          <FormattedMessage id='app.name' />
+        </h1>
+      </div>
+      <div className={styles.bodyContainer}>
+        <p className={styles.bodyText}>
+          Cobuy is an app that makes buying groups/co-ops easy to start, maintain, and grow. Using the collective buying power of a group, people can buy food in bulk directly from wholesalers. By cutting out retailers, we effectively eliminate retail food waste, save money and have access to a wider range of better quality products.
+        </p>
+      </div>
     </div>
   )
 }
