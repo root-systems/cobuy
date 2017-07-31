@@ -78,16 +78,16 @@ export default {
     accent2: deepPurple600,
     accent3: deepPurple700,
     greys: [
-      grey50,
-      grey100,
-      grey200,
-      grey300,
-      grey400,
-      grey500,
-      grey600,
-      grey700,
-      grey800,
-      grey900
+      grey50, // [0]
+      grey100, // [1]
+      grey200, // [2]
+      grey300, // [3]
+      grey400, // [4]
+      grey500, // [5]
+      grey600, // [6]
+      grey700, // [7]
+      grey800, // [8]
+      grey900 // [9]
     ],
     text: darkBlack,
     alternateText: white,
