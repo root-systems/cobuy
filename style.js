@@ -14,5 +14,8 @@ export default {
     renderer.renderFont('Roboto', [
       'https://fonts.gstatic.com/s/lato/v11/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff'
     ])
+    renderer.renderFont('Lobster Two', [
+      'https://fonts.googleapis.com/css?family=Lobster+Two:700'
+    ])
   }
 }
