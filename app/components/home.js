@@ -1,15 +1,23 @@
 import React from 'react'
-import { createComponent } from '@ahdinosaur/react-fela'
-import { FormattedMessage } from 'react-intl'
+import { connect as connectFela } from 'react-fela'
+import { compose } from 'recompose'
+import { FormattedMessage } from '../../lib/Intl'
 
-import styles from '../styles/home'
+import styles from '../styles/Home'
 
-const Container = createComponent(styles.container, 'div')
+function Home (props) {
+  const { routes, styles } = props
 
-export default function Home (props) {
-  const { routes } = props
-
-  return <Container>
-    <FormattedMessage id='app.name' />
-  </Container>
+  return (
+    <div className={styles.container}>
+      <FormattedMessage
+        id='app.name'
+        className={styles.titleText}
+      />
+    </div>
+  )
 }
+
+export default compose(
+  connectFela(styles)
+)(Home)
