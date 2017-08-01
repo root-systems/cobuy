@@ -226,6 +226,10 @@ cp cobuy-config/*.js cobuy/config
 heroku run npm run db migrate:latest --app=cobuy
 ```
 
+### JSON schema
+
+All models must have an assoicated JSON schema. See [#118](https://github.com/root-systems/cobuy/issues/118) for more info.
+
 ### How to [storybook](https://storybook.js.org)
 
 So you want to tell a story about dumb React components, ey?
