@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "agents/Profile",
+  "title": "Profile",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Id referencing profile"
+    },
+    "agentId": {
+      "type": "integer",
+      "description": "Id referencing agent"
+    },
+    "name": {
+      "type": "string",
+      "description": "An agent name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Agent biography"
+    },
+    "avatar" : {
+      "type": "string",
+      "format": "uri",
+      "description": "Agent avatar image link"
+    }
+  },
+  "required": [
+    "id",
+    "agentId",
+    "name"
+  ]
+}
