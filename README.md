@@ -103,6 +103,8 @@ npm run dev
 - Dataflow between client and server
   - actions -> services && hooks -> db
   - services && hooks && db tables
+  
+### Also see the [Captain's Log](https://github.com/root-systems/cobuy/issues/123) for more epistolary notes
 
 ## Stack
 
