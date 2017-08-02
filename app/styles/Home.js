@@ -5,12 +5,14 @@ export default {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       backgroundColor: 'orange',
-      alignItems: 'center'
+      alignItems: 'center',
+      padding: theme.space[2] // FOR DEMO ONLY
     }
   },
   titleContainer: ({ theme }) => {
     return {
-      backgroundColor: 'green'
+      backgroundColor: 'green',
+      marginTop: theme.space[3] // FOR DEMO ONLY
     }
   },
   // Note for SR:
@@ -26,7 +28,8 @@ export default {
   }),
   bodyContainer: ({ theme }) => {
     return {
-      backgroundColor: 'pink'
+      backgroundColor: 'pink',
+      paddingBottom: theme.space[5] // FOR DEMO ONLY
     }
   },
   bodyText: ({ theme }) => ({
