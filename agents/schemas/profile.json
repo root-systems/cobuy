@@ -14,6 +14,7 @@
     },
     "name": {
       "type": "string",
+      "faker": "name.findName",
       "description": "An agent name"
     },
     "description": {
@@ -22,6 +23,7 @@
     },
     "avatar" : {
       "type": "string",
+      "faker": "internet.avatar",
       "format": "uri",
       "description": "Agent avatar image link"
     }
