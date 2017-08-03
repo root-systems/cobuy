@@ -32,13 +32,14 @@ export default {
     '97.6em'
   ],
   space: [
-    '0.25rem',
-    '0.5rem',
-    '1rem',
-    '2rem',
-    '4rem',
-    '8rem',
-    '16rem',
+    '0rem', // [0] SR: wanting to override default allofthespace with noneofthespace
+    '0.25rem', // [1]
+    '0.5rem', // [2]
+    '1rem', // [3]
+    '2rem', // [4]
+    '4rem', // [5]
+    '8rem', // [6]
+    '16rem' // [7]
   ],
   fontSizes: [
     '0.8rem', // [0] 10pt
