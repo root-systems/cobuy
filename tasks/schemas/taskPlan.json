@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "tasks/taskPlan",
+  "title": "Task Plan",
+  "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Id referencing task plan"
+    },
+    "parentTaskPlanID": {
+      "type": "integer",
+      "description": "Id referencing the associated task plan"
+    },
+    "assignee": {
+      "type": "integer",
+      "description": "Person or group or related agents (e.g. admins) being assigned"
+    },
+    "taskRecipeId": {
+        "$ref": "taskRecipe.json#/id",
+        "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED"
+    }
+  },
+  "required": [
+    "id",
+    "assignee",
+    "taskRecipeId"
+  ]
+}

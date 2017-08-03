@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "tasks/taskRecipe",
+  "title": "Task Recipe",
+  "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "definitions": {
+    "id": { "enum": [ "setupGroup", "setupSupplier", "finishPrereqs"] }
+  }
+}
