@@ -3,14 +3,13 @@ export default {
     return {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'flex-start',
-      backgroundColor: 'orange',
-      alignItems: 'center'
+      alignItems: 'center',
+      padding: theme.space[2]
     }
   },
   titleContainer: ({ theme }) => {
     return {
-      backgroundColor: 'green'
+      marginBottom: theme.space[1]
     }
   },
   // Note for SR:
@@ -22,11 +21,11 @@ export default {
   titleText: ({ theme }) => ({
     fontFamily: theme.fonts.logo,
     fontSize: theme.fontSizes[12],
-    color: theme.colors.greys[9]
+    color: theme.colors.greys[9],
+    margin: theme.space[0]
   }),
   bodyContainer: ({ theme }) => {
     return {
-      backgroundColor: 'pink'
     }
   },
   bodyText: ({ theme }) => ({
