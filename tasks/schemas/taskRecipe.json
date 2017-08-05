@@ -3,16 +3,28 @@
   "id": "tasks/taskRecipe",
   "title": "Task Recipe",
   "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED",
-  "type": "object",
-  "properties": {
-    "id": {
-      "$ref": "#/definitions/id"
-    }
-  },
-  "required": [
-    "id"
-  ],
+  "$ref": "#/definitions/taskRecipe",
   "definitions": {
-    "id": { "enum": [ "setupGroup", "setupSupplier", "finishPrereqs"] }
+    "id": {
+      "enum": [
+        "setupGroup",
+        "setupSupplier",
+        "finishPrereqs"
+      ]
+    },
+    "taskRecipe": {
+      "type": "object",
+      "properties": {
+        "taskRecipeId": {
+          "$ref": "#/definitions/id"
+        },
+        "childTaskRecipes": {
+          "$ref": "#/definitions/taskRecipe"
+        }
+      },
+      "required": [
+        "taskRecipeId"
+      ]
+    }
   }
 }
