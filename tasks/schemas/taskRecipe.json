@@ -15,15 +15,20 @@
     "taskRecipe": {
       "type": "object",
       "properties": {
-        "taskRecipeId": {
+        "id": {
           "$ref": "#/definitions/id"
         },
         "childTaskRecipes": {
-          "$ref": "#/definitions/taskRecipe"
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/taskRecipe"
+            }
+          ]
         }
       },
       "required": [
-        "taskRecipeId"
+        "id"
       ]
     }
   }
