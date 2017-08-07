@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import * as taskRecipes from '../data/recipes'
+import jsf from 'json-schema-faker'
 
 const ajv = require('ajv')
 const { validateSchema } = require('feathers-hooks-common')
@@ -13,7 +12,7 @@ test.beforeEach(t => {
     type: 'before',
     method: 'create',
     params: { provider: 'rest' },
-    data: taskRecipes.setupSupplier
+    data: jsf(schema)
   }
 })
 
