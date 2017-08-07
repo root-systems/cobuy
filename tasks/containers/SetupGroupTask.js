@@ -23,6 +23,7 @@ export default compose(
       var queries = []
       //  once we have the task plan, query for the context agent
       const { taskPlan } = props
+
       if (taskPlan) {
         const { params: { contextAgentId, contextAgent } } = taskPlan
         queries.push({
@@ -48,6 +49,7 @@ export default compose(
 
         if (contextAgent) {
           const { sourceRelationships } = contextAgent
+
           sourceRelationships.forEach(relationship => {
             const { targetId } = relationship
             queries.push({
@@ -77,11 +79,9 @@ export default compose(
       return queries
     },
     shouldQueryAgain: (props, status) => {
-      console.log('querrrrrrrrrrry')
       if (status.isPending) return false
-      debugger
 
-      const { taskPlan } = props.selected
+      const { taskPlan } = props.ownProps
 
       // wait for task plan before re-query
       if (isNil(taskPlan)) return false
@@ -90,7 +90,6 @@ export default compose(
       const contextAgent = getContextAgentFromTaskPlan(taskPlan)
 
       if (isNil(contextAgent)) return true
-      debugger
       if (anyTargetsAreNil(contextAgent)) return true
 
       return false

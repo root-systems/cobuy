@@ -18,7 +18,7 @@ export default (props) => {
 
   const { profile, sourceRelationships } = contextAgent
 
-  console.log(sourceRelationships)
+  console.log('sourceRelationships', sourceRelationships)
 
   const steps = [
     {

@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil } from 'ramda'
+import { isNil, pipe, filter, keys, length, gte, propEq, not } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 import { push } from 'react-router-redux'
@@ -75,7 +75,7 @@ export default compose(
       // re-query when we haven't gotten back taskWork
       const { taskWork } = taskPlan
 
-      if (isNil(taskWork)) return true
+      if (not(hasQueriedTaskWorks(status.requests))) return true
 
       return false
     }
@@ -100,3 +100,10 @@ export default compose(
     actions.router.push(nextRoute)
   }
 })
+
+const hasQueriedTaskWorks = pipe(
+  filter(propEq('service', 'taskWorks')),
+  keys,
+  length,
+  gte(1)
+)
