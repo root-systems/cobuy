@@ -1,8 +1,11 @@
 const feathersKnex = require('feathers-knex')
 import { isEmpty, ifElse, is, assoc, prop, map, pipe, __ } from 'ramda'
 const { iff, validateSchema } = require('feathers-hooks-common')
-const ajv = require('ajv')
+const Ajv = require('ajv')
+const taskPlanSchema = require('../schemas/taskPlan')
 const taskRecipeSchema = require('../schemas/taskRecipe')
+const ajv = new Ajv({$data: true})
+ajv.addSchema([taskRecipeSchema, taskPlanSchema])
 import { isEmpty } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
@@ -23,7 +26,8 @@ const hooks = {
       // encodeParams
     ],
     create: [
-      validateSchema(taskRecipeSchema, ajv)
+      logEvent,
+      validateSchema(taskPlanSchema, ajv)
     ]
   },
   after: {
@@ -83,5 +87,8 @@ function decodeParams (hook) {
   if (hook.result) {
     hook.result = transformPropMaybeArray(JSON.parse)('params')(hook.result)
   }
+}
+function logEvent (hook) {
+  console.log(hook.data)
   return hook
 }

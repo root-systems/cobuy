@@ -1,9 +1,26 @@
 {
-  "$schema": "http://json-schema.org/schema#",
-  "id": "tasks/taskRecipe",
+  "id": "http://localhost:3000/tasks/schemas/taskRecipe.json",
   "title": "Task Recipe",
-  "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED",
-  "$ref": "#/definitions/taskRecipe",
+  "description": "An abstract description of the task",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/id"
+    },
+    "ownerAgentId": {
+      "type": "integer",
+      "description": "Id of the agent that owns the recipe"
+    },
+    "childTaskRecipes": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "#"
+        }
+      ],
+      "description": "Task recipes that make up this task recipe..."
+    }
+  },
   "definitions": {
     "id": {
       "enum": [
@@ -11,25 +28,9 @@
         "setupSupplier",
         "finishPrereqs"
       ]
-    },
-    "taskRecipe": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "$ref": "#/definitions/id"
-        },
-        "childTaskRecipes": {
-          "type": "array",
-          "items": [
-            {
-              "$ref": "#/definitions/taskRecipe"
-            }
-          ]
-        }
-      },
-      "required": [
-        "id"
-      ]
     }
-  }
+  },
+  "required": [
+    "id"
+  ]
 }
