@@ -30,7 +30,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
       {fields.map((member, index) => (
         <div key={index} className={styles.rowContainer}>
           <Field
-            name={`${member}.name`}
+            name={`${member}.agent.profile.name`}
             floatingLabelText={
               <FormattedMessage
                 id='agents.nameLabel'
@@ -40,7 +40,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
             component={TextField}
           />
           <Field
-            name={`${member}.email`}
+            name={`${member}.agent.credential.email`}
             floatingLabelText={
               <FormattedMessage
                 id='agents.email'
@@ -129,7 +129,8 @@ const selector = formValueSelector('memberInvites')
 export default pipe(
   connectFela(styles),
   connectForm({
-    form: 'memberInvites'
+    form: 'memberInvites',
+    enableReinitialize: true
   }),
   connectRedux(
     state => ({

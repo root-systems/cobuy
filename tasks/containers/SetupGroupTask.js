@@ -1,4 +1,4 @@
-import { isNil, path, prop, pipe, any } from 'ramda'
+import { isNil, path, prop, pipe, values, any, forEach, either } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -48,19 +48,19 @@ export default compose(
         })
 
         if (contextAgent) {
-          const { sourceRelationships } = contextAgent
-
-          sourceRelationships.forEach(relationship => {
-            const { targetId } = relationship
+          const { members } = contextAgent
+          const queryEachMember = forEach(member => {
+            console.log('member', member)
+            const { agentId } = member
             queries.push({
               service: 'agents',
-              id: targetId
+              id: agentId
             })
             queries.push({
               service: 'profiles',
               params: {
                 query: {
-                  agentId: targetId
+                  agentId
                 }
               }
             })
@@ -68,11 +68,12 @@ export default compose(
               service: 'credentials',
               params: {
                 query: {
-                  agentId: targetId
+                  agentId
                 }
               }
             })
           })
+          queryEachMember(members)
         }
       }
 
@@ -90,17 +91,20 @@ export default compose(
       const contextAgent = getContextAgentFromTaskPlan(taskPlan)
 
       if (isNil(contextAgent)) return true
-      if (anyTargetsAreNil(contextAgent)) return true
+      if (anyMembersAreNil(contextAgent)) {
+        debugger
+        return true
+      }
 
       return false
     }
   })
 )(SetupGroupTask)
 
-const anyTargetsAreNil = pipe(
-  prop('sourceRelationships'),
-  any(pipe(
-    path(['target', 'id']),
-    isNil
-  ))
+const anyMembersAreNil = pipe(
+  prop('members'),
+  either(
+    any(pipe(path(['agent', 'profile', 'id']), isNil)),
+    any(pipe(path(['agent', 'credential', 'id']), isNil))
+  )
 )

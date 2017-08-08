@@ -16,9 +16,9 @@ export default (props) => {
   const { params: { contextAgent } } = taskPlan
   if (isNil(contextAgent)) return null
 
-  const { profile, sourceRelationships } = contextAgent
+  const { profile, members } = contextAgent
 
-  console.log('sourceRelationships', sourceRelationships)
+  console.log('members', members)
 
   const steps = [
     {
@@ -34,6 +34,9 @@ export default (props) => {
       id: 'tasks.steps.memberInvites',
       content: h(MemberInvites, {
         agent: contextAgent,
+        initialValues: {
+          members
+        },
         createMembers: (membersData) => {
           return membersData.members.map((member) => {
             if (isEmpty(member)) return null
