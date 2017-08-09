@@ -3,7 +3,7 @@ const mergeAll = require('ramda/src/mergeAll')
 const config = {
   port: 3000,
   favicon: 'app/favicon.ico',
-  assets: 'assets',
+  assets: 'app/assets',
   bundler: {
     head: `
       <style id="app-styles"></style>
