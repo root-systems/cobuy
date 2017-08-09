@@ -4,7 +4,8 @@ export default {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      padding: theme.space[2]
+      padding: theme.space[2],
+      backgroundImage: 'url("/images/cobuy-bg-lrg-1440.jpg")'
     }
   },
   titleContainer: ({ theme }) => {
@@ -26,6 +27,7 @@ export default {
   }),
   bodyContainer: ({ theme }) => {
     return {
+      padding: theme.space[2]
     }
   },
   bodyText: ({ theme }) => ({
