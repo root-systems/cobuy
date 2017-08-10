@@ -25,13 +25,14 @@ import {
 
 export default {
   breakpoints: {
-    mobile: '13.6em',
-    mobileWide: '30.4em',
-    tablet: '47.2em',
+    // em-px conversions given base 16px
+    mobile: '13.6em', // 217px
+    mobileWide: '30.4em', // 486px
+    tablet: '47.2em', // 755px
     //tabletLegacy: '49.2em',
     //tabletWide: '55em',
-    desktop: '64em',
-    desktopLarge: '97.6em'
+    desktop: '64em', // 1024px
+    desktopLarge: '97.6em' // 1171px
   },
   space: [
     '0rem', // [0] SR: wanting to override default allofthespace with noneofthespace
