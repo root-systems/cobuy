@@ -24,13 +24,15 @@ import {
 // and https://github.com/cloudflare/cf-ui/blob/master/packages/cf-style-const/src/variables.js
 
 export default {
-  breakpoints: [
-    '13.6em',
-    '30.4em',
-    '47.2em',
-    '64em',
-    '97.6em'
-  ],
+  breakpoints: {
+    mobile: '13.6em',
+    mobileWide: '30.4em',
+    tablet: '47.2em',
+    //tabletLegacy: '49.2em',
+    //tabletWide: '55em',
+    desktop: '64em',
+    desktopLarge: '97.6em'
+  },
   space: [
     '0rem', // [0] SR: wanting to override default allofthespace with noneofthespace
     '0.25rem', // [1]
