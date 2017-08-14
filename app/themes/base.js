@@ -34,6 +34,8 @@ export default {
     desktopXL: '120em' // 1920px
   },
   space: [
+    // exponential spacing because
+    // http://tachyons.io/docs/layout/spacing/
     '0rem', // [0] SR: to override default allofthespace with noneofthespace
     '0.25rem', // [1]
     '0.5rem', // [2]
@@ -45,6 +47,10 @@ export default {
     '32rem' // [8]
   ],
   fontSizes: [
+    // typographic scale because
+    // http://spencermortensen.com/articles/typographic-scale/
+    // and
+    // https://blog.madewithenvy.com/responsive-typographic-scales-in-css-b9f60431d1c4
     '0.8rem', // [0] 10pt
     '0.95rem', // [1] 11pt
     '1rem', // [2] 12pt
