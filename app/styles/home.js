@@ -16,41 +16,41 @@ export default {
         paddingLeft: theme.space[6],
         paddingRight: theme.space[6]
       },
-      [`@media (min-width: ${theme.breakpoints.desktop}) and (max-width: ${theme.breakpoints.desktopWide})`]: {
+      [`@media (min-width: ${theme.breakpoints.desktop}) and (max-width: ${theme.breakpoints.desktopXL})`]: {
+        paddingLeft: theme.space[7],
+        paddingRight: theme.space[7]
+      },
+      [`@media (min-width: ${theme.breakpoints.desktopXL})`]: {
         paddingLeft: theme.space[8],
         paddingRight: theme.space[8]
       },
-      [`@media (min-width: ${theme.breakpoints.desktopWide})`]: {
-        paddingLeft: theme.space[10],
-        paddingRight: theme.space[10]
-      },
       ':before': {
-      [`@media (max-width: ${theme.breakpoints.desktop})`]: {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        opacity: .6,
-        zIndex: -1,
-        backgroundColor: theme.colors.canvas,
-        backgroundImage: 'url("/images/cobuy-bg-sml-1080.jpg")',
-        backgroundSize: 'cover'
-      },
-      [`@media (min-width: ${theme.breakpoints.desktop})`]: {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        opacity: .6,
-        zIndex: -1,
-        backgroundColor: theme.colors.canvas,
-        backgroundImage: 'url("/images/cobuy-bg-lrg-1440.jpg")',
-        backgroundSize: 'cover'
-        }
+        [`@media (max-width: ${theme.breakpoints.desktop})`]: {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          opacity: .6,
+          zIndex: -1,
+          backgroundColor: theme.colors.canvas,
+          backgroundImage: 'url("/images/cobuy-bg-sml-1080.jpg")',
+          backgroundSize: 'cover'
+        },
+        [`@media (min-width: ${theme.breakpoints.desktop})`]: {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          opacity: .6,
+          zIndex: -1,
+          backgroundColor: theme.colors.canvas,
+          backgroundImage: 'url("/images/cobuy-bg-lrg-1440.jpg")',
+          backgroundSize: 'cover'
+          }
       }
     }
   },
