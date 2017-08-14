@@ -19,8 +19,6 @@ function Home (props) {
         <p className={styles.taglineText}>
           <FormattedMessage id='app.tagline' />
         </p>
-      </div>
-      <div className={styles.bodyContainer}>
         <div className={styles.buttonsContainer}>
           <Link to={"/sign-in"}>
             <RaisedButton primary={true}>
@@ -39,6 +37,8 @@ function Home (props) {
             </RaisedButton>
           </Link>
         </div>
+      </div>
+      <div className={styles.bodyContainer}>
         <p className={styles.bodyText}>
           Cobuy is an app that makes buying groups easy to start, maintain, and grow. Using the collective buying power of a group, we can buy food in bulk directly from wholesalers. By cutting out retailers, we effectively eliminate retail food waste, save money and have access to a wider range of better quality products.
         </p>
