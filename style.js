@@ -12,7 +12,10 @@ export default {
       'html,body,#app'
     )
     renderer.renderFont('Roboto', [
-      'https://fonts.gstatic.com/s/lato/v11/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff'
+      'https://fonts.googleapis.com/css?family=Roboto:400,400i,700'
+    ])
+    renderer.renderFont('Lobster Two', [
+      'https://fonts.googleapis.com/css?family=Lobster+Two:700'
     ])
   }
 }

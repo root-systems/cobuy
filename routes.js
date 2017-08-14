@@ -2,7 +2,7 @@ import { Route } from 'react-router-dom'
 import React from 'react'
 
 // Top Level Containers
-import Home from './app/containers/home'
+import Home from './app/containers/Home'
 import Dashboard from './app/containers/Dashboard'
 
 import Register from './agents/containers/Register'

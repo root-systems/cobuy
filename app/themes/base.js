@@ -24,32 +24,51 @@ import {
 // and https://github.com/cloudflare/cf-ui/blob/master/packages/cf-style-const/src/variables.js
 
 export default {
-  breakpoints: [
-    '13.6em',
-    '30.4em',
-    '47.2em',
-    '64em',
-    '97.6em'
-  ],
+  breakpoints: {
+    mobile: '30em', // 480px,
+    mobileWide: '37.5em', // 600px,
+    tablet: '48em', // 768px,
+    tabletWide: '56.25em', // 900px,
+    desktop: '64em', // 1024px,
+    desktopWide: '90em', // 1440px,
+    desktopXL: '120em' // 1920px
+  },
   space: [
-    '0.25rem',
-    '0.5rem',
-    '1rem',
-    '2rem',
-    '4rem',
-    '8rem',
-    '16rem',
+    // exponential spacing because
+    // http://tachyons.io/docs/layout/spacing/
+    '0rem', // [0] SR: to override default allofthespace with noneofthespace
+    '0.25rem', // [1]
+    '0.5rem', // [2]
+    '1rem', // [3]
+    '2rem', // [4]
+    '4rem', // [5]
+    '8rem', // [6]
+    '16rem', // [7]
+    '32rem' // [8]
   ],
   fontSizes: [
-    '0.875rem',
-    '1rem',
-    '1.25rem',
-    '1.5rem',
-    '2.25rem',
-    '3rem',
-    '5rem',
-    '6rem'
+    // typographic scale because
+    // http://spencermortensen.com/articles/typographic-scale/
+    // and
+    // https://blog.madewithenvy.com/responsive-typographic-scales-in-css-b9f60431d1c4
+    '0.8rem', // [0] 10pt
+    '0.95rem', // [1] 11pt
+    '1rem', // [2] 12pt
+    '1.2rem', // [3] 14pt
+    '1.4rem', // [4] 16pt
+    '1.5rem', // [5] 18pt
+    '1.7rem', // [6] 21pt
+    '2rem', // [7] 24pt
+    '3rem', // [8] 36pt
+    '4rem', // [9] 48pt
+    '5rem', // [10] 60pt
+    '6rem', // [11] 72pt
+    '8rem' // [12] 96pt
   ],
+  fonts: {
+    primary: 'Roboto, sans-serif',
+    logo: '"Lobster Two", cursive'
+  },
   colors: {
     primary1: teal500,
     primary2: teal600,
@@ -58,16 +77,16 @@ export default {
     accent2: deepPurple600,
     accent3: deepPurple700,
     greys: [
-      grey50,
-      grey100,
-      grey200,
-      grey300,
-      grey400,
-      grey500,
-      grey600,
-      grey700,
-      grey800,
-      grey900
+      grey50, // [0]
+      grey100, // [1]
+      grey200, // [2]
+      grey300, // [3]
+      grey400, // [4]
+      grey500, // [5]
+      grey600, // [6]
+      grey700, // [7]
+      grey800, // [8]
+      grey900 // [9]
     ],
     text: darkBlack,
     alternateText: white,
@@ -85,7 +104,6 @@ export default {
   },
   em: '1em',
   rem: '1rem',
-  fontFamily: 'Roboto, sans-serif',
   borderRadius: '2px',
   zIndexMax: 1000
 }
