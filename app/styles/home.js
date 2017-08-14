@@ -7,18 +7,35 @@ export default {
       alignSelf: 'center',
       height: '100%',
       paddingTop: theme.space[1],
-      backgroundColor: theme.colors.canvas,
+      paddingLeft: theme.space[6],
+      paddingRight: theme.space[6],
+      ':before': {
       [`@media (max-width: ${theme.breakpoints.desktop})`]: {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        opacity: .6,
+        zIndex: -1,
+        backgroundColor: theme.colors.canvas,
         backgroundImage: 'url("/images/cobuy-bg-sml-1080.jpg")',
-        backgroundSize: 'cover',
-        paddingLeft: theme.space[5],
-        paddingRight: theme.space[5],
+        backgroundSize: 'cover'
       },
       [`@media (min-width: ${theme.breakpoints.desktop})`]: {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        opacity: .6,
+        zIndex: -1,
+        backgroundColor: theme.colors.canvas,
         backgroundImage: 'url("/images/cobuy-bg-lrg-1440.jpg")',
-        backgroundSize: 'cover',
-        paddingLeft: theme.space[6],
-        paddingRight: theme.space[6]
+        backgroundSize: 'cover'
+        }
       }
     }
   },
