@@ -6,9 +6,24 @@ export default {
       alignItems: 'center',
       alignSelf: 'center',
       height: '100%',
-      paddingTop: theme.space[1],
-      paddingLeft: theme.space[6],
-      paddingRight: theme.space[6],
+      paddingTop: theme.space[3],
+      paddingBottom: theme.space[3],
+      [`@media (max-width: ${theme.breakpoints.tabletWide})`]: {
+        paddingLeft: theme.space[5],
+        paddingRight: theme.space[5]
+      },
+      [`@media (min-width: ${theme.breakpoints.tabletWide}) and (max-width: ${theme.breakpoints.desktop})`]: {
+        paddingLeft: theme.space[6],
+        paddingRight: theme.space[6]
+      },
+      [`@media (min-width: ${theme.breakpoints.desktop}) and (max-width: ${theme.breakpoints.desktopWide})`]: {
+        paddingLeft: theme.space[8],
+        paddingRight: theme.space[8]
+      },
+      [`@media (min-width: ${theme.breakpoints.desktopWide})`]: {
+        paddingLeft: theme.space[10],
+        paddingRight: theme.space[10]
+      },
       ':before': {
       [`@media (max-width: ${theme.breakpoints.desktop})`]: {
         content: '""',
@@ -64,25 +79,28 @@ export default {
     fontWeight: theme.fontWeights.bold,
     textAlign: 'center'
   }),
+  buttonsContainer: ({ theme }) => {
+    return {
+      display: 'flex',
+      justifyContent: 'space-around',
+      paddingTop: theme.space[1],
+      paddingBottom: theme.space[1]
+    }
+  },
+  buttonText: ({ theme }) => ({
+    textTransform: 'capitalize',
+    color: theme.colors.alternateText
+  }),
   bodyContainer: ({ theme }) => {
     return {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
     }
   },
   bodyText: ({ theme }) => ({
     fontFamily: theme.fonts.primary,
     fontSize: theme.fontSizes[3],
     color: theme.colors.text
-  }),
-  buttonsContainer: ({ theme }) => {
-    return {
-      display: 'flex',
-      justifyContent: 'space-around',
-      paddingLeft: theme.space[4],
-      paddingRight: theme.space[4]
-    }
-  },
-  buttonText: ({ theme }) => ({
-    textTransform: 'capitalize',
-    color: theme.colors.alternateText
   })
 }
