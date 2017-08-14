@@ -25,24 +25,26 @@ import {
 
 export default {
   breakpoints: {
-    // em-px conversions given base 16px
-    mobile: '13.6em', // 217px
-    mobileWide: '30.4em', // 486px
-    tablet: '47.2em', // 755px
-    //tabletLegacy: '49.2em',
-    //tabletWide: '55em',
-    desktop: '64em', // 1024px
-    desktopLarge: '97.6em' // 1171px
+    mobile: '30em', // 480px,
+    mobileWide: '37.5em', // 600px,
+    tablet: '48em', // 768px,
+    tabletWide: '56.25em', // 900px,
+    desktop: '64em', // 1024px,
+    desktopWide: '90em', // 1440px,
+    desktopXL: '120em' // 1920px
   },
   space: [
-    '0rem', // [0] SR: wanting to override default allofthespace with noneofthespace
+    '0rem', // [0] SR: to override default allofthespace with noneofthespace
     '0.25rem', // [1]
     '0.5rem', // [2]
     '1rem', // [3]
     '2rem', // [4]
     '4rem', // [5]
     '8rem', // [6]
-    '16rem' // [7]
+    '12rem', // [7]
+    '16rem', // [8]
+    '20rem', // [9]
+    '24rem' // [10]
   ],
   fontSizes: [
     '0.8rem', // [0] 10pt
@@ -58,17 +60,6 @@ export default {
     '5rem', // [10] 60pt
     '6rem', // [11] 72pt
     '8rem' // [12] 96pt
-    // og scale:
-    // '0.875rem',
-    // '1rem',
-    // '1.25rem',
-    // '1.5rem',
-    // '2.25rem',
-    // '3rem',
-    // '5rem',
-    // '6rem',
-    // '8rem',
-    // '10rem'
   ],
   fonts: {
     primary: 'Roboto, sans-serif',
