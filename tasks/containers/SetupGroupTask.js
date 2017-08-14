@@ -50,7 +50,6 @@ export default compose(
         if (contextAgent) {
           const { members } = contextAgent
           const queryEachMember = forEach(member => {
-            console.log('member', member)
             const { agentId } = member
             queries.push({
               service: 'agents',
@@ -92,7 +91,6 @@ export default compose(
 
       if (isNil(contextAgent)) return true
       if (anyMembersAreNil(contextAgent)) {
-        debugger
         return true
       }
 

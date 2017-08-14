@@ -1,16 +1,16 @@
 import h from 'react-hyperscript'
 import { connect as connectRedux } from 'react-redux'
 import { connect as connectFela } from 'react-fela'
-import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
-import { pipe } from 'ramda'
-import { TextField, SelectField } from 'redux-form-material-ui'
+import { Field, FieldArray, FormSection, formValueSelector, reduxForm as connectForm } from 'redux-form'
+import { pipe, isNil, not } from 'ramda'
+import { TextField, SelectField, Checkbox } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/MemberInvites'
 
-function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
+function renderMembers ({ fields, meta: { error, submitFailed }, removeMember, formProps }) {
   const { memberVals, styles } = formProps
 
   // TODO: currently this is an anti-pattern as it occurs within the render cycle
@@ -56,41 +56,27 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
             component: TextField
           }),
           h(Field, {
-            name: `${member}.role`,
+            name: `${member}.roles.admin`,
             floatingLabelText: (
               h(FormattedMessage, {
-                id: 'agents.role',
+                id: 'agents.admin',
                 className: styles.labelText
               })
             ),
-            component: SelectField
-          }, [
-            h(MenuItem, {
-              value: 'member',
-              primaryText: (
-                h(FormattedMessage, {
-                  id: 'agents.member',
-                  className: styles.labelText
-                })
-              )
-            }),
-            h(MenuItem, {
-              value: 'admin',
-              primaryText: (
-                h(FormattedMessage, {
-                  id: 'agents.admin',
-                  className: styles.labelText
-                })
-              )
-            })
-          ]),
+            component: Checkbox
+          }),
           h('div', {
             className: styles.removeButtonContainer
           }, [
             h(RaisedButton, {
               type: 'button',
               className: styles.button,
-              onClick: () => fields.remove(index)
+              onClick: () => {
+                const memberVal = memberVals[index]
+                const { agentId } = memberVal
+                fields.remove(index)
+                if (not(isNil(agentId))) removeMember(agentId)
+              }
             }, [
               h(FormattedMessage, {
                 id: 'agents.removeMember',
@@ -119,7 +105,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
 }
 
 function MemberInvites (props) {
-  const { styles, createMembers, handleSubmit } = props
+  const { styles, removeMember, createMembers, handleSubmit } = props
 
   return (
     h('form', {
@@ -137,6 +123,7 @@ function MemberInvites (props) {
       h(FieldArray, {
         name: 'members',
         component: renderMembers,
+        removeMember,
         formProps: props
       }),
       h('div', {

@@ -5,9 +5,16 @@ import TaskStepper from './TaskStepper'
 import Profile from '../../agents/components/Profile'
 import MemberInvites from '../../agents/components/MemberInvites'
 
-const roleToRelationships = {
-  member: [ { relationshipType: 'member' } ],
-  admin: [ { relationshipType: 'member' }, { relationshipType: 'admin' } ]
+const rolesToRelationships = (roles = {}) => {
+  var relationships = [
+    { relationshipType: 'member' }
+  ]
+  if (roles.admin) {
+    relationships.push({
+      relationshipType: 'admin'
+    })
+  }
+  return relationships
 }
 
 export default (props) => {
@@ -37,21 +44,37 @@ export default (props) => {
         initialValues: {
           members
         },
+        removeMember: (agentId) => {
+          actions.agents.remove(agentId)
+        },
         createMembers: (membersData) => {
           return membersData.members.map((member) => {
             if (isEmpty(member)) return null
+
+            const { agent, roles } = member
+            const {
+              id,
+              type = 'person',
+              profile = {},
+              credential = {},
+            } = agent
+            const relationships = rolesToRelationships(roles)
+            const contextAgentId = contextAgent.id
+
             const agentData = {
-              type: 'person',
-              credential: {
-                email: member.email
-              },
-              profile: {
-                name: member.name
-              },
-              relationships: roleToRelationships[member.role],
-              contextAgent
+              id,
+              type,
+              profile,
+              credential,
+              relationships,
+              contextAgentId
             }
-            actions.agents.create(agentData)
+
+            if (isNil(agentData.id)) {
+              actions.agents.create(agentData)
+            } else {
+              actions.agents.patch(id, agentData)
+            }
           })
         }
       })
