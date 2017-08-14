@@ -21,9 +21,13 @@
 
 ## Setup
 
-Before we start, please [install `node@8` and `npm@5`](https://dogstack.js.org/guides/how-to-install-js.html).
+Before we start, please
+
+- [install `node@8` and `npm@5`](https://dogstack.js.org/guides/how-to-install-js.html)
+- [install Git LFS](https://git-lfs.github.com/)
 
 ```shell
+git lfs install
 git clone git@github.com:root-systems/cobuy
 cd cobuy
 npm run burnthemall # TODO npm install
