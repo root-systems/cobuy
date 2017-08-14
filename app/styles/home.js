@@ -55,5 +55,17 @@ export default {
     fontFamily: theme.fonts.primary,
     fontSize: theme.fontSizes[3],
     color: theme.colors.text
+  }),
+  buttonsContainer: ({ theme }) => {
+    return {
+      display: 'flex',
+      justifyContent: 'space-around',
+      paddingLeft: theme.space[4],
+      paddingRight: theme.space[4]
+    }
+  },
+  buttonText: ({ theme }) => ({
+    textTransform: 'capitalize',
+    color: theme.colors.alternateText
   })
 }
