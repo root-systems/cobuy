@@ -1,5 +1,5 @@
 import test from 'ava'
-import jsf from 'json-schema-faker'
+import * as mock from '../data/mock'
 
 const Ajv = require('ajv')
 const { validateSchema } = require('feathers-hooks-common')
@@ -12,15 +12,13 @@ ajv.addSchema([taskRecipeSchema, schema])
 let hookBefore
 
 test.beforeEach(t => {
-  return jsf.resolve(schema).then((result) => {
-    hookBefore = {
-      type: 'before',
-      method: 'create',
-      params: { provider: 'rest' },
-      data: result
-    }
-    console.log(hookBefore.data)
-  })
+  hookBefore = {
+    type: 'before',
+    method: 'create',
+    params: { provider: 'rest' },
+    data: mock.mockTaskPlans[1]
+  }
+  console.log(hookBefore.data)
 })
 
 test('works with simple plan', (t) => {

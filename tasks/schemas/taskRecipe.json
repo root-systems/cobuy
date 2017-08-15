@@ -5,7 +5,7 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "#/id"
+      "$ref": "#/definitions/id"
     },
     "ownerAgentId": {
       "type": "integer",

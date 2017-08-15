@@ -1,5 +1,5 @@
 import test from 'ava'
-import jsf from 'json-schema-faker'
+import * as mock from '../data/mock'
 
 const ajv = require('ajv')
 const { validateSchema } = require('feathers-hooks-common')
@@ -12,7 +12,7 @@ test.beforeEach(t => {
     type: 'before',
     method: 'create',
     params: { provider: 'rest' },
-    data: jsf(schema)
+    data: mock.mockTaskRecipes.finishPrereqs
   }
 })
 

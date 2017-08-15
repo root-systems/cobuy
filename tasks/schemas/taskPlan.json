@@ -17,7 +17,7 @@
       "description": "Person or group or related agents (e.g. admins) being assigned"
     },
     "taskRecipeId": {
-        "$ref": "http://localhost:3000/tasks/schemas/taskRecipe.json#/id",
+        "$ref": "http://localhost:3000/tasks/schemas/taskRecipe.json#/definitions/id",
         "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED"
     },
       "params": {
