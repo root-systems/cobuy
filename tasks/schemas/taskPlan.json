@@ -1,5 +1,5 @@
 {
-  "id": "http://localhost:3000/tasks/schemas/taskPlan.json",
+  "id": "/tasks/taskPlan",
   "title": "Task Plan",
   "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED",
   "type": "object",
@@ -17,7 +17,7 @@
       "description": "Person or group or related agents (e.g. admins) being assigned"
     },
     "taskRecipeId": {
-        "$ref": "http://localhost:3000/tasks/schemas/taskRecipe.json#/definitions/id",
+        "$ref": "/tasks/taskRecipe#/definitions/id",
         "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED"
     },
       "params": {
