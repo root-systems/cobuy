@@ -1,7 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil } from 'ramda'
-import { bindActionCreators } from 'redux'
-import { connect as connectRedux } from 'react-redux'
+import { isNil, pipe, filter, keys, length, gte, propEq, not } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 import { push } from 'react-router-redux'
@@ -23,33 +21,67 @@ export default compose(
         push: (cid, ...args) => push(...args)
       }
     },
-    query: ({ taskPlanId }) => [
-      {
-        service: 'taskPlans',
-        id: taskPlanId
-      },
-      {
-        service: 'taskPlans',
-        params: {
-          query: {
-            parentTaskPlanId: taskPlanId
+    // TODO can optimize `feathers-action-react` to de-dupe
+    // new queries by checking if deepEqual
+    query: (props) => {
+      const { taskPlanId } = props.match.params
+      const { taskPlan } = props.selected
+      var queries = [
+        {
+          service: 'taskPlans',
+          id: taskPlanId
+        },
+        {
+          service: 'taskPlans',
+          params: {
+            query: {
+              parentTaskPlanId: taskPlanId
+            }
+          }
+        },
+        {
+          service: 'taskWorks',
+          params: {
+            query: {
+              taskPlanId
+            }
           }
         }
-      },
-      {
-        service: 'taskWorks',
-        params: {
-          query: {
-            taskPlanId
+      ]
+
+      // once we have the task work, query for the child task works
+      const { taskWork } = taskPlan || {}
+      if (taskWork) {
+        queries.push({
+          service: 'taskWorks',
+          params: {
+            query: {
+              parentTaskWorkId: taskWork.id
+            }
           }
-        }
+        })
       }
-      // TODO how do we fetch child task works from task plan?
-      // need to re-query after the first one is done
-    ]
+
+      return queries
+    },
+    shouldQueryAgain: (props, status) => {
+      if (status.isPending) return false
+
+      const { taskPlan } = props.selected
+
+      // wait for task plan before re-query
+      if (isNil(taskPlan)) return false
+
+      // re-query when we haven't gotten back taskWork
+      const { taskWork } = taskPlan
+
+      if (not(hasQueriedTaskWorks(status.requests))) return true
+
+      return false
+    }
   })
 )(props => {
-  const { currentTaskPlan: taskPlan, currentAgent: agent, actions } = props
+  const { taskPlan, currentAgent: agent, actions } = props
 
   return h(TaskWorker, {
     taskPlan,
@@ -68,3 +100,10 @@ export default compose(
     actions.router.push(nextRoute)
   }
 })
+
+const hasQueriedTaskWorks = pipe(
+  filter(propEq('service', 'taskWorks')),
+  keys,
+  length,
+  gte(1)
+)

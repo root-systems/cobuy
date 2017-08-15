@@ -1,6 +1,6 @@
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
-import { isEmpty } from 'ramda'
+import { isEmpty, ifElse, is, assoc, prop, map, pipe, __ } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
@@ -15,8 +15,15 @@ module.exports = function () {
 }
 
 const hooks = {
-  before: {},
+  before: {
+    all: [
+      // encodeParams
+    ]
+  },
   after: {
+    all: [
+      decodeParams
+    ],
     create: [
       iff(hasChildTasks, createChildTaskPlans)
     ]
@@ -44,4 +51,31 @@ function createChildTaskPlans (hook) {
     })
   )
   .then(() => hook)
+}
+
+const transformProp = transformer => propName => object => pipe(
+  prop(propName),
+  transformer,
+  assoc(propName, __, object)
+)(object)
+const transformPropMaybeArray = (transformer) => (propName) => {
+  const transform = transformProp(transformer)(propName)
+  return ifElse(is(Array),
+    map(transform),
+    transform
+  )
+}
+
+function encodeParams (hook) {
+  if (hook.data) {
+    hook.data = transformPropMaybeArray(JSON.stringify)('params')(hook.data)
+  }
+  return hook
+}
+
+function decodeParams (hook) {
+  if (hook.result) {
+    hook.result = transformPropMaybeArray(JSON.parse)('params')(hook.result)
+  }
+  return hook
 }

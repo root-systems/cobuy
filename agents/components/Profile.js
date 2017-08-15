@@ -9,18 +9,19 @@ import h from 'react-hyperscript'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/Profile'
-import Button from '../../app/components/Button'
 import AvatarField from '../../app/components/AvatarField'
 
 function Profile (props) {
-  const { styles, isEditing, toggleEdit, agent } = props
-  if (isNil(agent)) return null
-  const { profile } = agent
-  if (isNil(profile)) return null
-  const { name, description, avatar } = profile
+  const { styles, isEditing, toggleEdit, updateProfile, handleSubmit } = props
+
+  const updateProfileAndToggleEdit = (nextProfile) => {
+    toggleEdit()
+    updateProfile(nextProfile)
+  }
 
   return h('form', {
-    className: styles.container
+    className: styles.container,
+    onSubmit: handleSubmit(updateProfileAndToggleEdit)
   }, [
     h('p', {
       className: styles.intro
@@ -39,8 +40,7 @@ function Profile (props) {
         h(Field, {
           name: 'avatar',
           component: AvatarField,
-          isEditingProfile: isEditing,
-          value: avatar
+          isEditingProfile: isEditing
         })
       ]),
       h('div', {
@@ -56,7 +56,6 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          value: name,
           disabled: not(isEditing)
         }),
         h(Field, {
@@ -68,7 +67,6 @@ function Profile (props) {
             })
           ),
           component: TextField,
-          value: description,
           fullWidth: true,
           multiLine: true,
           rowsMax: 5,
@@ -79,22 +77,32 @@ function Profile (props) {
     h('div', {
       className: styles.buttonContainer
     }, [
-      h(RaisedButton, {
+      isEditing
+      ? h(RaisedButton, {
+        className: styles.button,
+        type: 'submit'
+      }, [
+        h(FormattedMessage, {
+          id: 'agents.saveProfile',
+          className: styles.labelText
+        })
+      ])
+      : h(RaisedButton, {
         className: styles.button,
         type: 'button',
-        onClick: () => toggleEdit()
+        onClick: (ev) => {
+          // GK: not entirely clear why this is necessary considering the button type, but preventing default anyway
+          ev.preventDefault()
+          toggleEdit()
+        }
       }, [
-        isEditing
-          ? h(FormattedMessage, {
-            id: 'agents.saveProfile',
-            className: styles.labelText
-          })
-          : h(FormattedMessage, {
-            id: 'agents.editProfile',
-            className: styles.labelText
-          })
+        h(FormattedMessage, {
+          id: 'agents.editProfile',
+          className: styles.labelText
+        })
       ])
     ])
+
   ])
 }
 
@@ -106,10 +114,6 @@ export default compose(
   }),
   connectForm({
     form: 'profile',
-    initialValues: {
-      avatar: 'http://dinosaur.is/images/mikey-small.jpg',
-      name: 'classic nixon',
-      description: "it's classic nixon"
-    }
+    enableReinitialize: true
   })
 )(Profile)

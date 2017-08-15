@@ -1,7 +1,7 @@
 node_modules
 npm-debug.log*
 
-dev.sqlite3
+dev.sqlite
 
 /config/development*
 /config/production*

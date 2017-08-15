@@ -1,42 +1,62 @@
 import { finishPrereqs, setupGroup, setupSupplier } from '../data/recipes'
 
-const agent = {
+const person = {
   id: 1,
   profile: {
     name: 'Sam'
   }
 }
 
+const group = {
+  id: 2,
+  profile: {
+    name: 'Friends Who Buy Together'
+  }
+}
+
 const finishPrereqsTaskPlan = {
   id: 1,
   parentTaskPlanId: null,
-  assignee: 1,
-  taskRecipeId: 'finishPrereqs'
+  assigneeId: person.id,
+  taskRecipeId: 'finishPrereqs',
+  params: {
+    contextAgentId: group.id
+  }
 }
 
 const setupGroupTaskPlan = {
   id: 2,
   parentTaskPlanId: 1,
-  assignee: 1,
-  taskRecipeId: 'setupGroup'
+  assigneeId: person.id,
+  taskRecipeId: 'setupGroup',
+  params: {
+    contextAgentId: group.id
+  }
 }
 
 const setupSupplierTaskPlan = {
   id: 3,
   parentTaskPlanId: 1,
-  assignee: 1,
-  taskRecipeId: 'setupSupplier'
+  assigneeId: person.id,
+  taskRecipeId: 'setupSupplier',
+  params: {
+    contextAgentId: group.id
+  }
 }
 
 const taskWork = {
   id: 1,
   taskPlanId: 1,
   taskRecipeId: 'finishPrereqs',
-  agent
+  actorId: person.id, // TODO
+  params: {
+    contextAgentId: group.id
+  }
 }
 
 const mockAgents = {
-  1: agent
+  1: person,
+  2: group
 }
 
 export const mockTaskPlans = {
@@ -64,50 +84,59 @@ export const mockState = {
 
 export const mockEnhancedTaskPlans = {
   1: {
-     id: 1,
-     parentTaskPlanId: null,
-     assignee: agent,
-     taskRecipeId: 'finishPrereqs',
-     taskRecipe: finishPrereqs
-   },
+    id: 1,
+    parentTaskPlanId: null,
+    assignee: person,
+    taskRecipeId: 'finishPrereqs',
+    taskRecipe: finishPrereqs,
+    params: {
+      contextAgent: group
+    }
+  },
   2: {
-     id: 2,
-     parentTaskPlanId: 1,
-     assignee: agent,
-     taskRecipeId: 'setupGroup',
-     taskRecipe: setupGroup
-   },
+    id: 2,
+    parentTaskPlanId: 1,
+    assignee: person,
+    taskRecipeId: 'setupGroup',
+    taskRecipe: setupGroup,
+    params: {
+      contextAgent: group
+    }
+  },
   3: {
-     id: 3,
-     parentTaskPlanId: 1,
-     assignee: agent,
-     taskRecipeId: 'setupSupplier',
-     taskRecipe: setupSupplier
-   }
- }
+    id: 3,
+    parentTaskPlanId: 1,
+    assignee: person,
+    taskRecipeId: 'setupSupplier',
+    taskRecipe: setupSupplier,
+    params: {
+      contextAgent: group
+    }
+  }
+}
 
 export const mockEnhancedTaskPlansByParentId = { 1:
    [ { id: 2,
        parentTaskPlanId: 1,
-       assignee: agent,
+       assignee: person,
        taskRecipeId: 'setupGroup',
        taskRecipe: setupGroup },
      { id: 3,
        parentTaskPlanId: 1,
-       assignee: agent,
+       assignee: person,
        taskRecipeId: 'setupSupplier',
        taskRecipe: setupSupplier } ],
   null:
    [ { id: 1,
        parentTaskPlanId: null,
-       assignee: agent,
+       assignee: person,
        taskRecipeId: 'finishPrereqs',
        taskRecipe: finishPrereqs } ] }
 
 var mockFullTaskPlanId1 = {
   id: 1,
   parentTaskPlanId: null,
-  assignee: agent,
+  assignee: person,
   taskRecipeId: 'finishPrereqs',
   taskRecipe:
   { id: 'finishPrereqs',
@@ -117,7 +146,7 @@ var mockFullTaskPlanId1 = {
 const mockFullTaskPlanId2 = {
   id: 2,
   parentTaskPlanId: 1,
-  assignee: agent,
+  assignee: person,
   taskRecipeId: 'setupGroup',
   taskRecipe: setupGroup,
   childTaskPlans: [],
@@ -127,7 +156,7 @@ const mockFullTaskPlanId2 = {
 const mockFullTaskPlanId3 = {
   id: 3,
   parentTaskPlanId: 1,
-  assignee: agent,
+  assignee: person,
   taskRecipeId: 'setupSupplier',
   taskRecipe: setupSupplier,
   childTaskPlans: [],

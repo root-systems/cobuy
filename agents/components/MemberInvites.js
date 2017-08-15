@@ -1,17 +1,18 @@
-import PropTypes from 'prop-types'
-import React from 'react'
+import h from 'react-hyperscript'
 import { connect as connectRedux } from 'react-redux'
 import { connect as connectFela } from 'react-fela'
-import { Field, FieldArray, formValueSelector, reduxForm as connectForm } from 'redux-form'
-import { pipe } from 'ramda'
-import { TextField } from 'redux-form-material-ui'
+import { Field, FieldArray, FormSection, formValueSelector, reduxForm as connectForm } from 'redux-form'
+import { pipe, isNil, not } from 'ramda'
+import { TextField, SelectField, Checkbox } from 'redux-form-material-ui'
+import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/MemberInvites'
 
-function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
+function renderMembers ({ fields, meta: { error, submitFailed }, removeMember, formProps }) {
   const { memberVals, styles } = formProps
+
   // TODO: currently this is an anti-pattern as it occurs within the render cycle
   // TODO: mikey's idea was to not push state until the first edit to the empty row
   if (memberVals) {
@@ -23,76 +24,122 @@ function renderMembers ({ fields, meta: { error, submitFailed }, formProps }) {
       }
     }
   }
+
   return (
-    <div className={styles.fieldsContainer}>
-      {submitFailed && error && <span>{error}</span>}
-      {fields.map((member, index) => (
-        <div key={index} className={styles.rowContainer}>
-          <Field
-            name={`${member}.name`}
-            floatingLabelText={
-              <FormattedMessage
-                id='agents.nameLabel'
-                className={styles.labelText}
-              />
-            }
-            component={TextField}
-          />
-          <Field
-            name={`${member}.email`}
-            floatingLabelText={
-              <FormattedMessage
-                id='agents.email'
-                className={styles.labelText}
-              />
-            }
-            component={TextField}
-          />
-          <Field
-            name={`${member}.role`}
-            floatingLabelText={
-              <FormattedMessage
-                id='agents.role'
-                className={styles.labelText}
-              />
-            }
-            component={TextField}
-          />
-          <div className={styles.removeButtonContainer}>
-            <RaisedButton type='button' className={styles.button} onClick={() => fields.remove(index)}>
-              <FormattedMessage
-                id='agents.removeMember'
-                className={styles.buttonText}
-              />
-            </RaisedButton>
-          </div>
-        </div>
-      )
-    )}
-      <div className={styles.addButtonContainer}>
-        <RaisedButton type='button' className={styles.button} onClick={() => fields.push({})}>
-          <FormattedMessage
-            id='agents.addMember'
-            className={styles.buttonText}
-          />
-        </RaisedButton>
-      </div>
-    </div>
+    h('div', {
+      className: styles.fieldsContainer
+    }, [
+      submitFailed && error && h('span', error),
+      fields.map((member, index) => (
+        h('div', {
+          key: index,
+          className: styles.rowContainer
+        }, [
+          h(Field, {
+            name: `${member}.agent.profile.name`,
+            floatingLabelText: (
+              h(FormattedMessage, {
+                id: 'agents.nameLabel',
+                className: styles.labelText
+              })
+            ),
+            component: TextField
+          }),
+          h(Field, {
+            name: `${member}.agent.credential.email`,
+            floatingLabelText: (
+              h(FormattedMessage, {
+                id: 'agents.email',
+                className: styles.labelText
+              })
+            ),
+            component: TextField
+          }),
+          h(Field, {
+            name: `${member}.roles.admin`,
+            floatingLabelText: (
+              h(FormattedMessage, {
+                id: 'agents.admin',
+                className: styles.labelText
+              })
+            ),
+            component: Checkbox
+          }),
+          h('div', {
+            className: styles.removeButtonContainer
+          }, [
+            h(RaisedButton, {
+              type: 'button',
+              className: styles.button,
+              onClick: () => {
+                const memberVal = memberVals[index]
+                const { agentId } = memberVal
+                fields.remove(index)
+                if (not(isNil(agentId))) removeMember(agentId)
+              }
+            }, [
+              h(FormattedMessage, {
+                id: 'agents.removeMember',
+                className: styles.buttonText
+              })
+            ])
+          ])
+        ])
+      )),
+      h('div', {
+        className: styles.addButtonContainer
+      }, [
+        h(RaisedButton, {
+          type: 'button',
+          className: styles.button,
+          onClick: () => fields.push({})
+        }, [
+          h(FormattedMessage, {
+            id: 'agents.addMember',
+            className: styles.buttonText
+          })
+        ])
+      ])
+    ])
   )
 }
 
 function MemberInvites (props) {
-  const { styles } = props
+  const { styles, removeMember, createMembers, handleSubmit } = props
+
   return (
-    <form className={styles.container}>
-      <p className={styles.intro}>
-        <FormattedMessage
-          id='agents.memberInvites'
-          className={styles.labelText}
-        />
-      </p>
-      <FieldArray name='members' component={renderMembers} formProps={props} />
-    </form>
+    h('form', {
+      className: styles.container,
+      onSubmit: handleSubmit(createMembers)
+    }, [
+      h('p', {
+        className: styles.intro
+      }, [
+        h(FormattedMessage, {
+          id: 'agents.memberInvites',
+          className: styles.labelText
+        })
+      ]),
+      h(FieldArray, {
+        name: 'members',
+        component: renderMembers,
+        removeMember,
+        formProps: props
+      }),
+      h('div', {
+        className: styles.addButtonContainer
+      }, [
+        h(RaisedButton, {
+          type: 'submit',
+          className: styles.button
+        }, [
+          h(FormattedMessage, {
+            id: 'agents.inviteMembers',
+            className: styles.buttonText
+          })
+        ])
+      ])
+    ])
   )
 }
 
@@ -101,7 +148,8 @@ const selector = formValueSelector('memberInvites')
 export default pipe(
   connectFela(styles),
   connectForm({
-    form: 'memberInvites'
+    form: 'memberInvites',
+    enableReinitialize: true
   }),
   connectRedux(
     state => ({

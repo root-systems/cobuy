@@ -11,11 +11,20 @@ const getEnhancedTaskPlans = createSelector(
   getAgents,
   (taskPlans, taskRecipes, agents) => {
     const enhanceTaskPlan = (taskPlan) => {
-      const taskRecipe = taskRecipes[taskPlan.taskRecipeId]
-      const assignee = agents[taskPlan.assigneeId]
+      const { taskRecipeId, assigneeId, params } = taskPlan
+      const taskRecipe = taskRecipes[taskRecipeId]
+      const assignee = agents[assigneeId]
+
+      const { contextAgentId } = params
+      const contextAgent = agents[contextAgentId]
+      const nextParams = merge(params, {
+        contextAgent
+      })
+
       return merge(taskPlan, {
         taskRecipe,
-        assignee
+        assignee,
+        params: nextParams
       })
     }
     return map(enhanceTaskPlan, taskPlans)
