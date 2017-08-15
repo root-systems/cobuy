@@ -1,7 +1,7 @@
 {
   "id": "/tasks/taskPlan",
   "title": "Task Plan",
-  "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED",
+  "description": "An assignment of the task to an agent",
   "type": "object",
   "properties": {
     "id": {
@@ -17,13 +17,13 @@
       "description": "Person or group or related agents (e.g. admins) being assigned"
     },
     "taskRecipeId": {
-        "$ref": "/tasks/taskRecipe#/definitions/id",
-        "description": "WILL NEED TO FILL IN ONCE #125 HAS BEEN ANSWERED"
+      "$ref": "/tasks/taskRecipe#/definitions/id",
+      "description": "Task recipe that this taask plan is related to"
     },
-      "params": {
-        "type": "object",
-        "description": ""
-      }
+    "params": {
+      "type": "object",
+      "description": "Util paramaters"
+    }
   },
   "required": [
     "assigneeId",

@@ -5,16 +5,12 @@ const ajv = require('ajv')
 const { validateSchema } = require('feathers-hooks-common')
 const schema = require('../schemas/taskRecipe')
 
-let hookBefore
-
-test.beforeEach(t => {
-  hookBefore = {
-    type: 'before',
-    method: 'create',
-    params: { provider: 'rest' },
-    data: mock.mockTaskRecipes.finishPrereqs
-  }
-})
+const hookBefore = {
+  type: 'before',
+  method: 'create',
+  params: { provider: 'rest' },
+  data: mock.mockTaskRecipes.finishPrereqs
+}
 
 test('works with simple recipe', (t) => {
   try {
@@ -29,14 +25,35 @@ test('works with simple recipe', (t) => {
 })
 
 test('fails with incorrect id', (t) => {
-  hookBefore.data.id = 'incorrectId'
-
+  let hookBeforeLocal = Object.assign({}, hookBefore, {
+    data: {
+      ...hookBefore.data,
+      id: 'incorrectId'
+    }
+  })
   try {
-    validateSchema(schema, ajv)(hookBefore)
+    validateSchema(schema, ajv)(hookBeforeLocal)
     t.fail('validation passed unexpectedly')
   } catch (err) {
     t.deepEqual(err.errors, [
       "'id' should be equal to one of the allowed values"
+    ])
+  }
+})
+
+test('fails when child task recipes are invalid', (t) => {
+  let hookBeforeLocal = Object.assign({}, hookBefore, {
+    data: {
+      ...hookBefore.data,
+      childTaskRecipes: [{}]
+    }
+  })
+  try {
+    validateSchema(schema, ajv)(hookBeforeLocal)
+    t.fail('validation passed unexpectedly')
+  } catch (err) {
+    t.deepEqual(err.errors, [
+      "'childTaskRecipes[0]' should have required property 'id'"
     ])
   }
 })
