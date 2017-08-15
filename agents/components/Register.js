@@ -7,7 +7,7 @@ import { TextField } from 'redux-form-material-ui'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
-import { required, email, length, confirmation } from 'redux-form-validators'
+import { required, email, length, confirmation } from '@root-systems/redux-form-validators'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/Register'
