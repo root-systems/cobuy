@@ -1,5 +1,6 @@
 import SetupGroupTask from '../containers/SetupGroupTask'
 import SetupSupplierTask from '../components/SetupSupplierTask'
+import CreateProfileTask from '../containers/CreateProfileTask'
 
 export const setupGroup = {
   id: 'setupGroup',
@@ -19,4 +20,10 @@ export const finishPrereqs = {
     setupGroup,
     setupSupplier
   ]
+}
+
+export const createProfile = {
+  id: 'createProfile',
+  Component: CreateProfileTask,
+  childTaskRecipes: []
 }

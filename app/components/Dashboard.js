@@ -11,7 +11,7 @@ import DashboardOrders from '../../ordering/components/DashboardOrders'
 import { mockFullParentTaskPlan } from '../../tasks/data/mock'
 
 function Dashboard (props) {
-  const { styles, actions, taskPlans } = props
+  const { styles, actions, taskPlans, currentAgent } = props
 
   return (
     <div className={styles.container}>
@@ -26,7 +26,11 @@ function Dashboard (props) {
       </div>
       <Divider className={styles.divider} />
       <div className={styles.tasksContainer}>
-        <DashboardTasks taskPlans={taskPlans} />
+        <DashboardTasks
+          taskPlans={taskPlans}
+          actions={actions}
+          currentAgent={currentAgent}
+        />
       </div>
     </div>
   )

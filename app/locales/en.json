@@ -50,6 +50,7 @@
   "tasks.cancelTask": "cancel",
   "tasks.recipes.finishPrereqs": "finish pre-requisites for ordering",
   "tasks.recipes.setupGroup": "setup group profile and members",
+  "tasks.recipes.createProfile": "create your profile",
   "tasks.steps.groupProfile": "enter your group profile information",
   "tasks.steps.memberInvites": "invite group members",
   "tasks.recipes.setupSupplier": "setup supplier profile and products"

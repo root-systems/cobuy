@@ -1,9 +1,11 @@
 import { createSelector } from 'reselect'
-import { map, merge } from 'ramda'
+import { map, merge, defaultTo, isNil } from 'ramda'
 
 import { getAgents } from 'dogstack-agents/getters'
 import getRawTaskPlans from './getRawTaskPlans'
 import getRawTaskRecipes from './getRawTaskRecipes'
+
+const defaultToEmptyObject = defaultTo({})
 
 const getEnhancedTaskPlans = createSelector(
   getRawTaskPlans,
@@ -11,12 +13,15 @@ const getEnhancedTaskPlans = createSelector(
   getAgents,
   (taskPlans, taskRecipes, agents) => {
     const enhanceTaskPlan = (taskPlan) => {
-      const { taskRecipeId, assigneeId, params } = taskPlan
+      const { taskRecipeId, assigneeId } = taskPlan
+      const params = defaultToEmptyObject(taskPlan.params)
       const taskRecipe = taskRecipes[taskRecipeId]
       const assignee = agents[assigneeId]
 
       const { contextAgentId } = params
-      const contextAgent = agents[contextAgentId]
+      const contextAgent = isNil(contextAgentId)
+        ? null
+        : agents[contextAgentId]
       const nextParams = merge(params, {
         contextAgent
       })

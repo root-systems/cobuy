@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
-import { pipe, map, values } from 'ramda'
+import { pipe, map, values, isNil } from 'ramda'
 import RaisedButton from 'material-ui/RaisedButton'
 import { List, ListItem } from 'material-ui/List'
 import { Link } from 'react-router-dom'
@@ -9,7 +9,9 @@ import styles from '../styles/DashboardTasks'
 import { FormattedMessage } from '../../lib/Intl'
 
 function DashboardTasks (props) {
-  const { styles, taskPlans = {} } = props
+  const { styles, taskPlans = {}, actions, currentAgent } = props
+
+  if (isNil(currentAgent)) { return null }
 
   const renderChildTask = (childTaskPlan) => {
     return (
@@ -40,6 +42,12 @@ function DashboardTasks (props) {
   }
   const renderParentTasks = pipe(map(renderParentTask), values)
 
+  const createProfileTaskPlan = {
+    assigneeId: currentAgent.id,
+    taskRecipeId: 'createProfile',
+    params: {}
+  }
+
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
@@ -48,6 +56,9 @@ function DashboardTasks (props) {
           className={styles.labelText}
         />
       </p>
+      <RaisedButton onClick={ () => { actions.taskPlans.create(createProfileTaskPlan) }}>
+        Create a create profile task plan, yo
+      </RaisedButton>
       <List>
         {renderParentTasks(taskPlans)}
       </List>
