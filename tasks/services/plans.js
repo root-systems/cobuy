@@ -6,7 +6,6 @@ const taskPlanSchema = require('../schemas/taskPlan')
 const taskRecipeSchema = require('../schemas/taskRecipe')
 const ajv = new Ajv({$data: true})
 ajv.addSchema([taskRecipeSchema, taskPlanSchema])
-import { isEmpty } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
@@ -22,13 +21,9 @@ module.exports = function () {
 
 const hooks = {
   before: {
-    all: [
-      // encodeParams
-    ],
-    create: [
-      logEvent,
-      validateSchema(taskPlanSchema, ajv)
-    ]
+    create: [validateSchema(taskPlanSchema, ajv), encodeParams],
+    update: [validateSchema(taskPlanSchema, ajv), encodeParams],
+    patch: [validateSchema(taskPlanSchema, ajv), encodeParams]
   },
   after: {
     all: [
@@ -56,11 +51,11 @@ function createChildTaskPlans (hook) {
         parentTaskPlanId: hook.result.id,
         assigneeId: hook.data.assigneeId,
         taskRecipeId: childTaskRecipe.id,
-        params: hook.data.params
+        params: hook.result.params
       })
     })
   )
-  .then(() => hook)
+    .then(() => hook)
 }
 
 const transformProp = transformer => propName => object => pipe(
@@ -87,8 +82,4 @@ function decodeParams (hook) {
   if (hook.result) {
     hook.result = transformPropMaybeArray(JSON.parse)('params')(hook.result)
   }
-}
-function logEvent (hook) {
-  console.log(hook.data)
-  return hook
 }
