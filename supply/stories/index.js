@@ -1,1 +1,2 @@
 require ('./Offerings')
+require ('./Product')
