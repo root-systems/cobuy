@@ -42,12 +42,6 @@ function DashboardTasks (props) {
   }
   const renderParentTasks = pipe(map(renderParentTask), values)
 
-  const createProfileTaskPlan = {
-    assigneeId: currentAgent.id,
-    taskRecipeId: 'createProfile',
-    params: {}
-  }
-
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
@@ -56,9 +50,6 @@ function DashboardTasks (props) {
           className={styles.labelText}
         />
       </p>
-      <RaisedButton onClick={ () => { actions.taskPlans.create(createProfileTaskPlan) }}>
-        Create a create profile task plan, yo
-      </RaisedButton>
       <List>
         {renderParentTasks(taskPlans)}
       </List>
