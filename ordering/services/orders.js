@@ -22,7 +22,8 @@ const hooks = {
   },
   after: {
     create: [
-      iff(hasOneOrder, createPrereqTaskPlan)
+      iff(hasOneOrder, createPrereqTaskPlan),
+      iff(hasNoSupplierAgent, createSupplierAgent)
     ]
   },
   error: {}
@@ -65,4 +66,18 @@ function createPrereqTaskPlan (hook) {
   .then(() => {
     return hook
   })
+}
+
+function createSupplierAgent (hook) {
+  // const agents = hook.app.service('agents')
+  // return agents.create({ type: 'group' })
+  // .then((agent) => {
+  //   hook.data.agentId = agent.id
+  //   return hook
+  // })
+}
+
+function hasNoSupplierAgent (hook) {
+  console.log(hook.data)
+  // return isNil(hook.data.agentId)
 }

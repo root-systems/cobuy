@@ -31,7 +31,6 @@ export default (props) => {
     {
       id: 'tasks.steps.groupProfile',
       content: h(Profile, {
-        initialValues: profile,
         updateProfile: (nextProfile) => {
           actions.profiles.update(profile.id, merge(nextProfile, { agentId: contextAgent.id }))
         }
