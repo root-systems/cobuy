@@ -81,12 +81,13 @@ export default compose(
     }
   })
 )(props => {
-  const { taskPlan, currentAgent: agent, actions } = props
+  const { taskPlan, currentAgent, actions } = props
 
   return h(TaskWorker, {
     taskPlan,
     onNavigate: handleNavigate,
-    onCancel: handleCancel
+    onCancel: handleCancel,
+    onComplete: handleComplete
   })
 
   function handleNavigate (taskPlan) {
@@ -97,6 +98,24 @@ export default compose(
     const { parentTaskPlan } = taskPlan
     const nextRoute = isNil(parentTaskPlan)
       ? '/' : `/tasks/${parentTaskPlan.id}`
+    actions.router.push(nextRoute)
+  }
+
+  function handleComplete (taskplan) {
+    const { parentTaskPlan } = taskPlan
+    const nextRoute = isNil(parentTaskPlan)
+      ? '/' : `/tasks/${parentTaskPlan.id}`
+
+    const taskWork = {
+      taskPlanId: taskPlan.id,
+      taskRecipeId: taskplan.taskRecipeId,
+      workerAgentId: currentAgent.id,
+      params: {
+        // contextAgentId: group.id
+      }
+    }
+
+    actions.taskWorks.create(taskWork)
     actions.router.push(nextRoute)
   }
 })
