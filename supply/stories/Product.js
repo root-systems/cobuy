@@ -5,24 +5,15 @@ import { action } from '@storybook/addon-actions'
 
 import Product from '../components/Product'
 
-const ProductForm = props => {
-  const { handleSubmit } = props
-  return (
-    h('form', {
-      onSubmit: handleSubmit
-    }, [
-      h(Product, {})
-    ])
-  )
+const product = {
+  resourceType: undefined,
+  prices: []
 }
-const ConnectedProductForm = reduxForm({
-  form: 'product',
-  initialValues: {}
-})(ProductForm)
 
 storiesOf('supply.Product', module)
   .add('basic', () => (
-    h(ConnectedProductForm, {
+    h(Product, {
+      product,
       onSubmit: action('submit')
     })
   ))
