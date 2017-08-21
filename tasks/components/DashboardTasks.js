@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
-import { pipe, map, values } from 'ramda'
+import { pipe, map, values, isNil } from 'ramda'
 import RaisedButton from 'material-ui/RaisedButton'
 import { List, ListItem } from 'material-ui/List'
 import { Link } from 'react-router-dom'
@@ -9,7 +9,9 @@ import styles from '../styles/DashboardTasks'
 import { FormattedMessage } from '../../lib/Intl'
 
 function DashboardTasks (props) {
-  const { styles, taskPlans = {} } = props
+  const { styles, taskPlans = {}, actions, currentAgent } = props
+
+  if (isNil(currentAgent)) { return null }
 
   const renderChildTask = (childTaskPlan) => {
     return (
