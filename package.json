@@ -103,6 +103,6 @@
     "deep-freeze": "^0.0.1",
     "dependency-check": "^2.8.0",
     "precinct": "^3.6.0",
-    "sqlite3": "^3.1.8"
+    "sqlite3": "3.1.8"
   }
 }
