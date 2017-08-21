@@ -88,7 +88,6 @@ export default compose(
 
       // re-query when we haven't gotten back contextAgent or taskWork
       const contextAgent = getContextAgentFromTaskPlan(taskPlan)
-
       if (isNil(contextAgent)) return true
       if (anyMembersAreNil(contextAgent)) {
         return true
