@@ -17,13 +17,13 @@ module.exports = function () {
 const hooks = {
   before: {
     create: [
-      iff(hasNoGroupAgent, createGroupAgent)
+      iff(hasNoGroupAgent, createGroupAgent),
+      iff(hasNoSupplierAgent, createSupplierAgent)
     ]
   },
   after: {
     create: [
-      iff(hasOneOrder, createPrereqTaskPlan),
-      iff(hasNoSupplierAgent, createSupplierAgent)
+      iff(hasOneOrder, createPrereqTaskPlan)
     ]
   },
   error: {}
@@ -33,21 +33,21 @@ function createGroupAgent (hook) {
   const agents = hook.app.service('agents')
   return agents.create({ type: 'group' })
   .then((agent) => {
-    hook.data.agentId = agent.id
+    hook.data.consumerAgentId = agent.id
     return hook
   })
 }
 
 function hasNoGroupAgent (hook) {
-  return isNil(hook.data.agentId)
+  return isNil(hook.data.consumerAgentId)
 }
 
 const hasLengthOne = pipe(length, equals(1))
 
 function hasOneOrder (hook) {
   const orders = hook.app.service('orders')
-  const agentId = hook.data.agentId
-  return orders.find({ query: { agentId } })
+  const consumerAgentId = hook.data.consumerAgentId
+  return orders.find({ query: { consumerAgentId } })
   .then(hasLengthOne)
 }
 
@@ -69,15 +69,14 @@ function createPrereqTaskPlan (hook) {
 }
 
 function createSupplierAgent (hook) {
-  // const agents = hook.app.service('agents')
-  // return agents.create({ type: 'group' })
-  // .then((agent) => {
-  //   hook.data.agentId = agent.id
-  //   return hook
-  // })
+  const agents = hook.app.service('agents')
+  return agents.create({ type: 'supplier' })
+  .then((agent) => {
+    hook.data.supplierAgentId = agent.id
+    return hook
+  })
 }
 
 function hasNoSupplierAgent (hook) {
-  console.log(hook.data)
-  // return isNil(hook.data.agentId)
+  return isNil(hook.data.supplierAgentId)
 }
