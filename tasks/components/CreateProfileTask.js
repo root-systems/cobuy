@@ -1,5 +1,6 @@
-import React from 'react'
+import h from 'react-hyperscript'
 import { isNil } from 'ramda'
+
 import Profile from '../../agents/components/Profile'
 
 export default (props) => {
@@ -9,10 +10,10 @@ export default (props) => {
     return null
   }
 
-  return <Profile
-    initialValues={currentAgent.profile}
-    updateProfile={ (nextProfile) => {
+  return h(Profile, {
+    initialValues: currentAgent.profile,
+    updateProfile: (nextProfile) => {
       actions.profiles.update(currentAgent.profile.id, nextProfile)
-    } }
-  />
+    }
+  })
 }
