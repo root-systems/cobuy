@@ -55,6 +55,7 @@
   "dependencies": {
     "@ahdinosaur/react-fela": "^4.3.5",
     "@f/create-action": "^1.1.1",
+    "@root-systems/redux-form-validators": "^1.1.0",
     "babel-plugin-ramda": "^1.2.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
@@ -70,6 +71,7 @@
     "feathers-errors": "^2.6.2",
     "feathers-hooks-common": "^3.0.0",
     "feathers-knex": "^2.6.3",
+    "feathers-mailer": "^2.0.0",
     "fela": "^5.0.1",
     "material-ui": "^0.18.3",
     "passport-github": "^1.1.0",
@@ -90,7 +92,6 @@
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^6.6.0",
     "redux-form-material-ui": "^4.2.0",
-    "@root-systems/redux-form-validators": "^1.1.0",
     "redux-fp": "^0.2.0",
     "redux-observable": "^0.14.1",
     "reselect": "^3.0.0",
