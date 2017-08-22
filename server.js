@@ -4,7 +4,7 @@ const services = [
   require('./tasks/services/works'),
   require('./ordering/services/orders'),
   require('./agents/services/agents'),
-  require('./notifications/services/notifications')
+  require('./notifications/services/mailer')
 ]
 
 export default {
