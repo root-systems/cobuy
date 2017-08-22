@@ -1,7 +1,7 @@
 import h from 'react-hyperscript'
 import { isNil, pipe, filter, keys, length, gte, propEq, not } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
-import { compose } from 'recompose'
+import { compose, lifecycle, withState, withHandlers } from 'recompose'
 import { push } from 'react-router-redux'
 
 import { actions as taskPlans } from '../dux/plans'
@@ -79,9 +79,26 @@ export default compose(
 
       return false
     }
+  }),
+  withState('createTaskWorkerCid', 'editTaskWorkerCid', null),
+  withHandlers({
+    setTaskWorkerId: ({ editTaskWorkerCid }) => (cId) => editTaskWorkerCid(cId)
+  }),
+  lifecycle({
+    componentWillReceiveProps: function (nextProps) {
+      if (!isNil(nextProps.createTaskWorkerCid) &&
+        nextProps.feathersData[nextProps.createTaskWorkerCid].isReady &&
+        isNil(nextProps.feathersData[nextProps.createTaskWorkerCid].error)
+      ) {
+        const { parentTaskPlan } = nextProps.taskPlan
+        const nextRoute = isNil(parentTaskPlan)
+          ? '/' : `/tasks/${parentTaskPlan.id}`
+        nextProps.actions.router.push(nextRoute)
+      }
+    }
   })
 )(props => {
-  const { taskPlan, currentAgent, actions } = props
+  const { taskPlan, currentAgent, actions, setTaskWorkerId } = props
 
   return h(TaskWorker, {
     taskPlan,
@@ -102,10 +119,6 @@ export default compose(
   }
 
   function handleComplete (taskplan) {
-    const { parentTaskPlan } = taskPlan
-    const nextRoute = isNil(parentTaskPlan)
-      ? '/' : `/tasks/${parentTaskPlan.id}`
-
     const taskWork = {
       taskPlanId: taskPlan.id,
       taskRecipeId: taskplan.taskRecipeId,
@@ -115,8 +128,7 @@ export default compose(
       }
     }
 
-    actions.taskWorks.create(taskWork)
-    actions.router.push(nextRoute)
+    setTaskWorkerId(actions.taskWorks.create(taskWork))
   }
 })
 
