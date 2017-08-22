@@ -26,7 +26,8 @@ const hooks = {
   },
   after: {
     create: [
-      iff(hasOneOrder, createPrereqTaskPlan)
+      iff(hasOneOrder, createPrereqTaskPlan),
+      createCastIntentTaskPlan
     ]
   },
   error: {}
@@ -135,4 +136,22 @@ function createSupplierAgent (hook) {
 
 function hasNoSupplierAgent (hook) {
   return isNil(hook.data.supplierAgentId)
+}
+
+function createCastIntentTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const taskRecipeId = taskRecipes.castIntent.id
+
+  // TODO: add beforeAll hook to get agent
+  // const assigneeId = hook.params.agent.id
+
+  const assigneeId = hook.params.credential.agentId
+  const params = JSON.stringify({
+    contextAgentId: hook.data.agentId
+  })
+
+  return taskPlans.create({ taskRecipeId, params, assigneeId })
+  .then(() => {
+    return hook
+  })
 }
