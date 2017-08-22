@@ -4,7 +4,9 @@
   "description": "Helping people buy good food at good prices, together.",
   "scripts": {
     "start": "dog server",
-    "dev": "dog dev server",
+    "dev:app": "dog dev server",
+    "dev:mail": "maildev",
+    "dev": "npm-run-all -p dev:*",
     "debug": "DEBUG=*,-babel dog dev server",
     "lint": "dog lint",
     "test": "dog test",
@@ -74,6 +76,7 @@
     "feathers-mailer": "^2.0.0",
     "fela": "^5.0.1",
     "material-ui": "^0.18.3",
+    "nodemailer": "^4.0.1",
     "passport-github": "^1.1.0",
     "pg": "^6.1.5",
     "ramda": "^0.23.0",
@@ -103,6 +106,8 @@
     "@storybook/react": "^3.1.3",
     "deep-freeze": "^0.0.1",
     "dependency-check": "^2.8.0",
+    "maildev": "^1.0.0-rc3",
+    "npm-run-all": "^4.0.2",
     "precinct": "^3.6.0",
     "sqlite3": "3.1.8"
   }

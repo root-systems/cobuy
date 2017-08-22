@@ -1,12 +1,15 @@
-const feathersKnex = require('feathers-knex')
+const feathersMailer = require('feathers-mailer')
+const nodemailer = require('nodemailer')
+
+// TODO: some flag for dev vs prod, prod we probably want Mandrill transport or something similar
+const mailerConfig = require(`../../config/${process.env.NODE_ENV}`).mailer
+const dummyTransport = nodemailer.createTransport(mailerConfig)
 
 module.exports = function () {
   const app = this
   const db = app.get('db')
 
   const name = 'notifications'
-  const options = { Model: db, name }
 
-  app.use(name, feathersKnex(options))
-  // app.service(name).hooks(hooks)
+  app.use(name, feathersMailer(dummyTransport))
 }
