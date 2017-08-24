@@ -5,16 +5,22 @@ import { reduxForm, FieldArray, Field } from 'redux-form'
 import { SelectField, TextField } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
-import { merge } from 'ramda'
+import { merge, pipe, prop } from 'ramda'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/PriceSpecsEditor'
 
 const PriceSpecsEditor = (props) => {
-  const { resourceType = {} } = props
+  const {
+    resourceType,
+    priceSpecs
+  } = props
   const { id = 'tmp' } = resourceType
   const nextProps = merge(props, {
-    form: `priceSpecs-${id}`
+    form: `priceSpecs-${id}`,
+    initialValues: {
+      priceSpecs
+    }
   })
   return h(PriceSpecsForm, nextProps)
 }
@@ -25,10 +31,13 @@ const PriceSpecsForm = compose(
   connectFela(styles),
   reduxForm({})
 )(props => {
-  const { styles, handleSubmit, priceSpecs } = props
+  const { styles, resourceType, handleSubmit, onSubmit } = props
   return (
     h('form', {
-      onSubmit: handleSubmit,
+      onSubmit: handleSubmit(pipe(
+        prop('priceSpecs'),
+        onSubmit
+      )),
       className: styles.container
     }, [
       h('p', {
@@ -40,25 +49,37 @@ const PriceSpecsForm = compose(
         })
       ]),
       h(FieldArray, {
+        name: 'priceSpecs',
         component: PriceSpecs,
-        styles
-      })
+        styles,
+        resourceType
+      }),
+      h(RaisedButton, {
+        type: 'submit',
+        className: styles.submitButton
+      }, [
+        h(FormattedMessage, {
+          id: 'supply.savePriceSpecs',
+          className: styles.buttonText
+        })
+      ])
     ])
   )
 })
 
 const PriceSpecs = (props) => {
-  const { fields, styles } = props
+  const { styles, resourceType, fields } = props
   return (
     h('div', {
       className: styles.priceSpecsContainer
     }, [
-      fields.map((priceSpec, index) => (
+      fields.map((field, index) => (
         h(PriceSpec, {
           key: index,
-          priceSepc,
-          removePriceSpec: () => fields.remove(index),
-          styles
+          field,
+          removeField: () => fields.remove(index),
+          styles,
+          resourceType
         })
       )),
       h(RaisedButton, {
@@ -76,46 +97,66 @@ const PriceSpecs = (props) => {
 }
 
 const PriceSpec = (props) => {
-  const { styles, priceSpec, removePriceSpec } = props
+  const { styles, resourceType, field, removeField } = props
 
   return (
     h('div', {
       className: styles.priceSpecContainer
     }, [
       h(Field, {
-        name: `${priceSpec}.price`,
-        floatingTextLabel: (
+        name: `${field}.minimum`,
+        component: TextField,
+        floatingLabelText: (
+          h(FormattedMessage, {
+            id: 'quantity.minimum',
+            className: styles.labelText
+          })
+        )
+      }),
+      h(TextField, {
+        value: resourceType.unit,
+        floatingLabelText: (
+          h(FormattedMessage, {
+            id: 'quantity.unit',
+            className: styles.labelText
+          })
+        ),
+        disabled: true
+      }),
+      h(Field, {
+        name: `${field}.price`,
+        component: TextField,
+        floatingLabelText: (
           h(FormattedMessage, {
             id: 'supply.price',
             className: styles.labelText
           })
-        ),
-        component: TextField
+        )
       }),
       h(Field, {
-        name: `${price}.currency`,
-        floatingTextLabel: (
+        name: `${field}.currency`,
+        component: SelectField,
+        floatingLabelText: (
           h(FormattedMessage, {
             id: 'supply.currency',
             className: styles.labelText
           })
-        ),
-        component: SelectField
-      }),
-      h(Field, {
-        name: `${price}.minimum`,
-        floatingTextLabel: (
-          h(FormattedMessage, {
-            id: 'supply.minimum',
-            className: styles.labelText
-          })
-        ),
-        component: TextField
-      }),
+        )
+      }, [
+        h(MenuItem, {
+          value: 'nzd',
+          primaryText: (
+            h(FormattedMessage, {
+              id: 'currency.nzd',
+              className: styles.labelText
+            })
+          )
+        })
+      ]),
       h(RaisedButton, {
         type: 'button',
         className: styles.removePriceSpecButton,
-        onClick: () => removePriceSpec()
+        onClick: () => removeField()
       }, [
         h(FormattedMessage, {
           id: 'supply.removePriceSpec',
