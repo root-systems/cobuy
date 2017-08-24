@@ -1,7 +1,6 @@
 import h from 'react-hyperscript'
-import { connect as connectRedux } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { pipe, values, map, merge } from 'ramda'
+import { pipe, values, map, merge, propOr, length, gte, __ } from 'ramda'
 import { withState, compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import { reduxForm as connectForm, Field, FieldArray } from 'redux-form'
@@ -19,7 +18,8 @@ const ResourceTypeEditor = compose(
   const { resourceType = {} } = props
   const { id = 'tmp' } = resourceType
   const nextProps = merge(props, {
-    form: `resourceType-${id}`
+    form: `resourceType-${id}`,
+    initialValues: resourceType
   })
   return h(ResourceTypeForm, nextProps)
 })
@@ -28,11 +28,9 @@ export default ResourceTypeEditor
 
 const ResourceTypeForm = compose(
   connectForm({}),
-  // an atom is not reducible
-  // a tree is reducible (is composed of atoms)
-  withState('isReducible', 'setReducible', false),
 )(props => {
-  const { styles, handleSubmit, setReducible, isReducible } = props
+  const { styles, handleSubmit } = props
+
   return h('form', {
     className: styles.container,
     onSubmit: handleSubmit
@@ -47,7 +45,7 @@ const ResourceTypeForm = compose(
       ),
       component: TextField
     }),
-    h(ResourceTypeContains, { styles, setReducible, isReducible }),
+    h(ResourceTypeContains, props),
     h(RaisedButton, {
       type: 'submit',
       className: styles.submitButton
@@ -60,8 +58,17 @@ const ResourceTypeForm = compose(
   ])
 })
 
-const ResourceTypeContains = (props) => {
-  const { styles, setReducible, isReducible } = props
+const ResourceTypeContains = compose(
+  // an atom is not reducible
+  // a tree is reducible (is composed of atoms)
+  withState('isReducible', 'setReducible', pipe(
+    propOr({}, 'initialValues'),
+    propOr([], 'items'),
+    length,
+    gte(__, 1)
+  ))
+)(props => {
+  const { styles, setReducible, isReducible, resourceTypes } = props
 
   return h('div', {
     className: styles.contains
@@ -104,24 +111,26 @@ const ResourceTypeContains = (props) => {
       h(FieldArray, {
         name: 'items',
         component: ResourceTypeItemList,
-        styles
+        styles,
+        resourceTypes
       })
     )
   ])
-}
+})
 
 const ResourceTypeItemList = (props) => {
-  const { styles, fields } = props
+  const { styles, fields, resourceTypes } = props
 
   return h('div', {
     className: styles.itemListContainer
   }, [
-    fields.map((item, index) => (
+    fields.map((field, index) => (
       h(ResourceTypeItem, {
         key: index,
         styles,
-        item,
-        removeItem: () => fields.remove(index)
+        field,
+        resourceTypes,
+        removeField: () => fields.remove(index)
       })
     )),
     h('div', {
@@ -142,13 +151,13 @@ const ResourceTypeItemList = (props) => {
 }
 
 function ResourceTypeItem (props) {
-  const { styles, item, removeItem } = props
+  const { styles, field, removeField } = props
 
   return h('div', {
     className: styles.itemContainer
   }, [
     h(Field, {
-      name: `${item}.quantity.value`,
+      name: `${field}.quantity.value`,
       component: TextField,
       floatingLabelText: (
         h(FormattedMessage, {
@@ -158,7 +167,7 @@ function ResourceTypeItem (props) {
       )
     }),
     h(Field, {
-      name: `${item}.quantity.unit`,
+      name: `${field}.quantity.unit`,
       component: SelectField,
       floatingLabelText: (
         h(FormattedMessage, {
@@ -171,7 +180,7 @@ function ResourceTypeItem (props) {
         value: 'kg',
         primaryText: (
           h(FormattedMessage, {
-            id: 'supply.kg',
+            id: 'unit.kg',
             className: styles.labelText
           })
         )
@@ -180,7 +189,7 @@ function ResourceTypeItem (props) {
         value: 'litres',
         primaryText: (
           h(FormattedMessage, {
-            id: 'supply.litres',
+            id: 'unit.litres',
             className: styles.labelText
           })
         )
@@ -189,7 +198,7 @@ function ResourceTypeItem (props) {
         value: 'each',
         primaryText: (
           h(FormattedMessage, {
-            id: 'supply.each',
+            id: 'unit.each',
             className: styles.labelText
           })
         )
@@ -213,23 +222,16 @@ function ResourceTypeItem (props) {
   ])
 }
 
-const getResourceTypes = () => ({ 1: { id: 1, name: 'egg' }, 2: { id: 2, name: 'carton' } })
-const ResourceTypeItemSelectField = compose(
-  connectRedux(
-    createStructuredSelector({
-      resourceTypes: getResourceTypes
-    })
-  )
-)(props => {
-  const { item, styles, resourceTypes } = props
+const ResourceTypeItemSelectField = props => {
+  const { field, styles, resourceTypes } = props
 
   return (
     h(Field, {
-      name: `${item}.resourceTypeId`,
+      name: `${field}.resourceTypeId`,
       component: SelectField,
       floatingLabelText: (
         h(FormattedMessage, {
-          id: 'supply.resourceType',
+          id: 'resource.resourceType',
           className: styles.labelText
         })
       )
@@ -237,7 +239,7 @@ const ResourceTypeItemSelectField = compose(
       renderResourceTypeMenuItems(resourceTypes)
     ])
   )
-})
+}
 
 const renderResourceTypeMenuItems = pipe(
   values,
