@@ -86,14 +86,16 @@ export default compose(
   }),
   lifecycle({
     componentWillReceiveProps: function (nextProps) {
-      if (!isNil(nextProps.createTaskWorkerCid) &&
+      if (not(isNil(nextProps.createTaskWorkerCid)) &&
         nextProps.feathersData[nextProps.createTaskWorkerCid].isReady &&
         isNil(nextProps.feathersData[nextProps.createTaskWorkerCid].error)
       ) {
-        const { parentTaskPlan } = nextProps.taskPlan
+        const { setTaskWorkerId, taskPlan, actions } = nextProps
+        const { parentTaskPlan } = taskPlan
         const nextRoute = isNil(parentTaskPlan)
           ? '/' : `/tasks/${parentTaskPlan.id}`
-        nextProps.actions.router.push(nextRoute)
+        setTaskWorkerId(null)
+        actions.router.push(nextRoute)
       }
     }
   })
