@@ -15,12 +15,12 @@ import PriceSpecsEditor from '../../supply/components/PriceSpecsEditor'
 const ProductEditor = compose(
   connectFela(styles),
 )(props => {
-  const { styles, product } = props
-  const { resourceType, prices } = product
+  const { styles, product, resourceTypes } = props
+  const { resourceType, priceSpecs } = product
   return h('div', {
     className: styles.container
   }, [
-    h(ResourceTypeEditor, { resourceType }),
+    h(ResourceTypeEditor, { resourceType, resourceTypes }),
     h(PriceSpecsEditor, { resourceType, priceSpecs })
   ])
 })
