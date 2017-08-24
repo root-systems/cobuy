@@ -2,11 +2,11 @@ import h from 'react-hyperscript'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 
-import PriceEditor from '../components/PriceEditor'
+import PriceSpecsEditor from '../components/PriceSpecsEditor'
 
-storiesOf('supply.PriceEditor', module)
+storiesOf('supply.PriceSpecsEditor', module)
   .add('basic', () => (
-    h(PriceEditor, {
+    h(PriceSpecsEditor, {
       onSubmit: action('submit')
     })
   ))

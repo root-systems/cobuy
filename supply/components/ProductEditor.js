@@ -8,14 +8,11 @@ import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 
 import { FormattedMessage } from '../../lib/Intl'
-import styles from '../styles/Product'
-import ResourceType from '../../resources/components/ResourceType'
+import styles from '../styles/ProductEditor'
+import ResourceTypeEditor from '../../resources/components/ResourceTypeEditor'
+import PriceSpecsEditor from '../../supply/components/PriceSpecsEditor'
 
-function Prices (props) {
-  return h('div', 'prices')
-}
-
-const Product = compose(
+const ProductEditor = compose(
   connectFela(styles),
 )(props => {
   const { styles, product } = props
@@ -23,9 +20,9 @@ const Product = compose(
   return h('div', {
     className: styles.container
   }, [
-    h(ResourceType, { resourceType }),
-    h(Prices, { prices })
+    h(ResourceTypeEditor, { resourceType }),
+    h(PriceSpecsEditor, { resourceType, priceSpecs })
   ])
 })
 
-export default Product
+export default ProductEditor

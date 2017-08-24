@@ -1,3 +1,3 @@
 require ('./Offerings')
-require ('./Product')
-require('./PriceEditor')
+require ('./ProductEditor')
+require('./PriceSpecsEditor')

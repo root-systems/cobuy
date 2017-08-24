@@ -3,16 +3,16 @@ import { storiesOf } from '@storybook/react'
 import { reduxForm, Field } from 'redux-form'
 import { action } from '@storybook/addon-actions'
 
-import Product from '../components/Product'
+import ProductEditor from '../components/ProductEditor'
 
 const product = {
   resourceType: undefined,
   prices: []
 }
 
-storiesOf('supply.Product', module)
+storiesOf('supply.ProductEditor', module)
   .add('basic', () => (
-    h(Product, {
+    h(ProductEditor, {
       product,
       onSubmit: action('submit')
     })

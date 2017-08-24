@@ -1,1 +1,1 @@
-require('./ResourceType')
+require('./ResourceTypeEditor')

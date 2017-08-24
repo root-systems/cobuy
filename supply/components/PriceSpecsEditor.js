@@ -8,24 +8,24 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { merge } from 'ramda'
 
 import { FormattedMessage } from '../../lib/Intl'
-import styles from '../styles/PriceEditor'
+import styles from '../styles/PriceSpecsEditor'
 
-const PriceEditor = (props) => {
+const PriceSpecsEditor = (props) => {
   const { resourceType = {} } = props
   const { id = 'tmp' } = resourceType
   const nextProps = merge(props, {
-    form: `price-${id}`
+    form: `priceSpecs-${id}`
   })
-  return h(PriceForm, nextProps)
+  return h(PriceSpecsForm, nextProps)
 }
 
-export default PriceEditor
+export default PriceSpecsEditor
 
-const PriceForm = compose(
+const PriceSpecsForm = compose(
   connectFela(styles),
   reduxForm({})
 )(props => {
-  const { styles, handleSubmit, prices } = props
+  const { styles, handleSubmit, priceSpecs } = props
   return (
     h('form', {
       onSubmit: handleSubmit,
@@ -35,39 +35,39 @@ const PriceForm = compose(
         className: styles.intro
       }, [
         h(FormattedMessage, {
-          id: 'supply.prices',
+          id: 'supply.priceSpecs',
           className: styles.labelText
         })
       ]),
       h(FieldArray, {
-        component: Prices,
+        component: PriceSpecs,
         styles
       })
     ])
   )
 })
 
-const Prices = (props) => {
+const PriceSpecs = (props) => {
   const { fields, styles } = props
   return (
     h('div', {
-      className: styles.pricesContainer
+      className: styles.priceSpecsContainer
     }, [
-      fields.map((price, index) => (
-        h(Price, {
+      fields.map((priceSpec, index) => (
+        h(PriceSpec, {
           key: index,
-          price,
-          removePrice: () => fields.remove(index),
+          priceSepc,
+          removePriceSpec: () => fields.remove(index),
           styles
         })
       )),
       h(RaisedButton, {
         type: 'button',
-        className: styles.addPriceButton,
+        className: styles.addPriceSpecButton,
         onClick: () => fields.push({})
       }, [
         h(FormattedMessage, {
-          id: 'supply.addPrice',
+          id: 'supply.addPriceSpec',
           className: styles.buttonText
         })
       ])
@@ -75,15 +75,15 @@ const Prices = (props) => {
   )
 }
 
-const Price = (props) => {
-  const { styles, price, removePrice } = props
+const PriceSpec = (props) => {
+  const { styles, priceSpec, removePriceSpec } = props
 
   return (
     h('div', {
-      className: styles.priceContainer
+      className: styles.priceSpecContainer
     }, [
       h(Field, {
-        name: `${price}.price`,
+        name: `${priceSpec}.price`,
         floatingTextLabel: (
           h(FormattedMessage, {
             id: 'supply.price',
@@ -114,11 +114,11 @@ const Price = (props) => {
       }),
       h(RaisedButton, {
         type: 'button',
-        className: styles.removePriceButton,
-        onClick: () => removePrice()
+        className: styles.removePriceSpecButton,
+        onClick: () => removePriceSpec()
       }, [
         h(FormattedMessage, {
-          id: 'supply.removePrice',
+          id: 'supply.removePriceSpec',
           className: styles.buttonText
         })
       ])

@@ -11,9 +11,9 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 
 import { FormattedMessage } from '../../lib/Intl'
-import styles from '../styles/ResourceType'
+import styles from '../styles/ResourceTypeEditor'
 
-const ResourceType = compose(
+const ResourceTypeEditor = compose(
   connectFela(styles)
 )(props => {
   const { resourceType = {} } = props
@@ -24,7 +24,7 @@ const ResourceType = compose(
   return h(ResourceTypeForm, nextProps)
 })
 
-export default ResourceType
+export default ResourceTypeEditor
 
 const ResourceTypeForm = compose(
   connectForm({}),

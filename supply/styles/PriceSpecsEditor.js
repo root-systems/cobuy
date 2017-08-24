@@ -6,13 +6,13 @@ export default {
   labelText: () => ({
     textTransform: 'capitalize'
   }),
-  pricesContainer: () => ({
+  priceSpecs: () => ({
   }),
-  priceContainer: () => ({
+  priceSpecContainer: () => ({
   }),
-  addPriceButton: () => ({
+  addPriceSpecButton: () => ({
   }),
-  removePriceButton: () => ({
+  removePriceSpecButton: () => ({
   }),
   buttonText: () => ({
     textTransform: 'capitalize'
