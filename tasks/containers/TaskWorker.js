@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, pipe, filter, keys, length, gte, propEq, not } from 'ramda'
+import { isNil, pipe, filter, keys, length, gte, propEq, not, __ } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose, lifecycle, withState, withHandlers } from 'recompose'
 import { push } from 'react-router-redux'
@@ -136,5 +136,5 @@ const hasQueriedTaskWorks = pipe(
   filter(propEq('service', 'taskWorks')),
   keys,
   length,
-  gte(1)
+  gte(__, 1)
 )
