@@ -67,6 +67,7 @@
   "tasks.recipes.setupGroup": "setup group profile and members",
   "tasks.recipes.createProfile": "create your profile",
   "tasks.steps.groupProfile": "enter your group profile information",
+  "tasks.steps.supplierProfile": "enter your supplier profile information",
   "tasks.steps.memberInvites": "invite group members",
   "tasks.recipes.setupSupplier": "setup supplier profile and products"
 }

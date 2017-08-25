@@ -53,11 +53,13 @@ function createChildTaskPlans (hook) {
   const childTaskRecipes = taskRecipe.childTaskRecipes
   return Promise.all(
     childTaskRecipes.map((childTaskRecipe) => {
+      var params = hook.params[childTaskRecipe.id]
+      console.log(params, 'the params')
       return taskPlans.create({
         parentTaskPlanId: hook.result.id,
         assigneeId: hook.data.assigneeId,
         taskRecipeId: childTaskRecipe.id,
-        params: hook.result.params
+        params: JSON.stringify(params)
       })
     })
   )

@@ -25,12 +25,11 @@ export default (props) => {
 
   const { profile, members } = contextAgent
 
-  console.log('members', members)
-
   const steps = [
     {
-      id: 'tasks.steps.groupProfile',
+      id: 'tasks.steps.supplierProfile',
       content: h(Profile, {
+        initialValues: profile,
         updateProfile: (nextProfile) => {
           actions.profiles.update(profile.id, merge(nextProfile, { agentId: contextAgent.id }))
         }
