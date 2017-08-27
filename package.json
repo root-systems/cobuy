@@ -4,7 +4,9 @@
   "description": "Helping people buy good food at good prices, together.",
   "scripts": {
     "start": "dog server",
-    "dev": "dog dev server",
+    "dev:server": "dog dev server",
+    "dev:mail": "maildev",
+    "dev": "npm-run-all -p dev:*",
     "debug": "DEBUG=*,-babel dog dev server",
     "lint": "dog lint",
     "test": "dog test",
@@ -55,6 +57,7 @@
   "dependencies": {
     "@ahdinosaur/react-fela": "^4.3.5",
     "@f/create-action": "^1.1.1",
+    "@root-systems/redux-form-validators": "^1.1.0",
     "babel-plugin-ramda": "^1.2.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
@@ -70,8 +73,10 @@
     "feathers-errors": "^2.6.2",
     "feathers-hooks-common": "^3.0.0",
     "feathers-knex": "^2.6.3",
+    "feathers-mailer": "^2.0.0",
     "fela": "^5.0.1",
     "material-ui": "^0.18.3",
+    "nodemailer": "^4.0.1",
     "passport-github": "^1.1.0",
     "pg": "^6.1.5",
     "ramda": "^0.23.0",
@@ -90,7 +95,6 @@
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^6.6.0",
     "redux-form-material-ui": "^4.2.0",
-    "@root-systems/redux-form-validators": "^1.1.0",
     "redux-fp": "^0.2.0",
     "redux-observable": "^0.14.1",
     "reselect": "^3.0.0",
@@ -102,6 +106,8 @@
     "@storybook/react": "^3.1.3",
     "deep-freeze": "^0.0.1",
     "dependency-check": "^2.8.0",
+    "maildev": "^1.0.0-rc3",
+    "npm-run-all": "^4.0.2",
     "precinct": "^3.6.0",
     "sqlite3": "3.1.8"
   }
