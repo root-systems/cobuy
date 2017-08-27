@@ -211,7 +211,7 @@ function ResourceTypeItem (props) {
       h(RaisedButton, {
         className: styles.button,
         type: 'button',
-        onClick: () => removeItem() 
+        onClick: () => removeField() 
       }, [
         h(FormattedMessage, {
           id: 'resources.removeResourceTypeItem',
