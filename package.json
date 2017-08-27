@@ -4,7 +4,7 @@
   "description": "Helping people buy good food at good prices, together.",
   "scripts": {
     "start": "dog server",
-    "dev:app": "dog dev server",
+    "dev:server": "dog dev server",
     "dev:mail": "maildev",
     "dev": "npm-run-all -p dev:*",
     "debug": "DEBUG=*,-babel dog dev server",
