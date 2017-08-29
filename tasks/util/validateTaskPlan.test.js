@@ -1,13 +1,9 @@
 import test from 'ava'
 import * as mock from '../data/mock'
+import ajv from '../../app/schemas'
 
-const Ajv = require('ajv')
 const { validateSchema } = require('feathers-hooks-common')
 const schema = require('../schemas/taskPlan')
-const taskRecipeSchema = require('../schemas/taskRecipe')
-
-let ajv = new Ajv({ $data: true })
-ajv.addSchema([taskRecipeSchema, schema])
 
 let hookBefore
 

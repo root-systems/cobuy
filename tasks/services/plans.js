@@ -1,11 +1,8 @@
 const feathersKnex = require('feathers-knex')
 import { isEmpty, ifElse, is, assoc, prop, map, pipe, __ } from 'ramda'
 const { iff, validateSchema } = require('feathers-hooks-common')
-const Ajv = require('ajv')
 const taskPlanSchema = require('../schemas/taskPlan')
-const taskRecipeSchema = require('../schemas/taskRecipe')
-const ajv = new Ajv({$data: true})
-ajv.addSchema([taskRecipeSchema, taskPlanSchema])
+import ajv from '../../app/schemas'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
