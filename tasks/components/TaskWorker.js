@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
-import { pipe, length, gt, all, prop, propOr, path, either, complement, not, isNil } from 'ramda'
+import { pipe, length, gt, all, prop, propOr, path, either, complement, not, isNil, isEmpty } from 'ramda'
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
@@ -12,7 +12,7 @@ import styles from '../styles/TaskWorker'
 import TaskWorkerTree from './TaskWorkerTree'
 
 const getSubTaskPlans = propOr([], 'childTaskPlans')
-const getIsTaskComplete = pipe(prop('taskWork'), Boolean)
+const getIsTaskComplete = pipe(prop('taskWork'), (taskwork) => not(isEmpty(taskwork)))
 const getAreAllSubTasksComplete = pipe(getSubTaskPlans, all(getIsTaskComplete))
 const getHasSubTasks = pipe(getSubTaskPlans, childTaskPlans => gt(length(childTaskPlans), 0))
 const getIsTaskReadyToComplete = either(complement(getHasSubTasks), getAreAllSubTasksComplete)

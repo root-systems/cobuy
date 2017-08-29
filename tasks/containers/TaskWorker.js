@@ -1,7 +1,7 @@
 import h from 'react-hyperscript'
-import { isNil, pipe, filter, keys, length, gte, propEq, not } from 'ramda'
+import { isNil, pipe, filter, keys, length, gte, propEq, not, __ } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
-import { compose } from 'recompose'
+import { compose, lifecycle, withState, withHandlers } from 'recompose'
 import { push } from 'react-router-redux'
 
 import { actions as taskPlans } from '../dux/plans'
@@ -79,14 +79,34 @@ export default compose(
 
       return false
     }
+  }),
+  withState('createTaskWorkerCid', 'editTaskWorkerCid', null),
+  withHandlers({
+    setTaskWorkerId: ({ editTaskWorkerCid }) => (cId) => editTaskWorkerCid(cId)
+  }),
+  lifecycle({
+    componentWillReceiveProps: function (nextProps) {
+      if (not(isNil(nextProps.createTaskWorkerCid)) &&
+        nextProps.feathersData[nextProps.createTaskWorkerCid].isReady &&
+        isNil(nextProps.feathersData[nextProps.createTaskWorkerCid].error)
+      ) {
+        const { setTaskWorkerId, taskPlan, actions } = nextProps
+        const { parentTaskPlan } = taskPlan
+        const nextRoute = isNil(parentTaskPlan)
+          ? '/' : `/tasks/${parentTaskPlan.id}`
+        setTaskWorkerId(null)
+        actions.router.push(nextRoute)
+      }
+    }
   })
 )(props => {
-  const { taskPlan, currentAgent: agent, actions } = props
+  const { taskPlan, currentAgent, actions, setTaskWorkerId } = props
 
   return h(TaskWorker, {
     taskPlan,
     onNavigate: handleNavigate,
-    onCancel: handleCancel
+    onCancel: handleCancel,
+    onComplete: handleComplete
   })
 
   function handleNavigate (taskPlan) {
@@ -99,11 +119,24 @@ export default compose(
       ? '/' : `/tasks/${parentTaskPlan.id}`
     actions.router.push(nextRoute)
   }
+
+  function handleComplete (taskplan) {
+    const taskWork = {
+      taskPlanId: taskPlan.id,
+      taskRecipeId: taskplan.taskRecipeId,
+      workerAgentId: currentAgent.id,
+      params: {
+        // contextAgentId: group.id
+      }
+    }
+
+    setTaskWorkerId(actions.taskWorks.create(taskWork))
+  }
 })
 
 const hasQueriedTaskWorks = pipe(
   filter(propEq('service', 'taskWorks')),
   keys,
   length,
-  gte(1)
+  gte(__, 1)
 )

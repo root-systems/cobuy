@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
-import { pipe, map, not, isNil } from 'ramda'
+import { pipe, map, not, isEmpty } from 'ramda'
 import { List, ListItem } from 'material-ui/List'
 import Paper from 'material-ui/Paper'
 import Checkbox from 'material-ui/Checkbox'
@@ -27,7 +27,7 @@ function TaskWorkerTree (props) {
               className={styles.childTaskNameText}
             />
           }
-          checked={not(isNil(childTaskWork))}
+          checked={not(isEmpty(childTaskWork))}
           className={styles.childTaskCheckbox}
           onCheck={handleNavigate(childTaskPlan)}
         />
