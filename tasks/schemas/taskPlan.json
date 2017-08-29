@@ -5,12 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "type": "integer",
-      "description": "Id referencing task plan"
+      "$ref": "#/definitions/id"
     },
     "parentTaskPlanID": {
-      "type": "integer",
-      "description": "Id referencing the associated task plan"
+      "$ref": "#/definitions/id"
     },
     "assigneeId": {
       "type": "integer",
@@ -28,5 +26,11 @@
   "required": [
     "assigneeId",
     "taskRecipeId"
-  ]
+  ],
+  "definitions": {
+    "id": {
+      "type": "integer",
+      "description": "Id referencing task plan"
+    }
+  }
 }

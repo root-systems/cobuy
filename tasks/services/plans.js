@@ -21,9 +21,18 @@ module.exports = function () {
 
 const hooks = {
   before: {
-    create: [validateSchema(taskPlanSchema, ajv), encodeParams],
-    update: [validateSchema(taskPlanSchema, ajv), encodeParams],
-    patch: [validateSchema(taskPlanSchema, ajv), encodeParams]
+    create: [
+      validateSchema(taskPlanSchema, ajv),
+      encodeParams
+    ],
+    update: [
+      validateSchema(taskPlanSchema, ajv),
+      encodeParams
+    ],
+    patch: [
+      validateSchema(taskPlanSchema, ajv),
+      encodeParams
+    ]
   },
   after: {
     all: [
