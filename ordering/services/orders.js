@@ -1,6 +1,6 @@
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
-import { pipe, equals, length, isNil } from 'ramda'
+import { pipe, equals, length, isNil, isEmpty } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
@@ -18,7 +18,8 @@ const hooks = {
   before: {
     create: [
       iff(hasNoGroupAgent, createGroupAgent),
-      iff(hasNoSupplierAgent, createSupplierAgent)
+      iff(hasNoSupplierAgent, createSupplierAgent),
+      iff(hasNoRelation, createRelation)
     ]
   },
   after: {
@@ -40,6 +41,27 @@ function createGroupAgent (hook) {
 
 function hasNoGroupAgent (hook) {
   return isNil(hook.data.consumerAgentId)
+}
+
+function hasNoRelation (hook) {
+  const relationships = hook.app.service('relationships')
+  const supplierAgentId = hook.data.supplierAgentId
+  return relationships.find({ query: { sourceId: supplierAgentId }  }).then((relationship)=>{
+    return isEmpty(relationship)
+  })
+}
+
+function createRelation (hook){
+  const relationships = hook.app.service('relationships')
+  const consumerAgentId = hook.data.consumerAgentId
+  const supplierAgentId = hook.data.supplierAgentId
+  return relationships.create({
+     relationshipType: 'supplier',
+     sourceId: consumerAgentId,
+     targetId: supplierAgentId
+}).then(() => {
+  return hook
+})
 }
 
 const hasLengthOne = pipe(length, equals(1))
