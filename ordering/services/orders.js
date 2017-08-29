@@ -16,13 +16,13 @@ module.exports = function () {
 
 const hooks = {
   before: {
-    create: [
-      getCurrentUser,
-      iff(hasNoGroupAgent, createGroupAgent),
-      iff(hasNoSupplierAgent, createSupplierAgent),
-      iff(hasNoRelation, createRelation),
-      iff(groupHasNoAdminRelation,createGroupAdminRelation)
-    ]
+    // create: [
+    //   getCurrentUser,
+    //   iff(hasNoGroupAgent, createGroupAgent),
+    //   iff(hasNoSupplierAgent, createSupplierAgent),
+    //   iff(hasNoRelation, createRelation),
+    //   iff(groupHasNoAdminRelation,createGroupAdminRelation)
+    // ]
   },
   after: {
     create: [
