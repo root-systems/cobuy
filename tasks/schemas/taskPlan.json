@@ -1,0 +1,36 @@
+{
+  "id": "/tasks/taskPlan",
+  "title": "Task Plan",
+  "description": "An assignment of the task to an agent",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id"
+    },
+    "parentTaskPlanID": {
+      "$ref": "#/definitions/id"
+    },
+    "assigneeId": {
+      "type": "integer",
+      "description": "Person or group or related agents (e.g. admins) being assigned"
+    },
+    "taskRecipeId": {
+      "$ref": "/tasks/taskRecipe#/definitions/id",
+      "description": "Task recipe that this taask plan is related to"
+    },
+    "params": {
+      "type": "object",
+      "description": "Util paramaters"
+    }
+  },
+  "required": [
+    "assigneeId",
+    "taskRecipeId"
+  ],
+  "definitions": {
+    "id": {
+      "type": "integer",
+      "description": "Id referencing task plan"
+    }
+  }
+}

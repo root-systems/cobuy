@@ -1,0 +1,36 @@
+{
+  "id": "/tasks/taskRecipe",
+  "title": "Task Recipe",
+  "description": "An abstract description of the task",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id"
+    },
+    "ownerAgentId": {
+      "type": "integer",
+      "description": "Id of the agent that owns the recipe"
+    },
+    "childTaskRecipes": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "#"
+        }
+      ],
+      "description": "Task recipes that make up this task recipe..."
+    }
+  },
+  "definitions": {
+    "id": {
+      "enum": [
+        "setupGroup",
+        "setupSupplier",
+        "finishPrereqs"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ]
+}

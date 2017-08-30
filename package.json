@@ -58,6 +58,7 @@
     "@ahdinosaur/react-fela": "^4.3.5",
     "@f/create-action": "^1.1.1",
     "@root-systems/redux-form-validators": "^1.1.0",
+    "ajv": "^5.2.2",
     "babel-plugin-ramda": "^1.2.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
@@ -108,6 +109,7 @@
     "dependency-check": "^2.8.0",
     "maildev": "^1.0.0-rc3",
     "npm-run-all": "^4.0.2",
+    "json-schema-faker": "^0.4.3",
     "precinct": "^3.6.0",
     "sqlite3": "3.1.8"
   }

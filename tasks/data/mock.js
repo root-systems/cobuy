@@ -90,7 +90,7 @@ export const mockEnhancedTaskPlans = {
     taskRecipeId: 'finishPrereqs',
     taskRecipe: finishPrereqs,
     params: {
-      contextAgent: group
+      contextAgentId: group.id
     }
   },
   2: {
@@ -100,7 +100,7 @@ export const mockEnhancedTaskPlans = {
     taskRecipeId: 'setupGroup',
     taskRecipe: setupGroup,
     params: {
-      contextAgent: group
+      contextAgentId: group.id
     }
   },
   3: {
@@ -110,7 +110,7 @@ export const mockEnhancedTaskPlans = {
     taskRecipeId: 'setupSupplier',
     taskRecipe: setupSupplier,
     params: {
-      contextAgent: group
+      contextAgentId: group.id
     }
   }
 }

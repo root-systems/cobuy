@@ -58,9 +58,9 @@ function createPrereqTaskPlan (hook) {
   // const assigneeId = hook.params.agent.id
 
   const assigneeId = hook.params.credential.agentId
-  const params = JSON.stringify({
+  const params = {
     contextAgentId: hook.data.agentId
-  })
+  }
   return taskPlans.create({ taskRecipeId, params, assigneeId })
   .then(() => {
     return hook
