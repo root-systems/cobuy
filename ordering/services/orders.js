@@ -17,9 +17,11 @@ module.exports = function () {
 const hooks = {
   before: {
     create: [
+      getCurrentUser,
       iff(hasNoGroupAgent, createGroupAgent),
       iff(hasNoSupplierAgent, createSupplierAgent),
-      iff(hasNoRelation, createRelation)
+      iff(hasNoRelation, createRelation),
+      iff(groupHasNoAdminRelation,createGroupAdminRelation)
     ]
   },
   after: {
@@ -28,6 +30,38 @@ const hooks = {
     ]
   },
   error: {}
+}
+
+function getCurrentUser (hook) {
+ const { agentId } = hook.params.credential
+ const agentsService = hook.app.service('agents')
+ return agentsService.get(agentId)
+ .then(agent => {
+   hook.params.agent = agent
+ })
+ .then(() => hook)
+}
+
+function groupHasNoAdminRelation(hook) {
+  const relationships = hook.app.service('relationships')
+  const groupId = hook.data.consumerAgentId
+  return relationships.find({ query: {targetId: groupId} }).then((relationship)=>{
+    return isEmpty(relationship)
+  })
+}
+
+function createGroupAdminRelation(hook) {
+  const relationships = hook.app.service('relationships')
+  const groupId = hook.data.consumerAgentId
+  const userId =  hook.params.agent.id
+  console.log(userId, 'the user id')
+  return relationships.create({
+    relationshipType: 'admin',
+    sourceId: userId,
+    targetId: groupId
+  }).then(() => {
+    return hook
+  })
 }
 
 function createGroupAgent (hook) {
