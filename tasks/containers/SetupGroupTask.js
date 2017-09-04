@@ -6,7 +6,7 @@ import { agents, profiles, relationships, credentials } from 'dogstack-agents/ac
 import getSetupGroupTaskProps from '../getters/getSetupGroupTaskProps'
 import SetupGroupTask from '../components/SetupGroupTask'
 
-const getContextAgentFromTaskPlan = path(['params', 'contextAgent'])
+const getConsumerAgentFromTaskPlan = path(['params', 'consumerAgent'])
 
 export default compose(
   connectFeathers({
@@ -21,20 +21,20 @@ export default compose(
     // new queries by checking if deepEqual
     query: (props) => {
       var queries = []
-      //  once we have the task plan, query for the context agent
+      //  once we have the task plan, query for the consumer agent
       const { taskPlan } = props
 
       if (taskPlan) {
-        const { params: { contextAgentId, contextAgent } } = taskPlan
+        const { params: { consumerAgentId, consumerAgent } } = taskPlan
         queries.push({
           service: 'agents',
-          id: contextAgentId
+          id: consumerAgentId
         })
         queries.push({
           service: 'profiles',
           params: {
             query: {
-              agentId: contextAgentId
+              agentId: consumerAgentId
             }
           }
         })
@@ -42,13 +42,13 @@ export default compose(
           service: 'relationships',
           params: {
             query: {
-              sourceId: contextAgentId
+              sourceId: consumerAgentId
             }
           }
         })
 
-        if (contextAgent) {
-          const { members } = contextAgent
+        if (consumerAgent) {
+          const { members } = consumerAgent
           const queryEachMember = forEach(member => {
             const { agentId } = member
             queries.push({
@@ -86,11 +86,11 @@ export default compose(
       // wait for task plan before re-query
       if (isNil(taskPlan)) return false
 
-      // re-query when we haven't gotten back contextAgent or taskWork
-      const contextAgent = getContextAgentFromTaskPlan(taskPlan)
+      // re-query when we haven't gotten back consumerAgent or taskWork
+      const consumerAgent = getConsumerAgentFromTaskPlan(taskPlan)
 
-      if (isNil(contextAgent)) return true
-      if (anyMembersAreNil(contextAgent)) {
+      if (isNil(consumerAgent)) return true
+      if (anyMembersAreNil(consumerAgent)) {
         return true
       }
 

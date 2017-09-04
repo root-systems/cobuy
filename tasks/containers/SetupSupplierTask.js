@@ -6,7 +6,7 @@ import { agents, profiles, relationships, credentials } from 'dogstack-agents/ac
 import getSetupGroupTaskProps from '../getters/getSetupGroupTaskProps'
 import SetupSupplierTask from '../components/SetupSupplierTask'
 
-const getContextAgentFromTaskPlan = path(['params', 'contextAgent'])
+const getSupplierAgentFromTaskPlan = path(['params', 'supplierAgent'])
 
 export default compose(
   connectFeathers({
@@ -21,59 +21,23 @@ export default compose(
     // new queries by checking if deepEqual
     query: (props) => {
       var queries = []
-      //  once we have the task plan, query for the context agent
+      //  once we have the task plan, query for the supplier agent
       const { taskPlan } = props
 
       if (taskPlan) {
-        const { params: { contextAgentId, contextAgent } } = taskPlan
+        const { params: { supplierAgentId } } = taskPlan
         queries.push({
           service: 'agents',
-          id: contextAgentId
+          id: supplierAgentId
         })
         queries.push({
           service: 'profiles',
           params: {
             query: {
-              agentId: contextAgentId
+              agentId: supplierAgentId
             }
           }
         })
-        queries.push({
-          service: 'relationships',
-          params: {
-            query: {
-              sourceId: contextAgentId
-            }
-          }
-        })
-
-        if (contextAgent) {
-          const { members } = contextAgent
-          const queryEachMember = forEach(member => {
-            const { agentId } = member
-            queries.push({
-              service: 'agents',
-              id: agentId
-            })
-            queries.push({
-              service: 'profiles',
-              params: {
-                query: {
-                  agentId
-                }
-              }
-            })
-            queries.push({
-              service: 'credentials',
-              params: {
-                query: {
-                  agentId
-                }
-              }
-            })
-          })
-          queryEachMember(members)
-        }
       }
 
       return queries
@@ -86,22 +50,11 @@ export default compose(
       // wait for task plan before re-query
       if (isNil(taskPlan)) return false
 
-      // re-query when we haven't gotten back contextAgent or taskWork
-      const contextAgent = getContextAgentFromTaskPlan(taskPlan)
-      if (isNil(contextAgent)) return true
-      if (anyMembersAreNil(contextAgent)) {
-        return true
-      }
+      // re-query when we haven't gotten back supplierAgent or taskWork
+      const supplierAgent = getSupplierAgentFromTaskPlan(taskPlan)
+      if (isNil(supplierAgent)) return true
 
       return false
     }
   })
 )(SetupSupplierTask)
-
-const anyMembersAreNil = pipe(
-  prop('members'),
-  either(
-    any(pipe(path(['agent', 'profile', 'id']), isNil)),
-    any(pipe(path(['agent', 'credential', 'id']), isNil))
-  )
-)

@@ -21,12 +21,16 @@ const getEnhancedTaskPlans = createSelector(
       const assignee = agents[assigneeId]
       const taskWork = filter(propEq('taskPlanId', id))(taskWorks)
 
-      const { contextAgentId } = params
-      const contextAgent = isNil(contextAgentId)
+      const { consumerAgentId, supplierAgentId } = params
+      const consumerAgent = isNil(consumerAgentId)
         ? null
-        : agents[contextAgentId]
+        : agents[consumerAgentId]
+      const supplierAgent = isNil(supplierAgentId)
+        ? null
+        : agents[supplierAgentId]
       const nextParams = merge(params, {
-        contextAgent
+        consumerAgent,
+        supplierAgent
       })
 
       return merge(taskPlan, {
