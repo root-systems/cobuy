@@ -57,7 +57,7 @@ function createChildTaskPlans (hook) {
         parentTaskPlanId: hook.result.id,
         assigneeId: hook.data.assigneeId,
         taskRecipeId: childTaskRecipe.id,
-        params: hook.data.params
+        params: hook.result.params
       })
     })
   )
