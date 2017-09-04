@@ -54,7 +54,6 @@ function createGroupAdminRelation(hook) {
   const relationships = hook.app.service('relationships')
   const groupId = hook.data.consumerAgentId
   const userId =  hook.params.agent.id
-  console.log(userId, 'the user id')
   return relationships.create({
     relationshipType: 'admin',
     sourceId: userId,
