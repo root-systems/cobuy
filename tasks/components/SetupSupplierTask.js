@@ -26,6 +26,7 @@ export default (props) => {
     {
       id: 'tasks.steps.supplierProducts',
       content: h(ProductListEditor, {
+        createProduct: actions.products.create
       })
     },
   ]

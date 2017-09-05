@@ -8,6 +8,8 @@ import SetupSupplierTask from '../components/SetupSupplierTask'
 
 const getSupplierAgentFromTaskPlan = path(['params', 'supplierAgent'])
 
+import {products, priceSpecs, resourceTypes} from '../../actions'
+
 export default compose(
   connectFeathers({
     selector: getSetupGroupTaskProps,
@@ -15,7 +17,10 @@ export default compose(
       agents,
       profiles,
       relationships,
-      credentials
+      credentials,
+      products,
+      priceSpecs,
+      resourceTypes
     },
     // TODO can optimize `feathers-action-react` to de-dupe
     // new queries by checking if deepEqual

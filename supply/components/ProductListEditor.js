@@ -11,13 +11,15 @@ import ProductEditor from '../../supply/components/ProductEditor'
 const ProductListEditor = compose(
   connectFela(styles),
 )(props => {
-  const { styles } = props
+  const { styles, createProduct } = props
   return h('div', {
     className: styles.container
   }, [
     h('button', {
       onClick: function(){
-        debugger
+        createProduct({
+          
+        })
       }
     }, 'create new product')
   ])
