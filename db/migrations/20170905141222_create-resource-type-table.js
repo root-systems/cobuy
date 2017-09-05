@@ -1,14 +1,14 @@
 
 exports.up = function(knex, Promise) {
-  return knex.schema.createTableIfNotExists('resourceType', function (table){
+  return knex.schema.createTableIfNotExists('resourceTypes', function (table){
     table.increments('id')
     table.string('name')
-    table.string('description')
-    table.string('image')
+    table.text('description')
+    table.text('image')
 
   })
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTableIfExists('resourceType')
+  return knex.schema.dropTableIfExists('resourceTypes')
 };

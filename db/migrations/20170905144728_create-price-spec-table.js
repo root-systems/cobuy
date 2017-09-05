@@ -1,7 +1,8 @@
 
 exports.up = function(knex, Promise) {
-  return knex.schema.createTableIfNotExists('priceSpec', function (table){
-    table.increments('productId')
+  return knex.schema.createTableIfNotExists('priceSpecs', function (table){
+    table.increments('id')
+    table.integer('productId').references('products.id')
     table.string('minimum')
     table.string('price')
     table.string('currency')
@@ -9,5 +10,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTableIfExists('priceSpec')
+  return knex.schema.dropTableIfExists('priceSpecs')
 };
