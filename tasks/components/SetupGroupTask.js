@@ -20,10 +20,10 @@ const rolesToRelationships = (roles = {}) => {
 export default (props) => {
   const { taskPlan, actions } = props
   if (isNil(taskPlan)) return null
-  const { params: { contextAgent } } = taskPlan
-  if (isNil(contextAgent)) return null
+  const { params: { consumerAgent } } = taskPlan
+  if (isNil(consumerAgent)) return null
 
-  const { profile, members } = contextAgent
+  const { profile, members } = consumerAgent
 
   console.log('members', members)
 
@@ -33,14 +33,14 @@ export default (props) => {
       content: h(Profile, {
         initialValues: profile,
         updateProfile: (nextProfile) => {
-          actions.profiles.update(profile.id, merge(nextProfile, { agentId: contextAgent.id }))
+          actions.profiles.update(profile.id, merge(nextProfile, { agentId: consumerAgent.id }))
         }
       })
     },
     {
       id: 'tasks.steps.memberInvites',
       content: h(MemberInvites, {
-        agent: contextAgent,
+        agent: consumerAgent,
         initialValues: {
           members
         },
@@ -59,7 +59,7 @@ export default (props) => {
               credential = {},
             } = agent
             const relationships = rolesToRelationships(roles)
-            const contextAgentId = contextAgent.id
+            const consumerAgentId = consumerAgent.id
 
             const agentData = {
               id,
@@ -67,7 +67,7 @@ export default (props) => {
               profile,
               credential,
               relationships,
-              contextAgentId
+              consumerAgentId
             }
 
             if (isNil(agentData.id)) {

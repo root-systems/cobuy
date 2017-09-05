@@ -1,5 +1,5 @@
 import SetupGroupTask from '../containers/SetupGroupTask'
-import SetupSupplierTask from '../components/SetupSupplierTask'
+import SetupSupplierTask from '../containers/SetupSupplierTask'
 import CreateProfileTask from '../containers/CreateProfileTask'
 
 export const setupGroup = {
