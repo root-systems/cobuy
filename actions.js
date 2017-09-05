@@ -1,3 +1,6 @@
 export { actions as taskPlans } from './tasks/dux/plans'
 export { actions as taskWorks } from './tasks/dux/works'
 export { default as ordering } from './ordering/actions'
+export { actions as products } from './supply/dux/products'
+export { actions as priceSpecs } from './supply/dux/priceSpecs'
+export { actions as resourceTypes } from './resources/dux/resourceTypes'
