@@ -3,7 +3,7 @@ import { isNil, merge, isEmpty } from 'ramda'
 
 import TaskStepper from './TaskStepper'
 import Profile from '../../agents/components/Profile'
-import MemberInvites from '../../agents/components/MemberInvites'
+import ProductListEditor from '../../supply/components/ProductListEditor'
 
 export default (props) => {
   const { taskPlan, actions } = props
@@ -21,6 +21,11 @@ export default (props) => {
         updateProfile: (nextProfile) => {
           actions.profiles.update(profile.id, merge(nextProfile, { agentId: supplierAgent.id }))
         }
+      })
+    },
+    {
+      id: 'tasks.steps.supplierProducts',
+      content: h(ProductListEditor, {
       })
     },
   ]
