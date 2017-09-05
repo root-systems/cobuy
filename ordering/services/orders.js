@@ -45,9 +45,9 @@ function getCurrentUser (hook) {
 function groupHasNoAdminRelation(hook) {
   const relationships = hook.app.service('relationships')
   const groupId = hook.data.consumerAgentId
-  return relationships.find({ query: {targetId: groupId} }).then((relationship)=>{
-    return isEmpty(relationship)
-  })
+  return relationships
+    .find({ query: {targetId: groupId} })
+    .then(isEmpty)
 }
 
 function createGroupAdminRelation(hook) {
