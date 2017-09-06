@@ -3,16 +3,16 @@ import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
 import { agents, profiles, relationships, credentials } from 'dogstack-agents/actions'
-import getSetupGroupTaskProps from '../getters/getSetupGroupTaskProps'
+import getSetupSupplierTaskProps from '../getters/getSetupSupplierTaskProps'
 import SetupSupplierTask from '../components/SetupSupplierTask'
 
 const getSupplierAgentFromTaskPlan = path(['params', 'supplierAgent'])
 
-import {products, priceSpecs, resourceTypes} from '../../actions'
+import { products, priceSpecs, resourceTypes } from '../../actions'
 
 export default compose(
   connectFeathers({
-    selector: getSetupGroupTaskProps,
+    selector: getSetupSupplierTaskProps,
     actions: {
       agents,
       profiles,
@@ -27,7 +27,7 @@ export default compose(
     query: (props) => {
       var queries = []
       //  once we have the task plan, query for the supplier agent
-      const { taskPlan } = props
+      const { taskPlan, selected } = props
 
       if (taskPlan) {
         const { params: { supplierAgentId } } = taskPlan
@@ -53,6 +53,25 @@ export default compose(
         })
       }
 
+      const { products } = selected
+
+      if (products) {
+        products.forEach(product => {
+          queries.push({
+            service: 'resourceTypes',
+            id: product.resourceTypeId
+          })
+          queries.push({
+            service: 'priceSpecs',
+            params: {
+              query: {
+                productId: product.id
+              }
+            }
+          })
+        })
+      }
+
       return queries
     },
     shouldQueryAgain: (props, status) => {
@@ -67,7 +86,16 @@ export default compose(
       const supplierAgent = getSupplierAgentFromTaskPlan(taskPlan)
       if (isNil(supplierAgent)) return true
 
+      if (anyProductsAreMissingDetails(props.selected)) {
+        return true
+      }
+
       return false
     }
   })
 )(SetupSupplierTask)
+
+const anyProductsAreMissingDetails = pipe(
+  prop('products'),
+  any(pipe(path(['resourceType', 'id']), isNil))
+)

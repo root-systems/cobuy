@@ -13,13 +13,14 @@ import ResourceTypeEditor from '../../resources/components/ResourceTypeEditor'
 import PriceSpecsEditor from '../../supply/components/PriceSpecsEditor'
 
 const ProductEditor = compose(
-  connectFela(styles),
+  connectFela(styles)
 )(props => {
   const { styles, product, resourceTypes } = props
   const { resourceType, priceSpecs } = product
   return h('div', {
     className: styles.container
   }, [
+    h('div', product.id),
     h(ResourceTypeEditor, { resourceType, resourceTypes }),
     h(PriceSpecsEditor, { resourceType, priceSpecs })
   ])

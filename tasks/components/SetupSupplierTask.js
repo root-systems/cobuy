@@ -6,12 +6,12 @@ import Profile from '../../agents/components/Profile'
 import ProductListEditor from '../../supply/components/ProductListEditor'
 
 export default (props) => {
-  const { taskPlan, actions } = props
+  const { taskPlan, actions, products } = props
   if (isNil(taskPlan)) return null
   const { params: { supplierAgent } } = taskPlan
   if (isNil(supplierAgent)) return null
 
-  const { profile, members } = supplierAgent
+  const { profile } = supplierAgent
 
   const steps = [
     {
@@ -26,13 +26,14 @@ export default (props) => {
     {
       id: 'tasks.steps.supplierProducts',
       content: h(ProductListEditor, {
+        products,
         createProduct: () => {
           actions.products.create({
             supplierAgentId: supplierAgent.id
           })
         }
       })
-    },
+    }
   ]
 
   return h(TaskStepper, {

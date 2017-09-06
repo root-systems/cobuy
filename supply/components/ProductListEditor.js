@@ -1,27 +1,40 @@
 import h from 'react-hyperscript'
-import { withState, compose } from 'recompose'
+import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
-import { pipe } from 'ramda'
-import { SelectField, TextField, Toggle } from 'redux-form-material-ui'
+import { map } from 'ramda'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ProductListEditor'
 import ProductEditor from '../../supply/components/ProductEditor'
 
 const ProductListEditor = compose(
-  connectFela(styles),
+  connectFela(styles)
 )(props => {
-  const { styles, createProduct } = props
+  const { styles, createProduct, products } = props
+
+  console.log('products', products)
+
+  const renderProducts = map(product => {
+    return h(ProductEditor, {
+      product,
+      key: product.id
+      // saveResourceType:
+      // savePriceSpec:
+    })
+  })
+
   return h('div', {
     className: styles.container
   }, [
     h('button', {
-      onClick: function(){
-        createProduct({
-          
-        })
-      }
-    }, 'create new product')
+      onClick: () => createProduct()
+    }, [
+      h(FormattedMessage, {
+        id: 'resources.createProduct',
+        className: styles.labelText
+      })
+    ]),
+    renderProducts(products)
   ])
 })
 
