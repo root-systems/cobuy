@@ -1,1 +1,2 @@
 require('./MemberIntentField')
+require('./ProductList')
