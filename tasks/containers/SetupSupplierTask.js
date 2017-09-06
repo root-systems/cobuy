@@ -43,6 +43,14 @@ export default compose(
             }
           }
         })
+        queries.push({
+          service: 'products',
+          params: {
+            query: {
+              supplierAgentId
+            }
+          }
+        })
       }
 
       return queries
