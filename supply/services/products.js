@@ -1,4 +1,6 @@
 const feathersKnex = require('feathers-knex')
+const { pipe, path, isNil } = require('ramda')
+const { iff } = require('feathers-hooks-common')
 
 module.exports = function () {
   const app = this
@@ -11,8 +13,28 @@ module.exports = function () {
   app.service(name).hooks(hooks)
 }
 
+const hasNoResourceType = pipe(
+  path(['data', 'resourceTypeId']),
+  isNil
+)
+
 const hooks = {
-  before: {},
+  before: {
+    create: [
+      iff(hasNoResourceType,
+        createResourceType
+      )
+    ]
+  },
   after: {},
   error: {}
+}
+
+function createResourceType (hook) {
+  const resourceTypesService = hook.app.service('resourceTypes')
+  return resourceTypesService.create({})
+    .then(resourceType => {
+      hook.data.resourceTypeId = resourceType.id
+    })
+    .then(() => hook)
 }
