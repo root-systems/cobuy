@@ -3,15 +3,19 @@ import { map, merge } from 'ramda'
 
 import getProductsState from './getProductsState'
 import getResourceTypes from '../../resources/getters/getResourceTypes'
+import getPriceSpecsByProduct from './getPriceSpecsByProduct'
 
 export default createSelector(
   getProductsState,
   getResourceTypes,
-  (products, resourceTypes) => {
+  getPriceSpecsByProduct,
+  (products, resourceTypes, priceSpecsByProduct) => {
     const mapProducts = map(product => {
       const resourceType = resourceTypes[product.resourceTypeId]
+      const priceSpecs = priceSpecsByProduct[product.id]
       return merge(product, {
-        resourceType
+        resourceType,
+        priceSpecs
       })
     })
     return mapProducts(products)

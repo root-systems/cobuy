@@ -15,9 +15,10 @@ import styles from '../styles/ResourceTypeEditor'
 const ResourceTypeEditor = compose(
   connectFela(styles)
 )(props => {
-  const { resourceType = {} } = props
+  const { resourceType = {}, updateResourceType } = props
   const { id = 'tmp' } = resourceType
   const nextProps = merge(props, {
+    onSubmit: updateResourceType,
     form: `resourceType-${id}`,
     initialValues: resourceType
   })
