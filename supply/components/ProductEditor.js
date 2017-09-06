@@ -1,11 +1,7 @@
 import h from 'react-hyperscript'
-import { withState, compose } from 'recompose'
+import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
-import { Field, reduxForm as connectForm, FormSection, FieldArray } from 'redux-form'
-import { pipe } from 'ramda'
-import { SelectField, TextField, Toggle } from 'redux-form-material-ui'
-import MenuItem from 'material-ui/MenuItem'
-import RaisedButton from 'material-ui/RaisedButton'
+import { isNil } from 'ramda'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ProductEditor'
@@ -17,6 +13,12 @@ const ProductEditor = compose(
 )(props => {
   const { styles, product, updateResourceType, savePriceSpecs } = props
   const { resourceType, priceSpecs } = product
+
+  // ResourceTypeEditor and PriceSpecsEditor can't handle
+  // not having a resourceType, so don't render without one.
+  // this happens temporarily when a new product is created.
+  if (isNil(resourceType)) return null
+
   return h('div', {
     className: styles.container
   }, [
