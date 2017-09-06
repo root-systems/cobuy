@@ -22,6 +22,14 @@ export const finishPrereqs = {
   ]
 }
 
+export const createFirstOrder = {
+  id: 'createFirstOrder',
+  childTaskRecipes: [
+    finishPrereqs,
+    // castIntent TODO: will come out of #49
+  ]
+}
+
 export const createProfile = {
   id: 'createProfile',
   Component: CreateProfileTask,
