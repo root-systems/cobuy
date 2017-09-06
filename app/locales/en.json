@@ -62,6 +62,7 @@
   "tasks.tasks": "tasks",
   "tasks.completeTask": "done",
   "tasks.cancelTask": "cancel",
+  "tasks.recipes.createFirstOrder": "Start your first order",
   "tasks.recipes.finishPrereqs": "finish pre-requisites for ordering",
   "tasks.recipes.setupGroup": "setup group profile and members",
   "tasks.recipes.createProfile": "create your profile",
