@@ -1,10 +1,6 @@
-// import React from 'react'
-import { merge, pipe, map } from 'ramda'
+import { pipe, map } from 'ramda'
 import { connect as connectFela } from 'react-fela'
-import BigMath from 'bigmath'
 import h from 'react-hyperscript'
-
-import { FormattedMessage } from '../../lib/Intl'
 
 import ListViewProduct from './ListViewProduct'
 import styles from '../styles/ProductList'
