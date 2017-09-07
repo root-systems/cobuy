@@ -26,6 +26,8 @@
       "enum": [
         "setupGroup",
         "setupSupplier",
+        "createFirstOrder",
+        "startOrder",
         "finishPrereqs",
         "createProfile"
       ]
