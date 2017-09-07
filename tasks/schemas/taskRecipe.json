@@ -27,6 +27,7 @@
         "setupGroup",
         "setupSupplier",
         "createFirstOrder",
+        "startOrder",
         "finishPrereqs",
         "createProfile"
       ]

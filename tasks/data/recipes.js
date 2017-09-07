@@ -1,6 +1,7 @@
 import SetupGroupTask from '../containers/SetupGroupTask'
 import SetupSupplierTask from '../containers/SetupSupplierTask'
 import CreateProfileTask from '../containers/CreateProfileTask'
+import StartOrderTask from '../containers/StartOrderTask'
 
 export const setupGroup = {
   id: 'setupGroup',
@@ -22,11 +23,17 @@ export const finishPrereqs = {
   ]
 }
 
+export const startOrder = {
+  id: 'startOrder',
+  Component: StartOrderTask,
+  childTaskRecipes: []
+}
+
 export const createFirstOrder = {
   id: 'createFirstOrder',
   childTaskRecipes: [
     finishPrereqs,
-    // castIntent TODO: will come out of #49
+    startOrder
   ]
 }
 
