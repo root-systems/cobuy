@@ -1,46 +1,50 @@
-import React from 'react'
 import { merge, pipe } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import BigMath from 'bigmath'
+import h from 'react-hyperscript'
 
 import { FormattedMessage } from '../../lib/Intl'
-import MemberIntentControl from './MemberIntentControl'
-import MemberPreIntentControl from './MemberPreIntentControl'
-import getOrderableFromOffering from '../util/getOrderableFromOffering'
 
-import styles from '../styles/MemberIntentField'
+import styles from '../styles/SingleViewProduct'
 
-function MemberIntentField (props) {
-  const { styles, input: { value, onChange }, offering } = props
-  const Controls = value == false ? MemberPreIntentControl : MemberIntentControl
-
-  const { resourceType, unit, step } = getOrderableFromOffering(offering)
-  const { name } = resourceType
-  const min = '0'
-  const increment = BigMath.mul(step, '2')
-  const max = value == false
-    ? increment
-    : BigMath.add(value.maximum, increment)
+function SingleViewProduct (props) {
+  const { styles, product } = props
 
   return (
-    <div className={styles.container}>
-      <span className={styles.title}>
-        <FormattedMessage
-          id='ordering.intentTitle'
-          values={{ name, step, unit }}
-        />
-      </span>
-      <Controls
-        onChange={onChange}
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-      />
-    </div>
+    h('div', {
+      className: styles.container
+    }, [
+      h('div', {
+        className: styles.imageContainer
+      }, [
+        h('img', {
+          className: styles.image,
+          src: product.image
+        })
+      ]),
+      h('div', {
+        className: styles.textContainer
+      }, [
+        h('h3', {
+          className: styles.nameText
+        }, product.name),
+        h('p', {
+          className: styles.productText
+        }, product.description),
+        h('p', {
+          className: styles.priceText
+        }, [
+          h(FormattedMessage, {
+            id: 'ordering.from',
+            className: styles.fromText
+          }),
+          ` $${product.priceSpecifications[0].price}`
+        ])
+      ])
+    ])
   )
 }
 
 export default pipe(
   connectFela(styles)
-)(MemberIntentField)
+)(SingleViewProduct)

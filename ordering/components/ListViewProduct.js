@@ -1,4 +1,3 @@
-// import React from 'react'
 import { merge, pipe } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import BigMath from 'bigmath'
