@@ -1,5 +1,7 @@
+import baseTheme from './app/themes/base'
+
 export default {
-  fontNode: '#app-fonts',
+  theme: baseTheme,
   setup: (renderer) => {
     renderer.renderStatic(
       {

@@ -4,8 +4,8 @@ import { connect as connectFela } from 'react-fela'
 import TextField from 'material-ui/TextField'
 import BigMath from 'bigmath'
 import DebounceInput from 'react-debounce-input'
+import { FormattedMessage } from 'dogstack/intl'
 
-import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/MemberPreIntentControl'
 
 function MemberPreIntentControl (props) {

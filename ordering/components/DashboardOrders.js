@@ -2,9 +2,9 @@ import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { pipe } from 'ramda'
 import RaisedButton from 'material-ui/RaisedButton'
+import { FormattedMessage } from 'dogstack/intl'
 
 import styles from '../styles/DashboardOrders'
-import { FormattedMessage } from '../../lib/Intl'
 
 function DashboardOrders (props) {
   const { styles, actions } = props

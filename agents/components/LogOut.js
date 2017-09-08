@@ -2,8 +2,8 @@ import React from 'react'
 import FlatButton from 'material-ui/FlatButton'
 import { connect as connectFela } from 'react-fela'
 import { pipe } from 'ramda'
+import { FormattedMessage } from 'dogstack/intl'
 
-import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/LogOut'
 
 function LogOut (props) {

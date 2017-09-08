@@ -2,12 +2,10 @@
 
 import { configure, addDecorator } from '@storybook/react'
 
-import initFelaStorybook from './helpers/initFelaStorybook'
-import initFormStorybook from './helpers/initFormStorybook'
-import initMuiStorybook from './helpers/initMuiStorybook'
-import initIntlStorybook from './helpers/initIntlStorybook'
+const createRoot = require('dogstack/createRoot')
 
-window.config = require('../config/default').browser
+const config = require('../config/default').browser
+window.config = config
 
 function loadStories() {
   // add any topic stories here!
@@ -19,19 +17,28 @@ function loadStories() {
   require('../resources/stories')
 }
 
-const FelaProvider = initFelaStorybook()
-const FormProvider = initFormStorybook()
-const MuiProvider = initMuiStorybook()
-const IntlProvider = initIntlStorybook()
+import store from '../store'
+import style from '../style'
+import client from '../client'
+import root from '../root'
+import intl from '../intl'
 
-// global decorators applied to all stories
-addDecorator(FelaProvider)
-addDecorator(FormProvider)
-addDecorator(MuiProvider)
-addDecorator(IntlProvider)
+const options = {
+  config,
+  store,
+  style,
+  client,
+  root,
+  intl
+}
 
-// Needed for onTouchTap
-import injectTapEventPlugin from 'react-tap-event-plugin'
-injectTapEventPlugin()
+const renderRoot = createRoot(options)
 
-configure(loadStories, module);
+// global decorator applied to all stories
+addDecorator(story => {
+  return renderRoot([
+    story()
+  ])
+})
+
+configure(loadStories, module)

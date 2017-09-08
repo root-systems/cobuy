@@ -6,8 +6,8 @@ import { pipe, isNil, not } from 'ramda'
 import { TextField, SelectField, Checkbox } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
+import { FormattedMessage } from 'dogstack/intl'
 
-import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/MemberInvites'
 
 function renderMembers ({ fields, meta: { error, submitFailed }, removeMember, formProps }) {
