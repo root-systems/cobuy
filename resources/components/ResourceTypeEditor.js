@@ -46,6 +46,26 @@ const ResourceTypeForm = compose(
       ),
       component: TextField
     }),
+    h(Field, {
+      name: 'description',
+      floatingLabelText: (
+        h(FormattedMessage, {
+          id: 'resources.resourceTypeDescription',
+          className: styles.labelText
+        })
+      ),
+      component: TextField
+    }),
+    h(Field, {
+      name: 'image',
+      floatingLabelText: (
+        h(FormattedMessage, {
+          id: 'resources.resourceTypeImage',
+          className: styles.labelText
+        })
+      ),
+      component: TextField
+    }),
     h(RaisedButton, {
       type: 'submit',
       className: styles.submitButton

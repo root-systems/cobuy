@@ -116,16 +116,6 @@ const PriceSpec = (props) => {
           })
         )
       }),
-      h(TextField, {
-        value: resourceType.unit,
-        floatingLabelText: (
-          h(FormattedMessage, {
-            id: 'quantity.unit',
-            className: styles.labelText
-          })
-        ),
-        disabled: true
-      }),
       h(Field, {
         name: `${field}.price`,
         component: TextField,

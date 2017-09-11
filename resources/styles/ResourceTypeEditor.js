@@ -20,8 +20,7 @@ export default {
   }),
   itemListContainer: () => ({
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    flexDirection: 'column'
   }),
   itemContainer: () => ({
     display: 'flex',

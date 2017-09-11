@@ -7,6 +7,8 @@ import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ProductListEditor'
 import ProductEditor from '../../supply/components/ProductEditor'
 
+import RaisedButton from 'material-ui/RaisedButton';
+
 const ProductListEditor = compose(
   connectFela(styles)
 )(props => {
@@ -26,11 +28,12 @@ const ProductListEditor = compose(
   return h('div', {
     className: styles.container
   }, [
-    h('button', {
+    h(RaisedButton, {
+      className: styles.addProductButton,
       onClick: () => createProduct()
     }, [
       h(FormattedMessage, {
-        id: 'resources.createProduct',
+        id: 'supply.createProduct',
         className: styles.labelText
       })
     ]),
