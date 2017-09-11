@@ -27,10 +27,14 @@ function ListViewProduct (props) {
       }, [
         h('h3', {
           className: styles.nameText
-        }, product.name),
+        }, [
+          product.name
+        ]),
         h('p', {
           className: styles.productText
-        }, product.description),
+        }, [
+          product.description
+        ]),
         h('p', {
           className: styles.priceText
         }, [
