@@ -1,6 +1,5 @@
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { reduxForm, Field } from 'redux-form'
 import h from 'react-hyperscript'
 
 import SingleViewProduct from '../components/SingleViewProduct'
