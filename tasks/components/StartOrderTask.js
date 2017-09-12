@@ -2,27 +2,27 @@ import h from 'react-hyperscript'
 import { isNil } from 'ramda'
 
 import TaskStepper from './TaskStepper'
-import Profile from '../../agents/components/Profile'
+import SelectAgentForOrder from '../../agents/components/SelectAgentForOrder'
 
 export default (props) => {
   const steps = [
     {
       id: 'tasks.steps.selectGroup',
-      content: h('div', {
-
-      }, 'select group')
+      content: h(SelectAgentForOrder, {
+        selectAgent: (agent) => { console.log('agent, ', agent)}
+      })
     },
     {
       id: 'tasks.steps.selectSupplier',
-      content: h('div', {
-
-      }, 'select supplier')
+      content: h(SelectAgentForOrder, {
+        selectAgent: (agent) => { console.log('agent, ', agent)}
+      })
     },
     {
       id: 'tasks.steps.selectAdmin',
-      content: h('div', {
-
-      }, 'select admin')
+      content: h(SelectAgentForOrder, {
+        selectAgent: (agent) => { console.log('agent, ', agent)}
+      })
     }
   ]
 
