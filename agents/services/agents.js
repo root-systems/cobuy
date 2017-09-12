@@ -138,6 +138,7 @@ function hasNoOrders (hook) {
 
 function createFirstOrderTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
   const taskRecipeId = taskRecipes.createFirstOrder.id
 
   // TODO: add beforeAll hook to get agent
@@ -148,7 +149,10 @@ function createFirstOrderTaskPlan (hook) {
     consumerAgentId: hook.data.consumerAgentId,
     supplierAgentId: hook.data.supplierAgentId
   }
-  return taskPlans.create({ taskRecipeId, params, assigneeId })
+  return orders.create(params)
+  .then(() => {
+    return taskPlans.create({ taskRecipeId, params, assigneeId })
+  })
   .then(() => {
     return hook
   })
