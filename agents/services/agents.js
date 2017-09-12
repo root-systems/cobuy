@@ -1,5 +1,5 @@
 const { iff } = require('feathers-hooks-common')
-import { isNil, isEmpty, pipe, length, equals } from 'ramda'
+import { isNil, isEmpty, pipe, length, equals, merge } from 'ramda'
 
 import * as taskRecipes from '../../tasks/data/recipes'
 
@@ -145,12 +145,15 @@ function createFirstOrderTaskPlan (hook) {
   // const assigneeId = hook.params.agent.id
 
   const assigneeId = hook.result.id
-  const params = {
+
+  // TODO: IK: this gives these params to all child TaskPlans, probably a better way in future
+  let params = {
     consumerAgentId: hook.data.consumerAgentId,
     supplierAgentId: hook.data.supplierAgentId
   }
   return orders.create(params)
-  .then(() => {
+  .then((order) => {
+    params = merge(params, { orderId: order.id })
     return taskPlans.create({ taskRecipeId, params, assigneeId })
   })
   .then(() => {
