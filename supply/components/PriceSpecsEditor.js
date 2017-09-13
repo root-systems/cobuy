@@ -13,14 +13,17 @@ import styles from '../styles/PriceSpecsEditor'
 const PriceSpecsEditor = (props) => {
   const {
     resourceType,
-    priceSpecs
+    priceSpecs,
+    savePriceSpecs
   } = props
   const { id = 'tmp' } = resourceType
   const nextProps = merge(props, {
     form: `priceSpecs-${id}`,
     initialValues: {
       priceSpecs
-    }
+    },
+    enableReinitialize: true, // to set id when created
+    onSubmit: savePriceSpecs
   })
   return h(PriceSpecsForm, nextProps)
 }
@@ -112,16 +115,6 @@ const PriceSpec = (props) => {
             className: styles.labelText
           })
         )
-      }),
-      h(TextField, {
-        value: resourceType.unit,
-        floatingLabelText: (
-          h(FormattedMessage, {
-            id: 'quantity.unit',
-            className: styles.labelText
-          })
-        ),
-        disabled: true
       }),
       h(Field, {
         name: `${field}.price`,

@@ -6,7 +6,18 @@ import epic from './epic'
 export default {
   updater,
   epic,
+  middlewares: [
+//    debug
+  ],
   enhancers: [
     devToolsEnhancer()
   ]
+}
+
+function debug ({ getState }) {
+  return next => action => {
+    const nextValue = next(action)
+    debugger
+    return nextValue
+  }
 }

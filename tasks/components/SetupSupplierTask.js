@@ -3,15 +3,16 @@ import { isNil, merge, isEmpty } from 'ramda'
 
 import TaskStepper from './TaskStepper'
 import Profile from '../../agents/components/Profile'
-import MemberInvites from '../../agents/components/MemberInvites'
+import ProductListEditor from '../../supply/components/ProductListEditor'
+import ResourceTypeEditor from '../../resources/components/ResourceTypeEditor'
 
 export default (props) => {
-  const { taskPlan, actions } = props
+  const { taskPlan, actions, products } = props
   if (isNil(taskPlan)) return null
   const { params: { supplierAgent } } = taskPlan
   if (isNil(supplierAgent)) return null
 
-  const { profile, members } = supplierAgent
+  const { profile } = supplierAgent
 
   const steps = [
     {
@@ -23,6 +24,30 @@ export default (props) => {
         }
       })
     },
+    {
+      id: 'tasks.steps.supplierProducts',
+      content: h(ProductListEditor, {
+        products,
+        createProduct: () => {
+          actions.products.create({
+            supplierAgentId: supplierAgent.id
+          })
+        },
+        updateResourceType: (resourceType) => {
+          actions.resourceTypes.update(resourceType.id, resourceType)
+        },
+        savePriceSpecs: (productId, priceSpecs) => {
+          priceSpecs.forEach(priceSpec => {
+            const nextPriceSpec = merge(priceSpec, { productId })
+            if (nextPriceSpec.id) {
+              actions.priceSpecs.update(nextPriceSpec.id, nextPriceSpec)
+            } else {
+              actions.priceSpecs.create(nextPriceSpec)
+            }
+          })
+        }
+      })
+    }
   ]
 
   return h(TaskStepper, {
