@@ -74,6 +74,7 @@ function Profile (props) {
         })
       ])
     ]),
+
     h('div', {
       className: styles.buttonContainer
     }, [

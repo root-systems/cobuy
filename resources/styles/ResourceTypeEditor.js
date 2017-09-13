@@ -1,7 +1,12 @@
 export default {
   container: () => ({
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    paddingTop: '2rem'
+  }),
+  resourceHeader: () => ({
+    display: 'flex',
+    fontSize: '2rem'
   }),
   submitButton: () => ({
   }),
@@ -20,7 +25,8 @@ export default {
   }),
   itemListContainer: () => ({
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    alignItems: 'center'
   }),
   itemContainer: () => ({
     display: 'flex',

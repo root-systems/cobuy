@@ -4,6 +4,7 @@ import { isNil, merge, isEmpty } from 'ramda'
 import TaskStepper from './TaskStepper'
 import Profile from '../../agents/components/Profile'
 import ProductListEditor from '../../supply/components/ProductListEditor'
+import ResourceTypeEditor from '../../resources/components/ResourceTypeEditor'
 
 export default (props) => {
   const { taskPlan, actions, products } = props

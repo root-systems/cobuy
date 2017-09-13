@@ -1,9 +1,10 @@
 import h from 'react-hyperscript'
 import { createStructuredSelector } from 'reselect'
 import { pipe, values, map, merge, propOr, length, gte, __ } from 'ramda'
-import { withState, compose } from 'recompose'
+import { withState, withHandlers, compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import { reduxForm as connectForm, Field, FieldArray } from 'redux-form'
+import { not } from 'ramda'
 import { SelectField, TextField, Toggle } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -28,14 +29,31 @@ const ResourceTypeEditor = compose(
 export default ResourceTypeEditor
 
 const ResourceTypeForm = compose(
-  connectForm({})
+  connectForm({}),
+  withState('isEditing', 'setEditing', false),
+  withHandlers({
+    toggleEdit: ({ setEditing }) => () => setEditing(not)
+  })
 )(props => {
-  const { styles, handleSubmit } = props
+  const { styles, isEditing, toggleEdit, updateResourceType, handleSubmit } = props
+
+  const updateResourceAndToggleEdit = (nextResource) => {
+    toggleEdit()
+    updateResourceType(nextResource)
+  }
 
   return h('form', {
     className: styles.container,
-    onSubmit: handleSubmit
+    onSubmit: handleSubmit(updateResourceAndToggleEdit)
   }, [
+    h('p', {
+      className: styles.resourceHeader
+    }, [
+      h(FormattedMessage, {
+        id: 'resources.resourceTypes',
+        className: styles.labelText
+      })
+    ]),
     h(Field, {
       name: 'name',
       floatingLabelText: (
@@ -44,7 +62,8 @@ const ResourceTypeForm = compose(
           className: styles.labelText
         })
       ),
-      component: TextField
+      component: TextField,
+      disabled: not(isEditing)
     }),
     h(Field, {
       name: 'description',
@@ -64,16 +83,37 @@ const ResourceTypeForm = compose(
           className: styles.labelText
         })
       ),
-      component: TextField
+      component: TextField,
+      disabled: not(isEditing)
     }),
-    h(RaisedButton, {
-      type: 'submit',
-      className: styles.submitButton
+
+    h('div', {
+      className: styles.buttonContainer
     }, [
-      h(FormattedMessage, {
-        id: 'resources.saveResourceType',
-        className: styles.buttonText
-      })
+      isEditing
+      ? h(RaisedButton, {
+        className: styles.submitButton,
+        type: 'submit'
+      }, [
+        h(FormattedMessage, {
+          id: 'resources.saveResourceType',
+          className: styles.labelText
+        })
+      ])
+      : h(RaisedButton, {
+        className: styles.submitButton,
+        type: 'button',
+        onClick: (ev) => {
+          // GK: not entirely clear why this is necessary considering the button type, but preventing default anyway
+          ev.preventDefault()
+          toggleEdit()
+        }
+      }, [
+        h(FormattedMessage, {
+          id: 'resources.editResource',
+          className: styles.labelText
+        })
+      ])
     ])
   ])
 })
