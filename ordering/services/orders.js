@@ -26,8 +26,8 @@ const hooks = {
   },
   after: {
     create: [
-      iff(hasOneOrder, createPrereqTaskPlan),
-      createCastIntentTaskPlan
+      createCastIntentTaskPlan,
+      iff(hasOneOrder, createPrereqTaskPlan)
     ]
   },
   error: {}
@@ -146,9 +146,9 @@ function createCastIntentTaskPlan (hook) {
   // const assigneeId = hook.params.agent.id
 
   const assigneeId = hook.params.credential.agentId
-  const params = JSON.stringify({
-    contextAgentId: hook.data.agentId
-  })
+  const params = {
+    consumerAgentId: hook.data.consumerAgentId
+  }
 
   return taskPlans.create({ taskRecipeId, params, assigneeId })
   .then(() => {

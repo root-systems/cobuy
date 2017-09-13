@@ -27,7 +27,8 @@
         "setupGroup",
         "setupSupplier",
         "finishPrereqs",
-        "createProfile"
+        "createProfile",
+        "castIntent"
       ]
     }
   },
