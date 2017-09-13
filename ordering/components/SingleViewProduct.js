@@ -1,6 +1,7 @@
 import { pipe, map } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import { reduxForm, Field } from 'redux-form'
+import RaisedButton from 'material-ui/RaisedButton'
 import h from 'react-hyperscript'
 
 import { FormattedMessage } from '../../lib/Intl'
@@ -47,13 +48,20 @@ function SingleViewProduct (props) {
         ]),
         h('div', {
           className: styles.priceSpecsContainer
-        },
-          map((priceSpec) => {
-            return h(ProductPriceSpec, {
-              priceSpec: priceSpec
-            })
-          }, product.priceSpecifications)
-        )
+        }, map((priceSpec) => {
+          return h(ProductPriceSpec, {
+            priceSpec: priceSpec
+          })
+        }, product.priceSpecifications)),
+        h(RaisedButton, {
+          type: 'submit',
+          primary: true,
+          className: styles.submitButton,
+          label: h(FormattedMessage, {
+            id: 'ordering.add',
+            className: styles.addButtonText
+          })
+        })
       ])
     ])
   )
