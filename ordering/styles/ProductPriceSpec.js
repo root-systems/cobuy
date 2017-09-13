@@ -1,9 +1,14 @@
 export default {
   container: () => ({
-    backgroundColor: 'yellow'
+    display: 'flex',
+    flexDirection: 'column'
   }),
-  valuesContainer: () => ({
+  priceSpecText: () => ({
+  }),
+  qtyContainer: () => ({
     display: 'flex',
     flexDirection: 'row'
+  }),
+  qtyTextField: () => ({
   })
 }
