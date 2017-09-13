@@ -1,5 +1,5 @@
 export default {
-  container: () => ({
-    backgroundColor: 'red'
+  container: ({ theme }) => ({
+    padding: theme.space[4]
   })
 }

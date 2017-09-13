@@ -1,5 +1,5 @@
 export default {
-  container: () => ({
+  container: ({ theme }) => ({
     display: 'flex',
     flexDirection: 'column'
   }),
