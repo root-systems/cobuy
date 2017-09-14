@@ -3,39 +3,23 @@ import { isNil } from 'ramda'
 import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
-import MemberIntentField from '../../ordering/components/MemberIntentField'
+import SingleViewProduct from '../../ordering/components/SingleViewProduct'
 
 // import styles from '../styles/CastIntentTask'
 
-const avoOffering = {
-  resourceType: {
-    name: 'crate of avocados',
-    items: [
-      {
-        resourceType: {
-          name: 'avocado'
-        },
-        quantity: {
-          step: '1',
-          value: '24',
-          unit: 'each'
-        }
-      },
-      {
-        resourceType: {
-          name: 'crate'
-        },
-        quantity: {
-          value: '1',
-          unit: 'each'
-        }
-      }
-    ]
-  },
+const mockProductInfo = {
+  name: 'crayons',
+  description: 'these are crayons',
+  image: 'http://www.mercurius-australia.com/site/images/1250623.jpg',
   priceSpecifications: [
     {
-      minimum: '0',
-      price: '100',
+      minimum: '10',
+      price: '9.99',
+      currency: 'NZD'
+    },
+    {
+      minimum: '100',
+      price: '7.99',
       currency: 'NZD'
     }
   ]
@@ -49,8 +33,8 @@ const IntentForm = props => {
     }, [
       h(Field, {
         name: 'intent',
-        component: MemberIntentField,
-        offering: avoOffering
+        component: SingleViewProduct,
+        product: mockProductInfo
       })
     ])
   )
