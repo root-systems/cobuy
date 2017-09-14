@@ -5,8 +5,8 @@ import { connect as connectFela } from 'react-fela'
 import BigMath from 'bigmath'
 import TextField from 'material-ui/TextField'
 import DebounceInput from 'react-debounce-input'
+import { FormattedMessage } from 'dogstack/intl'
 
-import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/MemberIntentControl'
 
 // IDEA: inputs as labels that hover over

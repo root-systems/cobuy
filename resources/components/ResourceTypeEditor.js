@@ -9,8 +9,8 @@ import { SelectField, TextField, Toggle } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
+import { FormattedMessage } from 'dogstack/intl'
 
-import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ResourceTypeEditor'
 
 const ResourceTypeEditor = compose(

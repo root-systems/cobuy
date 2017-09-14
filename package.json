@@ -55,7 +55,6 @@
   },
   "homepage": "https://github.com/enspiral-root-systems/cobuy#readme",
   "dependencies": {
-    "@ahdinosaur/react-fela": "^4.3.5",
     "@f/create-action": "^1.1.1",
     "@root-systems/redux-form-validators": "^1.1.0",
     "ajv": "^5.2.2",
@@ -67,7 +66,7 @@
     "babelify": "^7.3.0",
     "bigmath": "^1.0.3",
     "dog-names": "^1.0.2",
-    "dogstack": "^0.4.0",
+    "dogstack": "^0.5.1",
     "dogstack-agents": "^0.5.1",
     "feathers-action": "^2.4.0",
     "feathers-action-react": "^2.2.1",

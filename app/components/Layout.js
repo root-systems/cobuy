@@ -1,5 +1,6 @@
-import React from 'react'
-import { createComponent } from '@ahdinosaur/react-fela'
+import h from 'react-hyperscript'
+import { compose } from 'recompose'
+import { connect as connectFela } from 'react-fela'
 import { Route, Switch } from 'react-router-dom'
 import { pipe, map, values, isNil } from 'ramda'
 
@@ -7,18 +8,23 @@ import styles from '../styles/Layout'
 
 import Nav from './Navigation'
 
-const Container = createComponent(styles.container, 'div')
+export default compose(
+  connectFela(styles)
+)(Layout)
 
 function Layout (props) {
-  const { routes, navigationRoutes } = props
-  const pages = mapRoutePages(routes)
+  const { styles, routes, navigationRoutes } = props
 
-  return <Container>
-    <Nav navigationRoutes={navigationRoutes} />
-    <Switch>
-      {pages}
-    </Switch>
-  </Container>
+  return (
+    h('div', {
+      className: styles.container
+    }, [
+      h(Nav, { navigationRoutes }),
+      h(Switch, {}, [
+        mapRoutePages(routes)
+      ])
+    ])
+  )
 }
 
 const mapRoutePages = map(route => {
@@ -33,46 +39,11 @@ const mapRoutePages = map(route => {
   const key = path || '404'
 
   return (
-    <Route path={path} key={key} exact={exact} component={Component} />
+    h(Route, {
+      path,
+      key,
+      exact,
+      component: Component
+    })
   )
 })
-
-// TODO move this to some config for dogstack
-import PropTypes from 'prop-types'
-import { Provider as FelaProvider, ThemeProvider as FelaThemeProvider } from 'react-fela'
-import { StyleProvider as VeelProvider } from 'veel'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import { IntlProvider, addLocaleData } from 'react-intl'
-import en from 'react-intl/locale-data/en'
-import getLocaleMessages from '../helpers/getLocaleMessages'
-import MuiThemeHelper from '../helpers/MuiThemeHelper'
-import baseTheme from '../themes/base'
-
-const locale = navigator.language
-addLocaleData([...en])
-const messagesByLocale = {
-  'en': require('../locales/en'),
-  'en-US': require('../locales/en-us')
-}
-const messages = getLocaleMessages(messagesByLocale, locale)
-
-const Root = (props, context) => {
-  return (
-    <FelaThemeProvider theme={baseTheme}>
-      <VeelProvider renderer={context.renderer} config={baseTheme}>
-        <MuiThemeProvider muiTheme={MuiThemeHelper(baseTheme)}>
-          <IntlProvider
-            locale={locale}
-            messages={messages}
-          >
-            <Layout {...props} />
-          </IntlProvider>
-        </MuiThemeProvider>
-      </VeelProvider>
-    </FelaThemeProvider>
-  )
-}
-
-Root.contextTypes = { renderer: PropTypes.object }
-
-export default Root

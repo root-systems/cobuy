@@ -9,7 +9,5 @@ const messagesByLocale = {
 }
 
 export default {
-  appNode: '#app',
-  messagesByLocale,
-  styleNode: '#app-styles',
+  messagesByLocale
 }

@@ -6,8 +6,8 @@ import { TextField } from 'redux-form-material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
 import { compose, withState, withHandlers } from 'recompose'
 import h from 'react-hyperscript'
+import { FormattedMessage } from 'dogstack/intl'
 
-import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/Profile'
 import AvatarField from '../../app/components/AvatarField'
 
