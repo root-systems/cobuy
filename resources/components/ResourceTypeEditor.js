@@ -1,6 +1,6 @@
 import h from 'react-hyperscript'
 import { createStructuredSelector } from 'reselect'
-import { pipe, values, map, merge, propOr, length, gte, __ } from 'ramda'
+import { pipe, values, map, merge, propOr, length, gte } from 'ramda'
 import { withState, withHandlers, compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import { reduxForm as connectForm, Field, FieldArray } from 'redux-form'
@@ -12,9 +12,15 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ResourceTypeEditor'
+import ResourceTypeForm from './ResourceTypeForm'
+import ResourceTypeView from './ResourceTypeView'
 
 const ResourceTypeEditor = compose(
-  connectFela(styles)
+  connectFela(styles),
+  withState('isEditing', 'setEditing', false),
+  withHandlers({
+    toggleEdit: ({ setEditing }) => () => setEditing(not)
+  })
 )(props => {
   const { resourceType = {}, updateResourceType } = props
   const { id = 'tmp' } = resourceType
@@ -23,97 +29,11 @@ const ResourceTypeEditor = compose(
     form: `resourceType-${id}`,
     initialValues: resourceType
   })
-  return h(ResourceTypeForm, nextProps)
+  if (props.isEditing) {
+    return h(ResourceTypeForm, nextProps)
+  } else {
+    return h(ResourceTypeView, nextProps)
+  }
 })
 
 export default ResourceTypeEditor
-
-const ResourceTypeForm = compose(
-  connectForm({}),
-  withState('isEditing', 'setEditing', false),
-  withHandlers({
-    toggleEdit: ({ setEditing }) => () => setEditing(not)
-  })
-)(props => {
-  const { styles, isEditing, toggleEdit, updateResourceType, handleSubmit } = props
-
-  const updateResourceAndToggleEdit = (nextResource) => {
-    toggleEdit()
-    updateResourceType(nextResource)
-  }
-
-  return h('form', {
-    className: styles.container,
-    onSubmit: handleSubmit(updateResourceAndToggleEdit)
-  }, [
-    h('p', {
-      className: styles.resourceHeader
-    }, [
-      h(FormattedMessage, {
-        id: 'resources.resourceTypes',
-        className: styles.labelText
-      })
-    ]),
-    h(Field, {
-      name: 'name',
-      floatingLabelText: (
-        h(FormattedMessage, {
-          id: 'resources.resourceTypeName',
-          className: styles.labelText
-        })
-      ),
-      component: TextField,
-      disabled: not(isEditing)
-    }),
-    h(Field, {
-      name: 'description',
-      floatingLabelText: (
-        h(FormattedMessage, {
-          id: 'resources.resourceTypeDescription',
-          className: styles.labelText
-        })
-      ),
-      component: TextField
-    }),
-    h(Field, {
-      name: 'image',
-      floatingLabelText: (
-        h(FormattedMessage, {
-          id: 'resources.resourceTypeImage',
-          className: styles.labelText
-        })
-      ),
-      component: TextField,
-      disabled: not(isEditing)
-    }),
-
-    h('div', {
-      className: styles.buttonContainer
-    }, [
-      isEditing
-      ? h(RaisedButton, {
-        className: styles.submitButton,
-        type: 'submit'
-      }, [
-        h(FormattedMessage, {
-          id: 'resources.saveResourceType',
-          className: styles.labelText
-        })
-      ])
-      : h(RaisedButton, {
-        className: styles.submitButton,
-        type: 'button',
-        onClick: (ev) => {
-          // GK: not entirely clear why this is necessary considering the button type, but preventing default anyway
-          ev.preventDefault()
-          toggleEdit()
-        }
-      }, [
-        h(FormattedMessage, {
-          id: 'resources.editResource',
-          className: styles.labelText
-        })
-      ])
-    ])
-  ])
-})
