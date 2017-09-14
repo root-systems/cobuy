@@ -40,5 +40,8 @@ export default {
   }),
   buttonText: () => ({
     textTransform: 'capitalize'
+  }),
+  bluBox: () => ({
+    backgroundColor: 'blue'
   })
 }
