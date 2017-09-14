@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import LogOut from '../components/LogOut'
+import { LogOut } from 'dogstack-agents/components'
 
 const actions = {
   authentication: { logOut: () => {} }

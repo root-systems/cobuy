@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import Register from '../components/Register'
+import { Register } from 'dogstack-agents/components'
 
 const actions = {
   authentication: { register: () => {} },
