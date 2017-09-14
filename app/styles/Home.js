@@ -67,14 +67,14 @@ export default {
   // color: primary1
   titleText: ({ theme }) => ({
     fontFamily: theme.fonts.logo,
-    fontSize: theme.fontSizes[12],
+    fontSize: theme.fontSizes[15],
     color: theme.colors.text,
     margin: theme.space[0],
     textAlign: 'center'
   }),
   taglineText: ({ theme }) => ({
     fontFamily: theme.fonts.primary,
-    fontSize: theme.fontSizes[5],
+    fontSize: theme.fontSizes[3],
     color: theme.colors.text,
     fontWeight: theme.fontWeights.bold,
     textAlign: 'center'
@@ -100,7 +100,7 @@ export default {
   },
   bodyText: ({ theme }) => ({
     fontFamily: theme.fonts.primary,
-    fontSize: theme.fontSizes[3],
+    fontSize: theme.fontSizes[1],
     color: theme.colors.text
   })
 }
