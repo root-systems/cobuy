@@ -42,7 +42,7 @@ function ListViewProduct (props) {
             id: 'ordering.from',
             className: styles.fromText
           }),
-          ` $${product.priceSpecifications[0].price}`
+          ` ${product.priceSpecifications[0].currency}${product.priceSpecifications[0].price}`
         ])
       ])
     ])
