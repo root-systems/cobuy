@@ -1,13 +1,14 @@
 export default {
   container: ({ theme }) => ({
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    paddingBottom: theme.space[3]
   }),
   priceSpecText: () => ({
   }),
   qtyContainer: () => ({
     display: 'flex',
-    flexDirection: 'row'
+    width: '100px'
   }),
   qtyTextField: () => ({
   })

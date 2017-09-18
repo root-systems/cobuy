@@ -28,40 +28,44 @@ function SingleViewProduct (props) {
           })
         ]),
         h('div', {
-          className: styles.textContainer
+          className: styles.infoContainer
         }, [
-          h('h3', {
-            className: styles.nameText
-          }, product.name),
-          h('p', {
-            className: styles.productText
-          }, product.description),
-          h('p', {
-            className: styles.priceText
+          h('div', {
+            className: styles.textContainer
           }, [
-            h(FormattedMessage, {
-              id: 'ordering.from',
-              className: styles.fromText
-            }),
-            ` $${product.priceSpecifications[0].price}`
-          ])
-        ]),
-        h('div', {
-          className: styles.priceSpecsContainer
-        }, map((priceSpec) => {
-          return h(ProductPriceSpec, {
-            priceSpec: priceSpec
+            h('h3', {
+              className: styles.nameText
+            }, product.name),
+            h('p', {
+              className: styles.productText
+            }, product.description),
+            h('p', {
+              className: styles.priceText
+            }, [
+              h(FormattedMessage, {
+                id: 'ordering.from',
+                className: styles.fromText
+              }),
+              ` ${product.priceSpecifications[0].currency}${product.priceSpecifications[0].price}`
+            ])
+          ]),
+          h('div', {
+            className: styles.priceSpecsContainer
+          }, map((priceSpec) => {
+            return h(ProductPriceSpec, {
+              priceSpec: priceSpec
+            })
+          }, product.priceSpecifications)),
+          h(RaisedButton, {
+            type: 'submit',
+            primary: true,
+            className: styles.submitButton,
+            label: h(FormattedMessage, {
+              id: 'ordering.add',
+              className: styles.addButtonText
+            })
           })
-        }, product.priceSpecifications)),
-        h(RaisedButton, {
-          type: 'submit',
-          primary: true,
-          className: styles.submitButton,
-          label: h(FormattedMessage, {
-            id: 'ordering.add',
-            className: styles.addButtonText
-          })
-        })
+        ])
       ])
     ])
   )

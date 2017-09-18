@@ -21,7 +21,8 @@ function ProductPriceSpec (props) {
         className: styles.priceSpecText,
         values: {
           minimum: priceSpec.minimum,
-          price: priceSpec.price
+          price: priceSpec.price,
+          currency: priceSpec.currency
         }
       }),
       h('div', {
