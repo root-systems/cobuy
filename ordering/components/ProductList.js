@@ -1,4 +1,5 @@
-import { pipe, map } from 'ramda'
+import { compose } from 'recompose'
+import { map } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 
@@ -11,16 +12,17 @@ function ProductList (props) {
   return (
     h('div', {
       className: styles.container
-    },
+    }, [
       map((product) => {
         return h(ListViewProduct, {
-          product: product
+          product: product,
+          key: product.id
         })
       }, products)
-    )
+    ])
   )
 }
 
-export default pipe(
+export default compose(
   connectFela(styles)
 )(ProductList)

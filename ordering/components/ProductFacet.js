@@ -1,7 +1,7 @@
-import React from 'react'
-import { merge, pipe, map } from 'ramda'
+import { compose } from 'recompose'
+import { map } from 'ramda'
 import { connect as connectFela } from 'react-fela'
-import { reduxForm, Field } from 'redux-form'
+import { Field } from 'redux-form'
 import { RadioButtonGroup } from 'redux-form-material-ui'
 import { RadioButton } from 'material-ui/RadioButton'
 import h from 'react-hyperscript'
@@ -34,7 +34,7 @@ function ProductFacet (props) {
         }, map((facetValue) => {
           return h(RadioButton, {
             label: facetValue.name,
-            value: facetValue.name
+            value: facetValue.id
           })
         }, facet.values))
       ])
@@ -42,6 +42,6 @@ function ProductFacet (props) {
   )
 }
 
-export default pipe(
+export default compose(
   connectFela(styles)
 )(ProductFacet)

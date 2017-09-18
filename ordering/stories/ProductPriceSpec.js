@@ -7,6 +7,8 @@ import ProductPriceSpec from '../components/ProductPriceSpec'
 
 // https://github.com/root-systems/cobuy/wiki/Models
 const mockPriceSpec = {
+  id: 1,
+  productId: 2,
   minimum: '100',
   price: '7.99',
   currency: 'NZD'

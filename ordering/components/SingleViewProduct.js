@@ -1,6 +1,7 @@
-import { pipe, map } from 'ramda'
+import { compose } from 'recompose'
+import { map } from 'ramda'
 import { connect as connectFela } from 'react-fela'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm as connectForm } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
 import h from 'react-hyperscript'
 
@@ -71,8 +72,9 @@ function SingleViewProduct (props) {
   )
 }
 
-const ConnectedSingleViewProduct = reduxForm({ form: 'singleViewProduct' })(SingleViewProduct)
-
-export default pipe(
-  connectFela(styles)
-)(ConnectedSingleViewProduct)
+export default compose(
+  connectFela(styles),
+  connectForm({
+    form: 'singleViewProduct'
+  })
+)(SingleViewProduct)

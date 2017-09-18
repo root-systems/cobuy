@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
 import { pipe, isNil, not } from 'ramda'

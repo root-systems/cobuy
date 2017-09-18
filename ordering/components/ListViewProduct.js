@@ -1,6 +1,6 @@
-import { merge, pipe } from 'ramda'
+import { compose } from 'recompose'
+import { merge } from 'ramda'
 import { connect as connectFela } from 'react-fela'
-import BigMath from 'bigmath'
 import h from 'react-hyperscript'
 
 import { FormattedMessage } from '../../lib/Intl'
@@ -49,6 +49,6 @@ function ListViewProduct (props) {
   )
 }
 
-export default pipe(
+export default compose(
   connectFela(styles)
 )(ListViewProduct)

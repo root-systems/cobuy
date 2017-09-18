@@ -1,7 +1,6 @@
-import React from 'react'
-import { pipe, map } from 'ramda'
+import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
-import { reduxForm, Field } from 'redux-form'
+import { Field } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import h from 'react-hyperscript'
 
@@ -39,6 +38,6 @@ function ProductPriceSpec (props) {
   )
 }
 
-export default pipe(
+export default compose(
   connectFela(styles)
 )(ProductPriceSpec)
