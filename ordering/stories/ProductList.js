@@ -9,7 +9,7 @@ import ProductList from '../components/ProductList'
 const mockProductList = [
   {
     name: 'crayons',
-    description: 'these are crayons',
+    description: 'these are crayons. look at all the pretty colours! they are made of beeswax. you could probably eat them and not die.',
     image: 'http://www.mercurius-australia.com/site/images/1250623.jpg',
     priceSpecifications: [
       {
