@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { linkTo } from '@storybook/addon-links'
 
-import SignIn from '../components/SignIn'
+import { SignIn } from 'dogstack-agents/components'
 
 const actions = {
   authentication: { signIn: () => {}, register: () => {} },

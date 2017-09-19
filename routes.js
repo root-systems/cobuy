@@ -5,19 +5,17 @@ import React from 'react'
 import Home from './app/containers/Home'
 import Dashboard from './app/containers/Dashboard'
 
-import Register from './agents/containers/Register'
-import SignIn from './agents/containers/SignIn'
-import LogOut from './agents/containers/LogOut'
 
 import TaskWorker from './tasks/containers/TaskWorker'
 
 import {
-  SignOut
+  Register,
+  SignIn,
+  LogOut
 } from 'dogstack-agents/components'
 import {
   UserIsAuthenticated,
-  UserIsNotAuthenticated,
-  UserIsAuthenticatedOrHome
+  UserIsNotAuthenticated
 } from 'dogstack-agents/hoc'
 import {
   getIsAuthenticated,
