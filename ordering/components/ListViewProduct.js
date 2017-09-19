@@ -39,10 +39,13 @@ function ListViewProduct (props) {
           className: styles.priceText
         }, [
           h(FormattedMessage, {
-            id: 'ordering.from',
-            className: styles.fromText
-          }),
-          ` ${product.priceSpecifications[0].currency}${product.priceSpecifications[0].price}`
+            id: 'ordering.fromPrice',
+            className: styles.fromText,
+            values: {
+              currency: product.priceSpecs[0].currency,
+              price: product.priceSpecs[0].price
+            }
+          })
         ])
       ])
     ])

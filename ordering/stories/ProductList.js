@@ -10,7 +10,7 @@ const mockProductList = [
     name: 'crayons',
     description: 'these are crayons. look at all the pretty colours! they are made of beeswax. you could probably eat them and not die.',
     image: 'http://www.mercurius-australia.com/site/images/1250623.jpg',
-    priceSpecifications: [
+    priceSpecs: [
       {
         id: 1,
         productId: 1,
@@ -32,7 +32,7 @@ const mockProductList = [
     name: 'coloured pencils',
     description: 'these are pencils that are coloured',
     image: 'http://thewoodenwagon.com/Merchant2/graphics/00000001/ACST85090912-2.jpg',
-    priceSpecifications: [
+    priceSpecs: [
       {
         id: 3,
         productId: 2,
@@ -54,7 +54,7 @@ const mockProductList = [
     name: 'workbooks',
     description: 'these are workbooks',
     image: 'http://jodihildebrandt.com/wp-content/uploads/2013/02/colored_workbooks1.jpg',
-    priceSpecifications: [
+    priceSpecs: [
       {
         id: 5,
         productId: 3,

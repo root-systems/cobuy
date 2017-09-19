@@ -10,7 +10,7 @@ const mockProductInfo = {
   name: 'crayons',
   description: 'these are crayons. look at all the pretty colours! they are made of beeswax. you could probably eat them and not die.',
   image: 'http://www.mercurius-australia.com/site/images/1250623.jpg',
-  priceSpecifications: [
+  priceSpecs: [
     {
       id: 1,
       productId: 1,
