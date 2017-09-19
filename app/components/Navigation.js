@@ -7,10 +7,10 @@ import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
 import { withState, withHandlers, compose } from 'recompose'
 import { NavLink } from 'react-router-dom'
+import { LogOut } from 'dogstack-agents/components'
 
 import styles from '../styles/Navigation'
 import { FormattedMessage } from '../../lib/Intl'
-import LogOut from '../../agents/containers/LogOut'
 
 function Navigation (props) {
   const { styles, isDrawerOpen, toggleDrawer, navigationRoutes } = props
