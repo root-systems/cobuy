@@ -1,6 +1,6 @@
 const feathersKnex = require('feathers-knex')
-const { iff } = require('feathers-hooks-common')
-import { pipe, equals, length, isNil, isEmpty } from 'ramda'
+const { iffElse } = require('feathers-hooks-common')
+import { pipe, equals, length, isNil, isEmpty, map, find, any } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
@@ -15,21 +15,44 @@ module.exports = function () {
 }
 
 const hooks = {
-  before: {
-    // create: [
-    //   getCurrentUser,
-    //   iff(hasNoGroupAgent, createGroupAgent),
-    //   iff(hasNoSupplierAgent, createSupplierAgent),
-    //   iff(hasNoRelation, createRelation),
-    //   iff(groupHasNoAdminRelation,createGroupAdminRelation)
-    // ]
-  },
   after: {
-    // create: [
-    //   iff(hasOneOrder, createPrereqTaskPlan)
-    // ]
+    create: [
+      // TODO: IK: for createPrereqTaskPlan, we actually want to to check whether a group exists AND whether a supplier exists (that relate to this user)
+      // iff(hasOneOrder, createPrereqTaskPlan)
+      getCurrentUser,
+      iffElse(hasNotCompletedGroupOrSupplierProfile, createCompleteOrderSetupWithPreReqsTaskPlan, createCompleteOrderSetupTaskPlan)
+    ]
   },
   error: {}
+}
+
+function hasNotCompletedGroupOrSupplierProfile (hook) {
+ const agentId = hook.params.agent.id
+ const agentsService = hook.app.service('agents')
+ const relationshipsService = hook.app.service('relationships')
+ const profilesService = hook.app.service('profiles')
+
+ return relationshipsService.find({ query: { sourceId: agentId, relationshipType: 'admin' }})
+ .then(groupRelationships => {
+   const groupIds = map((relationship) => { return relationship.targetId }, groupRelationships)
+   return relationshipsService.find({ query: { targetId: { $in: groupIds }, relationshipType: 'supplier' }})
+   .then((supplierRelationships) => {
+     const supplierIds = map((relationship) => { return relationship.sourceId }, supplierRelationships)
+     return Promise.all([
+       profilesService.find({ query: { agentId: { $in: groupIds }}}),
+       profilesService.find({ query: { agentId: { $in: supplierIds }}})
+     ])
+   })
+ })
+ .then(profilesArray => {
+   // TODO: IK: need to return true if either the 'find' for group profiles with a name OR supplier profiles with a name returns true
+   return any((result) => { isNil(result) }, map((profiles) => { find((profile) => { !isNil(profile.name) }) }, profilesArray))
+
+  //  return !isNil(find((profile) => {
+  //    return !isNil(profile.name)
+  //  }, profiles))
+ })
+ .then(() => hook)
 }
 
 function getCurrentUser (hook) {
@@ -135,4 +158,46 @@ function createSupplierAgent (hook) {
 
 function hasNoSupplierAgent (hook) {
   return isNil(hook.data.supplierAgentId)
+}
+
+function createCompleteOrderSetupWithPreReqsTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
+  const taskRecipeId = taskRecipes.completeOrderSetupWithPrereqs.id
+
+  // TODO: add beforeAll hook to get agent
+  // const assigneeId = hook.params.agent.id
+
+  const assigneeId = hook.result.id
+
+  // TODO: IK: this gives these params to all child TaskPlans, probably a better way in future
+  let params = {
+    consumerAgentId: hook.data.consumerAgentId,
+    supplierAgentId: hook.data.supplierAgentId
+  }
+  return taskPlans.create({ taskRecipeId, params, assigneeId })
+  .then(() => {
+    return hook
+  })
+}
+
+function createCompleteOrderSetupTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
+  const taskRecipeId = taskRecipes.completeOrderSetup.id
+
+  // TODO: add beforeAll hook to get agent
+  // const assigneeId = hook.params.agent.id
+
+  const assigneeId = hook.result.id
+
+  // TODO: IK: this gives these params to all child TaskPlans, probably a better way in future
+  let params = {
+    consumerAgentId: hook.data.consumerAgentId,
+    supplierAgentId: hook.data.supplierAgentId
+  }
+  return taskPlans.create({ taskRecipeId, params, assigneeId })
+  .then(() => {
+    return hook
+  })
 }

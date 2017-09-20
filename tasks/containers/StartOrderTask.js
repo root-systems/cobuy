@@ -30,6 +30,8 @@ export default compose(
       return queries
     },
     shouldQueryAgain: (props, status) => {
+      console.log(props, status)
+      return false
       if (status.isPending) return false
 
       const { taskPlan } = props.ownProps

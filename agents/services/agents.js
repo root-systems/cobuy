@@ -15,8 +15,8 @@ const hooks = {
       iff(hasNoGroupAgent, createGroupAgent),
       iff(hasNoSupplierAgent, createSupplierAgent),
       iff(groupHasNoAdminRelation, createGroupAdminRelation),
-      iff(hasNoRelation, createRelation),
-      iff(hasNoOrders, createFirstOrderTaskPlan)
+      iff(hasNoRelation, createRelation)
+      //iff(hasNoOrders, createFirstOrderTaskPlan)
     ]
   }
 }
