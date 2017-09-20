@@ -8,11 +8,12 @@ import { TextField } from 'redux-form-material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ResourceTypeEditor'
+import PriceSpecsEditor from '../../supply/components/PriceSpecsEditor'
 
 const ResourceTypeForm = compose(
   connectForm({})
 )(props => {
-  const { styles, toggleEdit, updateResourceType, handleSubmit } = props
+  const { styles, toggleEdit, updateResourceType, handleSubmit, resourceType, priceSpecs, savePriceSpecs } = props
 
   const updateResourceAndToggleEdit = (nextResource) => {
     toggleEdit()
@@ -75,7 +76,8 @@ const ResourceTypeForm = compose(
           className: styles.labelText
         })
       ])
-    ])
+    ]),
+    h(PriceSpecsEditor, { resourceType, priceSpecs, savePriceSpecs })
   ])
 })
 export default ResourceTypeForm

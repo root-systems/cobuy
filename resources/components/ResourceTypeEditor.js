@@ -23,6 +23,7 @@ const ResourceTypeEditor = compose(
   })
 )(props => {
   const { resourceType = {}, updateResourceType } = props
+  console.log(props)
   const { id = 'tmp' } = resourceType
   const nextProps = merge(props, {
     onSubmit: updateResourceType,
