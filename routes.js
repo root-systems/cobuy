@@ -1,5 +1,4 @@
 import { Route } from 'react-router-dom'
-import React from 'react'
 
 // Top Level Containers
 import Home from './app/containers/Home'
