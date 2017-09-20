@@ -23,8 +23,7 @@ const ProductEditor = compose(
     className: styles.container
   }, [
     h('div', product.id),
-    h(ResourceTypeEditor, { resourceType, updateResourceType }),
-    h(PriceSpecsEditor, { resourceType, priceSpecs, savePriceSpecs })
+    h(ResourceTypeEditor, { resourceType, updateResourceType, priceSpecs, savePriceSpecs, product })
   ])
 })
 
