@@ -1,6 +1,6 @@
-import React from 'react'
+import h from 'react-hyperscript'
 import { connect as connectFela } from 'react-fela'
-import { not, pipe, map, values, isNil } from 'ramda'
+import { not, pipe, map, values } from 'ramda'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
@@ -10,10 +10,15 @@ import { NavLink } from 'react-router-dom'
 import { LogOut } from 'dogstack-agents/components'
 
 import styles from '../styles/Navigation'
-import { FormattedMessage } from '../../lib/Intl'
+import { FormattedMessage } from 'dogstack/intl'
 
 function Navigation (props) {
-  const { styles, isDrawerOpen, toggleDrawer, navigationRoutes } = props
+  const {
+    styles,
+    isDrawerOpen,
+    toggleDrawer,
+    navigationRoutes
+  } = props
 
   const mapRouteItems = pipe(
     map(route => {
@@ -31,62 +36,78 @@ function Navigation (props) {
 
       if (Component) {
         return (
-          <Component
-            key={name}
-            as={MenuItem}
-            leftIcon={
-              <i className={icon} aria-hidden="true" />
-            }
-          />
+          h(Component, {
+            onClick: toggleDrawer,
+            key: name,
+            as: MenuItem,
+            leftIcon: (
+              h('i', {
+                className: icon,
+                'aria-hidden': true
+              })
+            )
+          })
         )
       }
 
       return (
-        <NavLink to={path} key={name}>
-          <MenuItem
-            leftIcon={
-              <i className={icon} aria-hidden="true" />
-            }
-          >
-            <FormattedMessage
-              id={title}
-              className={styles.labelText}
-            />
-          </MenuItem>
-        </NavLink>
+        h(NavLink, {
+          to: path,
+          key: name
+        }, [
+          h(MenuItem, {
+            onClick: toggleDrawer,
+            leftIcon: (
+              h('i', {
+                className: icon,
+                'aria-hidden': true
+              })
+            )
+          }, [
+            h(FormattedMessage, {
+              id: title,
+              className: styles.labelText
+            })
+          ])
+        ])
       )
     }),
     values
   )
 
   return (
-    <div>
-      <AppBar
-        title={
-          <FormattedMessage
-            id='app.name'
-            className={styles.labelText}
-          />
-        }
-        onLeftIconButtonTouchTap={toggleDrawer}
-      />
-      <Drawer open={isDrawerOpen}>
-        <MenuItem
-          leftIcon={
-            <i className="fa fa-bars" aria-hidden="true"/>
-          }
-          onTouchTap={toggleDrawer}
-        >
-          <FormattedMessage
-            id='app.closeMenu'
-            className={styles.labelText}
-          />
-        </MenuItem>
-        <Divider />
-        {mapRouteItems(navigationRoutes)}
-        <Divider />
-      </Drawer>
-    </div>
+    h('div', [
+      h(AppBar, {
+        title: (
+          h(FormattedMessage, {
+            id: 'app.name',
+            className: styles.labelText
+          })
+        ),
+        onLeftIconButtonTouchTap: toggleDrawer
+      }),
+      h(Drawer, {
+        open: isDrawerOpen
+      }, [
+        h(MenuItem, {
+          leftIcon: (
+            h('i', {
+              className: 'fa fa-bars',
+              'aria-hidden': true
+            })
+          ),
+          onClick: toggleDrawer
+        }, [
+          h(FormattedMessage, {
+            id: 'app.closeMenu',
+            className: styles.labelText
+          })
+        ]),
+        h(Divider),
+        mapRouteItems(navigationRoutes),
+        h(Divider)
+      ])
+    ])
   )
 }
 
