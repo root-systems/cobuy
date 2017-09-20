@@ -65,10 +65,16 @@
   "tasks.cancelTask": "cancel",
   "tasks.recipes.finishPrereqs": "finish pre-requisites for ordering",
   "tasks.recipes.setupGroup": "setup group profile and members",
+  "tasks.recipes.startOrder": "Start order",
+  "tasks.recipes.completeOrderSetupWithPrereqs": "Complete your order",
+  "tasks.recipes.completeOrderSetup": "Complete your order",
   "tasks.recipes.createProfile": "create your profile",
   "tasks.steps.groupProfile": "enter your group profile information",
   "tasks.steps.supplierProfile": "enter your supplier profile information",
   "tasks.steps.supplierProducts": "enter your supplier product list",
   "tasks.steps.memberInvites": "invite group members",
+  "tasks.steps.selectGroup": "Select a group",
+  "tasks.steps.selectSupplier": "Select a supplier",
+  "tasks.steps.selectAdmin": "Select an admin",
   "tasks.recipes.setupSupplier": "setup supplier profile and products"
 }

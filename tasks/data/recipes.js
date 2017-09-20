@@ -29,10 +29,17 @@ export const startOrder = {
   childTaskRecipes: []
 }
 
-export const createFirstOrder = {
-  id: 'createFirstOrder',
+export const completeOrderSetupWithPrereqs = {
+  id: 'completeOrderSetupWithPrereqs',
   childTaskRecipes: [
     finishPrereqs,
+    startOrder
+  ]
+}
+
+export const completeOrderSetup = {
+  id: 'completeOrderSetup',
+  childTaskRecipes: [
     startOrder
   ]
 }
