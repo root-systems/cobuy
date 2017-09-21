@@ -171,15 +171,10 @@ function createCompleteOrderSetupWithPreReqsTaskPlan (hook) {
    const orders = hook.app.service('orders')
    const taskRecipeId = taskRecipes.completeOrderSetupWithPrereqs.id
 
-   // TODO: add beforeAll hook to get agent
-   // const assigneeId = hook.params.agent.id
+   const assigneeId = hook.params.agent.id
 
-   const assigneeId = hook.result.id
-
-   // TODO: IK: this gives these params to all child TaskPlans, probably a better way in future
    let params = {
-     consumerAgentId: hook.data.consumerAgentId,
-     supplierAgentId: hook.data.supplierAgentId
+     orderId: hook.result.id
    }
    return taskPlans.create({ taskRecipeId, params, assigneeId })
    .then(() => {
@@ -192,15 +187,10 @@ function createCompleteOrderSetupWithPreReqsTaskPlan (hook) {
    const orders = hook.app.service('orders')
    const taskRecipeId = taskRecipes.completeOrderSetup.id
 
-   // TODO: add beforeAll hook to get agent
-   // const assigneeId = hook.params.agent.id
+   const assigneeId = hook.params.agent.id
 
-   const assigneeId = hook.result.id
-
-   // TODO: IK: this gives these params to all child TaskPlans, probably a better way in future
    let params = {
-     consumerAgentId: hook.data.consumerAgentId,
-     supplierAgentId: hook.data.supplierAgentId
+     orderId: hook.result.id
    }
    return taskPlans.create({ taskRecipeId, params, assigneeId })
    .then(() => {
