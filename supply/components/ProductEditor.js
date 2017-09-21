@@ -18,13 +18,32 @@ const ProductEditor = compose(
   // not having a resourceType, so don't render without one.
   // this happens temporarily when a new product is created.
   if (isNil(resourceType)) return null
-
-  return h('div', {
-    className: styles.container
-  }, [
-    h('div', product.id),
-    h(ResourceTypeEditor, { resourceType, updateResourceType, priceSpecs, savePriceSpecs, product })
-  ])
+  console.log(product, resourceType.name)
+  if (resourceType.name) {
+    return h('div', {
+      className: styles.container
+    }, [
+      h('div', resourceType.name),
+      h(ResourceTypeEditor, {
+        resourceType,
+        updateResourceType,
+        priceSpecs,
+        savePriceSpecs
+      })
+    ])
+  } else {
+    return h('div', {
+      className: styles.container
+    }, [
+      h('div', 'unamed product'),
+      h(ResourceTypeEditor, {
+        resourceType,
+        updateResourceType,
+        priceSpecs,
+        savePriceSpecs
+      })
+    ])
+  }
 })
 
 export default ProductEditor
