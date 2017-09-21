@@ -18,7 +18,7 @@ const ProductEditor = compose(
   // not having a resourceType, so don't render without one.
   // this happens temporarily when a new product is created.
   if (isNil(resourceType)) return null
-  console.log(product, resourceType.name)
+
   if (resourceType.name) {
     return h('div', {
       className: styles.container
