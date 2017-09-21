@@ -35,6 +35,7 @@
   "resources.resourceTypeName": "Resource name",
   "resources.saveResourceType": "save resource type",
   "resources.resourceTypeDescription": "Resource description",
+  "resources.editResource": "Edit product",
   "resources.resourceTypeImage": "Paste image link",
   "resources.resourceTypes": "Add Resource",
   "supply.quantity": "quantity",
