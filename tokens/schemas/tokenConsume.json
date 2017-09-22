@@ -1,0 +1,32 @@
+{
+  "id": "/tokens/tokenConsume",
+  "title": "Token Consume",
+  "description": "A record for consumption / usage of a capability token.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id"
+    },
+    "tokenId": {
+      "$ref": "/tokens/token/#/definitions/id"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp for when token was consumed",
+      "faker": "date.past"
+    }
+  },
+  "definitions": {
+    "id": {
+      "type": "integer",
+      "description": "Id referencing record of token consumption",
+      "faker": "random.number"
+    }
+  },
+  "required": [
+    "id",
+    "tokenId",
+    "createdAt"
+  ]
+}
