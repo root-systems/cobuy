@@ -20,7 +20,7 @@ const tokenTwoConsumes = [
 ].map(assoc('tokenId', tokenTwo.id))
 
 const tokenThree = jsf(tokenSchema, refs)
-const tokenThreeoConsumes = [
+const tokenThreeConsumes = [
   jsf(tokenConsumeSchema, refs)
 ].map(assoc('tokenId', tokenThree.id))
 
