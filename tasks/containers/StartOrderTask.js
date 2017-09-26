@@ -30,7 +30,7 @@ export default compose(
     query: (props) => {
       var queries = []
       const { taskPlan, selected } = props
-      const { currentAgent, currentAgentGroupIds, currentAgentGroupSupplierIds } = selected
+      const { currentAgent, currentAgentGroupIds, currentAgentGroupSupplierIds, currentAgentGroupMemberIds } = selected
 
       if (taskPlan) {
         const { params: { orderId } } = taskPlan
@@ -62,11 +62,23 @@ export default compose(
             }
           }
         })
+        // get suppliers with a relationship to any groups of the currentAgent
         queries.push({
           service: 'relationships',
           params: {
             query: {
               sourceId: {
+                $in: currentAgentGroupIds
+              }
+            }
+          }
+        })
+        // get members with a relationship to any groups of the currentAgent
+        queries.push({
+          service: 'relationships',
+          params: {
+            query: {
+              targetId: {
                 $in: currentAgentGroupIds
               }
             }
@@ -87,6 +99,19 @@ export default compose(
         })
       }
 
+      if (currentAgentGroupMemberIds) {
+        queries.push({
+          service: 'profiles',
+          params: {
+            query: {
+              agentId: {
+                $in: currentAgentGroupMemberIds
+              }
+            }
+          }
+        })
+      }
+
       return queries
     },
     shouldQueryAgain: (props, status) => {
@@ -99,7 +124,9 @@ export default compose(
         currentAgentGroupIds,
         currentAgentGroupProfiles,
         currentAgentGroupSupplierIds,
-        currentAgentGroupSupplierProfiles
+        currentAgentGroupSupplierProfiles,
+        currentAgentGroupMemberIds,
+        currentAgentGroupMemberProfiles
       } = props.selected
 
        // wait for task plan before re-query
@@ -115,10 +142,16 @@ export default compose(
       if (isEmpty(currentAgentGroupIds)) return true
 
       if (isEmpty(currentAgentGroupProfiles)) return true
-      
+
       if (isEmpty(currentAgentGroupSupplierIds)) return true
 
       if (isEmpty(currentAgentGroupSupplierProfiles)) return true
+
+      // TODO: IK: not sure how we should do this one, given the currentAgent is always part of currentAgentGroupMemberIds
+      // but they also could legitimately be the only one
+      // if (isEmpty(currentAgentGroupMemberIds)) return true
+
+      // if (isEmpty(currentAgentGroupMemberProfiles)) return true
 
       return false
     }
