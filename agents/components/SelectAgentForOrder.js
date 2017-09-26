@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
-import { pipe, isNil, not } from 'ramda'
+import { pipe, isNil, not, map, isArrayLike } from 'ramda'
 import { SelectField } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -13,10 +13,10 @@ import styles from '../styles/SelectAgentForOrder'
 import AvatarField from '../../app/components/AvatarField'
 
 function SelectAgentForOrder (props) {
-  const { styles, isEditing, toggleEdit, selectAgent, handleSubmit } = props
+  const { styles, isEditing, toggleEdit, selectAgent, handleSubmit, agentCollection } = props
 
   return h('form', {
-    className: styles.container,
+    className: styles.container
   }, [
     h('p', {
       className: styles.intro
@@ -43,14 +43,12 @@ function SelectAgentForOrder (props) {
           selectAgent(menuItem)
         }
       }, [
-        h(MenuItem, {
-          value: 'test',
-          primaryText: 'Test'
-        }),
-        h(MenuItem, {
-          value: 'tester',
-          primaryText: 'Tester'
-        })
+        map((agent) => {
+          return h(MenuItem, {
+            value: agent.id,
+            primaryText: agent.name
+          })
+        }, agentCollection)
       ]),
       h(RaisedButton, {
         className: styles.button,

@@ -167,32 +167,32 @@ function hasNotCompletedGroupOrSupplierProfile (hook) {
 }
 
 function createCompleteOrderSetupWithPreReqsTaskPlan (hook) {
-   const taskPlans = hook.app.service('taskPlans')
-   const orders = hook.app.service('orders')
-   const taskRecipeId = taskRecipes.completeOrderSetupWithPrereqs.id
+  const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
+  const taskRecipeId = taskRecipes.completeOrderSetupWithPrereqs.id
 
-   const assigneeId = hook.params.agent.id
+  const assigneeId = hook.params.agent.id
 
-   let params = {
-     orderId: hook.result.id
-   }
-   return taskPlans.create({ taskRecipeId, params, assigneeId })
+  let params = {
+    orderId: hook.result.id
+  }
+  return taskPlans.create({ taskRecipeId, params, assigneeId })
    .then(() => {
      return hook
    })
- }
+}
 
- function createCompleteOrderSetupTaskPlan (hook) {
-   const taskPlans = hook.app.service('taskPlans')
-   const orders = hook.app.service('orders')
-   const taskRecipeId = taskRecipes.completeOrderSetup.id
+function createCompleteOrderSetupTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
+  const taskRecipeId = taskRecipes.completeOrderSetup.id
 
-   const assigneeId = hook.params.agent.id
+  const assigneeId = hook.params.agent.id
 
-   let params = {
-     orderId: hook.result.id
-   }
-   return taskPlans.create({ taskRecipeId, params, assigneeId })
+  let params = {
+    orderId: hook.result.id
+  }
+  return taskPlans.create({ taskRecipeId, params, assigneeId })
    .then(() => {
      return hook
    })
