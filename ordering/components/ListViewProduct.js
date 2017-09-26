@@ -9,6 +9,8 @@ import styles from '../styles/ListViewProduct'
 
 function ListViewProduct (props) {
   const { styles, product } = props
+  const { resourceType, priceSpecs, facets } = product
+  const { name, description, image } = resourceType
 
   return (
     h('div', {
@@ -19,7 +21,7 @@ function ListViewProduct (props) {
       }, [
         h('img', {
           className: styles.image,
-          src: product.image
+          src: image
         })
       ]),
       h('div', {
@@ -28,12 +30,12 @@ function ListViewProduct (props) {
         h('h3', {
           className: styles.nameText
         }, [
-          product.name
+          name
         ]),
         h('p', {
           className: styles.productText
         }, [
-          product.description
+          description
         ]),
         h('p', {
           className: styles.priceText
@@ -42,8 +44,8 @@ function ListViewProduct (props) {
             id: 'ordering.fromPrice',
             className: styles.fromText,
             values: {
-              currency: product.priceSpecs[0].currency,
-              price: product.priceSpecs[0].price
+              currency: priceSpecs[0].currency,
+              price: priceSpecs[0].price
             }
           })
         ])
