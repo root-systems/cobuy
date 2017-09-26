@@ -28,7 +28,7 @@ function ProductPriceSpec (props) {
         className: styles.qtyContainer
       }, [
         h(Field, {
-          name: priceSpec.minimum,
+          name: `priceSpec-${priceSpec.id}`,
           className: styles.qtyTextField,
           component: TextField,
           type: 'number'

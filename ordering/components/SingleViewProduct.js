@@ -82,7 +82,11 @@ function SingleViewProduct (props) {
           h('div', {
             className: styles.priceSpecsContainer
           }, [
-            renderPriceSpecs(priceSpecs)
+            h(FormSection, {
+              name: 'priceSpecs'
+            }, [
+              renderPriceSpecs(priceSpecs)
+            ])
           ]),
           h(RaisedButton, {
             type: 'submit',
