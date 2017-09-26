@@ -7,7 +7,7 @@ import SelectAgentForOrder from '../../agents/components/SelectAgentForOrder'
 // need to pass down the choices to each instance of the selection component
 
 export default (props) => {
-  const { taskPlan, actions, orders, currentAgentGroupProfiles } = props
+  const { taskPlan, actions, orders, currentAgentGroupProfiles, currentAgentGroupSupplierProfiles } = props
   if (isNil(taskPlan)) return null
   const { params: { orderId } } = taskPlan
   if (isNil(orderId)) return null
@@ -27,6 +27,7 @@ export default (props) => {
     {
       id: 'tasks.steps.selectSupplier',
       content: h(SelectAgentForOrder, {
+        agentCollection: currentAgentGroupSupplierProfiles,
         selectAgent: (agent) => {
           actions.orders.update(orderId, merge(currentOrder, { supplierAgentId: agent.id }))
         }

@@ -30,7 +30,7 @@ export default compose(
     query: (props) => {
       var queries = []
       const { taskPlan, selected } = props
-      const { currentAgent, currentAgentGroupIds } = selected
+      const { currentAgent, currentAgentGroupIds, currentAgentGroupSupplierIds } = selected
 
       if (taskPlan) {
         const { params: { orderId } } = taskPlan
@@ -62,6 +62,29 @@ export default compose(
             }
           }
         })
+        queries.push({
+          service: 'relationships',
+          params: {
+            query: {
+              sourceId: {
+                $in: currentAgentGroupIds
+              }
+            }
+          }
+        })
+      }
+
+      if (currentAgentGroupSupplierIds) {
+        queries.push({
+          service: 'profiles',
+          params: {
+            query: {
+              agentId: {
+                $in: currentAgentGroupSupplierIds
+              }
+            }
+          }
+        })
       }
 
       return queries
@@ -70,7 +93,14 @@ export default compose(
       if (status.isPending) return false
 
       const { taskPlan } = props.ownProps
-      const { currentAgent, currentAgentGroupIds, currentAgentGroupProfiles, relationships } = props.selected
+      const {
+        currentAgent,
+        relationships,
+        currentAgentGroupIds,
+        currentAgentGroupProfiles,
+        currentAgentGroupSupplierIds,
+        currentAgentGroupSupplierProfiles
+      } = props.selected
 
        // wait for task plan before re-query
       if (isNil(taskPlan)) return false
@@ -85,6 +115,10 @@ export default compose(
       if (isEmpty(currentAgentGroupIds)) return true
 
       if (isEmpty(currentAgentGroupProfiles)) return true
+      
+      if (isEmpty(currentAgentGroupSupplierIds)) return true
+
+      if (isEmpty(currentAgentGroupSupplierProfiles)) return true
 
       return false
     }
