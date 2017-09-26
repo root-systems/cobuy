@@ -1,5 +1,7 @@
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
+import { map, prop } from 'ramda'
+import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
   const app = this
@@ -22,22 +24,36 @@ const hooks = {
   error: {}
 }
 
-// TODO: IK:
-/*
-- check if the taskWork's taskRecipeId was completeOrderSetupWithPrereqs or completeOrderSetup
-- if so, then create a castOrderIntentTaskPlan for every member of the group selected for the created order
-  - we determine what the group was by looking at hook.data.taskPlanId which references the taskPlan, then grab the consumerAgentId of that taskPlan which references the group for the order
-
-- check admin of order is being assigned properly?
-*/
-
 function completeOrderSetupTaskWork (hook) {
-  console.log(hook.data)
   return hook.data.taskRecipeId === 'completeOrderSetupWithPrereqs'
   || hook.data.taskRecipeId === 'completeOrderSetup'
 }
 
 function createCastOrderIntentTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const relationships = hook.app.service('relationships')
+  const taskRecipeId = taskRecipes.castIntent.id
+  const completeOrderTaskPlanId = hook.data.taskPlanId
 
-  return hook
+  return taskPlans.get(completeOrderTaskPlanId)
+  .then((completeOrderTaskPlan) => {
+    const groupId = completeOrderTaskPlan.params.consumerAgentId
+    const orderId = completeOrderTaskPlan.params.orderId
+    const params = { orderId }
+
+    return relationships.find({
+      query: {
+        targetId: groupId
+      }
+    })
+    .then((relationships) => {
+      return Promise.all(
+        map((relationship) => {
+          const assigneeId = prop('sourceId', relationship)
+          return taskPlans.create({ taskRecipeId, params, assigneeId })
+        }, relationships)
+      )
+    })
+  })
+  .then(() => hook)
 }

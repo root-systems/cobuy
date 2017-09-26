@@ -29,6 +29,7 @@
         "completeOrderSetup",
         "completeOrderSetupWithPrereqs",
         "startOrder",
+        "castIntent",
         "finishPrereqs",
         "createProfile"
       ]
