@@ -39,8 +39,8 @@ function SelectAgentForOrder (props) {
         //   })
         // ),
         component: SelectField,
-        onChange: (e, menuItem) => {
-          selectAgent(menuItem)
+        onChange: (e, agentId) => {
+          selectAgent(agentId)
         }
       }, [
         map((agent) => {
