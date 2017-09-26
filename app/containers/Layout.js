@@ -5,6 +5,6 @@ import Layout from '../components/Layout'
 import getLayoutProps from '../getters/getLayoutProps'
 
 export default connect(
-  getLayoutProps,
+  getLayoutProps
 
 )(Layout)

@@ -4,7 +4,7 @@ import {
   Step,
   Stepper,
   StepButton,
-  StepContent,
+  StepContent
 } from 'material-ui/Stepper'
 import {
   compose,
@@ -41,7 +41,7 @@ function TaskStepper (props) {
     <Stepper
       activeStep={stepIndex}
       linear={false}
-      orientation="vertical"
+      orientation='vertical'
     >
       {renderSteps(steps)}
     </Stepper>
@@ -51,17 +51,17 @@ function TaskStepper (props) {
     return (
       <div>
         <RaisedButton
-          label="Next"
-          disableTouchRipple={true}
-          disableFocusRipple={true}
-          secondary={true}
+          label='Next'
+          disableTouchRipple
+          disableFocusRipple
+          secondary
           onTouchTap={handleNext}
         />
         {index > 0 && (
           <FlatButton
-            label="Back"
-            disableTouchRipple={true}
-            disableFocusRipple={true}
+            label='Back'
+            disableTouchRipple
+            disableFocusRipple
             onTouchTap={handlePrev}
           />
         )}

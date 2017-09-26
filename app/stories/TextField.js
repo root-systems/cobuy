@@ -8,7 +8,7 @@ import { TextField } from 'redux-form-material-ui'
 const TextForm = props => {
   const { handleSubmit } = props
   return (
-    <form onSubmit={ handleSubmit }>
+    <form onSubmit={handleSubmit}>
       <Field name='name' floatingLabelText='Name' component={TextField} />
     </form>
   )

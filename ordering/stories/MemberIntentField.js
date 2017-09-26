@@ -43,7 +43,7 @@ const avoOffering = {
 const IntentForm = props => {
   const { handleSubmit } = props
   return (
-    <form onSubmit={ handleSubmit }>
+    <form onSubmit={handleSubmit}>
       <Field name='intent' component={MemberIntentField} offering={avoOffering} />
     </form>
   )

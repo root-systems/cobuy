@@ -7,7 +7,7 @@ import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ProductListEditor'
 import ProductEditor from '../../supply/components/ProductEditor'
 
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from 'material-ui/RaisedButton'
 
 const ProductListEditor = compose(
   connectFela(styles)

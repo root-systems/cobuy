@@ -32,7 +32,7 @@ export default {
           left: 0,
           width: '100%',
           height: '100%',
-          opacity: .6,
+          opacity: 0.6,
           zIndex: -1,
           backgroundColor: theme.colors.canvas,
           backgroundImage: 'url("/images/cobuy-bg-sml-1080.jpg")',
@@ -45,12 +45,12 @@ export default {
           left: 0,
           width: '100%',
           height: '100%',
-          opacity: .6,
+          opacity: 0.6,
           zIndex: -1,
           backgroundColor: theme.colors.canvas,
           backgroundImage: 'url("/images/cobuy-bg-lrg-1440.jpg")',
           backgroundSize: 'cover'
-          }
+        }
       }
     }
   },

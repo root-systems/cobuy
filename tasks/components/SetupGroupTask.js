@@ -56,7 +56,7 @@ export default (props) => {
               id,
               type = 'person',
               profile = {},
-              credential = {},
+              credential = {}
             } = agent
             const relationships = rolesToRelationships(roles)
             const consumerAgentId = consumerAgent.id

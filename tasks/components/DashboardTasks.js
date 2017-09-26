@@ -16,7 +16,7 @@ function DashboardTasks (props) {
   const renderChildTask = (childTaskPlan) => {
     return (
       <ListItem
-        disabled={true}
+        disabled
       >
         <FormattedMessage
           id={`tasks.recipes.${childTaskPlan.taskRecipeId}`}

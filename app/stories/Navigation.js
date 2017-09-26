@@ -42,7 +42,7 @@ storiesOf('app.Navigation', module)
             title: 'abundance',
             icon: 'fa fa-heart'
           }
-        },
+        }
 
       ]
     })

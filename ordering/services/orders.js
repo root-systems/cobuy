@@ -21,7 +21,7 @@ const hooks = {
       iff(hasNoGroupAgent, createGroupAgent),
       iff(hasNoSupplierAgent, createSupplierAgent),
       iff(hasNoRelation, createRelation),
-      iff(groupHasNoAdminRelation,createGroupAdminRelation)
+      iff(groupHasNoAdminRelation, createGroupAdminRelation)
     ]
   },
   after: {
@@ -33,16 +33,16 @@ const hooks = {
 }
 
 function getCurrentUser (hook) {
- const { agentId } = hook.params.credential
- const agentsService = hook.app.service('agents')
- return agentsService.get(agentId)
+  const { agentId } = hook.params.credential
+  const agentsService = hook.app.service('agents')
+  return agentsService.get(agentId)
  .then(agent => {
    hook.params.agent = agent
  })
  .then(() => hook)
 }
 
-function groupHasNoAdminRelation(hook) {
+function groupHasNoAdminRelation (hook) {
   const relationships = hook.app.service('relationships')
   const groupId = hook.data.consumerAgentId
   return relationships
@@ -50,10 +50,10 @@ function groupHasNoAdminRelation(hook) {
     .then(isEmpty)
 }
 
-function createGroupAdminRelation(hook) {
+function createGroupAdminRelation (hook) {
   const relationships = hook.app.service('relationships')
   const groupId = hook.data.consumerAgentId
-  const userId =  hook.params.agent.id
+  const userId = hook.params.agent.id
   return relationships.create({
     relationshipType: 'admin',
     sourceId: userId,
@@ -79,22 +79,22 @@ function hasNoGroupAgent (hook) {
 function hasNoRelation (hook) {
   const relationships = hook.app.service('relationships')
   const supplierAgentId = hook.data.supplierAgentId
-  return relationships.find({ query: { sourceId: supplierAgentId }  }).then((relationship)=>{
+  return relationships.find({ query: { sourceId: supplierAgentId } }).then((relationship) => {
     return isEmpty(relationship)
   })
 }
 
-function createRelation (hook){
+function createRelation (hook) {
   const relationships = hook.app.service('relationships')
   const consumerAgentId = hook.data.consumerAgentId
   const supplierAgentId = hook.data.supplierAgentId
   return relationships.create({
-     relationshipType: 'supplier',
-     sourceId: consumerAgentId,
-     targetId: supplierAgentId
-}).then(() => {
-  return hook
-})
+    relationshipType: 'supplier',
+    sourceId: consumerAgentId,
+    targetId: supplierAgentId
+  }).then(() => {
+    return hook
+  })
 }
 
 const hasLengthOne = pipe(length, equals(1))

@@ -53,7 +53,7 @@ function TaskWorker (props) {
           />
         </h2>
         <RaisedButton
-          primary={true}
+          primary
           disabled={not(isTaskReadyToComplete)}
           className={styles.completeButton}
           onClick={handleComplete}
@@ -96,5 +96,5 @@ function TaskWorker (props) {
 }
 
 export default pipe(
-  connectFela(styles),
+  connectFela(styles)
 )(TaskWorker)

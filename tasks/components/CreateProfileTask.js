@@ -6,7 +6,7 @@ import Profile from '../../agents/components/Profile'
 export default (props) => {
   const { actions, currentAgent } = props
 
-  if(isNil(currentAgent)) {
+  if (isNil(currentAgent)) {
     return null
   }
 

@@ -30,7 +30,6 @@ const nestedResourceType = {
   ]
 }
 
-
 storiesOf('resources.ResourceTypeEditor', module)
   .add('empty', () => (
     h(ResourceTypeEditor, {
