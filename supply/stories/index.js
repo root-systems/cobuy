@@ -1,2 +1,2 @@
-require ('./ProductEditor')
+require('./ProductEditor')
 require('./PriceSpecsEditor')

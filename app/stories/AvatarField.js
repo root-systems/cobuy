@@ -8,7 +8,7 @@ import AvatarField from '../components/AvatarField'
 const AvatarForm = props => {
   const { handleSubmit } = props
   return (
-    <form onSubmit={ handleSubmit }>
+    <form onSubmit={handleSubmit}>
       <Field name='avatar' label='Avatar' component={AvatarField} />
     </form>
   )

@@ -50,11 +50,11 @@ export default {
     // http://spencermortensen.com/articles/typographic-scale/
     // and
     // https://blog.madewithenvy.com/responsive-typographic-scales-in-css-b9f60431d1c4
-    // 
+    //
     // px and pt values are based on a 1 em parent element with 16px (12pt) root size.
     // http://pxtoem.com/
     '-5': '0.50000em', // 8px, 6pt
-    '-4': '0.57435em', 
+    '-4': '0.57435em',
     '-3': '0.65975em',
     '-2': '0.75785em',
     '-1': '0.87055em',

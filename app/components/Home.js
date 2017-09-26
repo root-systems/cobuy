@@ -20,16 +20,16 @@ function Home (props) {
           <FormattedMessage id='app.tagline' />
         </p>
         <div className={styles.buttonsContainer}>
-          <Link to={"/sign-in"}>
-            <RaisedButton primary={true}>
+          <Link to={'/sign-in'}>
+            <RaisedButton primary>
               <FormattedMessage
                 id='agents.signIn'
                 className={styles.buttonText}
               />
             </RaisedButton>
           </Link>
-          <Link to={"/register"}>
-            <RaisedButton primary={true}>
+          <Link to={'/register'}>
+            <RaisedButton primary>
               <FormattedMessage
                 id='agents.register'
                 className={styles.buttonText}

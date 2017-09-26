@@ -55,5 +55,5 @@ function TaskWorkerTree (props) {
 }
 
 export default pipe(
-  connectFela(styles),
+  connectFela(styles)
 )(TaskWorkerTree)

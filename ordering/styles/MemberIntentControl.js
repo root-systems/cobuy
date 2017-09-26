@@ -45,7 +45,7 @@ export default {
   input: () => ({
   }),
   sliderContainer: () => ({
-    position: 'relative',
+    position: 'relative'
   }),
   slider: () => ({
     '> div:nth-child(1)': {

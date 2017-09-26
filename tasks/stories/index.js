@@ -1,1 +1,1 @@
-require ('./TaskWorker')
+require('./TaskWorker')

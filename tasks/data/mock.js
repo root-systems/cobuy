@@ -116,22 +116,22 @@ export const mockEnhancedTaskPlans = {
 }
 
 export const mockEnhancedTaskPlansByParentId = { 1:
-   [ { id: 2,
-       parentTaskPlanId: 1,
-       assignee: person,
-       taskRecipeId: 'setupGroup',
-       taskRecipe: setupGroup },
-     { id: 3,
-       parentTaskPlanId: 1,
-       assignee: person,
-       taskRecipeId: 'setupSupplier',
-       taskRecipe: setupSupplier } ],
+[ { id: 2,
+  parentTaskPlanId: 1,
+  assignee: person,
+  taskRecipeId: 'setupGroup',
+  taskRecipe: setupGroup },
+{ id: 3,
+  parentTaskPlanId: 1,
+  assignee: person,
+  taskRecipeId: 'setupSupplier',
+  taskRecipe: setupSupplier } ],
   null:
-   [ { id: 1,
-       parentTaskPlanId: null,
-       assignee: person,
-       taskRecipeId: 'finishPrereqs',
-       taskRecipe: finishPrereqs } ] }
+  [ { id: 1,
+    parentTaskPlanId: null,
+    assignee: person,
+    taskRecipeId: 'finishPrereqs',
+    taskRecipe: finishPrereqs } ] }
 
 var mockFullTaskPlanId1 = {
   id: 1,
