@@ -30,8 +30,8 @@ function SelectAgentForOrder (props) {
       className: styles.innerContainer
     }, [
       h(Field, {
-        name: 'description',
-        floatingLabelText: 'test',
+        name: 'Select Group',
+        floatingLabelText: 'Group',
         // floatingLabelText: (
         //   h(FormattedMessage, {
         //     id: 'agents.descriptionLabel',

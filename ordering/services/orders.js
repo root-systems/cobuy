@@ -174,6 +174,8 @@ function createCompleteOrderSetupWithPreReqsTaskPlan (hook) {
   const assigneeId = hook.params.agent.id
 
   let params = {
+    consumerAgentId: hook.data.consumerAgentId,
+    supplierAgentId: hook.data.supplierAgentId,
     orderId: hook.result.id
   }
   return taskPlans.create({ taskRecipeId, params, assigneeId })
@@ -190,6 +192,8 @@ function createCompleteOrderSetupTaskPlan (hook) {
   const assigneeId = hook.params.agent.id
 
   let params = {
+    consumerAgentId: hook.data.consumerAgentId,
+    supplierAgentId: hook.data.supplierAgentId,
     orderId: hook.result.id
   }
   return taskPlans.create({ taskRecipeId, params, assigneeId })
