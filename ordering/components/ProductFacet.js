@@ -28,7 +28,7 @@ function ProductFacet (props) {
         className: styles.valuesContainer
       }, [
         h(Field, {
-          name: facet.name,
+          name: `facet-${facet.id}`,
           component: RadioButtonGroup,
           className: styles.buttonsContainer
         }, map((facetValue) => {

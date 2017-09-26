@@ -60,6 +60,7 @@ const mockProductInfo = {
 storiesOf('ordering.SingleViewProduct', module)
   .add('default', () => (
     h(SingleViewProduct, {
-      product: mockProductInfo
+      product: mockProductInfo,
+      onSubmit: action('submit')
     })
   ))

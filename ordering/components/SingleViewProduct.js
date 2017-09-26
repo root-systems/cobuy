@@ -1,7 +1,7 @@
 import { compose } from 'recompose'
 import { map } from 'ramda'
 import { connect as connectFela } from 'react-fela'
-import { reduxForm as connectForm } from 'redux-form'
+import { reduxForm as connectForm, FormSection } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
 import h from 'react-hyperscript'
 
@@ -9,6 +9,21 @@ import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/SingleViewProduct'
 import ProductPriceSpec from './ProductPriceSpec'
+import ProductFacet from './ProductFacet'
+
+const renderPriceSpecs = map((priceSpec) => {
+  return h(ProductPriceSpec, {
+    priceSpec: priceSpec,
+    key: priceSpec.id
+  })
+})
+
+const renderFacets = map((facet) => {
+  return h(ProductFacet, {
+    facet: facet,
+    key: facet.id
+  })
+})
 
 function SingleViewProduct (props) {
   const { styles, product, handleSubmit } = props
@@ -56,12 +71,19 @@ function SingleViewProduct (props) {
             ])
           ]),
           h('div', {
+            className: styles.facetsContainer
+          }, [
+            h(FormSection, {
+              name: 'facets',
+            }, [
+              renderFacets(facets)
+            ])
+          ]),
+          h('div', {
             className: styles.priceSpecsContainer
-          }, map((priceSpec) => {
-            return h(ProductPriceSpec, {
-              priceSpec: priceSpec
-            })
-          }, priceSpecs)),
+          }, [
+            renderPriceSpecs(priceSpecs)
+          ]),
           h(RaisedButton, {
             type: 'submit',
             primary: true,
