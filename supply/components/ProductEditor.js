@@ -13,6 +13,7 @@ const ProductEditor = compose(
 )(props => {
   const { styles, product, updateResourceType, savePriceSpecs } = props
   const { resourceType, priceSpecs } = product
+  console.log(product, 'products')
 
   // ResourceTypeEditor and PriceSpecsEditor can't handle
   // not having a resourceType, so don't render without one.
@@ -23,6 +24,7 @@ const ProductEditor = compose(
     return h('div', {
       className: styles.container
     }, [
+      h('img', {src: resourceType.image }),
       h('div', resourceType.name),
       h(ResourceTypeEditor, {
         resourceType,
@@ -35,6 +37,7 @@ const ProductEditor = compose(
     return h('div', {
       className: styles.container
     }, [
+      h('img', {src: resourceType.image }),
       h('div', 'unamed product'),
       h(ResourceTypeEditor, {
         resourceType,

@@ -62,7 +62,7 @@ const ResourceTypeForm = compose(
       ),
       component: TextField
     }),
-
+    h(PriceSpecsEditor, { resourceType, priceSpecs, savePriceSpecs }),
     h('div', {
       className: styles.buttonContainer
     }, [
@@ -76,8 +76,7 @@ const ResourceTypeForm = compose(
           className: styles.labelText
         })
       ])
-    ]),
-    h(PriceSpecsEditor, { resourceType, priceSpecs, savePriceSpecs })
+    ])
   ])
 })
 export default ResourceTypeForm
