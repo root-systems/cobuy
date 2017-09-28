@@ -53,6 +53,29 @@ const mockProductInfo = {
           name: 'purple'
         }
       ]
+    },
+    {
+      id: 346,
+      resourceTypeId: 123,
+      name: 'size',
+      description: 'the size of each crayon',
+      values: [
+        {
+          id: 681,
+          resourceTypeFacetId: 346,
+          name: 'small'
+        },
+        {
+          id: 682,
+          resourceTypeFacetId: 346,
+          name: 'medium'
+        },
+        {
+          id: 683,
+          resourceTypeFacetId: 346,
+          name: 'large'
+        }
+      ]
     }
   ]
 }
