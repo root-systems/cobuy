@@ -5,6 +5,8 @@ const taskPlanSchema = require('../schemas/taskPlan')
 import ajv from '../../app/schemas'
 import * as taskRecipes from '../../tasks/data/recipes'
 
+import { encode as encodeParams, decode as decodeParams } from '../../lib/paramsCodec'
+
 module.exports = function () {
   const app = this
   const db = app.get('db')
@@ -64,30 +66,4 @@ function createChildTaskPlans (hook) {
     })
   )
     .then(() => hook)
-}
-
-const transformProp = transformer => propName => object => pipe(
-  prop(propName),
-  transformer,
-  assoc(propName, __, object)
-)(object)
-const transformPropMaybeArray = (transformer) => (propName) => {
-  const transform = transformProp(transformer)(propName)
-  return ifElse(is(Array),
-    map(transform),
-    transform
-  )
-}
-
-function encodeParams (hook) {
-  if (hook.data) {
-    hook.data = transformPropMaybeArray(JSON.stringify)('params')(hook.data)
-  }
-  return hook
-}
-
-function decodeParams (hook) {
-  if (hook.result) {
-    hook.result = transformPropMaybeArray(JSON.parse)('params')(hook.result)
-  }
 }
