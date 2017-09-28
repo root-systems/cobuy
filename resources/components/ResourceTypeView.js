@@ -4,7 +4,10 @@ import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ResourceTypeEditor'
 
 function ResourceTypeView (props) {
-  return h('div', [
+  return h('ul', [
+    h('li', {
+      className: styles.resourceImage
+    }),
     h(RaisedButton, {
       className: styles.submitButton,
       type: 'button',
