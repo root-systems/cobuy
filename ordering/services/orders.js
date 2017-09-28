@@ -21,7 +21,8 @@ const hooks = {
       iff(hasNoGroupAgent, createGroupAgent),
       iff(hasNoSupplierAgent, createSupplierAgent),
       iff(hasNoRelation, createRelation),
-      iff(groupHasNoAdminRelation, createGroupAdminRelation)
+      iff(groupHasNoAdminRelation, createGroupAdminRelation),
+      iff(userIsNotMemberOfGroup, createGroupMemberRelation)
     ]
   },
   after: {
@@ -42,11 +43,32 @@ function getCurrentUser (hook) {
  .then(() => hook)
 }
 
+function userIsNotMemberOfGroup (hook) {
+  const relationships = hook.app.service('relationships')
+  const groupId = hook.data.consumerAgentId
+  return relationships
+    .find({ query: { sourceId: groupId, relationshipType: 'member' } })
+    .then(isEmpty)
+}
+
+function createGroupMemberRelation (hook) {
+  const relationships = hook.app.service('relationships')
+  const groupId = hook.data.consumerAgentId
+  const userId = hook.params.agent.id
+  return relationships.create({
+    relationshipType: 'member',
+    sourceId: groupId,
+    targetId: userId
+  }).then(() => {
+    return hook
+  })
+}
+
 function groupHasNoAdminRelation (hook) {
   const relationships = hook.app.service('relationships')
   const groupId = hook.data.consumerAgentId
   return relationships
-    .find({ query: {targetId: groupId} })
+    .find({ query: { sourceId: groupId, relationshipType: 'admin' } })
     .then(isEmpty)
 }
 
@@ -56,8 +78,8 @@ function createGroupAdminRelation (hook) {
   const userId = hook.params.agent.id
   return relationships.create({
     relationshipType: 'admin',
-    sourceId: userId,
-    targetId: groupId
+    sourceId: groupId,
+    targetId: userId
   }).then(() => {
     return hook
   })
