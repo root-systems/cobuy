@@ -24,8 +24,8 @@ const ProductEditor = compose(
     return h('div', {
       className: styles.container
     }, [
-      h('img', {src: resourceType.image }),
       h('div', resourceType.name),
+      h('img', {src: resourceType.image }),
       h(ResourceTypeEditor, {
         resourceType,
         updateResourceType,
@@ -37,8 +37,8 @@ const ProductEditor = compose(
     return h('div', {
       className: styles.container
     }, [
-      h('img', {src: resourceType.image }),
       h('div', 'unamed product'),
+      h('img', {src: resourceType.image }),
       h(ResourceTypeEditor, {
         resourceType,
         updateResourceType,
