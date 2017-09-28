@@ -26,10 +26,10 @@ const tokenThreeConsumes = [
 
 const indexById = indexBy(prop('id'))
 
-exports.tokens = indexBy([tokenOne, tokenTwo, tokenThree])
+exports.tokens = indexById([tokenOne, tokenTwo, tokenThree])
 exports.consumesByToken = {
   [tokenOne.id]: tokenOneConsumes,
   [tokenTwo.id]: tokenTwoConsumes,
   [tokenThree.id]: tokenThreeConsumes
 }
-exports.tokenConsumes = indexBy([...tokenOneConsumes, ...tokenTwoConsumes, ...tokenThreeConsumes])
+exports.tokenConsumes = indexById([...tokenOneConsumes, ...tokenTwoConsumes, ...tokenThreeConsumes])
