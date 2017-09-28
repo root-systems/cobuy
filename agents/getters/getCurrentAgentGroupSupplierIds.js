@@ -10,7 +10,7 @@ const getCurrentAgentGroupSupplierIds = createSelector(
   (relationships, groupIds) => {
     const getSupplierIds = map(prop('targetId'))
     const supplierRelationships = getSupplierIds(filter((relationship) => {
-      return contains(relationship.sourceId, groupIds)
+      return contains(relationship.sourceId, groupIds) && relationship.relationshipType === 'supplier'
     }, relationships))
     return values(supplierRelationships)
   }

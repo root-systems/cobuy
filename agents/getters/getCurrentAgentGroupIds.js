@@ -5,14 +5,10 @@ import getRelationships from 'dogstack-agents/relationships/getters/getRelations
 import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
 
 const getCurrentAgentGroupIds = createSelector(
-  getRelationships,
   getCurrentAgent,
-  (relationships, currentAgent) => {
-    const getGroupIds = map(prop('targetId'))
-    const groupRelationships = getGroupIds(filter((relationship) => {
-      return relationship.sourceId === currentAgent.id // TODO: IK: possibly also specify relationshipType is admin or member
-    }, relationships))
-    return values(groupRelationships)
+  (currentAgent) => {
+    if (!currentAgent) return null
+    return map(prop('agentId'), currentAgent.groups)
   }
 )
 

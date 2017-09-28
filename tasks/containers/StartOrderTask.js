@@ -45,7 +45,7 @@ export default compose(
           service: 'relationships',
           params: {
             query: {
-              sourceId: currentAgent.id
+              targetId: currentAgent.id
             }
           }
         })
@@ -69,7 +69,8 @@ export default compose(
             query: {
               sourceId: {
                 $in: currentAgentGroupIds
-              }
+              },
+              relationshipType: 'supplier'
             }
           }
         })
@@ -78,9 +79,10 @@ export default compose(
           service: 'relationships',
           params: {
             query: {
-              targetId: {
+              sourceId: {
                 $in: currentAgentGroupIds
-              }
+              },
+              relationshipType: 'member'
             }
           }
         })
@@ -128,7 +130,7 @@ export default compose(
         currentAgentGroupMemberIds,
         currentAgentGroupMemberProfiles
       } = props.selected
-
+      
        // wait for task plan before re-query
       if (isNil(taskPlan)) return false
 
@@ -140,9 +142,9 @@ export default compose(
       if (isNil(currentAgent)) return true
 
       if (isEmpty(currentAgentGroupIds)) return true
-
+      //
       if (isEmpty(currentAgentGroupProfiles)) return true
-
+      //
       if (isEmpty(currentAgentGroupSupplierIds)) return true
 
       if (isEmpty(currentAgentGroupSupplierProfiles)) return true
