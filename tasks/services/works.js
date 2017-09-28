@@ -43,13 +43,14 @@ function createCastOrderIntentTaskPlan (hook) {
 
     return relationships.find({
       query: {
-        targetId: groupId
+        sourceId: groupId,
+        relationshipType: 'member'
       }
     })
     .then((relationships) => {
       return Promise.all(
         map((relationship) => {
-          const assigneeId = prop('sourceId', relationship)
+          const assigneeId = prop('targetId', relationship)
           return taskPlans.create({ taskRecipeId, params, assigneeId })
         }, relationships)
       )
