@@ -8,7 +8,34 @@
       "$ref": "#/definitions/id"
     },
     "tokenId": {
-      "$ref": "/tokens/token/#/definitions/id"
+      "$ref": "/tokens/token#/definitions/id"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "data": {
+          "type": "object"
+        },
+        "params": {
+          "type": "object"
+        }
+      }
+    },
+    "result": {
+      "oneOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      ]
     },
     "createdAt": {
       "type": "string",
@@ -25,8 +52,6 @@
     }
   },
   "required": [
-    "id",
-    "tokenId",
-    "createdAt"
+    "tokenId"
   ]
 }
