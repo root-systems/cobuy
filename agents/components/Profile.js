@@ -9,6 +9,8 @@ import { FormattedMessage } from 'dogstack/intl'
 
 import styles from '../styles/Profile'
 import AvatarField from '../../app/components/AvatarField'
+import { Editor } from 'react-draft-wysiwyg'
+
 
 function Profile (props) {
   const { styles, isEditing, toggleEdit, updateProfile, handleSubmit } = props
@@ -57,20 +59,21 @@ function Profile (props) {
           fullWidth: true,
           disabled: not(isEditing)
         }),
-        h(Field, {
-          name: 'description',
-          floatingLabelText: (
-            h(FormattedMessage, {
-              id: 'agents.descriptionLabel',
-              className: styles.labelText
-            })
-          ),
-          component: TextField,
-          fullWidth: true,
-          multiLine: true,
-          rowsMax: 5,
-          disabled: not(isEditing)
-        })
+        // h(Field, {
+        //   name: 'description',
+        //   floatingLabelText: (
+        //     h(FormattedMessage, {
+        //       id: 'agents.descriptionLabel',
+        //       className: styles.labelText
+        //     })
+        //   ),
+        //   component: Editor,
+        //   fullWidth: true,
+        //   multiLine: true,
+        //   rowsMax: 5,
+        //   disabled: not(isEditing)
+        // })
+        h(Editor)
       ])
     ]),
 

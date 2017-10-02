@@ -1,5 +1,6 @@
 import baseTheme from './app/themes/base'
-
+import wsiwygtyles from './node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+//this ^ is for the wysiwyg editor module in the profile...styles are transformed w browserify-css
 export default {
   theme: baseTheme,
   setup: (renderer) => {
