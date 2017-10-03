@@ -1,12 +1,12 @@
 export default {
-  container: () => ({
-  }),
-  valuesContainer: () => ({
+  container: ({ theme }) => ({
     display: 'flex',
-    flexDirection: 'row'
+    flex: 1,
+    flexDirection: 'column',
+    paddingBottom: theme.space[3]
   }),
   buttonsContainer: () => ({
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'column'
   })
 }
