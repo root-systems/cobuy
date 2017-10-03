@@ -1,6 +1,6 @@
 const feathersKnex = require('feathers-knex')
 const { iff, iffElse } = require('feathers-hooks-common')
-import { pipe, equals, length, isNil, isEmpty, map, any, find } from 'ramda'
+import { pipe, equals, length, isNil, isEmpty, map, any, find, not, prop } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
@@ -179,13 +179,13 @@ function hasNotCompletedGroupOrSupplierProfile (hook) {
   })
   .then(profilesArray => {
     // TODO: IK: need to return true if either the 'find' for group profiles with a name OR supplier profiles with a name returns true
-    return any((result) => { isNil(result) }, map((profiles) => { find((profile) => { !isNil(profile.name) }) }, profilesArray))
-
-   //  return !isNil(find((profile) => {
-   //    return !isNil(profile.name)
-   //  }, profiles))
+    return any(
+      isNil,
+      map((profiles) => {
+        find(pipe(prop('name'), isNil, not))
+      }, profilesArray)
+    )
   })
-  .then(() => hook)
 }
 
 function createCompleteOrderSetupWithPreReqsTaskPlan (hook) {
