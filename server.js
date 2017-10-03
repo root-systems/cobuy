@@ -1,5 +1,7 @@
 const services = [
   require('dogstack-agents/service'),
+  require('./tokens/services/tokens'),
+  require('./tokens/services/tokenConsumes'),
   require('./tasks/services/plans'),
   require('./tasks/services/works'),
   require('./ordering/services/orders'),

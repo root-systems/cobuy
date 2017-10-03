@@ -1,6 +1,8 @@
 import { concat } from 'redux-fp'
 
 import { updater as agents } from 'dogstack-agents'
+import { updater as tokens } from './tokens/dux/tokens'
+import { updater as tokenConsumes } from './tokens/dux/tokenConsumes'
 import { updater as taskPlans } from './tasks/dux/plans'
 import { updater as taskWorks } from './tasks/dux/works'
 import { updater as orders } from './ordering/dux/orders'
@@ -11,6 +13,8 @@ import { updater as resourceTypes } from './resources/dux/resourceTypes'
 
 export default concat(
   agents,
+  tokens,
+  tokenConsumes,
   orders,
   taskPlans,
   taskWorks,
