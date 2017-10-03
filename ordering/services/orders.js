@@ -1,6 +1,6 @@
 const feathersKnex = require('feathers-knex')
-const { iff } = require('feathers-hooks-common')
-import { pipe, equals, length, isNil, isEmpty } from 'ramda'
+const { iff, iffElse } = require('feathers-hooks-common')
+import { pipe, equals, length, isNil, isEmpty, map, any, find, not, prop } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
@@ -21,12 +21,13 @@ const hooks = {
       iff(hasNoGroupAgent, createGroupAgent),
       iff(hasNoSupplierAgent, createSupplierAgent),
       iff(hasNoRelation, createRelation),
-      iff(groupHasNoAdminRelation, createGroupAdminRelation)
+      iff(groupHasNoAdminRelation, createGroupAdminRelation),
+      iff(userIsNotMemberOfGroup, createGroupMemberRelation)
     ]
   },
   after: {
     create: [
-      iff(hasOneOrder, createPrereqTaskPlan)
+      iffElse(hasNotCompletedGroupOrSupplierProfile, createCompleteOrderSetupWithPreReqsTaskPlan, createCompleteOrderSetupTaskPlan)
     ]
   },
   error: {}
@@ -42,11 +43,32 @@ function getCurrentUser (hook) {
  .then(() => hook)
 }
 
+function userIsNotMemberOfGroup (hook) {
+  const relationships = hook.app.service('relationships')
+  const groupId = hook.data.consumerAgentId
+  return relationships
+    .find({ query: { sourceId: groupId, relationshipType: 'member' } })
+    .then(isEmpty)
+}
+
+function createGroupMemberRelation (hook) {
+  const relationships = hook.app.service('relationships')
+  const groupId = hook.data.consumerAgentId
+  const userId = hook.params.agent.id
+  return relationships.create({
+    relationshipType: 'member',
+    sourceId: groupId,
+    targetId: userId
+  }).then(() => {
+    return hook
+  })
+}
+
 function groupHasNoAdminRelation (hook) {
   const relationships = hook.app.service('relationships')
   const groupId = hook.data.consumerAgentId
   return relationships
-    .find({ query: {targetId: groupId} })
+    .find({ query: { sourceId: groupId, relationshipType: 'admin' } })
     .then(isEmpty)
 }
 
@@ -56,8 +78,8 @@ function createGroupAdminRelation (hook) {
   const userId = hook.params.agent.id
   return relationships.create({
     relationshipType: 'admin',
-    sourceId: userId,
-    targetId: groupId
+    sourceId: groupId,
+    targetId: userId
   }).then(() => {
     return hook
   })
@@ -135,4 +157,69 @@ function createSupplierAgent (hook) {
 
 function hasNoSupplierAgent (hook) {
   return isNil(hook.data.supplierAgentId)
+}
+
+function hasNotCompletedGroupOrSupplierProfile (hook) {
+  const agentId = hook.params.agent.id
+  const agentsService = hook.app.service('agents')
+  const relationshipsService = hook.app.service('relationships')
+  const profilesService = hook.app.service('profiles')
+
+  return relationshipsService.find({ query: { sourceId: agentId, relationshipType: 'admin' }})
+  .then(groupRelationships => {
+    const groupIds = map((relationship) => { return relationship.targetId }, groupRelationships)
+    return relationshipsService.find({ query: { targetId: { $in: groupIds }, relationshipType: 'supplier' }})
+    .then((supplierRelationships) => {
+      const supplierIds = map((relationship) => { return relationship.sourceId }, supplierRelationships)
+      return Promise.all([
+        profilesService.find({ query: { agentId: { $in: groupIds }}}),
+        profilesService.find({ query: { agentId: { $in: supplierIds }}})
+      ])
+    })
+  })
+  .then(profilesArray => {
+    // TODO: IK: need to return true if either the 'find' for group profiles with a name OR supplier profiles with a name returns true
+    return any(
+      isNil,
+      map((profiles) => {
+        find(pipe(prop('name'), isNil, not))
+      }, profilesArray)
+    )
+  })
+}
+
+function createCompleteOrderSetupWithPreReqsTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
+  const taskRecipeId = taskRecipes.completeOrderSetupWithPrereqs.id
+
+  const assigneeId = hook.params.agent.id
+
+  let params = {
+    consumerAgentId: hook.data.consumerAgentId,
+    supplierAgentId: hook.data.supplierAgentId,
+    orderId: hook.result.id
+  }
+  return taskPlans.create({ taskRecipeId, params, assigneeId })
+   .then(() => {
+     return hook
+   })
+}
+
+function createCompleteOrderSetupTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
+  const taskRecipeId = taskRecipes.completeOrderSetup.id
+
+  const assigneeId = hook.params.agent.id
+
+  let params = {
+    consumerAgentId: hook.data.consumerAgentId,
+    supplierAgentId: hook.data.supplierAgentId,
+    orderId: hook.result.id
+  }
+  return taskPlans.create({ taskRecipeId, params, assigneeId })
+   .then(() => {
+     return hook
+   })
 }

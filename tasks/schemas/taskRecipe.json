@@ -26,6 +26,10 @@
       "enum": [
         "setupGroup",
         "setupSupplier",
+        "completeOrderSetup",
+        "completeOrderSetupWithPrereqs",
+        "startOrder",
+        "castIntent",
         "finishPrereqs",
         "createProfile"
       ]
