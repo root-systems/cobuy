@@ -67,7 +67,7 @@
     "bigmath": "^1.0.3",
     "dog-names": "^1.0.2",
     "dogstack": "^0.5.2",
-    "dogstack-agents": "^0.6.3",
+    "dogstack-agents": "root-systems/dogstack-agents#fix/migration-sequencing",
     "feathers-action": "^2.4.0",
     "feathers-action-react": "^2.2.1",
     "feathers-errors": "^2.6.2",
