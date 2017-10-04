@@ -11,7 +11,7 @@ exports.seed = function (knex, Promise) {
     .then(() => {
       // insert person agent
       const devPersonAgent = {}
-      return knex('agents').insert(devPersonAgent).returning('*')
+      return knex('agents').insert(devPersonAgent).returning('id')
     })
     .then(([agentId]) => {
       // insert person profile
