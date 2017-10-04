@@ -18,5 +18,5 @@ const order = {
 
 storiesOf('ordering.orderSummary', module)
   .add('default', () => (
-    <OrderSummary />
+    <OrderSummary order={order} />
   ))
