@@ -1,7 +1,7 @@
 const mergeAll = require('ramda/src/mergeAll')
 
 const config = {
-  port: 3000,
+  port: process.env.PORT || 3000,
   favicon: 'app/favicon.ico',
   assets: 'app/assets',
   bundler: {
