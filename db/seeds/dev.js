@@ -3,6 +3,7 @@ const hasher = require('feathers-authentication-local/lib/utils/hash')
 exports.seed = function (knex, Promise) {
   // delete ALL existing entries
   return Promise.all([
+    knex('taskPlans').del(),
     knex('agents').del(),
     knex('credentials').del(),
     knex('profiles').del()
