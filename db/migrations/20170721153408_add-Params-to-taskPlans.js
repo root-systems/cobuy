@@ -1,6 +1,6 @@
 exports.up = function (knex, Promise) {
   return knex.schema.table('taskPlans', function (table) {
-    table.json('params').references('taskPlans.id')
+    table.json('params')
   })
 }
 
