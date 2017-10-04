@@ -14,8 +14,9 @@ exports.up = function (knex, Promise) {
 }
 
 exports.down = function (knex, Promise) {
-  return Promise.all([
-    knex.schema.dropTableIfExists('taskPlans'),
+  return (
     knex.schema.dropTableIfExists('taskWorks')
-  ])
+  ).then(() => (
+    knex.schema.dropTableIfExists('taskPlans')
+  ))
 }
