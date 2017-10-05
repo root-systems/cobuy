@@ -26,6 +26,18 @@
       "faker": "internet.avatar",
       "format": "uri",
       "description": "Agent avatar image link"
+    },
+    "email" : {
+      "type": "string",
+      "description": "Agent email address"
+    },
+    "phone" : {
+      "type": "string",
+      "description": "Agent phone number"
+    },
+    "website" : {
+      "type": "string",
+      "description": "Agent website link"
     }
   },
   "required": [
