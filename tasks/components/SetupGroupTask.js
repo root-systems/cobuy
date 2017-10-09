@@ -59,7 +59,7 @@ export default (props) => {
               credential = {}
             } = agent
             const relationships = rolesToRelationships(roles)
-            const consumerAgentId = consumerAgent.id
+            const contextAgentId = consumerAgent.id
 
             const agentData = {
               id,
@@ -67,7 +67,7 @@ export default (props) => {
               profile,
               credential,
               relationships,
-              consumerAgentId
+              contextAgentId
             }
 
             if (isNil(agentData.id)) {

@@ -14,9 +14,9 @@ const hooks = {
             params: {}
           })
           .then(() => {
-            return hook.app.service('credentials').get(hook.result.id)
+            return hook.app.service('credentials').find({ query: { agentId: hook.result.id } })
           })
-          .then((cred) => {
+          .then(([cred]) => {
             // TODO: IK: looks like the email isn't getting attached to the credential correctly, investigate dogstack-agents
             return hook.app.service('mailer').create({
               from: 'hello@cobuy.nz',
@@ -26,6 +26,7 @@ const hooks = {
             })
           })
           .then(() => hook)
+          .catch((err) => console.log('error sending email invite,', err))
         }
       }
     ]
