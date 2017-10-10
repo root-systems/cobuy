@@ -16,13 +16,12 @@ import ProductList from './ProductList'
 
 // import styles from '../styles/ListViewProduct'
 
-function OrderSummary ({ orderSummary }) {
+function OrderSummary({ orderSummary }) {
   // const { styles, order } = props
   /*
-    Need to know:
-      Product summary info - are we storign oders somewhere already?
+    Could add a new header row for every new agent?
+    How would the data be orginised? Using gettings to malipulate the data with different props/filters for different groupings
   */
-  console.log('this is: ', find(propEq('id', orderSummary.orderPlans[0].intent.product.priceSpecId))(orderSummary.orderPlans[0].intent.product.priceSpecs))
   return (
     h('div', {}, [
       h(Paper, {
@@ -34,26 +33,34 @@ function OrderSummary ({ orderSummary }) {
       h(Table, {}, [
         h(TableHeader, { displaySelectAll: false }, [
           h(TableRow, {}, [
+            h(TableHeaderColumn, {}, ''),
             h(TableHeaderColumn, {}, 'Product Name'),
-            h(TableHeaderColumn, {}, 'Name'),
             h(TableHeaderColumn, {}, 'Quanity'),
             h(TableHeaderColumn, {}, 'Item Price'),
             h(TableHeaderColumn, {}, 'Total')
           ])
-        ]),
-        h(TableBody, { displayRowCheckbox: false }, [
-          orderSummary.orderPlans.map((plan) => {
-            const price = find(propEq('id', plan.intent.priceSpecId))(plan.intent.product.priceSpecs).price
-            return h(TableRow, {}, [
-              h(TableRowColumn, {}, plan.intent.product.resourceType.name),
-              h(TableRowColumn, {}, plan.intent.agent.profile.name),
-              h(TableRowColumn, {}, plan.quantity),
-              h(TableRowColumn, {}, find(propEq('id', plan.intent.priceSpecId))(plan.intent.product.priceSpecs).price),
-              h(TableRowColumn, {}, (plan.quantity * price))
+        ])]),
+      orderSummary.agentOrderPlans.map((agentPlan) => {
+        return h(Table, {}, [
+          h(TableHeader, { displaySelectAll: false }, [
+            h(TableRow, {}, [
+              h(TableHeaderColumn, {}, agentPlan.agent.profile.name)
             ])
-          })
+          ]),
+          h(TableBody, { displayRowCheckbox: false }, [
+            agentPlan.orderPlans.map((plan) => {
+              const price = find(propEq('id', plan.intent.priceSpecId))(plan.intent.product.priceSpecs).price
+              return h(TableRow, {}, [
+                h(TableRowColumn, {}, ''),
+                h(TableRowColumn, {}, plan.intent.product.resourceType.name),
+                h(TableRowColumn, {}, plan.quantity),
+                h(TableRowColumn, {}, find(propEq('id', plan.intent.priceSpecId))(plan.intent.product.priceSpecs).price),
+                h(TableRowColumn, {}, (plan.quantity * price))
+              ])
+            })
+          ])
         ])
-      ])
+      })
     ])
   )
 }
