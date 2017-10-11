@@ -22,36 +22,44 @@ import OrderSummary from '../components/OrderSummary'
   }
 */
 
-const agent = {
+const agents = [{
   profile: {
     name: 'Ella Banks'
   }
-}
+},
+{
+  profile: {
+    name: 'Kath Uru'
+  }
+}]
 
 // desired order, optimistic thinking
-const intents = [{
-  // agent that made the order
-  desiredQuantity: 1,
-  minimumQuantity: 1,
-  maximumQuantity: 2,
-  productId: products[0].id,
-  product: products[0],
-  priceSpecId: 456
-}]
 
+const intents = products.map((product) => {
+  return {
+    desiredQuantity: 1,
+    minimumQuantity: 1,
+    maximumQuantity: 2,
+    productId: product.id,
+    product: product,
+    priceSpecId: product.priceSpecs[0].id
+  }
+})
 // What has actually happened
-const orderPlans = [{
-  quantity: 1,
-  intent: intents[0]
-}]
+const orderPlans = intents.map((intent) => {
+  return {
+    quantity: Math.floor(Math.random() * 6) + 1,
+    intent
+  }
+})
 
 const orderSummary = {
-  agentOrderPlans: [
-    {
+  agentOrderPlans: agents.map((agent) => {
+    return {
       agent,
       orderPlans
     }
-  ]
+  })
 }
 
 storiesOf('ordering.orderSummary', module)
