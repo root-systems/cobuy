@@ -4,24 +4,6 @@ import products from './mock/products'
 
 import OrderSummary from '../components/OrderSummary'
 
-/*
-  Ideal data shape for grouping by agents
-
-  {
-    agents: [
-      {
-        agent,
-        orderPlans
-      }
-    ]
-  }
-  {
-    agent,
-    orderplans:
-
-  }
-*/
-
 const agents = [{
   profile: {
     name: 'Ella Banks'
@@ -34,7 +16,6 @@ const agents = [{
 }]
 
 // desired order, optimistic thinking
-
 const intents = products.map((product) => {
   return {
     desiredQuantity: 1,
@@ -53,16 +34,14 @@ const orderPlans = intents.map((intent) => {
   }
 })
 
-const orderSummary = {
-  agentOrderPlans: agents.map((agent) => {
-    return {
-      agent,
-      orderPlans
-    }
-  })
-}
+const agentOrderPlans = agents.map((agent) => {
+  return {
+    agent,
+    orderPlans
+  }
+})
 
 storiesOf('ordering.orderSummary', module)
   .add('default', () => (
-    <OrderSummary orderSummary={orderSummary} />
+    <OrderSummary agentOrderPlans={agentOrderPlans} />
   ))
