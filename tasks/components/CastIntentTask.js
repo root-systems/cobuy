@@ -7,26 +7,10 @@ import SingleViewProduct from '../../ordering/components/SingleViewProduct'
 
 // import styles from '../styles/CastIntentTask'
 
-const mockProductInfo = {
-  name: 'crayons',
-  description: 'these are crayons',
-  image: 'http://www.mercurius-australia.com/site/images/1250623.jpg',
-  priceSpecifications: [
-    {
-      minimum: '10',
-      price: '9.99',
-      currency: 'NZD'
-    },
-    {
-      minimum: '100',
-      price: '7.99',
-      currency: 'NZD'
-    }
-  ]
-}
 
 const IntentForm = props => {
-  const { handleSubmit } = props
+  const { handleSubmit, products, name } = props
+  console.log(props, 'the props here')
   return (
     h('form', {
       onSubmit: () => { console.log('lunch') }
@@ -34,7 +18,7 @@ const IntentForm = props => {
       h(Field, {
         name: 'intent',
         component: SingleViewProduct,
-        product: mockProductInfo
+        product: props.products
       })
     ])
   )

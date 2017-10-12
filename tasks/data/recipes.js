@@ -2,7 +2,7 @@ import SetupGroupTask from '../containers/SetupGroupTask'
 import SetupSupplierTask from '../containers/SetupSupplierTask'
 import CreateProfileTask from '../containers/CreateProfileTask'
 import StartOrderTask from '../containers/StartOrderTask'
-import CastIntentTask from '../containers/CastIntentTask'
+import CastIntentTask from '../containers/CastIntentTask' 
 
 export const setupGroup = {
   id: 'setupGroup',
