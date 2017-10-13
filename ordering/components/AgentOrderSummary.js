@@ -12,15 +12,15 @@ import {
 import { find, propEq, add, reduce } from 'ramda'
 import { FormattedMessage } from '../../lib/Intl'
 
-const getPriceFromPlan = (plan) => find(propEq('id', plan.intent.priceSpecId))(plan.intent.product.priceSpecs).price
+const getPriceFromPlan = (plan) => find(propEq('id', plan.priceSpecId))(plan.product.priceSpecs).price
 
-function AgentOrderSummary ({ orderPlans, agent }) {
+function AgentOrderSummary ({ orderPlans, agentId }) {
   const total = reduce(add, 0, orderPlans.map((plan) => getPriceFromPlan(plan) * plan.quantity))
   return (
     h(Table, {}, [
       h(TableHeader, { displaySelectAll: false }, [
         h(TableRow, {}, [
-          h(TableHeaderColumn, {}, agent.profile.name)
+          h(TableHeaderColumn, {}, orderPlans[0].agent.profile.name)
         ])
       ]),
       h(TableBody, { displayRowCheckbox: false }, [
@@ -28,7 +28,7 @@ function AgentOrderSummary ({ orderPlans, agent }) {
           const price = getPriceFromPlan(plan)
           return h(TableRow, {}, [
             h(TableRowColumn, {}, ''),
-            h(TableRowColumn, {}, plan.intent.product.resourceType.name),
+            h(TableRowColumn, {}, plan.product.resourceType.name),
             h(TableRowColumn, {}, plan.quantity),
             h(TableRowColumn, {}, price),
             h(TableRowColumn, {}, (plan.quantity * price))

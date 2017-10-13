@@ -2,6 +2,7 @@ import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import Paper from 'material-ui/Paper'
+import { groupBy, map } from 'ramda'
 import {
   Table,
   TableHeader,
@@ -12,8 +13,16 @@ import { FormattedMessage } from '../../lib/Intl'
 
 import AgentOrderSummary from './AgentOrderSummary'
 
-function OrderSummary ({ agentOrderPlans }) {
+function OrderSummary ({ order }) {
   // const { styles, order } = props
+  const groupedAgentPlans = groupBy((plan) => plan.agent.profile.id)(order.orderPlans)
+  const agentPlans = Object.keys(groupedAgentPlans).map((key) => {
+    return {
+      agentId: key,
+      orderPlans: groupedAgentPlans[key]
+    }
+  })
+
   return (
     h('div', {}, [
       h(Paper, {
@@ -32,9 +41,9 @@ function OrderSummary ({ agentOrderPlans }) {
             h(TableHeaderColumn, {}, 'Total')
           ])
         ])]),
-      agentOrderPlans.map((agentPlan) => {
-        const { orderPlans, agent } = agentPlan
-        return h(AgentOrderSummary, { orderPlans, agent }, [])
+      agentPlans.map((plan) => {
+        const { orderPlans, agentId } = plan
+        return h(AgentOrderSummary, { orderPlans, agentId }, [])
       })
     ])
   )
