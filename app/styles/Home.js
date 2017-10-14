@@ -1,4 +1,9 @@
-const { config } = window // HACK
+var config // HACK
+if (typeof window === 'undefined') {
+  config = {}
+} else {
+  config = window.config
+}
 
 export default {
   container: ({ theme }) => {
