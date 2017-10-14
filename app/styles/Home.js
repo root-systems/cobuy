@@ -1,3 +1,5 @@
+const { config } = window // HACK
+
 export default {
   container: ({ theme }) => {
     return {
@@ -35,7 +37,7 @@ export default {
           opacity: 0.6,
           zIndex: -1,
           backgroundColor: theme.colors.canvas,
-          backgroundImage: 'url("/images/cobuy-bg-sml-1080.jpg")',
+          backgroundImage: `url("${config.assetsUrl}/images/cobuy-bg-sml-1080.jpg")`,
           backgroundSize: 'cover'
         },
         [`@media (min-width: ${theme.breakpoints.desktop})`]: {
@@ -48,7 +50,7 @@ export default {
           opacity: 0.6,
           zIndex: -1,
           backgroundColor: theme.colors.canvas,
-          backgroundImage: 'url("/images/cobuy-bg-lrg-1440.jpg")',
+          backgroundImage: `url("${config.assetsUrl}/images/cobuy-bg-lrg-1440.jpg")`,
           backgroundSize: 'cover'
         }
       }

@@ -4,6 +4,7 @@ const config = {
   port: 3000,
   favicon: 'app/favicon.ico',
   assets: 'app/assets',
+  assetsUrl: '/',
   bundler: {
     head: `
       <style id="app-styles"></style>
