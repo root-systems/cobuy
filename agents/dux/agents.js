@@ -1,5 +1,6 @@
 // TODO: IK: maybe rename this / move somewhere else
 import createAction from '@f/create-action'
+import { push } from 'react-router-redux'
 
 import { combineEpics } from 'redux-observable'
 import Rx from 'rxjs'
@@ -21,11 +22,26 @@ export default combineEpics(patchPasswordAndSignIn)
 export function patchPasswordAndSignIn (action$, store, { feathers }) {
   return action$.ofType(invitedPatchPassword.type)
     .switchMap(({ payload, meta: { cid }}) => {
-      const patchPasswordPayload = { jwt: payload.jwt, payload: { data: { password: payload.password } } }
+      // TODO: IK: this should probably be a util function or somthing ramda-smart
+      function onlyCid (action) {
+        return action.meta.cid === cid
+      }
+
+      const tokenConsumesComplete$ = action$.ofType(tokenConsumes.complete.type).filter(onlyCid).take(1)
+      const tokenConsumesSet$ = action$.ofType(tokenConsumes.set.type).filter(onlyCid)
+      const signInSuccess$ = action$.ofType(authentication.signInSuccess.type).filter(onlyCid).take(1)
+
+      const password = payload.password
+      const patchPasswordPayload = { jwt: payload.jwt, payload: { data: { password } } }
+
       return Rx.Observable.merge(
         Rx.Observable.of(tokenConsumes.create(cid, patchPasswordPayload)),
-        action$.ofType(tokenConsumes.start.type).filter((action) => action.meta.cid === cid).take(1)
+        tokenConsumesComplete$
+          .withLatestFrom(tokenConsumesSet$, (success, set) => set.payload.data)
+          .mergeMap(({ result: { email } }) => {
+            return Rx.Observable.of(authentication.signIn(cid, { strategy: 'local', email, password }))
+          }),
+        signInSuccess$.mapTo(push('/')) // TODO this should be configurable
       )
     })
-    .do(console.log)
 }
