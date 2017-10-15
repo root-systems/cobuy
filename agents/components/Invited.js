@@ -4,18 +4,21 @@ import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
+import { merge } from 'ramda'
 import { FormattedMessage } from 'dogstack/intl'
 const { length } = require('@root-systems/redux-form-validators')
 
 import styles from '../styles/Invited'
 
 function Invited (props) {
-  const { styles, handleSubmit } = props
+  const { styles, handleSubmit, actions: { invited } } = props
   const { jwt } = props.match.params
 
   return h('form', {
     className: styles.container,
-    onSubmit: handleSubmit(() => console.log('wefawef'))
+    onSubmit: handleSubmit((data) => {
+      invited.invitedPatchPassword({ jwt, password: data.password })
+    })
   }, [
     h('h2', `You've been invited to Cobuy!`),
     h('div', [

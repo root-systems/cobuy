@@ -9,6 +9,7 @@ const hooks = {
       (hook) => {
         if (hook.result.type === 'person') {
           const agentId = hook.result.id
+          var agentEmail
 
           return hook.app.service('taskPlans').create({
             assigneeId: agentId,
@@ -16,21 +17,23 @@ const hooks = {
             params: {}
           })
           .then(() => {
-            return Promise.all([
-              hook.app.service('credentials').find({ query: { agentId } }),
-              hook.app.service('tokens').create({
-                agentId,
-                service: 'credentials',
-                method: 'patch',
-                createdAt: new Date().toString()
-              })
-            ])
+            return hook.app.service('credentials').find({ query: { agentId } })
           })
-          .then(([cred, token]) => {
+          .then(([cred]) => {
+            agentEmail = cred.email
+            return hook.app.service('tokens').create({
+              agentId,
+              service: 'credentials',
+              method: 'patch',
+              params: { serviceId: cred.id },
+              createdAt: new Date().toString()
+            })
+          })
+          .then((token) => {
             // TODO: IK: looks like the email isn't getting attached to the credential correctly, investigate dogstack-agents
             return hook.app.service('mailer').create({
               from: 'hello@cobuy.nz',
-              to: cred.email || 'no@email.com',
+              to: agentEmail || 'no@email.com',
               subject: `You're invited to join Cobuy!`,
               html: `
                 Hi -name-. You've been invited by -admin- to join -group- on Cobuy! Click <a href=http://localhost:3000/invited/${token.jwt}>here</a> to set your password and start co-buying!

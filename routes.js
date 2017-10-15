@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom'
 import Home from './app/containers/Home'
 import Dashboard from './app/containers/Dashboard'
 
-import Invited from './agents/components/Invited'
+import Invited from './agents/containers/Invited'
 
 import TaskWorker from './tasks/containers/TaskWorker'
 
