@@ -35,7 +35,6 @@ export default compose(
           }
         })
       }
-      console.log(selected.products, 'the selected products')
       if (!isEmpty(selected.products)) {
         const resourceTypeIds = values(map((product) => {
           return product.resourceTypeId
@@ -46,6 +45,21 @@ export default compose(
             query: {
               id: {
                 $in: resourceTypeIds
+              }
+            }
+          }
+        })
+      }
+      if (!isEmpty(selected.products)) {
+        const productIds = values(map((product) => {
+          return product.id
+        }, selected.products))
+        queries.push({
+          service: 'priceSpecs',
+          params: {
+            query: {
+              productId: {
+                $in: productIds
               }
             }
           }
