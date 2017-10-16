@@ -52,7 +52,6 @@ function Invited (props) {
 export default compose(
   connectFela(styles),
   connectForm({
-    form: 'invited',
-    enableReinitialize: true
+    form: 'invited'
   })
 )(Invited)

@@ -9,7 +9,7 @@ import { invitedPatchPassword } from '../dux/agents'
 
 export default compose(
   connectFeathers({
-    selector: (state) => state,
+    selector: (state) => {},
     actions: {
       invited: { invitedPatchPassword }
     },
