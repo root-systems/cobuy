@@ -34,7 +34,8 @@ export default (props) => {
         initialValues: profile,
         updateProfile: (nextProfile) => {
           actions.profiles.update(profile.id, merge(nextProfile, { agentId: consumerAgent.id }))
-        }
+        },
+        agentType: 'group'
       })
     },
     {

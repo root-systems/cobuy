@@ -11,7 +11,7 @@ import styles from '../styles/Profile'
 import AvatarField from '../../app/components/AvatarField'
 
 function Profile (props) {
-  const { styles, isEditing, toggleEdit, updateProfile, handleSubmit } = props
+  const { styles, isEditing, toggleEdit, updateProfile, handleSubmit, agentType } = props
 
   const updateProfileAndToggleEdit = (nextProfile) => {
     toggleEdit()
@@ -27,7 +27,10 @@ function Profile (props) {
     }, [
       h(FormattedMessage, {
         id: 'agents.profile',
-        className: styles.labelText
+        className: styles.labelText,
+        values: {
+          agentType
+        }
       })
     ]),
     h('div', {

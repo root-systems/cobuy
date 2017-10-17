@@ -14,6 +14,7 @@ export default (props) => {
     initialValues: currentAgent.profile,
     updateProfile: (nextProfile) => {
       actions.profiles.update(currentAgent.profile.id, nextProfile)
-    }
+    },
+    agentType: 'my'
   })
 }
