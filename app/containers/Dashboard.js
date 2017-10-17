@@ -1,4 +1,5 @@
 import { connect } from 'feathers-action-react'
+import { isEmpty } from 'ramda'
 
 import Dashboard from '../components/Dashboard'
 import { actions as taskPlanActions } from '../../tasks/dux/plans'
@@ -13,14 +14,32 @@ export default connect({
     taskWorks: taskWorkActions,
     orders: orderActions
   },
-  query: [
-    {
-      service: 'taskPlans',
-      params: {}
-    },
-    {
-      service: 'taskWorks',
-      params: {}
+  query: (props) => {
+    var queries = []
+    const { currentAgent } = props.selected
+    if (currentAgent) {
+      queries.push({
+        service: 'taskPlans',
+        params: {
+          query: {
+            assigneeId: currentAgent.id
+          }
+        }
+      })
+      queries.push({
+        service: 'taskWorks',
+        params: {
+          query: {
+            workerAgentId: currentAgent.id
+          }
+        }
+      })
     }
-  ]
+    return queries
+  },
+  shouldQueryAgain: (props, status) => {
+    const { currentAgent, taskPlans } = props.selected
+    if (currentAgent && isEmpty(taskPlans)) return true
+    return false
+  }
 })(Dashboard)
