@@ -38,6 +38,7 @@
     },
     "website" : {
       "type": "string",
+      "format": "uri",
       "description": "Agent website link"
     }
   },
