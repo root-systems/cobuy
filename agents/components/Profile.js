@@ -81,7 +81,6 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          multiLine: true,
           rowsMax: 5,
           disabled: not(isEditing)
         }),
@@ -95,7 +94,6 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          multiLine: true,
           rowsMax: 5,
           disabled: not(isEditing)
         }),
@@ -109,7 +107,6 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          multiLine: true,
           rowsMax: 5,
           disabled: not(isEditing)
         })
