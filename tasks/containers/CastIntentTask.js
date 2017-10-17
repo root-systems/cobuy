@@ -1,6 +1,7 @@
 import { connect as connectFeathers } from 'feathers-action-react'
 import { isNil, path, prop, pipe, values, any, forEach, either, map, isEmpty } from 'ramda'
 import { compose } from 'recompose'
+import { push } from 'react-router-redux'
 
 import getCastIntentTaskProps from '../getters/getCastIntentTaskProps'
 import CastIntentTask from '../components/CastIntentTask'
@@ -18,7 +19,12 @@ export default compose(
       products,
       relationships,
       resourceTypes,
-      priceSpecs
+      priceSpecs,
+      // `feathers-action-react` wraps every
+      //  action creator in a cid creator.
+      router: {
+        push: (cid, ...args) => push(...args)
+      }
     },
     query: (props) => {
       var queries = []

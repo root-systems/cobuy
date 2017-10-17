@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil } from 'ramda'
+import { isNil, merge } from 'ramda'
 import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
@@ -7,7 +7,7 @@ import ProductList from '../../ordering/components/ProductList'
 
 // import styles from '../styles/CastIntentTask'
 
-
+/*
 const IntentForm = props => {
   const { handleSubmit, products, name } = props
   return (
@@ -26,14 +26,24 @@ const IntentForm = props => {
 const CastIntentTask = compose(
   connectForm({ form: 'memberIntent' }),
   // connectStyles(styles)
-)(props => {
-  const { actions, currentAgent } = props
+)
+*/
+
+function CastIntentTask (props) {
+  const { actions, currentAgent, taskPlan } = props
 
   if(isNil(currentAgent)) {
     return null
   }
 
-  return h(IntentForm, props)
-})
+  const handleNavigate = (product) => {
+    const { id: productId } = product
+    const { id: taskPlanId } = taskPlan
+    actions.router.push(`/tasks/${taskPlanId}?productId=${productId}`)
+  }
+  const nextProps = merge(props, { handleNavigate })
+
+  return h(ProductList, nextProps)
+}
 
 export default CastIntentTask

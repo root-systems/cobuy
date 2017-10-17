@@ -7,7 +7,7 @@ import ListViewProduct from './ListViewProduct'
 import styles from '../styles/ProductList'
 
 function ProductList (props) {
-  const { styles, products } = props
+  const { styles, products, handleNavigate } = props
 
   return (
     h('div', {
@@ -16,7 +16,8 @@ function ProductList (props) {
       values(map((product) => {
         return h(ListViewProduct, {
           product: product,
-          key: product.id
+          key: product.id,
+          handleNavigate
         })
       }, products))
     ])
