@@ -1,5 +1,5 @@
 import { compose } from 'recompose'
-import { map } from 'ramda'
+import { map, values } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 
@@ -13,12 +13,12 @@ function ProductList (props) {
     h('div', {
       className: styles.container
     }, [
-      map((product) => {
+      values(map((product) => {
         return h(ListViewProduct, {
           product: product,
           key: product.id
         })
-      }, products)
+      }, products))
     ])
   )
 }
