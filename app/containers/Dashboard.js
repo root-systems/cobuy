@@ -39,6 +39,7 @@ export default connect({
   },
   shouldQueryAgain: (props, status) => {
     const { currentAgent, taskPlans } = props.selected
+    if (status.isPending) return false
     if (currentAgent && isEmpty(taskPlans)) return true
     return false
   }
