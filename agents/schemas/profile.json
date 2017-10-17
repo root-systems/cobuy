@@ -28,7 +28,8 @@
       "description": "Agent avatar image link"
     },
     "email" : {
-      "type": "emails",
+      "type": "string",
+      "format": "email",
       "description": "Agent email address"
     },
     "phone" : {
