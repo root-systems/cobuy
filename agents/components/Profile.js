@@ -70,6 +70,45 @@ function Profile (props) {
           multiLine: true,
           rowsMax: 5,
           disabled: not(isEditing)
+        }),
+        h(Field, {
+          name: 'email',
+          floatingLabelText: (
+            h(FormattedMessage, {
+              id: 'agents.email',
+              className: styles.labelText
+            })
+          ),
+          component: TextField,
+          fullWidth: true,
+          rowsMax: 5,
+          disabled: not(isEditing)
+        }),
+        h(Field, {
+          name: 'phone',
+          floatingLabelText: (
+            h(FormattedMessage, {
+              id: 'agents.phoneLabel',
+              className: styles.labelText
+            })
+          ),
+          component: TextField,
+          fullWidth: true,
+          rowsMax: 5,
+          disabled: not(isEditing)
+        }),
+        h(Field, {
+          name: 'website',
+          floatingLabelText: (
+            h(FormattedMessage, {
+              id: 'agents.website',
+              className: styles.labelText
+            })
+          ),
+          component: TextField,
+          fullWidth: true,
+          rowsMax: 5,
+          disabled: not(isEditing)
         })
       ])
     ]),
