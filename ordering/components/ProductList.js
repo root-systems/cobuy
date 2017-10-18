@@ -7,7 +7,7 @@ import ListViewProduct from './ListViewProduct'
 import styles from '../styles/ProductList'
 
 function ProductList (props) {
-  const { styles, products, handleNavigate } = props
+  const { styles, products, onNavigate } = props
 
   return (
     h('div', {
@@ -17,7 +17,7 @@ function ProductList (props) {
         return h(ListViewProduct, {
           product: product,
           key: product.id,
-          handleNavigate
+          onNavigate
         })
       }, products))
     ])

@@ -14,7 +14,7 @@ import styles from '../styles/ListViewProduct'
  })
 
 function ListViewProduct (props) {
-  const { styles, product, handleNavigate } = props
+  const { styles, product, onNavigate } = props
   if (isNil(product)) return null
   const { resourceType, facets, priceSpecs } = product
   if (isNil(priceSpecs)) return null
@@ -61,7 +61,7 @@ function ListViewProduct (props) {
       ]),
       h(FlatButton, {
         onClick: (ev) => {
-          handleNavigate(product)
+          onNavigate(product)
         }
       },
       ['click here'])
