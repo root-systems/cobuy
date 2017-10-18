@@ -18,14 +18,6 @@ function SelectAgentForOrder (props) {
   return h('form', {
     className: styles.container
   }, [
-    h('p', {
-      className: styles.intro
-    }, [
-      h(FormattedMessage, {
-        id: 'agents.profile',
-        className: styles.labelText
-      })
-    ]),
     h('div', {
       className: styles.innerContainer
     }, [
