@@ -9,9 +9,9 @@ import {
   TableHeaderColumn,
   TableRow,
   TableRowColumn,
-  TableBody
+  TableBody,
+  TableFooter
 } from 'material-ui/Table'
-import { FormattedMessage } from '../../lib/Intl'
 import { add, mul } from 'bigmath'
 
 const summariseOrder = pipe(
@@ -38,7 +38,6 @@ const summariseOrder = pipe(
 const getPriceFromPlan = (plan) => find(propEq('id', plan.priceSpecId))(plan.product.priceSpecs).price
 
 function SupplierOrderSummary ({ order }) {
-  // const { styles, order } = props
   const summarisedOrder = summariseOrder(order.orderPlans)
   return (
     h('div', {}, [
@@ -59,7 +58,7 @@ function SupplierOrderSummary ({ order }) {
         ])]),
       h(TableBody, { displayRowCheckbox: false }, [
         summarisedOrder.map((plan) => {
-          const { product, priceSpecId, quantity } = plan
+          const { product, quantity } = plan
           const price = getPriceFromPlan(plan)
           return h(TableRow, {}, [
             h(TableRowColumn, {}, ''),
@@ -69,6 +68,14 @@ function SupplierOrderSummary ({ order }) {
             h(TableRowColumn, {}, mul(plan.quantity, price))
           ])
         })
+      ]),
+      h(TableFooter, {}, [
+        h(TableRow, {}, [
+          h(TableRowColumn, {}, ''),
+          h(TableRowColumn, {}, ''),
+          h(TableRowColumn, {}, 'total'),
+          h(TableRowColumn, {}, reduce(add, 0, summarisedOrder.map((plan) => mul(getPriceFromPlan(plan), plan.quantity))))
+        ])
       ])
     ])
   )
