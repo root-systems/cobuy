@@ -12,6 +12,7 @@ import {
   TableBody
 } from 'material-ui/Table'
 import { FormattedMessage } from '../../lib/Intl'
+import { add, mul } from 'bigmath'
 
 const summariseOrder = pipe(
   groupBy(
@@ -28,7 +29,7 @@ const summariseOrder = pipe(
       }
     }
     return merge(soFar, {
-      quantity: quantity + soFar.quantity
+      quantity: add(quantity, soFar.quantity)
     })
   }, null)),
   values
@@ -65,7 +66,7 @@ function SupplierOrderSummary ({ order }) {
             h(TableRowColumn, {}, product.resourceType.name),
             h(TableRowColumn, {}, quantity),
             h(TableRowColumn, {}, price),
-            h(TableRowColumn, {}, (plan.quantity * price))
+            h(TableRowColumn, {}, mul(plan.quantity, price))
           ])
         })
       ])

@@ -9,13 +9,13 @@ import {
   TableRowColumn,
   TableFooter
 } from 'material-ui/Table'
-import { find, propEq, add, reduce } from 'ramda'
-import { FormattedMessage } from '../../lib/Intl'
+import { find, propEq, reduce } from 'ramda'
+import { add, mul } from 'bigmath'
 
 const getPriceFromPlan = (plan) => find(propEq('id', plan.priceSpecId))(plan.product.priceSpecs).price
 
 function AgentOrderSummary ({ orderPlans, agentId }) {
-  const total = reduce(add, 0, orderPlans.map((plan) => getPriceFromPlan(plan) * plan.quantity))
+  const total = reduce(add, 0, orderPlans.map((plan) => mul(getPriceFromPlan(plan), plan.quantity)))
   return (
     h(Table, {}, [
       h(TableHeader, { displaySelectAll: false }, [
@@ -31,7 +31,7 @@ function AgentOrderSummary ({ orderPlans, agentId }) {
             h(TableRowColumn, {}, plan.product.resourceType.name),
             h(TableRowColumn, {}, plan.quantity),
             h(TableRowColumn, {}, price),
-            h(TableRowColumn, {}, (plan.quantity * price))
+            h(TableRowColumn, {}, mul(plan.quantity, price))
           ])
         })
       ]),
