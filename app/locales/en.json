@@ -28,7 +28,7 @@
   "agents.signInWith": "sign in with...",
   "agents.saveAvatar": "save avatar",
   "agents.editAvatar": "edit avatar",
-  "agents.profile": "my profile",
+  "agents.profile": "{agentType} profile",
   "agents.memberInvites": "invite your members",
   "agents.inviteMembers": "invite members",
   "agents.member": "member",

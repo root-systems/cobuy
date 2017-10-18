@@ -21,7 +21,8 @@ export default (props) => {
         initialValues: profile,
         updateProfile: (nextProfile) => {
           actions.profiles.update(profile.id, merge(nextProfile, { agentId: supplierAgent.id }))
-        }
+        },
+        agentType: 'supplier'
       })
     },
     {
