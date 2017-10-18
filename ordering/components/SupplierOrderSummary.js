@@ -55,26 +55,26 @@ function SupplierOrderSummary ({ order }) {
             h(TableHeaderColumn, {}, 'Item Price'),
             h(TableHeaderColumn, {}, 'Total')
           ])
-        ])]),
-      h(TableBody, { displayRowCheckbox: false }, [
-        summarisedOrder.map((plan) => {
-          const { product, quantity } = plan
-          const price = getPriceFromPlan(plan)
-          return h(TableRow, {}, [
+        ]),
+        h(TableBody, { displayRowCheckbox: false }, [
+          summarisedOrder.map((plan) => {
+            const { product, quantity } = plan
+            const price = getPriceFromPlan(plan)
+            return h(TableRow, {}, [
+              h(TableRowColumn, {}, product.resourceType.name),
+              h(TableRowColumn, {}, quantity),
+              h(TableRowColumn, {}, price),
+              h(TableRowColumn, {}, mul(plan.quantity, price))
+            ])
+          })
+        ]),
+        h(TableFooter, {}, [
+          h(TableRow, {}, [
             h(TableRowColumn, {}, ''),
-            h(TableRowColumn, {}, product.resourceType.name),
-            h(TableRowColumn, {}, quantity),
-            h(TableRowColumn, {}, price),
-            h(TableRowColumn, {}, mul(plan.quantity, price))
+            h(TableRowColumn, {}, ''),
+            h(TableRowColumn, {}, 'total'),
+            h(TableRowColumn, {}, reduce(add, 0, summarisedOrder.map((plan) => mul(getPriceFromPlan(plan), plan.quantity))))
           ])
-        })
-      ]),
-      h(TableFooter, {}, [
-        h(TableRow, {}, [
-          h(TableRowColumn, {}, ''),
-          h(TableRowColumn, {}, ''),
-          h(TableRowColumn, {}, 'total'),
-          h(TableRowColumn, {}, reduce(add, 0, summarisedOrder.map((plan) => mul(getPriceFromPlan(plan), plan.quantity))))
         ])
       ])
     ])
