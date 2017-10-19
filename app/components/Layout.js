@@ -1,8 +1,10 @@
 import h from 'react-hyperscript'
 import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
-import { Route, Switch } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { pipe, map, values, isNil } from 'ramda'
+
+import ConnectedSwitch from '../../lib/connected-Switch'
 
 import styles from '../styles/Layout'
 
@@ -20,7 +22,7 @@ function Layout (props) {
       className: styles.container
     }, [
       h(Nav, { navigationRoutes }),
-      h(Switch, {}, [
+      h(ConnectedSwitch, {}, [
         mapRoutePages(routes)
       ])
     ])
