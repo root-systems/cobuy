@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
-import { pipe, isNil, not, map, isArrayLike } from 'ramda'
+import { pipe, isNil, not, map, isArrayLike, merge } from 'ramda'
 import { SelectField } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -12,7 +12,10 @@ import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/SelectAgentForOrder'
 import AvatarField from '../../app/components/AvatarField'
 
-function SelectAgentForOrder (props) {
+const SelectAgentForOrderForm = compose(
+  connectFela(styles),
+  connectForm({})
+)(props => {
   const { agentType, styles, isEditing, toggleEdit, selectAgent, handleSubmit, agentCollection } = props
 
   return h('form', {
@@ -53,13 +56,18 @@ function SelectAgentForOrder (props) {
       }, 'create new')
     ])
   ])
+})
+
+const SelectAgentForOrder = (props) => {
+  const nextProps = merge(props, {
+    form: `select${props.agentType}`,
+    enableReinitialize: true,
+    initialValues: {
+      // TODO: IK: is there a better way to write this
+      [`select${props.agentType}`]: props.selectedAgent ? props.selectedAgent.id : null
+    }
+  })
+  return h(SelectAgentForOrderForm, nextProps)
 }
 
-export default compose(
-  connectFela(styles),
-  // TODO: IK: passing a function to connectForm seems to be supported, mentioned in docs, but causes forms to throw TypeErrors non-destructively
-  connectForm((props) => ({
-    form: `select${props.agentType}`, // TODO: probably need to pass in the form name so they don't all have the same name
-    enableReinitialize: true
-  }))
-)(SelectAgentForOrder)
+export default SelectAgentForOrder
