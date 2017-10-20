@@ -2,7 +2,7 @@ import { combineEpics } from 'redux-observable'
 
 import { epic as agents } from 'dogstack-agents'
 // TODO: fix naming
-import invited from './agents/dux/agents'
+import invited from './agents/dux/invited'
 import { epic as tokens } from './tokens/dux/tokens'
 import { epic as tokenConsumes } from './tokens/dux/tokenConsumes'
 import { epic as taskPlans } from './tasks/dux/plans'

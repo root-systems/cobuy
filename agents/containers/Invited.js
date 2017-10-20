@@ -5,7 +5,7 @@ import { authentication } from 'dogstack-agents/actions'
 // import getInvitedProps from '../getters/getInvitedProps'
 import Invited from '../components/Invited'
 
-import { invitedPatchPassword } from '../dux/agents'
+import { invitedPatchPassword } from '../dux/invited'
 
 export default compose(
   connectFeathers({
