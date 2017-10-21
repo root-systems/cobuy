@@ -42,7 +42,6 @@ const hooks = {
             })
           })
           .then(() => hook)
-          .catch((err) => console.log('error sending email invite,', err))
         }
       }
     ]
