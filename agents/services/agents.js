@@ -36,7 +36,8 @@ const hooks = {
               to: agentEmail || 'no@email.com',
               subject: `You're invited to join Cobuy!`,
               html: `
-                Hi -name-. You've been invited by -admin- to join -group- on Cobuy! Click <a href=http://localhost:3000/invited/${token.jwt}>here</a> to set your password and start co-buying!
+                Hi -name-. You've been invited by -admin- to join -group- on Cobuy! Click <a href=
+                ${hook.app.get('url')}/invited/${token.jwt}>here</a> to set your password and start co-buying!
               `
             })
           })
