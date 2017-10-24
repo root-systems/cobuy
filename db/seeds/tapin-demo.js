@@ -61,6 +61,14 @@ exports.seed = function (knex, Promise) {
     }))
   })
   .then(() => {
+    // insert supplier relationships
+    return knex('relationships').insert({
+      relationshipType: 'supplier',
+      sourceId: groupId,
+      targetId: supplierId
+    })
+  })
+  .then(() => {
     // insert agents
     const devPersonAgent = {}
     return Promise.all([
@@ -85,11 +93,24 @@ exports.seed = function (knex, Promise) {
       const credential = merge(pick(['email', 'password'], agent), { agentId: ids[i] })
       return hashCredential(credential)
     }))
+    .then((credentials) => {
+      // insert person credentials
+      return Promise.all(credentials.map((credential) => {
+        return knex('credentials').insert(credential).returning('agentId')
+      }))
+    })
+    // not sure why, but credentials .returning doesn't return the correct agentIds, hack for now
+    .then(() => ids)
   })
-  .then((credentials) => {
-    // insert person credentials
-    return Promise.all(credentials.map((credential) => {
-      return knex('credentials').insert(credential).returning('agentId')
+  .then((ids) => {
+    // insert person relationships
+    return Promise.all(agents.map((agent, i) => {
+      const relationship = {
+        relationshipType: i === 0 ? 'admin' : 'member',
+        sourceId: groupId,
+        targetId: ids[i]
+      }
+      return knex('relationships').insert(relationship).returning('agentId')
     }))
   })
 }
