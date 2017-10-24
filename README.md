@@ -256,6 +256,21 @@ All numbers should be represented as strings and manipulated with [`bigmath`](ht
 
 Developers should be using British spelling in the codebase
 
+### Assets
+
+All assets (binary files) should be checked in using [Git LFS](https://git-lfs.github.com/):
+
+```shell
+git lfs add <file>
+```
+
+They must also be manually added to our production [OpenStack Object storage](http://docs.catalystcloud.io/object-storage.html) `cobuy-assets` container.
+
+This can be found at: https://dashboard.cloud.catalyst.net.nz/project/containers/container/cobuy-assets
+
+Ensure the name of the file is the same locally and remotely.
+
+
 ## License
 
 AGPL-3.0

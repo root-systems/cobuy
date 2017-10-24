@@ -1,9 +1,16 @@
-const mergeAll = require('ramda/src/mergeAll')
+const { pipe, path, toPairs, reduce, assocPath } = require('ramda')
+const deepExtend = require('deep-extend')
 
-const config = {
+const browserConfigPaths = [
+  'assetsUrl'
+]
+
+var config = {
   port: 3000,
+  url: 'http://localhost:3000',
   favicon: 'app/favicon.ico',
   assets: 'app/assets',
+  assetsUrl: 'http://localhost:3000/',
   bundler: {
     head: `
       <style id="app-styles"></style>
@@ -15,7 +22,17 @@ const config = {
   }
 }
 
-module.exports = mergeAll([
+const getBrowserConfig = pipe(
+  toPairs,
+  reduce((sofar, [key]) => {
+    const value = path(key, config)
+    return assocPath(key, value, config)
+  }, {})
+)
+
+config.browser = getBrowserConfig(config)
+
+module.exports = deepExtend(
   config,
   require('dogstack-agents/config')
-])
+)

@@ -32,6 +32,10 @@
       "ramda"
     ]
   },
+  "engines": {
+    "node": "^8.0.0",
+    "npm": "^5.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/enspiral-root-systems/cobuy.git"
@@ -65,16 +69,17 @@
     "babel-preset-react": "^6.5.0",
     "babelify": "^7.3.0",
     "bigmath": "^1.0.3",
+    "deep-extend": "^0.5.0",
     "dog-names": "^1.0.2",
-    "dogstack": "^0.5.2",
-    "dogstack-agents": "^0.7.1",
+    "dogstack": "^0.6.2",
+    "dogstack-agents": "^0.7.2",
     "feathers-action": "^2.4.0",
     "feathers-action-react": "^2.2.1",
     "feathers-errors": "^2.6.2",
     "feathers-hooks-common": "^3.0.0",
     "feathers-knex": "^2.6.3",
     "feathers-mailer": "^2.0.0",
-    "fela": "^5.0.1",
+    "fela": "^6.0.3",
     "material-ui": "^0.18.3",
     "nodemailer": "^4.0.1",
     "passport-github": "^1.1.0",
@@ -84,12 +89,12 @@
     "react-avatar-editor": "^9.1.1",
     "react-debounce-input": "^3.0.0",
     "react-dom": "^15.6.1",
-    "react-fela": "^5.0.3",
+    "react-fela": "^6.0.3",
     "react-hyperscript": "^3.0.0",
     "react-intl": "^2.3.0",
     "react-redux": "^4.4.5",
     "react-router-dom": "^4.1.1",
-    "react-router-redux": "^5.0.0-alpha.6",
+    "react-router-redux": "5.0.0-alpha.6",
     "react-tap-event-plugin": "^2.0.1",
     "recompose": "^0.24.0",
     "redux-devtools-extension": "^2.13.2",
