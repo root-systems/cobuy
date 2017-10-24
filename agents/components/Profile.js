@@ -84,7 +84,6 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          rowsMax: 5,
           disabled: not(isEditing)
         }),
         h(Field, {
@@ -97,7 +96,6 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          rowsMax: 5,
           disabled: not(isEditing)
         }),
         h(Field, {
@@ -110,7 +108,6 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          rowsMax: 5,
           disabled: not(isEditing)
         }),
         h(Field, {
