@@ -112,6 +112,20 @@ function Profile (props) {
           fullWidth: true,
           rowsMax: 5,
           disabled: not(isEditing)
+        }),
+        h(Field, {
+          name: 'address',
+          floatingLabelText: (
+            h(FormattedMessage, {
+              id: 'agents.address',
+              className: styles.labelText
+            })
+          ),
+          component: TextField,
+          fullWidth: true,
+          multiLine: true,
+          rowsMax: 5,
+          disabled: not(isEditing)
         })
       ])
     ]),

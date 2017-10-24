@@ -12,6 +12,7 @@
   "agents.phoneLabel": "Phone",
   "agents.email": "email",
   "agents.website": "website",
+  "agents.address": "address",
   "agents.role": "role",
   "agents.password": "password",
   "agents.confirmPassword": "confirm password",
