@@ -3,6 +3,8 @@ import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import { Route } from 'react-router-dom'
 import { pipe, map, values, isNil } from 'ramda'
+import { Helmet as Head } from 'react-helmet'
+import { FormattedMessage } from 'dogstack/intl'
 
 import ConnectedSwitch from '../../lib/connected-Switch'
 
@@ -15,12 +17,17 @@ export default compose(
 )(Layout)
 
 function Layout (props) {
-  const { styles, routes, navigationRoutes } = props
+  const { config, styles, routes, navigationRoutes } = props
 
   return (
     h('div', {
       className: styles.container
     }, [
+      h(Head, [
+        h('title', [
+          config.name
+        ])
+      ]),
       h(Nav, { navigationRoutes }),
       h(ConnectedSwitch, {}, [
         mapRoutePages(routes)
