@@ -8,7 +8,8 @@ import CastIntentTask from '../components/CastIntentTask'
 
 const getSupplierAgentFromTaskPlan = path(['params', 'supplierAgent'])
 import { agents, profiles, relationships } from 'dogstack-agents/actions'
-import { products, priceSpecs, resourceTypes } from '../../actions'
+import { products, priceSpecs, resourceTypes, orderIntents } from '../../actions'
+
 
 export default compose(
   connectFeathers({
@@ -20,6 +21,7 @@ export default compose(
       relationships,
       resourceTypes,
       priceSpecs,
+      orderIntents,
       // `feathers-action-react` wraps every
       //  action creator in a cid creator.
       router: {
@@ -29,7 +31,7 @@ export default compose(
     query: (props) => {
       var queries = []
       const {taskPlan, selected} = props
-
+      console.log(taskPlan, 'the task plan')
       if (taskPlan) {
         const { params: {supplierAgentId} } = taskPlan
         queries.push({
@@ -71,6 +73,14 @@ export default compose(
           }
         })
       }
+      queries.push({
+        service: 'orderIntents',
+        params: {
+          query: {
+            orderId: taskPlan.params.orderId
+          }
+        }
+      })
 
       return queries
     },

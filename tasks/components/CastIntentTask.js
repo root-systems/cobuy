@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, merge } from 'ramda'
+import { isNil, merge, keys, takeLast, toString, mapObjIndexed, split } from 'ramda'
 import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
@@ -25,7 +25,7 @@ function CastIntentTask (props) {
 }
 
 function SingleProduct (props) {
-  const { actions, products, routerParams } = props
+  const { actions, products, routerParams, currentAgent, taskPlan } = props
   const product = products[routerParams.productId]
   const nextProps = merge(props, { product, onSubmit })
   // TODO pass onNavigate to allow SingleViewProduct
@@ -35,9 +35,23 @@ function SingleProduct (props) {
     // value.pricesSpecs is an object where
     // keys are priceSpec-${priceSpecId}
     // and values are desired amounts.
-    console.log('submitted!', value)
-    // TODO create newIntent
-    // TODO actions.intents.create(newIntent)
+
+    const orderIntents = mapObjIndexed((quantity, priceSpecString) => {
+      console.log(quantity, 'quantity', priceSpecString, 'priceSpecString')
+      return {
+        agentId: currentAgent.id,
+        desiredQuantity: quantity,
+        productId: product.id,
+        priceSpecId: split('-', priceSpecString)[1],
+        orderId: taskPlan.params.orderId
+      }
+    }, value.priceSpecs)
+    // check if orderIntent with orderId, priceSpecId and productId already exists
+    // if exists actions.orderIntents.update
+    // if doesn't exist actions.orderIntents.create
+
+    console.log('submitted!', orderIntents)
+    actions.orderIntents.create(value)
   }
 }
 

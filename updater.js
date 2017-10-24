@@ -10,6 +10,7 @@ import taskRecipes from './tasks/updaters/recipes'
 import { updater as products } from './supply/dux/products'
 import { updater as priceSpecs } from './supply/dux/priceSpecs'
 import { updater as resourceTypes } from './resources/dux/resourceTypes'
+import { updater as orderIntents } from './ordering/dux/orderIntents'
 
 export default concat(
   agents,
@@ -21,5 +22,6 @@ export default concat(
   taskRecipes,
   products,
   priceSpecs,
-  resourceTypes
+  resourceTypes,
+  orderIntents
 )
