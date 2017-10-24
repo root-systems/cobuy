@@ -25,7 +25,7 @@ const SelectAgentForOrderForm = compose(
       className: styles.innerContainer
     }, [
       h(Field, {
-        name: `select${agentType}`,
+        name: 'selectAgent',
         floatingLabelText: (
           h(FormattedMessage, {
             id: 'agents.labelText',
@@ -63,8 +63,7 @@ const SelectAgentForOrder = (props) => {
     form: `select${props.agentType}`,
     enableReinitialize: true,
     initialValues: {
-      // TODO: IK: is there a better way to write this
-      [`select${props.agentType}`]: props.selectedAgent ? props.selectedAgent.id : null
+      selectAgent: props.selectedAgent ? props.selectedAgent.id : null
     }
   })
   return h(SelectAgentForOrderForm, nextProps)
