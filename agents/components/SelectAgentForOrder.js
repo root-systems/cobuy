@@ -60,7 +60,7 @@ const SelectAgentForOrderForm = compose(
 
 const SelectAgentForOrder = (props) => {
   const nextProps = merge(props, {
-    form: `select${props.agentType}`,
+    form: `select-${props.agentType}`,
     enableReinitialize: true,
     initialValues: {
       selectAgent: props.selectedAgent ? props.selectedAgent.id : null
