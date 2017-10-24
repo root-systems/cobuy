@@ -22,6 +22,7 @@ export default (props) => {
       content: h(SelectAgentForOrder, {
         agentType: 'group',
         agentCollection: currentAgentGroupProfiles,
+        selectedAgent: currentOrder ? currentOrder.consumerAgent: null,
         selectAgent: (agentId) => {
           actions.orders.update(orderId, merge(currentOrder, { consumerAgentId: agentId }))
         }
@@ -32,6 +33,7 @@ export default (props) => {
       content: h(SelectAgentForOrder, {
         agentType: 'supplier',
         agentCollection: currentAgentGroupSupplierProfiles,
+        selectedAgent: currentOrder ? currentOrder.supplierAgent: null,
         selectAgent: (agentId) => {
           actions.orders.update(orderId, merge(currentOrder, { supplierAgentId: agentId }))
         }
@@ -42,6 +44,7 @@ export default (props) => {
       content: h(SelectAgentForOrder, {
         agentType: 'admin',
         agentCollection: currentAgentGroupMemberProfiles,
+        selectedAgent: currentOrder ? currentOrder.adminAgent: null,
         selectAgent: (agentId) => {
           actions.orders.update(orderId, merge(currentOrder, { adminAgentId: agentId }))
         }
