@@ -1,6 +1,17 @@
 const hasher = require('feathers-authentication-local/lib/utils/hash')
 const { flatten, map, pick, merge } = require('ramda')
 
+const groups = [
+  {
+    name: "Ruru Kāhui Ako",
+    description: "Ruru Kāhui Ako"
+  },
+  {
+    name: "School Supplies R'Us",
+    description: "If you're yearning for some learning, we'll set your mind churning"
+  }
+]
+
 const agents = [
   {
     name: 'Dan Lewis',
@@ -33,17 +44,35 @@ const agents = [
 ]
 
 exports.seed = function (knex, Promise) {
-  // insert agents
-  const devPersonAgent = {}
+  var groupId, supplierId
+  // insert group / supplier agents
   return Promise.all([
-    knex('agents').insert(devPersonAgent).returning('id'),
-    knex('agents').insert(devPersonAgent).returning('id'),
-    knex('agents').insert(devPersonAgent).returning('id'),
-    knex('agents').insert(devPersonAgent).returning('id')
+    knex('agents').insert({ type: 'group' }).returning('id'),
+    knex('agents').insert({ type: 'group' }).returning('id')
   ])
   .then((ids) => {
     ids = flatten(ids)
-    // insert person profile
+    groupId = ids[0]
+    supplierId = ids[1]
+    // insert group profiles
+    return Promise.all(groups.map((group, i) => {
+      const profile = merge(group, { agentId: ids[i] })
+      return knex('profiles').insert(profile).returning('agentId')
+    }))
+  })
+  .then(() => {
+    // insert agents
+    const devPersonAgent = {}
+    return Promise.all([
+      knex('agents').insert(devPersonAgent).returning('id'),
+      knex('agents').insert(devPersonAgent).returning('id'),
+      knex('agents').insert(devPersonAgent).returning('id'),
+      knex('agents').insert(devPersonAgent).returning('id')
+    ])
+  })
+  .then((ids) => {
+    ids = flatten(ids)
+    // insert person profiles
     return Promise.all(agents.map((agent, i) => {
       const profile = merge(pick(['name', 'description', 'avatar'], agent), { agentId: ids[i] })
       return knex('profiles').insert(profile).returning('agentId')
@@ -51,14 +80,14 @@ exports.seed = function (knex, Promise) {
   })
   .then((ids) => {
     ids = flatten(ids)
-    // hash person credential
+    // hash person credentials
     return Promise.all(agents.map((agent, i) => {
       const credential = merge(pick(['email', 'password'], agent), { agentId: ids[i] })
       return hashCredential(credential)
     }))
   })
   .then((credentials) => {
-    // insert person credential
+    // insert person credentials
     return Promise.all(credentials.map((credential) => {
       return knex('credentials').insert(credential).returning('agentId')
     }))
