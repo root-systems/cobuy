@@ -40,6 +40,13 @@ const agents = [
     avatar: 'https://raw.githubusercontent.com/root-systems/handbook/master/members/mikey.png',
     email: 'mikey@rootsystems.nz',
     password: 'password'
+  },
+  {
+    name: 'Michael Smith',
+    description: "I'm Michael - I love exploring the globe and wearing radical socks",
+    avatar: 'https://raw.githubusercontent.com/root-systems/handbook/master/members/michael.png',
+    email: 'michael@rootsystems.nz',
+    password: 'password'
   }
 ]
 
@@ -72,6 +79,7 @@ exports.seed = function (knex, Promise) {
     // insert agents
     const devPersonAgent = {}
     return Promise.all([
+      knex('agents').insert(devPersonAgent).returning('id'),
       knex('agents').insert(devPersonAgent).returning('id'),
       knex('agents').insert(devPersonAgent).returning('id'),
       knex('agents').insert(devPersonAgent).returning('id'),
