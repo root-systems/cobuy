@@ -12,6 +12,60 @@ const groups = [
   }
 ]
 
+const products = [
+  {
+    name: "Laptop Pro 3",
+    description: "The latest and greatest for passing the tough test",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR71MqHHl8WFQ-Llf3EEJJSnBMKDRKqxyoWr0DMXEj0RgSrpS0W",
+    priceSpecs: [
+      {
+        minimum: 10,
+        price: 500,
+        currency: 'NZD'
+      },
+      {
+        minimum: 100,
+        price: 300,
+        currency: 'NZD'
+      }
+    ]
+  },
+  {
+    name: "Ergo-Chair 9000",
+    description: "Relax your back - why not buy a stack?",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcZGA_ssdCo0LgwYGkR-QT03hegiqELsyPgB2drk6PzS6zV8uX",
+    priceSpecs: [
+      {
+        minimum: 100,
+        price: 100,
+        currency: 'NZD'
+      },
+      {
+        minimum: 500,
+        price: 50,
+        currency: 'NZD'
+      }
+    ]
+  },
+  {
+    name: "The AllDesk",
+    description: "Just the right height for students and teachers alike. Also comes in dark or light",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0GW5TvkcWjaLTDg2-vQPcL5j5r9igWASYzSerQh_eQ2cVuyqY",
+    priceSpecs: [
+      {
+        minimum: 100,
+        price: 250,
+        currency: 'NZD'
+      },
+      {
+        minimum: 1000,
+        price: 120,
+        currency: 'NZD'
+      }
+    ]
+  }
+]
+
 const agents = [
   {
     name: 'Dan Lewis',
@@ -73,6 +127,29 @@ exports.seed = function (knex, Promise) {
       relationshipType: 'supplier',
       sourceId: groupId,
       targetId: supplierId
+    })
+  })
+  .then(() => {
+    // insert supplier resourceTypes, products, priceSpecs
+    return Promise.all(products.map((product, i) => {
+      const resourceType = pick(['name', 'description', 'image'], product)
+      return knex('resourceTypes').insert(resourceType).returning('id')
+    }))
+    .then((ids) => {
+      ids = flatten(ids)
+      return Promise.all(products.map((product, i) => {
+        const prod = { resourceTypeId: ids[i], supplierAgentId: supplierId }
+        return knex('products').insert(prod).returning('id')
+      }))
+    })
+    .then((ids) => {
+      ids = flatten(ids)
+      return Promise.all(products.map((product, i) => {
+        return Promise.all(product.priceSpecs.map((priceSpec) => {
+          const pSpec = merge(pick(['minimum', 'price', 'currency'], priceSpec), { productId: ids[i] })
+          return knex('priceSpecs').insert(pSpec).returning('id')
+        }))
+      }))
     })
   })
   .then(() => {
