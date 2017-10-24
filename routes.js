@@ -7,6 +7,7 @@ import Dashboard from './app/containers/Dashboard'
 import Invited from './agents/containers/Invited'
 
 import TaskWorker from './tasks/containers/TaskWorker'
+import OrderSummary from './ordering/containers/OrderSummary'
 
 import {
   Register,
@@ -82,5 +83,10 @@ export default [
     name: 'task',
     path: '/tasks/:taskPlanId',
     Component: UserIsAuthenticated(TaskWorker)
+  },
+  {
+    name: 'orderSummary',
+    path: '/ordersummary',
+    Component: OrderSummary
   }
 ]
