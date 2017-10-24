@@ -31,7 +31,6 @@ export default compose(
     query: (props) => {
       var queries = []
       const {taskPlan, selected} = props
-      console.log(taskPlan, 'the task plan')
       if (taskPlan) {
         const { params: {supplierAgentId} } = taskPlan
         queries.push({

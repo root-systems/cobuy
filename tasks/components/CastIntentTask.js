@@ -11,7 +11,6 @@ import SingleViewProduct from '../../ordering/components/SingleViewProduct'
 
 function CastIntentTask (props) {
   const { actions, currentAgent, taskPlan, routerParams } = props
-
   if(isNil(currentAgent)) {
     return null
   }
@@ -37,7 +36,6 @@ function SingleProduct (props) {
     // and values are desired amounts.
 
     const orderIntents = mapObjIndexed((quantity, priceSpecString) => {
-      console.log(quantity, 'quantity', priceSpecString, 'priceSpecString')
       return {
         agentId: currentAgent.id,
         desiredQuantity: quantity,
