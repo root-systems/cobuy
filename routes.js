@@ -4,6 +4,8 @@ import { Route } from 'react-router-dom'
 import Home from './app/containers/Home'
 import Dashboard from './app/containers/Dashboard'
 
+import Invited from './agents/containers/Invited'
+
 import TaskWorker from './tasks/containers/TaskWorker'
 
 import {
@@ -70,6 +72,11 @@ export default [
       selector: getIsNotAuthenticated,
       icon: 'fa fa-heart'
     }
+  },
+  {
+    name: 'invited',
+    path: '/invited/:jwt',
+    Component: UserIsNotAuthenticated(Invited)
   },
   {
     name: 'task',
