@@ -90,6 +90,7 @@
     "react-debounce-input": "^3.0.0",
     "react-dom": "^15.6.1",
     "react-fela": "^6.0.3",
+    "react-helmet": "^5.2.0",
     "react-hyperscript": "^3.0.0",
     "react-intl": "^2.3.0",
     "react-redux": "^4.4.5",

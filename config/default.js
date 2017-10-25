@@ -7,6 +7,7 @@ const browserConfigPaths = [
 
 var config = {
   port: 3000,
+  name: 'Cobuy',
   url: 'http://localhost:3000',
   favicon: 'app/favicon.ico',
   assets: 'app/assets',
