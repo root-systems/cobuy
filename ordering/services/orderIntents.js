@@ -8,5 +8,4 @@ module.exports = function () {
   const options = { Model: db, name }
 
   app.use(name, feathersKnex(options))
-  app.service(name).hooks(hooks)
 }

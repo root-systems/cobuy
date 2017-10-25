@@ -6,6 +6,8 @@ const services = [
   require('./tasks/services/works'),
   require('./ordering/services/orders'),
   require('./credentials/services/credentials'),
+  require('./ordering/services/orderIntents'),
+  require('./agents/services/agents'),
   require('./notifications/services/mailer'),
   require('./supply/services/products'),
   require('./supply/services/priceSpecs'),

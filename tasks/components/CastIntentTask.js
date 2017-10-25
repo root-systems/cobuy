@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, merge, keys, takeLast, toString, mapObjIndexed, split } from 'ramda'
+import { isNil, merge, keys, takeLast, toString, mapObjIndexed, split, forEach, pick, find, equals, values } from 'ramda'
 import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
@@ -24,32 +24,38 @@ function CastIntentTask (props) {
 }
 
 function SingleProduct (props) {
-  const { actions, products, routerParams, currentAgent, taskPlan } = props
+  const { actions, products, routerParams, currentAgent, taskPlan, orderIntents } = props
   const product = products[routerParams.productId]
   const nextProps = merge(props, { product, onSubmit })
   // TODO pass onNavigate to allow SingleViewProduct
   // to navigate back to list product view
   return h(SingleViewProduct, nextProps)
   function onSubmit (value) {
-    // value.pricesSpecs is an object where
-    // keys are priceSpec-${priceSpecId}
-    // and values are desired amounts.
 
-    const orderIntents = mapObjIndexed((quantity, priceSpecString) => {
+    const submittedOrderIntents = values(mapObjIndexed((quantity, priceSpecString) => {
       return {
         agentId: currentAgent.id,
-        desiredQuantity: quantity,
+        desiredQuantity: parseInt(quantity),
         productId: product.id,
-        priceSpecId: split('-', priceSpecString)[1],
+        priceSpecId: parseInt(split('-', priceSpecString)[1]),
         orderId: taskPlan.params.orderId
       }
-    }, value.priceSpecs)
-    // check if orderIntent with orderId, priceSpecId and productId already exists
-    // if exists actions.orderIntents.update
-    // if doesn't exist actions.orderIntents.create
+    }, value.priceSpecs))
+    console.log(submittedOrderIntents, 'the intents')
+    forEach((submittedOrderIntent) => {
+      console.log('here?!')
+      const scopedSubmittedOrderIntent = pick(['orderId', 'priceSpecId', 'productId'], submittedOrderIntent)
+      const existingOrderIntent = find((orderIntent) => {
+        const scopedOrderIntent = pick(['orderId', 'priceSpecId', 'productId'], orderIntent)
+        return equals(scopedOrderIntent, scopedSubmittedOrderIntent)
+      }, orderIntents)
+      if (existingOrderIntent) {
+        actions.orderIntents.update(existingOrderIntent.id, submittedOrderIntent)
+      } else {
+        actions.orderIntents.create(submittedOrderIntent)
+      }
+    }, submittedOrderIntents)
 
-    console.log('submitted!', orderIntents)
-    actions.orderIntents.create(value)
   }
 }
 
