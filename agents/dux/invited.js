@@ -3,7 +3,7 @@ import createAction from '@f/create-action'
 import { push } from 'react-router-redux'
 
 import { combineEpics } from 'redux-observable'
-import Rx from 'rxjs'
+import { Observable } from 'rxjs'
 
 import { actions as tokenConsumes } from '../../tokens/dux/tokenConsumes'
 import { authentication } from 'dogstack-agents/actions'
@@ -34,12 +34,12 @@ export function patchPasswordAndSignIn (action$, store, { feathers }) {
       const password = payload.password
       const patchPasswordPayload = { jwt: payload.jwt, payload: { data: { password } } }
 
-      return Rx.Observable.merge(
-        Rx.Observable.of(tokenConsumes.create(cid, patchPasswordPayload)),
+      return Observable.merge(
+        Observable.of(tokenConsumes.create(cid, patchPasswordPayload)),
         tokenConsumesComplete$
           .withLatestFrom(tokenConsumesSet$, (success, set) => set.payload.data)
           .mergeMap(({ result: { email } }) => {
-            return Rx.Observable.of(authentication.signIn(cid, { strategy: 'local', email, password }))
+            return Observable.of(authentication.signIn(cid, { strategy: 'local', email, password }))
           }),
         signInSuccess$.mapTo(push('/')) // TODO this should be configurable
       )
