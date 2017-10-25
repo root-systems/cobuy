@@ -188,15 +188,26 @@ exports.seed = function (knex, Promise) {
     .then(() => ids)
   })
   .then((ids) => {
-    // insert person relationships
+    // insert member relationships
     return Promise.all(agents.map((agent, i) => {
       const relationship = {
-        relationshipType: i === 0 ? 'admin' : 'member',
+        relationshipType: 'member',
         sourceId: groupId,
         targetId: ids[i]
       }
       return knex('relationships').insert(relationship).returning('agentId')
     }))
+    // not sure why, but relationships .returning doesn't return the correct agentIds, hack for now
+    .then(() => ids)
+  })
+  .then((ids) => {
+    // insert admin relationship for first group member
+    const relationship = {
+      relationshipType: 'admin',
+      sourceId: groupId,
+      targetId: ids[0]
+    }
+    return knex('relationships').insert(relationship)
   })
 }
 
