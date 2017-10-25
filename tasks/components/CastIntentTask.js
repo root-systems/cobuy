@@ -41,14 +41,14 @@ function SingleProduct (props) {
         orderId: taskPlan.params.orderId
       }
     }, value.priceSpecs))
-    console.log(submittedOrderIntents, 'the intents')
+
     forEach((submittedOrderIntent) => {
-      console.log('here?!')
       const scopedSubmittedOrderIntent = pick(['orderId', 'priceSpecId', 'productId'], submittedOrderIntent)
       const existingOrderIntent = find((orderIntent) => {
         const scopedOrderIntent = pick(['orderId', 'priceSpecId', 'productId'], orderIntent)
         return equals(scopedOrderIntent, scopedSubmittedOrderIntent)
-      }, orderIntents)
+      }, values(orderIntents))
+      console.log(orderIntents)
       if (existingOrderIntent) {
         actions.orderIntents.update(existingOrderIntent.id, submittedOrderIntent)
       } else {
