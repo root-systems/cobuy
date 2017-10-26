@@ -36,11 +36,12 @@ function OrderSummary ({ order }) {
           h(TableRow, {}, [
             h(TableHeaderColumn, {}, ''),
             h(TableHeaderColumn, {}, 'Product Name'),
-            h(TableHeaderColumn, {}, 'Quanity'),
+            h(TableHeaderColumn, {}, 'Quantity'),
             h(TableHeaderColumn, {}, 'Item Price'),
             h(TableHeaderColumn, {}, 'Total')
           ])
-        ])]),
+        ])
+      ]),
       agentPlans.map((plan) => {
         const { orderPlans, agentId } = plan
         return h(AgentOrderSummary, { orderPlans, agentId }, [])
