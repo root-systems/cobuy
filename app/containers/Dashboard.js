@@ -1,5 +1,5 @@
 import { connect } from 'feathers-action-react'
-import { isEmpty } from 'ramda'
+import { isNil, isEmpty, prop, groupBy, pipe, either, values } from 'ramda'
 
 import Dashboard from '../components/Dashboard'
 import { actions as taskPlanActions } from '../../tasks/dux/plans'
@@ -38,9 +38,19 @@ export default connect({
     return queries
   },
   shouldQueryAgain: (props, status) => {
-    const { currentAgent, taskPlans } = props.selected
     if (status.isPending) return false
-    if (currentAgent && isEmpty(taskPlans)) return true
+    const { currentAgent, taskPlans } = props.selected
+    if (currentAgent && hasNotQueriedForTaskPlans(status)) return true
     return false
   }
 })(Dashboard)
+
+const hasNotQueriedForTaskPlans = pipe(
+  prop('requests'),
+  values,
+  groupBy(prop('service')),
+  either(
+    pipe(prop('taskPlans'), either(isNil, isEmpty)),
+    pipe(prop('taskWorks'), either(isNil, isEmpty))
+  )
+)
