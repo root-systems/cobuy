@@ -63,6 +63,57 @@ const products = [
         currency: 'NZD'
       }
     ]
+  },
+  {
+    name: "E-Tablet 2018",
+    description: "Let's be clear, you can work from anywhere",
+    image: "http://static1.cdn.gadgetreview.com/wp-content/uploads/2014/08/android-tablet-reviews.png.pagespeed.ce.N6mQw8Ya_r.png",
+    priceSpecs: [
+      {
+        minimum: 10,
+        price: 300,
+        currency: 'NZD'
+      },
+      {
+        minimum: 100,
+        price: 100,
+        currency: 'NZD'
+      }
+    ]
+  },
+  {
+    name: "RetrOHP",
+    description: "Don't look like a clown if the wi-fi's down",
+    image: "https://images-na.ssl-images-amazon.com/images/I/61VZdTVJaWL._SL1300_.jpg",
+    priceSpecs: [
+      {
+        minimum: 10,
+        price: 3000,
+        currency: 'NZD'
+      },
+      {
+        minimum: 20,
+        price: 2000,
+        currency: 'NZD'
+      }
+    ]
+  },
+  {
+    name: "Vision 8",
+    description: "Are you ready for the technological yield? Welcome to education in the expanded field",
+    image: "https://edge.alluremedia.com.au/m/l/2016/06/samsung_gear_vr_1.jpg",
+    priceSpecs: [
+      {
+        minimum: 5,
+        price: 1000,
+        currency: 'NZD'
+      },
+      {
+        minimum: 50,
+        price: 700,
+        currency: 'NZD'
+      }
+    ]
   }
 ]
 
