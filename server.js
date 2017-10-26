@@ -7,7 +7,6 @@ const services = [
   require('./ordering/services/orders'),
   require('./credentials/services/credentials'),
   require('./ordering/services/orderIntents'),
-  require('./credentials/services/credentials'),
   require('./notifications/services/mailer'),
   require('./supply/services/products'),
   require('./supply/services/priceSpecs'),
