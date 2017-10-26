@@ -7,8 +7,13 @@ import getCurrentOrderId from './getCurrentOrderId'
 export default createSelector(
   getCurrentOrderId,
   getOrderIntentsByOrderProductAgentPrice,
+  (orderId, orderIntentsByOrderProductAgentPrice) => {
+    return orderIntentsByOrderProductAgentPrice[orderId] || {}
+  }
+  /*
   pipe(
     prop,
     map
   )
+  */
 )

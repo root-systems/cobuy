@@ -5,5 +5,5 @@ import getCurrentOrder from '../../ordering/getters/getCurrentOrder'
 
 export default createSelector(
   getCurrentOrder,
-  path(['params', 'consumerAgentId'])
+  path(['consumerAgentId'])
 )

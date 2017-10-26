@@ -12,8 +12,7 @@ export default createSelector(
       groupBy(prop('productId')),
       map(pipe(
         groupBy(prop('agentId')),
-        values,
-        indexBy('priceSpecId')
+        map(indexBy(prop('priceSpecId')))
       ))
     ))
   )

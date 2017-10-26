@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, merge, pipe, mapObjIndexed, split, prop, nthArg, forEach, set, __ } from 'ramda'
+import { isNil, merge, pipe, mapObjIndexed, split, prop, nth, values, path, forEach, assoc, __, map } from 'ramda'
 import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
@@ -25,15 +25,16 @@ function CastIntentTask (props) {
 }
 
 const getInitialValues = pipe(
+  map(prop('desiredQuantity')),
   renameBy(priceSpecId => `priceSpec-${priceSpecId}`),
-  set('priceSpecs', __, {})
+  assoc('priceSpecs', __, {})
 )
 
 const getSubmittedPriceSpecs = pipe(
   prop('priceSpecs'),
   renameBy(pipe(
     split('-'),
-    nthArg(1)
+    nth(1)
   ))
 )
 
@@ -49,6 +50,7 @@ function SingleProduct (props) {
       priceSpecId,
       desiredQuantity
     })),
+    values,
     forEach((submittedOrderIntent) => {
       const { ordersByProductAgentPrice } = props
       const { productId, agentId, priceSpecId } = submittedOrderIntent
@@ -61,8 +63,8 @@ function SingleProduct (props) {
     })
   )
 
-  const orderIntentsByAgentPriceSpec = orderIntentsByProductAgentPrice[product.id]
-  const initialValues = getInitialValues(orderIntentsByAgentPrice[currentAgent.id])
+  const orderIntentsByAgentPrice = orderIntentsByProductAgentPrice[product.id] || {}
+  const initialValues = getInitialValues(orderIntentsByAgentPrice[currentAgent.id] || {})
 
   const nextProps = merge(props, { onSubmit, orderIntentsByAgentPrice, initialValues })
 

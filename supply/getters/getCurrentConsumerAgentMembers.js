@@ -1,12 +1,16 @@
 import { createSelector } from 'reselect'
-import { pipe, prop, map } from 'ramda'
+import { pipe, prop, map, ifElse, isNil } from 'ramda'
 
 import getCurrentConsumerAgent from './getCurrentConsumerAgent'
 
 export default createSelector(
   getCurrentConsumerAgent,
-  pipe(
-    prop('members'),
-    map(prop('agent'))
+  ifElse(
+    isNil,
+    () => [],
+    pipe(
+      prop('members'),
+      map(prop('agent'))
+    )
   )
 )

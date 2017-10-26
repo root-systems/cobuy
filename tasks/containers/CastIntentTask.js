@@ -1,5 +1,5 @@
 import { connect as connectFeathers } from 'feathers-action-react'
-import { isNil, path, prop, pipe, values, any, forEach, either, map, isEmpty } from 'ramda'
+import { isNil, path, prop, pipe, values, any, forEach, either, map, isEmpty, groupBy, ifElse } from 'ramda'
 import { compose } from 'recompose'
 import { push } from 'react-router-redux'
 
@@ -15,7 +15,7 @@ const getResourceTypeIdsFromProducts = pipe(
   values
 )
 
-const getProductsIdsFromProducts = pipe(
+const getProductIdsFromProducts = pipe(
   map(prop('id')),
   values
 )
@@ -72,6 +72,7 @@ export default compose(
           }
         })
       }
+
       if (!isEmpty(selected.products)) {
         const resourceTypeIds = getResourceTypeIdsFromProducts(selected.products)
         queries.push({
@@ -102,28 +103,33 @@ export default compose(
     },
     shouldQueryAgain: (props, status) => {
       if (status.isPending) return false
+      const { selected } = props
 
-      const { taskPlan } = props.ownProps
-
-      // wait for task plan before re-query
-      // if (isNil(taskPlan)) return false
-
-      // re-query when we haven't gotten back supplierAgent or taskWork
-      // const supplierAgent = getSupplierAgentFromTaskPlan(taskPlan)
-      if (anyProductsAreMissingDetails(props.selected)) {
+      if (hasNotQueriedForProducts({ status, selected })) {
         return true
       }
-      // if (isEmpty(props.selected.resourceTypes)) return true
 
       return false
     }
   })
 )(CastIntentTask)
 
-const anyProductsAreMissingDetails = pipe(
-  prop('products'),
-  any(either(
-    pipe(path(['resourceType']), isNil),
-    pipe(path(['priceSpecs']), isNil)
-  ))
+const hasNotQueriedForProducts = ifElse(
+  pipe(path(['selected', 'products']), isEmpty),
+  pipe(
+    path(['status', 'requests']),
+    values,
+    groupBy(prop('service')),
+    pipe(prop('products'), either(isNil, isEmpty)),
+  ),
+  pipe(
+    path(['status', 'requests']),
+    values,
+    groupBy(prop('service')),
+    either(
+      pipe(prop('products'), either(isNil, isEmpty)),
+      pipe(prop('resourceTypes'), either(isNil, isEmpty)),
+      pipe(prop('priceSpecs'), either(isNil, isEmpty))
+    )
+  )
 )
