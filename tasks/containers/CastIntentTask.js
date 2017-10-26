@@ -10,6 +10,15 @@ const getSupplierAgentFromTaskPlan = path(['params', 'supplierAgent'])
 import { agents, profiles, relationships } from 'dogstack-agents/actions'
 import { products, priceSpecs, resourceTypes, orderIntents, orders } from '../../actions'
 
+const getResourceTypeIdsFromProducts = pipe(
+  map(prop('resourceTypeId')),
+  values
+)
+
+const getProductsIdsFromProducts = pipe(
+  map(prop('id')),
+  values
+)
 
 export default compose(
   connectFeathers({
@@ -51,9 +60,9 @@ export default compose(
           }
         })
       }
-      if (!isEmpty(selected.orders)) {
+      if (!isNil(selected.order)) {
         const { params: { orderId } } = taskPlan
-        const { supplierAgentId } = selected.orders[orderId]
+        const { supplierAgentId } = selected.order
         queries.push({
           service: 'products',
           params: {
@@ -64,12 +73,7 @@ export default compose(
         })
       }
       if (!isEmpty(selected.products)) {
-        const resourceTypeIds = values(map((product) => {
-          return product.resourceTypeId
-        }, selected.products))
-        const productIds = values(map((product) => {
-          return product.id
-        }, selected.products))
+        const resourceTypeIds = getResourceTypeIdsFromProducts(selected.products)
         queries.push({
           service: 'resourceTypes',
           params: {
@@ -80,6 +84,8 @@ export default compose(
             }
           }
         })
+
+        const productIds = getProductIdsFromProducts(selected.products)
         queries.push({
           service: 'priceSpecs',
           params: {
@@ -108,7 +114,6 @@ export default compose(
       //   return true
       //
       if (isEmpty(props.selected.resourceTypes)) return true
-
 
       return false
     }

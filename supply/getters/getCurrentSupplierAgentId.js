@@ -1,6 +1,9 @@
-import { pipe, nthArg, path } from 'ramda'
+import { createSelector } from 'reselect'
+import { path } from 'ramda'
 
-export default pipe(
-  nthArg(1),
-  path(['taskPlan', 'params', 'supplierAgentId'])
+import getCurrentOrder from '../../ordering/getters/getCurrentOrder'
+
+export default createSelector(
+  getCurrentOrder,
+  path(['params', 'supplierAgentId'])
 )

@@ -95,10 +95,12 @@ function SingleViewProduct (props) {
             type: 'submit',
             primary: true,
             className: styles.submitButton,
-            label: h(FormattedMessage, {
-              id: 'ordering.add',
-              className: styles.addButtonText
-            })
+            label: (
+              h(FormattedMessage, {
+                id: 'ordering.add',
+                className: styles.addButtonText
+              })
+            )
           })
         ])
       ])

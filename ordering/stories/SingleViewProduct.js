@@ -1,7 +1,9 @@
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import h from 'react-hyperscript'
+import jsf from 'json-schema-faker'
 
+import profileSchema from '../../agents/schemas/profile'
 import SingleViewProduct from '../components/SingleViewProduct'
 
 // https://github.com/root-systems/cobuy/wiki/Models
@@ -77,7 +79,30 @@ const mockProductInfo = {
         }
       ]
     }
-  ]
+  ],
+  agents: {
+    1: {
+      id: 1,
+      profile: jsf(profileSchema)
+    },
+    2: {
+      id: 2,
+      profile: jsf(profileSchema)
+    }
+    3: {
+      id: 3,
+      profile: jsf(profileSchema)
+    }
+    4: {
+      id: 4,
+      profile: jsf(profileSchema)
+    }
+  },
+  orderIntentByAgent: {
+    0: [
+      
+    ]
+  }
 }
 
 storiesOf('ordering.SingleViewProduct', module)

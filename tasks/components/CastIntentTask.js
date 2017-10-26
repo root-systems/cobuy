@@ -1,8 +1,9 @@
 import h from 'react-hyperscript'
-import { isNil, merge, keys, takeLast, toString, mapObjIndexed, split, forEach, pick, find, equals, values } from 'ramda'
+import { isNil, merge, pipe, mapObjIndexed, split, prop, nthArg, forEach } from 'ramda'
 import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
+import renameBy from '../../lib/renameBy'
 import ProductList from '../../ordering/components/ProductList'
 import SingleViewProduct from '../../ordering/components/SingleViewProduct'
 
@@ -10,53 +11,56 @@ import SingleViewProduct from '../../ordering/components/SingleViewProduct'
 // import styles from '../styles/CastIntentTask'
 
 function CastIntentTask (props) {
-  const { actions, currentAgent, taskPlan, routerParams } = props
+  const { currentAgent, product } = props
+
   if(isNil(currentAgent)) {
     return null
   }
 
-  const { productId } = routerParams
-  if (productId) {
+  if (product) {
     return h(SingleProduct, props)
   } else {
     return h(ManyProducts, props)
   }
 }
 
+const getSubmittedPriceSpecs = pipe(
+  prop('priceSpecs'),
+  renameBy(pipe(
+    split('-'),
+    nthArg(1)
+  ))
+)
+
 function SingleProduct (props) {
-  const { actions, products, routerParams, currentAgent, taskPlan, orderIntents } = props
-  const product = products[routerParams.productId]
-  const nextProps = merge(props, { product, onSubmit })
-  // TODO pass onNavigate to allow SingleViewProduct
-  // to navigate back to list product view
-  return h(SingleViewProduct, nextProps)
-  function onSubmit (value) {
+  const { actions, product, currentAgent, taskPlan, orderIntents } = props
 
-    const submittedOrderIntents = values(mapObjIndexed((quantity, priceSpecString) => {
-      return {
-        agentId: currentAgent.id,
-        desiredQuantity: parseInt(quantity),
-        productId: product.id,
-        priceSpecId: parseInt(split('-', priceSpecString)[1]),
-        orderId: taskPlan.params.orderId
-      }
-    }, value.priceSpecs))
-
+  const onSubmit = pipe(
+    getSubmittedPriceSpecs,
+    mapObjIndexed((desiredQuantity, priceSpecId) => ({
+      orderId: taskPlan.params.orderId,
+      productId: product.id,
+      agentId: currentAgent.id,
+      priceSpecId,
+      desiredQuantity
+    })),
     forEach((submittedOrderIntent) => {
-      const scopedSubmittedOrderIntent = pick(['orderId', 'priceSpecId', 'productId'], submittedOrderIntent)
-      const existingOrderIntent = find((orderIntent) => {
-        const scopedOrderIntent = pick(['orderId', 'priceSpecId', 'productId'], orderIntent)
-        return equals(scopedOrderIntent, scopedSubmittedOrderIntent)
-      }, values(orderIntents))
-      console.log(orderIntents)
+      const { ordersByProductAgentPrice } = props
+      const { productId, agentId, priceSpecId } = submittedOrderIntent
+      const existingOrderIntent = path([productId, agentId, priceSpecId], ordersByProductAgentPrice)
       if (existingOrderIntent) {
         actions.orderIntents.update(existingOrderIntent.id, submittedOrderIntent)
       } else {
         actions.orderIntents.create(submittedOrderIntent)
       }
-    }, submittedOrderIntents)
+    })
+  )
 
-  }
+  const nextProps = merge(props, { onSubmit })
+
+  // TODO pass onNavigate to allow SingleViewProduct
+  // to navigate back to list product view
+  return h(SingleViewProduct, nextProps)
 }
 
 function ManyProducts (props) {
