@@ -27,6 +27,7 @@ function AgentOrderSummary ({ orderPlans, agentId }) {
         orderPlans.map((plan) => {
           const price = getPriceFromPlan(plan)
           return h(TableRow, {}, [
+            h(TableRowColumn, { style: { width: '24px' } }, ''),
             h(TableRowColumn, {}, ''),
             h(TableRowColumn, {}, plan.product.resourceType.name),
             h(TableRowColumn, {}, plan.quantity),
