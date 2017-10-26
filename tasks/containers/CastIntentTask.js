@@ -8,7 +8,7 @@ import CastIntentTask from '../components/CastIntentTask'
 
 const getSupplierAgentFromTaskPlan = path(['params', 'supplierAgent'])
 import { agents, profiles, relationships } from 'dogstack-agents/actions'
-import { products, priceSpecs, resourceTypes, orderIntents } from '../../actions'
+import { products, priceSpecs, resourceTypes, orderIntents, orders } from '../../actions'
 
 
 export default compose(
@@ -22,6 +22,7 @@ export default compose(
       resourceTypes,
       priceSpecs,
       orderIntents,
+      orders,
       // `feathers-action-react` wraps every
       //  action creator in a cid creator.
       router: {
@@ -32,7 +33,27 @@ export default compose(
       var queries = []
       const {taskPlan, selected} = props
       if (taskPlan) {
-        const { params: {supplierAgentId} } = taskPlan
+        const { params: { orderId } } = taskPlan
+        queries.push({
+          service: 'orders',
+          params: {
+            query: {
+              id: orderId
+            }
+          }
+        })
+        queries.push({
+          service: 'orderIntents',
+          params: {
+            query: {
+              orderId
+            }
+          }
+        })
+      }
+      if (!isEmpty(selected.orders)) {
+        const { params: { orderId } } = taskPlan
+        const { supplierAgentId } = selected.orders[orderId]
         queries.push({
           service: 'products',
           params: {
@@ -46,6 +67,9 @@ export default compose(
         const resourceTypeIds = values(map((product) => {
           return product.resourceTypeId
         }, selected.products))
+        const productIds = values(map((product) => {
+          return product.id
+        }, selected.products))
         queries.push({
           service: 'resourceTypes',
           params: {
@@ -56,11 +80,6 @@ export default compose(
             }
           }
         })
-      }
-      if (!isEmpty(selected.products)) {
-        const productIds = values(map((product) => {
-          return product.id
-        }, selected.products))
         queries.push({
           service: 'priceSpecs',
           params: {
@@ -72,14 +91,6 @@ export default compose(
           }
         })
       }
-      queries.push({
-        service: 'orderIntents',
-        params: {
-          query: {
-            orderId: taskPlan.params.orderId
-          }
-        }
-      })
 
       return queries
     },

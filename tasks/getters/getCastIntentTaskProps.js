@@ -5,6 +5,7 @@ import getResourceTypes from '../../resources/getters/getResourceTypes'
 import getPriceSpecs from '../../supply/getters/getPriceSpecsByProduct'
 import getRouterParams from '../../app/getters/getRouterParams'
 import getOrderIntents from '../../ordering/getters/getOrderIntents'
+import getOrders from '../../ordering/getters/getOrders'
 
 export default createStructuredSelector({
   currentAgent: getCurrentAgent,
@@ -12,5 +13,6 @@ export default createStructuredSelector({
   resourceTypes: getResourceTypes,
   priceSpecs: getPriceSpecs,
   routerParams: getRouterParams,
-  orderIntents: getOrderIntents
+  orderIntents: getOrderIntents,
+  orders: getOrders
 })
