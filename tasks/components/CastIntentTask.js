@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, merge, pipe, mapObjIndexed, split, prop, nthArg, forEach } from 'ramda'
+import { isNil, merge, pipe, mapObjIndexed, split, prop, nthArg, forEach, set, __ } from 'ramda'
 import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
@@ -24,6 +24,11 @@ function CastIntentTask (props) {
   }
 }
 
+const getInitialValues = pipe(
+  renameBy(priceSpecId => `priceSpec-${priceSpecId}`),
+  set('priceSpecs', __, {})
+)
+
 const getSubmittedPriceSpecs = pipe(
   prop('priceSpecs'),
   renameBy(pipe(
@@ -33,7 +38,7 @@ const getSubmittedPriceSpecs = pipe(
 )
 
 function SingleProduct (props) {
-  const { actions, product, currentAgent, taskPlan, orderIntents } = props
+  const { actions, product, currentAgent, taskPlan, orderIntentsByProductAgentPrice } = props
 
   const onSubmit = pipe(
     getSubmittedPriceSpecs,
@@ -56,7 +61,10 @@ function SingleProduct (props) {
     })
   )
 
-  const nextProps = merge(props, { onSubmit })
+  const orderIntentsByAgentPriceSpec = orderIntentsByProductAgentPrice[product.id]
+  const initialValues = getInitialValues(orderIntentsByAgentPrice[currentAgent.id])
+
+  const nextProps = merge(props, { onSubmit, orderIntentsByAgentPrice, initialValues })
 
   // TODO pass onNavigate to allow SingleViewProduct
   // to navigate back to list product view

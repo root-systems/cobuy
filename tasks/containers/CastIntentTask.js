@@ -110,10 +110,10 @@ export default compose(
 
       // re-query when we haven't gotten back supplierAgent or taskWork
       // const supplierAgent = getSupplierAgentFromTaskPlan(taskPlan)
-      // if (anyProductsAreMissingDetails(props.selected)) {
-      //   return true
-      //
-      if (isEmpty(props.selected.resourceTypes)) return true
+      if (anyProductsAreMissingDetails(props.selected)) {
+        return true
+      }
+      // if (isEmpty(props.selected.resourceTypes)) return true
 
       return false
     }
@@ -122,5 +122,8 @@ export default compose(
 
 const anyProductsAreMissingDetails = pipe(
   prop('products'),
-  any(pipe(path(['resourceType']), isNil))
+  any(either(
+    pipe(path(['resourceType']), isNil),
+    pipe(path(['priceSpecs']), isNil)
+  ))
 )

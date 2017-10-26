@@ -7,6 +7,24 @@ import profileSchema from '../../agents/schemas/profile'
 import SingleViewProduct from '../components/SingleViewProduct'
 
 // https://github.com/root-systems/cobuy/wiki/Models
+const mockAgents = {
+  1: {
+    id: 1,
+    profile: jsf(profileSchema)
+  },
+  2: {
+    id: 2,
+    profile: jsf(profileSchema)
+  },
+  3: {
+    id: 3,
+    profile: jsf(profileSchema)
+  },
+  4: {
+    id: 4,
+    profile: jsf(profileSchema)
+  }
+}
 const mockProductInfo = {
   id: 188,
   resourceTypeId: 123,
@@ -79,30 +97,24 @@ const mockProductInfo = {
         }
       ]
     }
-  ],
-  agents: {
+  ]
+}
+
+const props = {
+  product: mockProductInfo,
+  agents: mockAgents,
+  currentAgent: mockAgents[0],
+  orderIntentsByAgentPrice: {
     1: {
-      id: 1,
-      profile: jsf(profileSchema)
-    },
-    2: {
-      id: 2,
-      profile: jsf(profileSchema)
-    }
-    3: {
-      id: 3,
-      profile: jsf(profileSchema)
-    }
-    4: {
-      id: 4,
-      profile: jsf(profileSchema)
+      456: {
+        desiredQuantity: '10'
+      },
+      457: {
+        desiredQuantity: '15'
+      }
     }
   },
-  orderIntentByAgent: {
-    0: [
-      
-    ]
-  }
+  onSubmit: action('submit')
 }
 
 storiesOf('ordering.SingleViewProduct', module)

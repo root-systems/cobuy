@@ -111,6 +111,7 @@ function SingleViewProduct (props) {
 export default compose(
   connectFela(styles),
   connectForm({
-    form: 'singleViewProduct'
+    form: 'singleViewProduct',
+    enableReinitialize: true
   })
 )(SingleViewProduct)
