@@ -12,7 +12,6 @@ import { mockFullParentTaskPlan } from '../../tasks/data/mock'
 
 function Dashboard (props) {
   const { styles, actions, taskPlans, currentAgent } = props
-
   return (
     <div className={styles.container}>
       <p className={styles.intro}>

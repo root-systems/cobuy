@@ -1,17 +1,26 @@
 import { compose } from 'recompose'
-import { merge } from 'ramda'
+import { merge, isNil, sortBy } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
+import { Link } from 'react-router-dom'
+import FlatButton from 'material-ui/FlatButton'
 
 import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/ListViewProduct'
 
-function ListViewProduct (props) {
-  const { styles, product } = props
-  const { resourceType, priceSpecs, facets } = product
-  const { name, description, image } = resourceType
+ const sortPriceSpecs = sortBy((priceSpec) => {
+   return priceSpec.price
+ })
 
+function ListViewProduct (props) {
+  const { styles, product, onNavigate } = props
+  if (isNil(product)) return null
+  const { resourceType, facets, priceSpecs } = product
+  if (isNil(priceSpecs)) return null
+  if (isNil(resourceType)) return null
+  const { name, description, image } = resourceType
+  const sortedPriceSpecs = sortPriceSpecs(priceSpecs)
   return (
     h('div', {
       className: styles.container
@@ -44,12 +53,18 @@ function ListViewProduct (props) {
             id: 'ordering.fromPrice',
             className: styles.fromText,
             values: {
-              currency: priceSpecs[0].currency,
-              price: priceSpecs[0].price
+              currency: sortedPriceSpecs[0].currency,
+              price: sortedPriceSpecs[0].price
             }
           })
         ])
-      ])
+      ]),
+      h(FlatButton, {
+        onClick: (ev) => {
+          onNavigate(product)
+        }
+      },
+      ['click here'])
     ])
   )
 }

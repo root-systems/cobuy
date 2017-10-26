@@ -39,7 +39,8 @@ function createCastOrderIntentTaskPlan (hook) {
   .then((completeOrderTaskPlan) => {
     const groupId = completeOrderTaskPlan.params.consumerAgentId
     const orderId = completeOrderTaskPlan.params.orderId
-    const params = { orderId }
+    const supplierAgentId = completeOrderTaskPlan.params.supplierAgentId
+    const params = { orderId, consumerAgentId: groupId, supplierAgentId }
 
     return relationships.find({
       query: {

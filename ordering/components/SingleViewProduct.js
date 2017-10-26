@@ -1,5 +1,5 @@
 import { compose } from 'recompose'
-import { map } from 'ramda'
+import { map, isNil } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import { reduxForm as connectForm, FormSection } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -27,7 +27,10 @@ const renderFacets = map((facet) => {
 
 function SingleViewProduct (props) {
   const { styles, product, handleSubmit } = props
-  const { resourceType, priceSpecs, facets } = product
+  if (isNil(product)) return null
+  const { resourceType, facets, priceSpecs } = product
+  if (isNil(priceSpecs)) return null
+  if (isNil(resourceType)) return null
   const { name, description, image } = resourceType
 
   return (
@@ -76,7 +79,7 @@ function SingleViewProduct (props) {
             h(FormSection, {
               name: 'facets',
             }, [
-              renderFacets(facets)
+              //renderFacets(facets)
             ])
           ]),
           h('div', {
