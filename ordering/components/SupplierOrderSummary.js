@@ -40,6 +40,7 @@ const getPriceFromPlan = (plan) => find(propEq('id', plan.priceSpecId))(plan.pro
 function SupplierOrderSummary ({ order }) {
   const summarisedOrder = summariseOrder(order.orderPlans)
   const orderTotal = reduce(add, 0, summarisedOrder.map((plan) => mul(getPriceFromPlan(plan), plan.quantity)))
+
   return (
     h('div', {}, [
       h(Paper, {
@@ -48,6 +49,9 @@ function SupplierOrderSummary ({ order }) {
         [
           h('h2', {}, 'Supplier Order Summary')
         ]),
+      h('div', {}, [
+        'contact info here?'
+      ]),
       h(Table, {}, [
         h(TableHeader, { displaySelectAll: false }, [
           h(TableRow, {}, [
