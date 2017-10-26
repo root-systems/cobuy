@@ -26,7 +26,7 @@ function OrderSummary ({ order }) {
   return (
     h('div', {}, [
       h(Paper, {
-        zDepth: 2
+        zDepth: 1
       },
         [
           h('h2', {}, 'Order Summary')
