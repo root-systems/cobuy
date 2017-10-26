@@ -10,7 +10,7 @@ import {
   TableFooter
 } from 'material-ui/Table'
 import { find, propEq, reduce } from 'ramda'
-import { add, mul } from 'bigmath'
+import { add, mul, round } from 'bigmath'
 
 const getPriceFromPlan = (plan) => find(propEq('id', plan.priceSpecId))(plan.product.priceSpecs).price
 
@@ -31,8 +31,8 @@ function AgentOrderSummary ({ orderPlans, agentId }) {
             h(TableRowColumn, {}, ''),
             h(TableRowColumn, {}, plan.product.resourceType.name),
             h(TableRowColumn, {}, plan.quantity),
-            h(TableRowColumn, {}, price),
-            h(TableRowColumn, {}, mul(plan.quantity, price))
+            h(TableRowColumn, {}, round(price, 2)),
+            h(TableRowColumn, {}, round(mul(plan.quantity, price), 2))
           ])
         })
       ]),
@@ -42,7 +42,7 @@ function AgentOrderSummary ({ orderPlans, agentId }) {
           h(TableRowColumn, {}, ''),
           h(TableRowColumn, {}, ''),
           h(TableRowColumn, {}, 'Total'),
-          h(TableRowColumn, {}, total)
+          h(TableRowColumn, {}, round(total, 2))
         ])
       ])
     ])

@@ -12,7 +12,7 @@ import {
   TableBody,
   TableFooter
 } from 'material-ui/Table'
-import { add, mul } from 'bigmath'
+import { add, mul, round } from 'bigmath'
 
 const summariseOrder = pipe(
   groupBy(
@@ -43,7 +43,7 @@ function SupplierOrderSummary ({ order }) {
   return (
     h('div', {}, [
       h(Paper, {
-        zDepth: 2
+        zDepth: 1
       },
         [
           h('h2', {}, 'Supplier Order Summary')
@@ -52,7 +52,7 @@ function SupplierOrderSummary ({ order }) {
         h(TableHeader, { displaySelectAll: false }, [
           h(TableRow, {}, [
             h(TableHeaderColumn, {}, 'Product Name'),
-            h(TableHeaderColumn, {}, 'Quanity'),
+            h(TableHeaderColumn, {}, 'Quantity'),
             h(TableHeaderColumn, {}, 'Item Price'),
             h(TableHeaderColumn, {}, 'Total')
           ])
@@ -62,10 +62,11 @@ function SupplierOrderSummary ({ order }) {
             const { product, quantity } = plan
             const price = getPriceFromPlan(plan)
             return h(TableRow, {}, [
+              h(TableRowColumn, { style: { width: '24px' } }, ''),
               h(TableRowColumn, {}, product.resourceType.name),
               h(TableRowColumn, {}, quantity),
               h(TableRowColumn, {}, price),
-              h(TableRowColumn, {}, mul(plan.quantity, price))
+              h(TableRowColumn, {}, round(mul(plan.quantity, price), 2))
             ])
           })
         ]),
@@ -75,13 +76,13 @@ function SupplierOrderSummary ({ order }) {
             h(TableRowColumn, {}, ''),
             h(TableRowColumn, {}, 'GST'),
             // Temp for demo until #191 has been worked on
-            h(TableRowColumn, {}, mul(orderTotal, 0.15))
+            h(TableRowColumn, {}, round(mul(orderTotal, 0.15), 2))
           ]),
           h(TableRow, {}, [
             h(TableRowColumn, {}, ''),
             h(TableRowColumn, {}, ''),
             h(TableRowColumn, {}, 'Total'),
-            h(TableRowColumn, {}, orderTotal)
+            h(TableRowColumn, {}, round(orderTotal, 2))
           ])
         ])
       ])
