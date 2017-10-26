@@ -1,9 +1,4 @@
-const { pipe, path, toPairs, reduce, assocPath } = require('ramda')
 const deepExtend = require('deep-extend')
-
-const browserConfigPaths = [
-  'assetsUrl'
-]
 
 var config = {
   port: 3000,
@@ -23,6 +18,15 @@ var config = {
   }
 }
 
+/*
+
+const browserConfigPaths = [
+  'assetsUrl'
+]
+
+// this breaks webpack in storybook, wtf?
+// https://github.com/webpack/webpack/issues/4039
+
 const getBrowserConfig = pipe(
   toPairs,
   reduce((sofar, [key]) => {
@@ -32,6 +36,11 @@ const getBrowserConfig = pipe(
 )
 
 config.browser = getBrowserConfig(config)
+*/
+
+config.browser = {
+  browserConfigPaths: config.browserConfigPaths
+}
 
 module.exports = deepExtend(
   config,
