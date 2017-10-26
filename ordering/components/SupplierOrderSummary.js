@@ -40,6 +40,8 @@ const getPriceFromPlan = (plan) => find(propEq('id', plan.priceSpecId))(plan.pro
 function SupplierOrderSummary ({ order }) {
   const summarisedOrder = summariseOrder(order.orderPlans)
   const orderTotal = reduce(add, 0, summarisedOrder.map((plan) => mul(getPriceFromPlan(plan), plan.quantity)))
+  const groupProfile = order.group.profile
+  const supplier = order.supplier.profile
 
   return (
     h('div', {}, [
@@ -50,7 +52,18 @@ function SupplierOrderSummary ({ order }) {
           h('h2', {}, 'Supplier Order Summary')
         ]),
       h('div', {}, [
-        'contact info here?'
+        h('h3', {}, 'To:'),
+        h('h4', {}, supplier.name),
+        h('p', {}, supplier.contactInfo.deliveryAddress.deliveryAddress),
+        h('p', {}, supplier.contactInfo.deliveryAddress.city),
+        h('p', {}, supplier.contactInfo.deliveryAddress.postcode)
+      ]),
+      h('div', {}, [
+        h('h3', {}, 'From:'),
+        h('h4', {}, groupProfile.name),
+        h('p', {}, groupProfile.contactInfo.deliveryAddress.deliveryAddress),
+        h('p', {}, groupProfile.contactInfo.deliveryAddress.city),
+        h('p', {}, groupProfile.contactInfo.deliveryAddress.postcode)
       ]),
       h(Table, {}, [
         h(TableHeader, { displaySelectAll: false }, [

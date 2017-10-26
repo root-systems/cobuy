@@ -82,5 +82,8 @@ const orderPlans = products.map((product) => {
 
 export default {
   orderIntents,
-  orderPlans
+  orderPlans,
+  // assuming one group per order
+  group: groups[0],
+  supplier: groups[1]
 }
