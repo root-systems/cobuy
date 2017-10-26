@@ -46,14 +46,7 @@ const SelectAgentForOrderForm = compose(
             primaryText: agent.name
           })
         }, agentCollection)
-      ]),
-      h(RaisedButton, {
-        className: styles.button,
-        type: 'button',
-        onClick: (ev) => {
-          console.log('going to create a new agent / relationship')
-        }
-      }, 'create new')
+      ])
     ])
   ])
 })
