@@ -20,6 +20,8 @@ const getProductIdsFromProducts = pipe(
   values
 )
 
+const getConsumerAgentFromOrder = path(['consumerAgent'])
+
 export default compose(
   connectFeathers({
     selector: getCastIntentTaskProps,
@@ -40,7 +42,9 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const {taskPlan, selected} = props
+      const { taskPlan, selected } = props
+      const { order } = selected
+
       if (taskPlan) {
         const { params: { orderId } } = taskPlan
         queries.push({
@@ -60,6 +64,7 @@ export default compose(
           }
         })
       }
+
       if (!isNil(selected.order)) {
         const { params: { orderId } } = taskPlan
         const { supplierAgentId } = selected.order
@@ -99,6 +104,42 @@ export default compose(
         })
       }
 
+      if (order) {
+        const { consumerAgentId, consumerAgent } = order
+        queries.push({
+          service: 'agents',
+          id: consumerAgentId
+        })
+        queries.push({
+          service: 'relationships',
+          params: {
+            query: {
+              sourceId: consumerAgentId
+            }
+          }
+        })
+
+        if (consumerAgent) {
+          const { members } = consumerAgent
+          const queryEachMember = forEach(member => {
+            const { agentId } = member
+            queries.push({
+              service: 'agents',
+              id: agentId
+            })
+            queries.push({
+              service: 'profiles',
+              params: {
+                query: {
+                  agentId
+                }
+              }
+            })
+          })
+          queryEachMember(members)
+        }
+      }
+
       return queries
     },
     shouldQueryAgain: (props, status) => {
@@ -106,6 +147,15 @@ export default compose(
       const { selected } = props
 
       if (hasNotQueriedForProducts({ status, selected })) {
+        return true
+      }
+
+      const { order } = props.selected
+      // re-query when we haven't gotten back consumerAgent or taskWork
+      const consumerAgent = getConsumerAgentFromOrder(order)
+
+      if (isNil(consumerAgent)) return true
+      if (anyMembersAreNil(consumerAgent)) {
         return true
       }
 
@@ -132,4 +182,9 @@ const hasNotQueriedForProducts = ifElse(
       pipe(prop('priceSpecs'), either(isNil, isEmpty))
     )
   )
+)
+
+const anyMembersAreNil = pipe(
+  prop('members'),
+  any(pipe(path(['agent', 'profile', 'id']), isNil))
 )
