@@ -1,16 +1,18 @@
 import products from './products'
 
-const agents = [{
-  profile: {
-    id: 121,
-    name: 'Ella Banks'
+const agents = [
+  {
+    profile: {
+      id: 1,
+      name: 'Dan Lewis'
+    }
+  }, {
+    profile: {
+      id: 2,
+      name: 'Sarah Rogers'
+    }
   }
-}, {
-  profile: {
-    id: 334,
-    name: 'Kath Uru'
-  }
-}]
+]
 
 const groups = [{
   profile: {
