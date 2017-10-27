@@ -1,5 +1,5 @@
 import { compose } from 'recompose'
-import { map, isNil } from 'ramda'
+import { map, isNil, pipe, values } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import { reduxForm as connectForm, FormSection } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -11,12 +11,21 @@ import styles from '../styles/SingleViewProduct'
 import ProductPriceSpec from './ProductPriceSpec'
 import ProductFacet from './ProductFacet'
 
-const renderPriceSpecs = map((priceSpec) => {
-  return h(ProductPriceSpec, {
-    priceSpec: priceSpec,
-    key: priceSpec.id
-  })
-})
+const RenderPriceSpecs = ({ orderIntentsByPriceAgent, currentAgent, agents }) => {
+  return pipe(
+    map((priceSpec) => {
+      const orderIntentsByAgent = orderIntentsByPriceAgent[priceSpec.id] || {}
+      return h(ProductPriceSpec, {
+        key: priceSpec.id,
+        priceSpec: priceSpec,
+        orderIntentsByAgent,
+        currentAgent,
+        agents
+      })
+    }),
+    values
+  )
+}
 
 const renderFacets = map((facet) => {
   return h(ProductFacet, {
@@ -26,12 +35,14 @@ const renderFacets = map((facet) => {
 })
 
 function SingleViewProduct (props) {
-  const { styles, product, handleSubmit } = props
+  const { styles, product, orderIntentsByPriceAgent, currentAgent, agents, handleSubmit } = props
   if (isNil(product)) return null
   const { resourceType, facets, priceSpecs } = product
   if (isNil(priceSpecs)) return null
   if (isNil(resourceType)) return null
   const { name, description, image } = resourceType
+
+  const renderPriceSpecs = RenderPriceSpecs({ orderIntentsByPriceAgent, currentAgent, agents })
 
   return (
     h('form', {
@@ -95,10 +106,12 @@ function SingleViewProduct (props) {
             type: 'submit',
             primary: true,
             className: styles.submitButton,
-            label: h(FormattedMessage, {
-              id: 'ordering.add',
-              className: styles.addButtonText
-            })
+            label: (
+              h(FormattedMessage, {
+                id: 'ordering.add',
+                className: styles.addButtonText
+              })
+            )
           })
         ])
       ])
@@ -109,6 +122,7 @@ function SingleViewProduct (props) {
 export default compose(
   connectFela(styles),
   connectForm({
-    form: 'singleViewProduct'
+    form: 'singleViewProduct',
+    enableReinitialize: true
   })
 )(SingleViewProduct)

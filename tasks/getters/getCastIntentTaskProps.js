@@ -1,18 +1,18 @@
 import { createStructuredSelector } from 'reselect'
 import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
-import getProducts from '../../supply/getters/getProducts'
+import getOrderAgents from '../../supply/getters/getCurrentConsumerAgentMembers'
+import getCurrentOrder from '../../ordering/getters/getCurrentOrder'
+import getCurrentOrderProducts from '../../supply/getters/getCurrentSupplierProducts'
+import getCurrentProduct from '../../supply/getters/getCurrentProduct'
 import getResourceTypes from '../../resources/getters/getResourceTypes'
-import getPriceSpecs from '../../supply/getters/getPriceSpecsByProduct'
-import getRouterParams from '../../app/getters/getRouterParams'
-import getOrderIntents from '../../ordering/getters/getOrderIntents'
-import getOrders from '../../ordering/getters/getOrders'
+import getPriceSpecs from '../../supply/getters/getPriceSpecs'
+import getCurrentOrderIntentsByProductPriceAgent from '../../ordering/getters/getCurrentOrderIntentsByProductPriceAgent'
 
 export default createStructuredSelector({
   currentAgent: getCurrentAgent,
-  products: getProducts,
-  resourceTypes: getResourceTypes,
-  priceSpecs: getPriceSpecs,
-  routerParams: getRouterParams,
-  orderIntents: getOrderIntents,
-  orders: getOrders
+  order: getCurrentOrder,
+  agents: getOrderAgents,
+  products: getCurrentOrderProducts,
+  product: getCurrentProduct,
+  orderIntentsByProductPriceAgent: getCurrentOrderIntentsByProductPriceAgent
 })
