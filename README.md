@@ -2,7 +2,7 @@
 
 :seedling: :package: :stew: :family: Helping people buy good food at good prices, together.
 
-[![Kanban](https://badge.waffle.io/enspiral-root-systems/cobuy.png?label=ready&title=Ready)](http://waffle.io/enspiral-root-systems/cobuy)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/root-systems/cobuy.svg?columns=Ready,In%20Progress,Review,Done&style=flat-square)](http://waffle.io/root-systems/cobuy)
 
 ## Table of Contents
 
