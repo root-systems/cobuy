@@ -41,6 +41,7 @@ const getSubmittedPriceSpecs = pipe(
 
 function SingleProduct (props) {
   const { actions, product, currentAgent, taskPlan, agents, orderIntentsByProductPriceAgent } = props
+  const { id: taskPlanId } = taskPlan
 
   const onSubmit = pipe(
     getSubmittedPriceSpecs,
@@ -61,7 +62,8 @@ function SingleProduct (props) {
       } else {
         actions.orderIntents.create(submittedOrderIntent)
       }
-    })
+    }),
+    () => { actions.router.push(`/tasks/${taskPlanId}`) }
   )
 
   const orderIntentsByPriceAgent = orderIntentsByProductPriceAgent[product.id] || {}
