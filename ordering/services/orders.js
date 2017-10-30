@@ -161,7 +161,6 @@ function hasNoSupplierAgent (hook) {
 
 function hasNotCompletedGroupOrSupplierProfile (hook) {
   const agentId = hook.params.agent.id
-  const agentsService = hook.app.service('agents')
   const relationshipsService = hook.app.service('relationships')
   const profilesService = hook.app.service('profiles')
 
@@ -190,7 +189,6 @@ function hasNotCompletedGroupOrSupplierProfile (hook) {
 
 function createCompleteOrderSetupWithPreReqsTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
-  const orders = hook.app.service('orders')
   const taskRecipeId = taskRecipes.completeOrderSetupWithPrereqs.id
 
   const assigneeId = hook.params.agent.id
@@ -208,7 +206,6 @@ function createCompleteOrderSetupWithPreReqsTaskPlan (hook) {
 
 function createCompleteOrderSetupTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
-  const orders = hook.app.service('orders')
   const taskRecipeId = taskRecipes.completeOrderSetup.id
 
   const assigneeId = hook.params.agent.id
