@@ -27,7 +27,11 @@ const hooks = {
   },
   after: {
     create: [
-      iffElse(hasNotCompletedGroupOrSupplierProfile, createCompleteOrderSetupWithPreReqsTaskPlan, createCompleteOrderSetupTaskPlan)
+      iffElse(hasNotCompletedGroupOrSupplierProfile, createCompleteOrderSetupWithPreReqsTaskPlan, createCompleteOrderSetupTaskPlan),
+      iffElse(groupHasNoAdminRelation, createCloseOrderTaskPlanToUser, createCloseOrderTaskPlanToAdmin)
+    ],
+    update: [
+      iff(updatedAdmin, updateCloseOrderTaskPlanAdmin)
     ]
   },
   error: {}
@@ -219,4 +223,20 @@ function createCompleteOrderSetupTaskPlan (hook) {
    .then(() => {
      return hook
    })
+}
+
+function updatedAdmin (hook) {
+  // has admin updated?
+}
+
+function updateCloseOrderTaskPlanAdmin (hook) {
+  // update close order task plan associated with this order to be assigned to the new admin
+}
+
+function createCloseOrderTaskPlanToAdmin (hook) {
+  // create closeOrderTaskPlan assigned to the order admin
+}
+
+function createCloseOrderTaskPlanToUser (hook) {
+  // create closeOrderTaskPlan assigned to the current logged in user
 }
