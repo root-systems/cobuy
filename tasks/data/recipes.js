@@ -2,7 +2,8 @@ import SetupGroupTask from '../containers/SetupGroupTask'
 import SetupSupplierTask from '../containers/SetupSupplierTask'
 import CreateProfileTask from '../containers/CreateProfileTask'
 import StartOrderTask from '../containers/StartOrderTask'
-import CastIntentTask from '../containers/CastIntentTask' 
+import CloseOrderTask from '../containers/CloseOrderTask'
+import CastIntentTask from '../containers/CastIntentTask'
 
 export const setupGroup = {
   id: 'setupGroup',
@@ -27,6 +28,12 @@ export const finishPrereqs = {
 export const startOrder = {
   id: 'startOrder',
   Component: StartOrderTask,
+  childTaskRecipes: []
+}
+
+export const closeOrder = {
+  id: 'closeOrder',
+  Component: CloseOrderTask,
   childTaskRecipes: []
 }
 
