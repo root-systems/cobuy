@@ -8,7 +8,7 @@ import SetupSupplierTask from '../components/SetupSupplierTask'
 
 const getSupplierAgentFromTaskPlan = path(['params', 'supplierAgent'])
 
-import { products, priceSpecs, resourceTypes } from '../../actions'
+import { products, priceSpecs, resourceTypes, orders } from '../../actions'
 
 export default compose(
   connectFeathers({
@@ -20,7 +20,8 @@ export default compose(
       credentials,
       products,
       priceSpecs,
-      resourceTypes
+      resourceTypes,
+      orders
     },
     // TODO can optimize `feathers-action-react` to de-dupe
     // new queries by checking if deepEqual
@@ -30,7 +31,11 @@ export default compose(
       const { taskPlan, selected } = props
 
       if (taskPlan) {
-        const { params: { supplierAgentId } } = taskPlan
+        const { params: { supplierAgentId, orderId } } = taskPlan
+        queries.push({
+          service: 'orders',
+          id: orderId
+        })
         queries.push({
           service: 'agents',
           id: supplierAgentId
