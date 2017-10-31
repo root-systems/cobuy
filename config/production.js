@@ -2,9 +2,10 @@ var config = {
   port: process.env.PORT,
   app: {
     name: process.env.APP_NAME,
-    tagine: process.env.APP_TAGLINE,
     url: process.env.APP_URL,
-    assetsUrl: process.env.ASSETS_URL
+  },
+  assets: {
+    url: process.env.ASSETS_URL
   },
   authentication: {
     secret: process.env.AUTHENTICATION_SECRET,
@@ -27,7 +28,8 @@ var config = {
 }
 
 config.browser = {
-  app: config.app
+  app: config.app,
+  assets: config.assets
 }
 
 module.exports = config
