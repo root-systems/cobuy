@@ -8,13 +8,14 @@ import RaisedButton from 'material-ui/RaisedButton'
 import styles from '../styles/Home'
 
 function Home (props) {
-  const { routes, styles } = props
+  const { routes, styles, config } = props
+  const { app: { name: appName } } = config
 
   return (
     <div className={styles.container}>
       <div className={styles.titleContainer}>
         <h1 className={styles.titleText}>
-          <FormattedMessage id='app.name' />
+          <FormattedMessage id='app.name' values={{appName}} />
         </h1>
         <p className={styles.taglineText}>
           <FormattedMessage id='app.tagline' />
