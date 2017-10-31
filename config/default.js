@@ -2,11 +2,14 @@ const deepExtend = require('deep-extend')
 
 var config = {
   port: 3000,
-  name: 'Cobuy',
-  url: 'http://localhost:3000',
-  favicon: 'app/favicon.ico',
-  assets: 'app/assets',
-  assetsUrl: 'http://localhost:3000/',
+  app: {
+    name: 'Cobuy',
+    tagline: 'Helping you buy good food, together',
+    url: 'http://localhost:3000',
+    favicon: 'app/favicon.ico',
+    assets: 'app/assets',
+    assetsUrl: 'http://localhost:3000/',
+  },
   bundler: {
     head: `
       <style id="app-styles"></style>
@@ -39,7 +42,7 @@ config.browser = getBrowserConfig(config)
 */
 
 config.browser = {
-  browserConfigPaths: config.browserConfigPaths
+  app: config.app
 }
 
 module.exports = deepExtend(

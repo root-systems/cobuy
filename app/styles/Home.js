@@ -1,8 +1,8 @@
-var config // HACK
+var appConfig // HACK
 if (typeof window === 'undefined') {
-  config = {}
+  appConfig = {}
 } else {
-  config = window.config
+  appConfig = window.config.app
 }
 
 export default {
@@ -42,7 +42,7 @@ export default {
           opacity: 0.6,
           zIndex: -1,
           backgroundColor: theme.colors.canvas,
-          backgroundImage: `url("${config.assetsUrl}/images/cobuy-bg-sml-1080.jpg")`,
+          backgroundImage: `url("${appConfig.assetsUrl}/images/cobuy-bg-sml-1080.jpg")`,
           backgroundSize: 'cover'
         },
         [`@media (min-width: ${theme.breakpoints.desktop})`]: {
@@ -55,7 +55,7 @@ export default {
           opacity: 0.6,
           zIndex: -1,
           backgroundColor: theme.colors.canvas,
-          backgroundImage: `url("${config.assetsUrl}/images/cobuy-bg-lrg-1440.jpg")`,
+          backgroundImage: `url("${appConfig.assetsUrl}/images/cobuy-bg-lrg-1440.jpg")`,
           backgroundSize: 'cover'
         }
       }
