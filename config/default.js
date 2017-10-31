@@ -8,7 +8,7 @@ var config = {
     url: 'http://localhost:3000',
   },
   assets: {
-    path: 'app/assets',
+    root: 'app/assets',
     url: 'http://localhost:3000/'
   },
   bundler: {
