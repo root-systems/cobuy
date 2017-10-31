@@ -11,6 +11,7 @@ import CloseOrderTask from '../components/CloseOrderTask'
 const getOrderIdFromTaskPlan = path(['params', 'orderId'])
 
 export default compose(
+
   connectFeathers({
     selector: getCloseOrderTaskProps,
     actions: {
@@ -23,7 +24,6 @@ export default compose(
       var queries = []
       const { taskPlan, selected } = props
       const { currentAgent, currentAgentGroupIds, currentAgentGroupSupplierIds, currentAgentGroupMemberIds } = selected
-
       if (taskPlan) {
         const { params: { orderId } } = taskPlan
         queries.push({
