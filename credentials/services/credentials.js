@@ -37,8 +37,7 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
     agentId,
     service: 'credentials',
     method: 'patch',
-    params: { serviceId: id },
-    createdAt: new Date().toString()
+    params: { serviceId: id }
   })
   .then((token) => {
     return hook.app.service('mailer').create({
