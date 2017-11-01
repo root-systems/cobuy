@@ -1,3 +1,7 @@
-const getHomeProps = (state) => ({})
+import { createStructuredSelector } from 'reselect'
 
-export default getHomeProps
+import getConfig from './getConfig'
+
+export default createStructuredSelector({
+  config: getConfig
+})

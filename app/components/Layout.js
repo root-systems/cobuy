@@ -25,10 +25,10 @@ function Layout (props) {
     }, [
       h(Head, [
         h('title', [
-          config.name
+          config.app.name
         ])
       ]),
-      h(Nav, { navigationRoutes }),
+      h(Nav, { config, navigationRoutes }),
       h(ConnectedSwitch, {}, [
         mapRoutePages(routes)
       ])

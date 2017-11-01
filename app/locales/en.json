@@ -1,5 +1,5 @@
 {
-  "app.name": "Cobuy",
+  "app.name": "{appName}",
   "app.tagline": "Helping you buy good food, together",
   "app.closeMenu": "close menu",
   "app.home": "home",
@@ -25,7 +25,7 @@
   "agents.register": "register",
   "agents.signIn": "sign in",
   "agents.logOut": "log out",
-  "agents.welcome": "hey, welcome to cobuy!",
+  "agents.welcome": "hey, welcome to {appName}!",
   "agents.signInWith": "sign in with...",
   "agents.saveAvatar": "save avatar",
   "agents.editAvatar": "edit avatar",
