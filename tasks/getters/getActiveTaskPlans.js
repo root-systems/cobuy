@@ -1,13 +1,17 @@
 import { createSelector } from 'reselect'
-import { filter, isNil, values } from 'ramda'
+import { map, prop, filter, contains, not, values } from 'ramda'
 
-import getTaskPlans from './getTaskPlans'
+import getParentTaskPlans from './getParentTaskPlans'
+import getRawTaskWorks from './getRawTaskWorks'
 
 const getActiveTaskPlans = createSelector(
-  getTaskPlans,
-  (taskPlans) => {
-    const byDueDate = n => isNil(n.dueDate)
-    return filter(byDueDate, values(taskPlans))
+  getParentTaskPlans,
+  getRawTaskWorks,
+  (taskPlans, taskWorks) => {
+    const taskWorksTaskPlanIds = map(prop('taskPlanId'), values(taskWorks))
+    return filter((taskPlan) => {
+      return not(contains(taskPlan.id, taskWorksTaskPlanIds))
+    }, taskPlans)
   }
 )
 
