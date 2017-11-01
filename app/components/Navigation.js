@@ -15,10 +15,13 @@ import { FormattedMessage } from 'dogstack/intl'
 function Navigation (props) {
   const {
     styles,
+    config,
     isDrawerOpen,
     toggleDrawer,
     navigationRoutes
   } = props
+
+  const { app: { name: appName } } = config
 
   const mapRouteItems = pipe(
     map(route => {
@@ -81,7 +84,10 @@ function Navigation (props) {
         title: (
           h(FormattedMessage, {
             id: 'app.name',
-            className: styles.labelText
+            className: styles.labelText,
+            values: {
+              appName
+            }
           })
         ),
         onLeftIconButtonTouchTap: toggleDrawer

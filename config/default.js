@@ -2,11 +2,15 @@ const deepExtend = require('deep-extend')
 
 var config = {
   port: 3000,
-  name: 'Cobuy',
-  url: 'http://localhost:3000',
   favicon: 'app/favicon.ico',
-  assets: 'app/assets',
-  assetsUrl: 'http://localhost:3000/',
+  app: {
+    name: 'Cobuy',
+    url: 'http://localhost:3000',
+  },
+  assets: {
+    root: 'app/assets',
+    url: 'http://localhost:3000/'
+  },
   bundler: {
     head: `
       <style id="app-styles"></style>
@@ -39,10 +43,13 @@ config.browser = getBrowserConfig(config)
 */
 
 config.browser = {
-  browserConfigPaths: config.browserConfigPaths
+  app: config.app,
+  assets: config.assets
 }
 
 module.exports = deepExtend(
-  config,
-  require('dogstack-agents/config')
+  require('dogstack-agents/config'),
+  config
 )
+
+console.log('config', module.exports)

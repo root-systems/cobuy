@@ -246,7 +246,7 @@ exports.seed = function (knex, Promise) {
         sourceId: groupId,
         targetId: ids[i]
       }
-      return knex('relationships').insert(relationship).returning('agentId')
+      return knex('relationships').insert(relationship).returning('targetId')
     }))
     // not sure why, but relationships .returning doesn't return the correct agentIds, hack for now
     .then(() => ids)
