@@ -18,7 +18,8 @@ const hooks = {
   before: {},
   after: {
     create: [
-      iff(completeOrderSetupTaskWork, createCastOrderIntentTaskPlan)
+      iff(completeOrderSetupTaskWork, createCastOrderIntentTaskPlan),
+      iff(completeCloseOrderTaskWork, createOrderPlanTaskPlan)
     ]
   },
   error: {}
@@ -29,6 +30,41 @@ function completeOrderSetupTaskWork (hook) {
   || hook.data.taskRecipeId === 'completeOrderSetup'
 }
 
+function completeCloseOrderTaskWork (hook) {
+  const orders = hook.app.service('orders')
+  const taskPlans = hook.app.service('taskPlans')
+  const orderIntents = hook.app.service('orderIntents')
+  return taskPlans.find({
+    query: {
+      id: hook.data.taskPlanId
+    }
+  })
+  .then((taskPlan) => {
+    return orders.find({
+      query: {
+        id: taskPlan[0].params.orderId
+      }
+    })
+    .then((order) => {
+      return orderIntents.find({
+        query: {
+          orderId: order[0].id
+        }
+      })
+      .then((associatedOrderIntents) => {
+      })
+    })
+  })
+
+  //get taskplan with taskPlanId
+  // get order from taskPlan
+  //get all order intents associated with order
+  //for each order intent create an order plan
+}
+
+function createOrderPlanTaskPlan (hook) {
+
+}
 function createCastOrderIntentTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
   const orders = hook.app.service('orders')
