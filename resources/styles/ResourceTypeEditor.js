@@ -4,6 +4,10 @@ export default {
     flexDirection: 'column',
     paddingTop: '2rem'
   }),
+  resourceTypeDetails: () => ({
+    display: 'flex',
+    flexDirection: 'row'
+  }),
   resourceHeader: () => ({
     display: 'flex',
     fontSize: '2rem'

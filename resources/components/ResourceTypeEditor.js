@@ -46,47 +46,40 @@ const ResourceTypeForm = compose(
     className: styles.container,
     onSubmit: handleSubmit(updateResourceAndToggleEdit)
   }, [
-    h('p', {
-      className: styles.resourceHeader
-    }, [
-      h(FormattedMessage, {
-        id: 'resources.resourceTypes',
-        className: styles.labelText
-      })
+    h('div', { className: styles.resourceTypeDetails }, [
+      h(Field, {
+        name: 'name',
+        floatingLabelText: (
+          h(FormattedMessage, {
+            id: 'resources.resourceTypeName',
+            className: styles.labelText
+          })
+        ),
+        component: TextField,
+        disabled: not(isEditing)
+      }),
+      h(Field, {
+        name: 'description',
+        floatingLabelText: (
+          h(FormattedMessage, {
+            id: 'resources.resourceTypeDescription',
+            className: styles.labelText
+          })
+        ),
+        component: TextField
+      }),
+      h(Field, {
+        name: 'image',
+        floatingLabelText: (
+          h(FormattedMessage, {
+            id: 'resources.resourceTypeImage',
+            className: styles.labelText
+          })
+        ),
+        component: TextField,
+        disabled: not(isEditing)
+      }),
     ]),
-    h(Field, {
-      name: 'name',
-      floatingLabelText: (
-        h(FormattedMessage, {
-          id: 'resources.resourceTypeName',
-          className: styles.labelText
-        })
-      ),
-      component: TextField,
-      disabled: not(isEditing)
-    }),
-    h(Field, {
-      name: 'description',
-      floatingLabelText: (
-        h(FormattedMessage, {
-          id: 'resources.resourceTypeDescription',
-          className: styles.labelText
-        })
-      ),
-      component: TextField
-    }),
-    h(Field, {
-      name: 'image',
-      floatingLabelText: (
-        h(FormattedMessage, {
-          id: 'resources.resourceTypeImage',
-          className: styles.labelText
-        })
-      ),
-      component: TextField,
-      disabled: not(isEditing)
-    }),
-
     h('div', {
       className: styles.buttonContainer
     }, [
