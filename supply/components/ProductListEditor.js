@@ -12,14 +12,13 @@ import RaisedButton from 'material-ui/RaisedButton'
 const ProductListEditor = compose(
   connectFela(styles)
 )(props => {
-  const { styles, createProduct, products, updateResourceType, savePriceSpecs } = props
-
-  console.log('products', products)
+  const { styles, createProduct, products, saveResourceTypeAndPriceSpecs, updateResourceType, savePriceSpecs } = props
 
   const renderProducts = map(product => {
     return h(ProductEditor, {
       product,
       key: product.id,
+      saveResourceTypeAndPriceSpecs,
       updateResourceType,
       savePriceSpecs: partial(savePriceSpecs, [product.id])
     })

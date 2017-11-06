@@ -34,6 +34,21 @@ export default (props) => {
             supplierAgentId: supplierAgent.id
           })
         },
+        saveResourceTypeAndPriceSpecs: (data) => {
+          console.log(data)
+          const { priceSpecs } = data
+          // update the resource type
+          actions.resourceTypes.update(resourceType.id, resourceType)
+          // update or create the priceSpecs
+          priceSpecs.forEach(priceSpec => {
+            const nextPriceSpec = merge(priceSpec, { productId })
+            if (nextPriceSpec.id) {
+              actions.priceSpecs.update(nextPriceSpec.id, nextPriceSpec)
+            } else {
+              actions.priceSpecs.create(nextPriceSpec)
+            }
+          })
+        },
         updateResourceType: (resourceType) => {
           actions.resourceTypes.update(resourceType.id, resourceType)
         },
