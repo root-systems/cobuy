@@ -43,22 +43,14 @@ function createOrderPlans (hook) {
   const taskPlans = hook.app.service('taskPlans')
   const orderIntents = hook.app.service('orderIntents')
   const orderPlans = hook.app.service('orderPlans')
-  return taskPlans.find({
-    query: {
-      id: hook.data.taskPlanId
-    }
-  })
+  return taskPlans.get(hook.data.taskPlanId)
     .then((taskPlan) => {
-      return orders.find({
-        query: {
-          id: taskPlan[0].params.orderId
-        }
-      })
+      return orders.get(taskPlan.params.orderId)
     })
     .then((order) => {
       return orderIntents.find({
         query: {
-          orderId: order[0].id
+          orderId: order.id
         }
       })
     })
