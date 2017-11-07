@@ -11,6 +11,7 @@ import { updater as products } from './supply/dux/products'
 import { updater as priceSpecs } from './supply/dux/priceSpecs'
 import { updater as resourceTypes } from './resources/dux/resourceTypes'
 import { updater as orderIntents } from './ordering/dux/orderIntents'
+import { updater as orderPlans } from './ordering/dux/orderPlans'
 
 export default concat(
   agents,
@@ -23,5 +24,6 @@ export default concat(
   products,
   priceSpecs,
   resourceTypes,
-  orderIntents
+  orderIntents,
+  orderPlans
 )
