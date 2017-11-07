@@ -18,20 +18,26 @@ const hooks = {
   before: {},
   after: {
     create: [
-      iff(completeOrderSetupTaskWork, createCastOrderIntentTaskPlan),
-      iff(completeOrderSetupTaskWork, createCloseOrderTaskPlan),
-      iff(completeCloseOrderTaskWork, createOrderPlanTaskPlan)
+      iff(taskRecipeIsCompleteOrderSetup, createCastOrderIntentTaskPlan),
+      iff(taskRecipeIsCompleteOrderSetup, createCloseOrderTaskPlan),
+      iff(taskRecipeIsCloseOrder, createCastOrderIntentTaskWorks)
     ]
   },
   error: {}
 }
 
-function completeOrderSetupTaskWork (hook) {
+function taskRecipeIsCompleteOrderSetup (hook) {
   return hook.data.taskRecipeId === 'completeOrderSetupWithPrereqs'
   || hook.data.taskRecipeId === 'completeOrderSetup'
 }
 
-function completeCloseOrderTaskWork (hook) {
+function taskRecipeIsCloseOrder (hook) {
+  return hook.data.taskRecipeId === 'closeOrder'
+}
+
+function createOrderPlans (hook) {
+  // TODO: IK: this is half done, aiming towards creating an orderPlan for each user who created an orderIntent for an order when that order closes
+  // would also be triggered by taskRecipeIsCloseOrder
   const orders = hook.app.service('orders')
   const taskPlans = hook.app.service('taskPlans')
   const orderIntents = hook.app.service('orderIntents')
@@ -63,10 +69,6 @@ function completeCloseOrderTaskWork (hook) {
   //for each order intent create an order plan
 }
 
-function createOrderPlanTaskPlan (hook) {
-  // TODO: IK: not sure how relevant this is, we need to figure out how a user indicates they have cast their intents
-  // and can they always change them up until the order closes? i.e. does the CloseOrderTaskWork ever get created?
-}
 function createCastOrderIntentTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
   const relationships = hook.app.service('relationships')
@@ -101,16 +103,56 @@ function createCastOrderIntentTaskPlan (hook) {
 function createCloseOrderTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
   const taskRecipeId = taskRecipes.closeOrder.id
-  const assigneeId = hook.params.agent.id
-
-  let params = {
-    consumerAgentId: hook.data.consumerAgentId,
-    supplierAgentId: hook.data.supplierAgentId,
-    orderId: hook.result.id
-  }
   // TODO: IK: at the moment the assigneeId is automatically the user who completesOrderSetup, should be the order admin
-  return taskPlans.create({ taskRecipeId, params, assigneeId})
-    .then(() => {
-      return hook
+  const assigneeId = hook.params.agent.id
+  const completedTaskPlanId = hook.result.taskPlanId
+
+  return taskPlans.get(completedTaskPlanId)
+  .then((completedTaskPlan) => {
+    const { orderId } = completedTaskPlan.params
+    const params = {
+      // consumerAgentId: hook.data.consumerAgentId,
+      // supplierAgentId: hook.data.supplierAgentId,
+      orderId
+    }
+    return taskPlans.create({ taskRecipeId, params, assigneeId})
+  })
+  .then(() => {
+    return hook
+  })
+}
+
+function createCastOrderIntentTaskWorks (hook) {
+  // order has closed, get all relevant taskPlans, create a taskWork for em
+  const taskPlans = hook.app.service('taskPlans')
+  const taskWorks = hook.app.service('taskWorks')
+  const closeOrderTaskPlanId = hook.data.taskPlanId
+
+  return taskPlans.get(closeOrderTaskPlanId)
+  .then((closeOrderTaskPlan) => {
+    const orderId = closeOrderTaskPlan.params.orderId
+    // const params = { orderId, consumerAgentId: groupId, supplierAgentId }
+
+    // TODO: IK: feels like a pretty sub-optimal way of querying, probably makes sense to have orderId as it's own column
+    return taskPlans.find({
+      query: {
+        taskRecipeId: 'castIntent',
+        params: {
+          $like: `%"orderId":${orderId}%`
+        }
+      }
     })
+    .then((taskPlans) => {
+      return Promise.all(taskPlans.map((taskPlan) => {
+        const { id, taskRecipeId, assigneeId, params } = taskPlan
+        return taskWorks.create({
+          taskPlanId: id,
+          taskRecipeId,
+          workerAgentId: assigneeId,
+          params
+        })
+      }))
+    })
+  })
+  .then(() => hook)
 }
