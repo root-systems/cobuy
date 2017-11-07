@@ -28,10 +28,10 @@ const hooks = {
   after: {
     create: [
       iffElse(hasNotCompletedGroupOrSupplierProfile, createCompleteOrderSetupWithPreReqsTaskPlan, createCompleteOrderSetupTaskPlan),
-      iffElse(groupHasNoAdminRelation, createCloseOrderTaskPlanToUser, createCloseOrderTaskPlanToAdmin)
+      // iffElse(groupHasNoAdminRelation, createCloseOrderTaskPlanToUser, createCloseOrderTaskPlanToAdmin)
     ],
     update: [
-      iff(updatedAdmin, updateCloseOrderTaskPlanAdmin)
+      // iff(updatedAdmin, updateCloseOrderTaskPlanAdmin)
     ]
   },
   error: {}
