@@ -13,7 +13,7 @@ export default (props) => {
 
   const currentOrder = orders[orderId]
 
-  console.log('closing order for: ', currentOrder)
+  // console.log('closing order for: ', currentOrder)
   return h('div', {}, [
     h('h2', {}, 'Closing order for ...')
   ]

@@ -19,6 +19,7 @@ const hooks = {
   after: {
     create: [
       iff(completeOrderSetupTaskWork, createCastOrderIntentTaskPlan),
+      iff(completeOrderSetupTaskWork, createCloseOrderTaskPlan),
       iff(completeCloseOrderTaskWork, createOrderPlanTaskPlan)
     ]
   },
@@ -63,7 +64,8 @@ function completeCloseOrderTaskWork (hook) {
 }
 
 function createOrderPlanTaskPlan (hook) {
-
+  // TODO: IK: not sure how relevant this is, we need to figure out how a user indicates they have cast their intents
+  // and can they always change them up until the order closes? i.e. does the CloseOrderTaskWork ever get created?
 }
 function createCastOrderIntentTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
@@ -99,4 +101,21 @@ function createCastOrderIntentTaskPlan (hook) {
     )
   })
   .then(() => hook)
+}
+
+function createCloseOrderTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const taskRecipeId = taskRecipes.closeOrder.id
+  const assigneeId = hook.params.agent.id
+
+  let params = {
+    consumerAgentId: hook.data.consumerAgentId,
+    supplierAgentId: hook.data.supplierAgentId,
+    orderId: hook.result.id
+  }
+  // TODO: IK: at the moment the assigneeId is automatically the user who completesOrderSetup, should be the order admin
+  return taskPlans.create({ taskRecipeId, params, assigneeId})
+    .then(() => {
+      return hook
+    })
 }
