@@ -77,6 +77,7 @@
   "tasks.recipes.completeOrderSetupWithPrereqs": "Complete Order Pre-requisites",
   "tasks.recipes.completeOrderSetup": "Complete Order Pre-requisites",
   "tasks.recipes.createProfile": "create your profile",
+  "tasks.recipes.viewOrderSummary": "view order summary",
   "tasks.steps.groupProfile": "enter your group profile information",
   "tasks.steps.supplierProfile": "enter your supplier profile information",
   "tasks.steps.supplierProducts": "enter your supplier product list",
