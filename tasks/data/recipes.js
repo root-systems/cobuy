@@ -4,6 +4,7 @@ import CreateProfileTask from '../containers/CreateProfileTask'
 import StartOrderTask from '../containers/StartOrderTask'
 import CloseOrderTask from '../containers/CloseOrderTask'
 import CastIntentTask from '../containers/CastIntentTask'
+import ViewOrderSummaryTask from '../containers/ViewOrderSummaryTask'
 
 export const setupGroup = {
   id: 'setupGroup',
@@ -61,5 +62,12 @@ export const createProfile = {
 export const castIntent = {
   id: 'castIntent',
   Component: CastIntentTask,
+  childTaskRecipes: []
+}
+
+// TODO: IK: probably don't want this as a task in the future, just a UI into viewing the order summary for now
+export const viewOrderSummary = {
+  id: 'viewOrderSummary',
+  Component: ViewOrderSummaryTask,
   childTaskRecipes: []
 }
