@@ -21,7 +21,8 @@ const hooks = {
       iff(taskRecipeIsCompleteOrderSetup, createCastOrderIntentTaskPlan),
       iff(taskRecipeIsCompleteOrderSetup, createCloseOrderTaskPlan),
       iff(taskRecipeIsCloseOrder, createCastOrderIntentTaskWorks),
-      iff(taskRecipeIsCloseOrder, createOrderPlans)
+      iff(taskRecipeIsCloseOrder, createOrderPlans),
+      iff(taskRecipeIsCloseOrder, createViewOrderSummaryTaskPlan)
     ]
   },
   error: {}
@@ -162,4 +163,22 @@ function createCastOrderIntentTaskWorks (hook) {
         })
     })
     .then(() => hook)
+}
+
+function createViewOrderSummaryTaskPlan (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const taskRecipeId = taskRecipes.viewOrderSummary.id
+  // TODO: IK: at the moment the assigneeId is automatically the user who closes the order, should be the order admin
+  const assigneeId = hook.params.agent.id
+  const closeOrderTaskPlanId = hook.data.taskPlanId
+
+  return taskPlans.get(closeOrderTaskPlanId)
+    .then((closeOrderTaskPlan) => {
+      const orderId = closeOrderTaskPlan.params.orderId
+      const params = { orderId }
+      return taskPlans.create({ taskRecipeId, params, assigneeId })
+    })
+    .then(() => {
+      return hook
+    })
 }
