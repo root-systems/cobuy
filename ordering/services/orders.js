@@ -27,11 +27,7 @@ const hooks = {
   },
   after: {
     create: [
-      iffElse(hasNotCompletedGroupOrSupplierProfile, createCompleteOrderSetupWithPreReqsTaskPlan, createCompleteOrderSetupTaskPlan),
-      // iffElse(groupHasNoAdminRelation, createCloseOrderTaskPlanToUser, createCloseOrderTaskPlanToAdmin)
-    ],
-    update: [
-      // iff(updatedAdmin, updateCloseOrderTaskPlanAdmin)
+      iffElse(hasNotCompletedGroupOrSupplierProfile, createCompleteOrderSetupWithPreReqsTaskPlan, createCompleteOrderSetupTaskPlan)
     ]
   },
   error: {}
@@ -223,35 +219,4 @@ function createCompleteOrderSetupTaskPlan (hook) {
    .then(() => {
      return hook
    })
-}
-
-function updatedAdmin (hook) {
-  // has admin updated?
-}
-
-function updateCloseOrderTaskPlanAdmin (hook) {
-  // update close order task plan associated with this order to be assigned to the new admin
-}
-
-function createCloseOrderTaskPlanToAdmin (hook) {
-  const taskPlans = hook.app.service('taskPlans')
-  const taskRecipeId = taskRecipes.closeOrder.id
-  const assigneeId = hook.params.agent.id
-
-  let params = {
-    consumerAgentId: hook.data.consumerAgentId,
-    supplierAgentId: hook.data.supplierAgentId,
-    orderId: hook.result.id
-  }
-  return taskPlans.create({ taskRecipeId, params, assigneeId})
-    .then(() => {
-      return hook
-    })
-
-  // create closeOrderTaskPlan assigned to the order admin
-}
-
-function createCloseOrderTaskPlanToUser (hook) {
-  console.log('close order to user')
-  // create closeOrderTaskPlan assigned to the current logged in user
 }
