@@ -5,11 +5,15 @@ import { compose } from 'recompose'
 import getViewOrderSummaryTaskProps from '../getters/getViewOrderSummaryTaskProps'
 import ViewOrderSummaryTask from '../components/ViewOrderSummaryTask'
 
+import { orders, orderPlans } from '../../actions'
+
 export default compose(
 
   connectFeathers({
     selector: getViewOrderSummaryTaskProps,
     actions: {
+      orders,
+      orderPlans
     },
     query: (props) => {
       var queries = []
