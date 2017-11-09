@@ -1,14 +1,11 @@
 import { createSelector } from 'reselect'
-import { filter, isNil, values } from 'ramda'
+import { prop, filter, pipe, isEmpty } from 'ramda'
 
 import getTaskPlans from './getTaskPlans'
 
 const getActiveTaskPlans = createSelector(
   getTaskPlans,
-  (taskPlans) => {
-    const byDueDate = n => isNil(n.dueDate)
-    return filter(byDueDate, values(taskPlans))
-  }
+  filter(pipe(prop('taskWork'), isEmpty))
 )
 
 export default getActiveTaskPlans
