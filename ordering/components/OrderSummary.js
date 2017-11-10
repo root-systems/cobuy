@@ -2,7 +2,7 @@ import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import Paper from 'material-ui/Paper'
-import { groupBy, map } from 'ramda'
+import { groupBy, map, pipe, values } from 'ramda'
 import {
   Table,
   TableHeader,
@@ -13,15 +13,22 @@ import { FormattedMessage } from '../../lib/Intl'
 
 import AgentOrderSummary from './AgentOrderSummary'
 
-function OrderSummary ({ order }) {
-  // const { styles, order } = props
-  const groupedAgentPlans = groupBy((plan) => plan.agent.profile.id)(order.orderPlans)
-  const agentPlans = Object.keys(groupedAgentPlans).map((key) => {
-    return {
-      agentId: key,
-      orderPlans: groupedAgentPlans[key]
-    }
-  })
+function OrderSummary (props) {
+  const { currentOrderOrderPlansByAgent } = props
+
+  // all the plans grouped by agent, may be > 1 per agent
+  // const groupedAgentPlans = groupBy((plan) => plan.agent.profile.id)(order.orderPlans)
+  // const agentPlans = Object.keys(groupedAgentPlans).map((key) => {
+  //   return {
+  //     agentId: key,
+  //     orderPlans: groupedAgentPlans[key]
+  //   }
+  // })
+
+  const renderAgentOrderSummary = (orderPlans) => {
+    return h(AgentOrderSummary, { orderPlans }, [])
+  }
+  const renderOrderPlansByAgent = map(renderAgentOrderSummary)
 
   return (
     h('div', {}, [
@@ -42,10 +49,7 @@ function OrderSummary ({ order }) {
           ])
         ])
       ]),
-      agentPlans.map((plan) => {
-        const { orderPlans, agentId } = plan
-        return h(AgentOrderSummary, { orderPlans, agentId }, [])
-      })
+      renderOrderPlansByAgent(values(currentOrderOrderPlansByAgent))
     ])
   )
 }

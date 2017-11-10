@@ -1,10 +1,10 @@
 import h from 'react-hyperscript'
-import { isNil } from 'ramda'
+import { isEmpty } from 'ramda'
 
 import OrderSummary from '../../ordering/components/OrderSummary'
 
 export default (props) => {
-  const { currentOrderOrderPlans } = props
-  if (isNil(currentOrderOrderPlans)) return false
+  const { currentOrderOrderPlansByAgent } = props
+  if (isEmpty(currentOrderOrderPlansByAgent)) return false
   return h(OrderSummary, props)
 }
