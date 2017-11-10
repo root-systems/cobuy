@@ -1,8 +1,8 @@
 import { createStructuredSelector } from 'reselect'
 import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
-import getCurrentOrderOrderPlans from '../../ordering/getters/getCurrentOrderOrderPlans'
+import getCurrentOrderOrderPlansByAgent from '../../ordering/getters/getCurrentOrderOrderPlansByAgent'
 
 export default createStructuredSelector({
   currentAgent: getCurrentAgent,
-  currentOrderOrderPlans: getCurrentOrderOrderPlans
+  currentOrderOrderPlansByAgent: getCurrentOrderOrderPlansByAgent
 })
