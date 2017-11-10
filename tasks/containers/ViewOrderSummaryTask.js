@@ -37,12 +37,12 @@ export default compose(
       if (status.isPending) return false
 
       const { taskPlan } = props.ownProps
-      const { currentOrderOrderPlans } = props.selected
+      const { currentOrderOrderPlansByAgent } = props.selected
 
       // wait for task plan before re-query
       if (isNil(taskPlan)) return false
 
-      if (isNil(currentOrderOrderPlans)) return true
+      if (isNil(currentOrderOrderPlansByAgent)) return true
 
       return false
     }
