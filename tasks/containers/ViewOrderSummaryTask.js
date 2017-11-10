@@ -17,9 +17,33 @@ export default compose(
     },
     query: (props) => {
       var queries = []
+      const { taskPlan, selected } = props
+
+      if (taskPlan) {
+        const { params: { orderId } } = taskPlan
+        queries.push({
+          service: 'orderPlans',
+          params: {
+            query: {
+              orderId
+            }
+          }
+        })
+      }
+
       return queries
     },
     shouldQueryAgain: (props, status) => {
+      if (status.isPending) return false
+
+      const { taskPlan } = props.ownProps
+      const { currentOrderOrderPlans } = props.selected
+
+      // wait for task plan before re-query
+      if (isNil(taskPlan)) return false
+
+      if (isNil(currentOrderOrderPlans)) return true
+
       return false
     }
   })
