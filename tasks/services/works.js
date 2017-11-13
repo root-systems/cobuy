@@ -1,6 +1,6 @@
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
-import { map, prop } from 'ramda'
+import { map, prop, groupBy } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
@@ -38,11 +38,11 @@ function taskRecipeIsCloseOrder (hook) {
 }
 
 function createOrderPlans (hook) {
-  // would also be triggered by taskRecipeIsCloseOrder
   const orders = hook.app.service('orders')
   const taskPlans = hook.app.service('taskPlans')
   const orderIntents = hook.app.service('orderIntents')
   const orderPlans = hook.app.service('orderPlans')
+  const priceSpecs = hook.app.service('priceSpecs')
   return taskPlans.get(hook.data.taskPlanId)
     .then((taskPlan) => {
       return orders.get(taskPlan.params.orderId)
@@ -54,19 +54,50 @@ function createOrderPlans (hook) {
         }
       })
     })
-    .then((associatedOrderIntents) => {
-      // for each order intent create an order plan
+    .then((queriedOrderIntents) => {
+      // TODO: IK: similar logic will also be needed on the client for showing the current state of the order per product - i.e. which priceSpec is currently going to be enforced
+
+      // for each productId of the orderIntents, sum the 'quantity' field of all orderIntents with the same productId
+      const orderIntentsByProductId = groupBy(prop('productId'), queriedOrderIntents)
+      const quantitiesOrderedByProductId = map(sum(map(prop('quantity'))), orderIntentsByProductId)
+
+      // find the priceSpec for each productId where the summed quantity is equal to or greater than the 'minimum' (but only the priceSpec with the largest minimum)
+      // need to test how combos of query params work in conjunction
       return Promise.all(
-        map((orderIntent) => {
-          return orderPlans.create({
-            orderId: orderIntent.orderId,
-            agentId: orderIntent.agentId,
-            quantity: orderIntent.desiredQuantity,
-            productId: orderIntent.productId,
-            priceSpecId: orderIntent.priceSpecId
+        map((quantity, productId) => {
+          return priceSpecs.find({
+            query: {
+              productId,
+              $limit: 1,
+              $sort: {
+                minimum: -1
+              },
+              minimum: {
+                $lte: quantity
+              }
+            }
           })
-        }, associatedOrderIntents)
+        }, quantitiesOrderedByProductId)
       )
+      .then((queriedPriceSpecs) => {
+        // might need to flatten() queriedPriceSpecs
+        // might want to groupBy on queriedPriceSpecs to group them by productId (might be better to use keyBy if it exists?)
+        // for each unique combination of an orderIntent's agentId and productId, create a single orderPlan with the found priceSpecId
+        // if no found priceSpecId, this means the combined orderIntents didn't meet a minimum quantity, therefore no orderPlan for that product
+        const matchedOrderIntents = filter()
+      })
+
+      // return Promise.all(
+      //   map((orderIntent) => {
+      //     return orderPlans.create({
+      //       orderId: orderIntent.orderId,
+      //       agentId: orderIntent.agentId,
+      //       quantity: orderIntent.desiredQuantity,
+      //       productId: orderIntent.productId,
+      //       priceSpecId: orderIntent.priceSpecId
+      //     })
+      //   }, orderIntents)
+      // )
     })
     .then(() => hook)
 }
