@@ -1,4 +1,4 @@
-import { map, prop, groupBy, sum, mapObjIndexed } from 'ramda'
+import { map, prop, groupBy, sum, mapObjIndexed, values, tap, pipe, uniq, pick, sortBy, reverse } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
@@ -56,38 +56,76 @@ function createOrderPlans (hook) {
     })
     .then((queriedOrderIntents) => {
       // TODO: IK: similar logic will also be needed on the client for showing the current state of the order per product - i.e. which priceSpec is currently going to be enforced
+      // this is logic which can be expressed as: given a set of orderIntents (and related priceSpecs), what is the desiredQuantity and applicable priceSpecId per product of the orderIntents?
+      // actually, thinking about this again, probably easier to just get / query for all the possible priceSpecs... will query for more records but saves a whole logic step, plus means back and front logic is more similar, perhaps even the same
 
-      // for each productId of the orderIntents, sum the 'quantity' field of all orderIntents with the same productId
-      const orderIntentsByProductId = groupBy(prop('productId'), queriedOrderIntents)
-      const quantitiesOrderedByProductId = map((intent) => sum(map(prop('desiredQuantity'), intent)), orderIntentsByProductId)
-      // find the priceSpec for each productId where the summed quantity is equal to or greater than the 'minimum' (but only the priceSpec with the largest minimum)
-      // need to test how combos of query params work in conjunction
-      console.log('all orderd by productId is: ', quantitiesOrderedByProductId)
-      return Promise.all([
-        // Why does this need to be surrounded in an array?
-        mapObjIndexed((quantity, productId) => {
-          return priceSpecs.find({
-            query: {
-              productId,
-              $limit: 1,
-              $sort: {
-                minimum: -1
-              },
-              minimum: {
-                $lte: quantity
-              }
-            }
-          })
-        }, quantitiesOrderedByProductId)
-      ])
-      .then((queriedPriceSpecs) => {
-        console.log('price specs: ', queriedOrderIntents)
-        // might need to flatten() queriedPriceSpecs
-        // might want to groupBy on queriedPriceSpecs to group them by productId (might be better to use keyBy if it exists?)
-        // for each unique combination of an orderIntent's agentId and productId, create a single orderPlan with the found priceSpecId
-        // if no found priceSpecId, this means the combined orderIntents didn't meet a minimum quantity, therefore no orderPlan for that product
-        // const matchedOrderIntents = filter()
+      const getUniqPriceSpecIds = pipe(map(prop('priceSpecId')), uniq)
+      return priceSpecs.find({
+        query: {
+          id: {
+            $in: getUniqPriceSpecIds(queriedOrderIntents)
+          }
+        }
       })
+      .then((queriedPriceSpecs) => {
+        // for each productId of the orderIntents, sum the 'quantity' field of all orderIntents with the same productId
+        const groupByProductId = groupBy(prop('productId'))
+        // we need to sum the quantities at each priceSpec
+        const groupByPriceSpecId = groupBy(prop('priceSpecId'))
+        const mapToQuantities = map(prop('desiredQuantity'))
+        // const priceSpecQuantitiesByProductId = map(, orderIntentsByProductId)
+        // const quantitiesOrderedByProductId = map((intent) => sum(map(prop('desiredQuantity'), intent)), orderIntentsByProductId)
+        // find the priceSpec for each productId where the summed quantity is equal to or greater than the 'minimum' (but only the priceSpec with the largest minimum)
+        // need to test how combos of query params work in conjunction
+
+        const priceSpecsByProductId = pipe(
+          groupByProductId,
+          map(pipe(
+            sortBy(prop('minimum')),
+            reverse
+          ))
+        )(queriedPriceSpecs)
+
+        const getCollectiveQuantityAndPriceSpec = pipe(
+          groupByProductId,
+          map(pipe(
+            groupByPriceSpecId,
+            map(pipe(
+              mapToQuantities,
+              sum
+            )),
+          )),
+          // map()
+          tap(console.log)
+        )
+        return getCollectiveQuantityAndPriceSpec(queriedOrderIntents)
+      })
+
+      // console.log('all orderd by productId is: ', quantitiesOrderedByProductId)
+      // return Promise.all(values(
+      //   mapObjIndexed((quantity, productId) => {
+      //     return priceSpecs.find({
+      //       query: {
+      //         productId,
+      //         $limit: 1,
+      //         $sort: {
+      //           minimum: -1
+      //         },
+      //         minimum: {
+      //           $lte: quantity
+      //         }
+      //       }
+      //     })
+      //   }, quantitiesOrderedByProductId)
+      // ))
+      // .then((queriedPriceSpecs) => {
+      //   console.log('price specs: ', queriedPriceSpecs)
+      //   // might need to flatten() queriedPriceSpecs
+      //   // might want to groupBy on queriedPriceSpecs to group them by productId (might be better to use keyBy if it exists?)
+      //   // for each unique combination of an orderIntent's agentId and productId, create a single orderPlan with the found priceSpecId
+      //   // if no found priceSpecId, this means the combined orderIntents didn't meet a minimum quantity, therefore no orderPlan for that product
+      //   // const matchedOrderIntents = filter()
+      // })
 
       // return Promise.all(
       //   map((orderIntent) => {
