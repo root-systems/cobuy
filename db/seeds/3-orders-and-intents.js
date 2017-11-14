@@ -17,7 +17,7 @@ exports.seed = function (knex, Promise) {
       },
       {
         agentId: 7,
-        desiredQuantity: 23,
+        desiredQuantity: 12,
         productId: 1,
         priceSpecId: 2,
         orderId
