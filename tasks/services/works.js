@@ -1,4 +1,4 @@
-import { map, prop, groupBy, sum, mapObjIndexed, values, tap, pipe, uniq, pick, sortBy, reverse } from 'ramda'
+import { map, prop, groupBy, sum, mapObjIndexed, values, tap, pipe, uniq, pick, sortBy, reverse, find, propEq } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
@@ -67,39 +67,56 @@ function createOrderPlans (hook) {
           }
         }
       })
-      .then((queriedPriceSpecs) => {
-        // for each productId of the orderIntents, sum the 'quantity' field of all orderIntents with the same productId
-        const groupByProductId = groupBy(prop('productId'))
-        // we need to sum the quantities at each priceSpec
-        const groupByPriceSpecId = groupBy(prop('priceSpecId'))
-        const mapToQuantities = map(prop('desiredQuantity'))
-        // const priceSpecQuantitiesByProductId = map(, orderIntentsByProductId)
-        // const quantitiesOrderedByProductId = map((intent) => sum(map(prop('desiredQuantity'), intent)), orderIntentsByProductId)
-        // find the priceSpec for each productId where the summed quantity is equal to or greater than the 'minimum' (but only the priceSpec with the largest minimum)
-        // need to test how combos of query params work in conjunction
+        .then((queriedPriceSpecs) => {
+          // for each productId of the orderIntents, sum the 'quantity' field of all orderIntents with the same productId
+          const groupByProductId = groupBy(prop('productId'))
+          // we need to sum the quantities at each priceSpec
+          const groupByPriceSpecId = groupBy(prop('priceSpecId'))
+          const mapToQuantities = map(prop('desiredQuantity'))
+          // const priceSpecQuantitiesByProductId = map(, orderIntentsByProductId)
+          // const quantitiesOrderedByProductId = map((intent) => sum(map(prop('desiredQuantity'), intent)), orderIntentsByProductId)
+          // find the priceSpec for each productId where the summed quantity is equal to or greater than the 'minimum' (but only the priceSpec with the largest minimum)
+          // need to test how combos of query params work in conjunction
 
-        const priceSpecsByProductId = pipe(
-          groupByProductId,
-          map(pipe(
-            sortBy(prop('minimum')),
-            reverse
-          ))
-        )(queriedPriceSpecs)
-
-        const getCollectiveQuantityAndPriceSpec = pipe(
-          groupByProductId,
-          map(pipe(
-            groupByPriceSpecId,
+          const removePriceSpecsLessThanMin = (priceSpecsWithQuantity) => {
+            return mapObjIndexed((quantity, key) => {
+              const getPriceSpec = find(propEq('id', key))(queriedPriceSpecs)
+              console.log('get sprice specs: ', getPriceSpec)
+              return getPriceSpec().minimum < quantity
+                ? { productId: getPriceSpec.productId, priceSpecId: key }
+                : undefined
+            }, priceSpecsWithQuantity)
+          }
+          console.log('queriedPriceSpecs: ', queriedPriceSpecs)
+          const priceSpecsByProductId = pipe(
+            groupByProductId,
             map(pipe(
-              mapToQuantities,
-              sum
+              sortBy(prop('minimum')),
+              reverse
+            ))
+          )(queriedPriceSpecs)
+
+          const getCollectiveQuantityAndPriceSpec = pipe(
+            groupByProductId,
+            map(pipe(
+              groupByPriceSpecId,
+              map(pipe(
+                mapToQuantities,
+                sum
+              )),
+              removePriceSpecsLessThanMin
             )),
-          )),
-          // map()
-          tap(console.log)
-        )
-        return getCollectiveQuantityAndPriceSpec(queriedOrderIntents)
-      })
+            // map()
+            tap(console.log)
+          )
+          return getCollectiveQuantityAndPriceSpec(queriedOrderIntents)
+        })
+        .then((productQuantityByPriceSpecs) => {
+          // remove price specs that are not needed, each product should only have one price spec.
+
+          // use only the price spec with the highest minimum that has the required amount.
+          // Removes all pricespecs that dont reach the minimum
+        })
 
       // console.log('all orderd by productId is: ', quantitiesOrderedByProductId)
       // return Promise.all(values(
