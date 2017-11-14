@@ -56,7 +56,7 @@ function createOrderPlans (hook) {
     })
     .then((queriedOrderIntents) => {
       // TODO: IK: similar logic will also be needed on the client for showing the current state of the order per product - i.e. which priceSpec is currently going to be enforced
-      // this is logic which can be expressed as: given a set of orderIntents (and related priceSpecs), what is the desiredQuantity and applicable priceSpecId per product of the orderIntents?
+      // this is logic which can be expressed as: given a set of orderIntents (and related priceSpecs), what is the applicable priceSpecId per product of the orderIntents?
       // actually, thinking about this again, probably easier to just get / query for all the possible priceSpecs... will query for more records but saves a whole logic step, plus means back and front logic is more similar, perhaps even the same
 
       const getUniqPriceSpecIds = pipe(map(prop('priceSpecId')), uniq)
@@ -78,16 +78,6 @@ function createOrderPlans (hook) {
           // find the priceSpec for each productId where the summed quantity is equal to or greater than the 'minimum' (but only the priceSpec with the largest minimum)
           // need to test how combos of query params work in conjunction
 
-          const removePriceSpecsLessThanMin = (priceSpecsWithQuantity) => {
-            return mapObjIndexed((quantity, key) => {
-              const getPriceSpec = find(propEq('id', key))(queriedPriceSpecs)
-              console.log('get sprice specs: ', getPriceSpec)
-              return getPriceSpec().minimum < quantity
-                ? { productId: getPriceSpec.productId, priceSpecId: key }
-                : undefined
-            }, priceSpecsWithQuantity)
-          }
-          console.log('queriedPriceSpecs: ', queriedPriceSpecs)
           const priceSpecsByProductId = pipe(
             groupByProductId,
             map(pipe(
@@ -103,10 +93,16 @@ function createOrderPlans (hook) {
               map(pipe(
                 mapToQuantities,
                 sum
-              )),
-              removePriceSpecsLessThanMin
+              ))
             )),
-            // map()
+            // need to iterate through the priceSpecsByProductId array (they're sorted by greatest minimum), looking for the first priceSpec per product where the minimum has been met / exceeded by the collective quantity for the related priceSpec
+            // TODO: IK: this could probably be made more ramda-y
+            mapObjIndexed((quantities, productId) => {
+              const matchingPriceSpec = find((priceSpec) => {
+                return priceSpec.minimum <= quantities[priceSpec.id]
+              }, priceSpecsByProductId[productId])
+              return matchingPriceSpec.id
+            }),
             tap(console.log)
           )
           return getCollectiveQuantityAndPriceSpec(queriedOrderIntents)
