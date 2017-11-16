@@ -1,11 +1,13 @@
-import { isNil, path, isEmpty } from 'ramda'
+import { isNil, isEmpty, prop, pipe, values, map, tap } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
 import getViewOrderSummaryTaskProps from '../getters/getViewOrderSummaryTaskProps'
 import ViewOrderSummaryTask from '../components/ViewOrderSummaryTask'
 
-import { orders, orderPlans } from '../../actions'
+import { orders, orderPlans, priceSpecs } from '../../actions'
+
+import anyOrderPlansMissingPriceSpecs from '../util/anyOrderPlansMissingPriceSpecs'
 
 export default compose(
 
@@ -13,11 +15,13 @@ export default compose(
     selector: getViewOrderSummaryTaskProps,
     actions: {
       orders,
-      orderPlans
+      orderPlans,
+      priceSpecs
     },
     query: (props) => {
       var queries = []
       const { taskPlan, selected } = props
+      const { currentOrderOrderPlansByAgent } = selected
 
       if (taskPlan) {
         const { params: { orderId } } = taskPlan
@@ -31,9 +35,29 @@ export default compose(
         })
       }
 
+      if (!isEmpty(currentOrderOrderPlansByAgent)) {
+        const getPriceSpecIds = pipe(
+          map(prop('priceSpecId')),
+          // tap(console.log),
+          values
+        )
+        console.log(currentOrderOrderPlansByAgent)
+        queries.push({
+          service: 'priceSpecs',
+          params: {
+            query: {
+              id: {
+                $in: getPriceSpecIds(currentOrderOrderPlansByAgent)
+              }
+            }
+          }
+        })
+      }
+
       return queries
     },
     shouldQueryAgain: (props, status) => {
+
       if (status.isPending) return false
 
       const { taskPlan } = props.ownProps
@@ -42,7 +66,9 @@ export default compose(
       // wait for task plan before re-query
       if (isNil(taskPlan)) return false
 
-      if (isNil(currentOrderOrderPlansByAgent)) return true
+      if (isEmpty(currentOrderOrderPlansByAgent)) return true
+      debugger
+      if (anyOrderPlansMissingPriceSpecs(currentOrderOrderPlansByAgent)) return true
 
       return false
     }
