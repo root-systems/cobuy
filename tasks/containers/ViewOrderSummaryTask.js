@@ -1,4 +1,4 @@
-import { isNil, isEmpty, prop, pipe, values, map, tap } from 'ramda'
+import { isNil, isEmpty, prop, pipe, values, map, tap, keys } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -37,9 +37,12 @@ export default compose(
 
       if (!isEmpty(currentOrderOrderPlansByAgent)) {
         const getPriceSpecIds = pipe(
-          map(prop('priceSpecId')),
+          // map(prop('priceSpecId')),
+          map(map(prop('priceSpecId'))),
+          // Why does this always have keys of the productIDs?!
+          // {6: Array(1), 8: Array(1)}
+          tap(console.log)
           // tap(console.log),
-          values
         )
         console.log(currentOrderOrderPlansByAgent)
         queries.push({
@@ -67,7 +70,6 @@ export default compose(
       if (isNil(taskPlan)) return false
 
       if (isEmpty(currentOrderOrderPlansByAgent)) return true
-      debugger
       if (anyOrderPlansMissingPriceSpecs(currentOrderOrderPlansByAgent)) return true
 
       return false
