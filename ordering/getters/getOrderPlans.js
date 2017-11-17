@@ -7,9 +7,11 @@ import getPriceSpecs from '../../supply/getters/getPriceSpecs'
 export default createSelector(
   getRawOrderPlans,
   getPriceSpecs,
-  (orderPlans, priceSpecs) => {
+  //Still to create
+  getAgentsInCurrentOrderGroup,
+  (orderPlans, priceSpecs, agents) => {
     return map((orderPlan) => {
-      return merge(orderPlan, { priceSpec: priceSpecs[orderPlan.priceSpecId] })
+      return merge(orderPlan, { priceSpec: priceSpecs[orderPlan.priceSpecId], agent: agents[orderPlan.agentId] })
     }, orderPlans)
   }
 )
