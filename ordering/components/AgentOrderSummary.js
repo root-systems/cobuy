@@ -12,7 +12,7 @@ import {
 import { find, propEq, reduce } from 'ramda'
 import { add, mul, round } from 'bigmath'
 
-const getPriceFromPlan = (plan) => find(propEq('id', plan.priceSpecId))(plan.product.priceSpecs).price
+const getPriceFromPlan = (plan) => plan.priceSpec.price
 
 function AgentOrderSummary ({ orderPlans, agentId }) {
   const total = reduce(add, 0, orderPlans.map((plan) => mul(getPriceFromPlan(plan), plan.quantity)))
