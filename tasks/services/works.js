@@ -124,13 +124,17 @@ function createOrderPlans (hook) {
           const matchingOrderIntent = find(where({ agentId: equals(orderIntent.agentId), productId: equals(orderIntent.productId) }), reducedOrderIntents)
           if (isNil(matchingOrderIntent)) return concat(reducedOrderIntents, [orderIntent])
 
-          const applicablePriceSpecIds = map(prop('priceSpecId'), applicablePriceSpecsPerProductId[orderIntent.productId])
+          const applicablePriceSpecIds = map(prop('id'), applicablePriceSpecsPerProductId[orderIntent.productId])
           const iteratingOrderIntentPriceSpecIndex = indexOf(orderIntent.priceSpecId, applicablePriceSpecIds)
           const currentOrderIntentPriceSpecIndex = indexOf(matchingOrderIntent.priceSpecId, applicablePriceSpecIds)
 
           if (iteratingOrderIntentPriceSpecIndex < currentOrderIntentPriceSpecIndex) {
             // we want to replace matchingOrderIntent with orderIntent
-            return concat(orderIntent, remove(indexOf(matchingOrderIntent, reducedOrderIntents), 1))
+            const matchedIndex = indexOf(matchingOrderIntent, reducedOrderIntents)
+            return pipe(
+              remove(matchedIndex, 1),
+              concat([orderIntent])
+            )(reducedOrderIntents)
           } else {
             return reducedOrderIntents
           }
