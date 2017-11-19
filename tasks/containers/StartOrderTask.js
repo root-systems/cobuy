@@ -8,8 +8,15 @@ import { agents, relationships, profiles } from 'dogstack-agents/actions'
 import getStartOrderTaskProps from '../getters/getStartOrderTaskProps'
 import StartOrderTask from '../components/StartOrderTask'
 
+import currentAgentMissingAnyGroupProfiles from '../util/currentAgentMissingAnyGroupProfiles'
+
 const getOrderIdFromTaskPlan = path(['params', 'orderId'])
 const getIdsFromProfiles = map(prop('id'))
+const missingAnyProfiles = pipe(
+  difference,
+  isEmpty,
+  not
+)
 
 /*
 queries:
@@ -148,19 +155,3 @@ export default compose(
     }
   })
 )(StartOrderTask)
-
-const currentAgentMissingAnyGroupProfiles = pipe(
-  prop('groups'),
-  any(
-    pipe(
-      path(['agent', 'profile']),
-      isNil
-    )
-  )
-)
-
-const missingAnyProfiles = pipe(
-  difference,
-  isEmpty,
-  not
-)

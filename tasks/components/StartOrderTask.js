@@ -1,16 +1,31 @@
 import h from 'react-hyperscript'
-import { isNil, merge } from 'ramda'
+import { isNil, path, isEmpty, pipe, any, prop, difference, keys, tap, not, map } from 'ramda'
 
 import TaskStepper from './TaskStepper'
 import SelectAgentForOrder from '../../agents/components/SelectAgentForOrder'
 
+import currentAgentMissingAnyGroupProfiles from '../util/currentAgentMissingAnyGroupProfiles'
+
+const getOrderIdFromTaskPlan = path(['params', 'orderId'])
+const getIdsFromProfiles = map(prop('id'))
+const missingAnyProfiles = pipe(
+  difference,
+  isEmpty,
+  not
+)
+
 // need to pass down the choices to each instance of the selection component
 
 export default (props) => {
-  const { taskPlan, actions, orders, currentAgentGroupProfiles, currentAgentGroupSupplierProfiles, currentAgentGroupMemberProfiles } = props
+  const { taskPlan, actions, orders, currentAgent, currentAgentGroupIds, currentAgentGroupProfiles, currentAgentGroupSupplierIds, currentAgentGroupSupplierProfiles, currentAgentGroupMemberIds, currentAgentGroupMemberProfiles } = props
   if (isNil(taskPlan)) return null
   const { params: { orderId } } = taskPlan
   if (isNil(orderId)) return null
+  if (isNil(currentAgent)) return null
+  if (isEmpty(currentAgentGroupIds)) return null
+  if (currentAgentMissingAnyGroupProfiles(currentAgent)) return null
+  if (missingAnyProfiles(currentAgentGroupSupplierIds, getIdsFromProfiles(currentAgentGroupSupplierProfiles))) return null
+  if (missingAnyProfiles(currentAgentGroupMemberIds, getIdsFromProfiles(currentAgentGroupMemberProfiles))) return null
 
   const currentOrder = orders[orderId]
 
