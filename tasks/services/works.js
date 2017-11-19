@@ -222,14 +222,17 @@ function createCastOrderIntentTaskWorks (hook) {
       // TODO: IK: feels like a pretty sub-optimal way of querying, probably makes sense to have orderId as it's own column
       return taskPlans.find({
         query: {
-          taskRecipeId: 'castIntent',
-          params: {
-            $like: `%"orderId":${orderId}%`
-          }
+          taskRecipeId: 'castIntent'
+          // TODO: IK: can't compare JSON values in postgres, need another way to do it
+          // params: {
+          //   $like: `%"orderId":${orderId}%`
+          // }
         }
       })
         .then((taskPlans) => {
-          return Promise.all(taskPlans.map((taskPlan) => {
+          // TODO: IK: can't compare JSON values in postgres, need another way to do it
+          const currentOrderTaskPlans = filter((plan) => { return plan.params.orderId === orderId }, taskPlans)
+          return Promise.all(currentOrderTaskPlans.map((taskPlan) => {
             const { id, taskRecipeId, assigneeId, params } = taskPlan
             return taskWorks.create({
               taskPlanId: id,
