@@ -1,5 +1,5 @@
 import { compose } from 'recompose'
-import { merge, isNil, sortBy } from 'ramda'
+import { merge, isNil, sortBy, map, values, pipe, prop, sum, indexBy } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import { Link } from 'react-router-dom'
@@ -18,18 +18,32 @@ import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/ListViewProduct'
 
- const sortPriceSpecs = sortBy((priceSpec) => {
-   return priceSpec.price
- })
+const sortPriceSpecs = sortBy((priceSpec) => {
+  return priceSpec.price
+})
+
+const indexById = indexBy(prop('id'))
+
+const summedQuantitiesByPriceSpec = map(pipe(
+  values,
+  map(prop('desiredQuantity')),
+  sum
+))
 
 function ListViewProduct (props) {
-  const { styles, product, onNavigate } = props
+  const { styles, product, orderIntentsByPriceAgent, onNavigate } = props
   if (isNil(product)) return null
   const { resourceType, facets, priceSpecs } = product
   if (isNil(priceSpecs)) return null
   if (isNil(resourceType)) return null
   const { name, description, image } = resourceType
   const sortedPriceSpecs = sortPriceSpecs(priceSpecs)
+  const quantitiesByPriceSpec = summedQuantitiesByPriceSpec(orderIntentsByPriceAgent)
+  const priceSpecsIndexedById = indexById(priceSpecs)
+  console.log(quantitiesByPriceSpec)
+  console.log(priceSpecsIndexedById)
+  // TODO: IK: we want to get the relevant priceSpec for the highest quantity that matches the minimum of a priceSpec
+  // either a sorting technique, or iterate over all and record which is highest (reduce?)
   return (
     h(TableRow, {}, [
       h(TableRowColumn, { style: { width: '50px' } }, [

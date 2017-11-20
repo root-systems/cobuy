@@ -18,7 +18,6 @@ import styles from '../styles/ProductsForOrder'
 
 function ProductsForOrder (props) {
   const { styles, products, orderIntentsByProductPriceAgent, onNavigate, isListView, setListView } = props
-  console.log(props)
 
   // TODO: IK: a toggle switch to change between grid view and list view of the products
   // probably using state handlers from recompose, just a local state thang
@@ -38,6 +37,7 @@ function ProductsForOrder (props) {
         values(map((product) => {
           return h(ListViewProduct, {
             product: product,
+            orderIntentsByPriceAgent: orderIntentsByProductPriceAgent[product.id] || {},
             key: product.id,
             onNavigate
           })
