@@ -49,7 +49,7 @@ function SupplierOrderSummary ({ order, orderPlans }) {
         zDepth: 1
       },
         [
-          h('h2', {}, 'Supplier Order Summary')
+          h('h2', {}, 'Total Order Summary')
         ]),
       h('div', {}, [
         h('h3', {}, 'To:'),
