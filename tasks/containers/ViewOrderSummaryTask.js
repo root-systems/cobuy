@@ -8,6 +8,8 @@ import ViewOrderSummaryTask from '../components/ViewOrderSummaryTask'
 import { orders, orderPlans, priceSpecs, products, resourceTypes } from '../../actions'
 import { agents, profiles } from 'dogstack-agents/actions'
 
+import currentOrderMissingAgents from '../util/currentOrderMissingAgents'
+import currentOrderMissingProfiles from '../util/currentOrderMissingProfiles'
 import anyOrderPlansMissingPriceSpecs from '../util/anyOrderPlansMissingPriceSpecs'
 import anyOrderPlansMissingAgents from '../util/anyOrderPlansMissingAgents'
 import anyOrderPlansMissingProducts from '../util/anyOrderPlansMissingProducts'
@@ -30,7 +32,7 @@ export default compose(
     query: (props) => {
       var queries = []
       const { taskPlan, selected } = props
-      const { currentOrderOrderPlansByAgent } = selected
+      const { currentOrder, currentOrderOrderPlansByAgent } = selected
 
       const getPriceSpecIds = pipe(
         values,
@@ -58,10 +60,42 @@ export default compose(
       if (taskPlan) {
         const { params: { orderId } } = taskPlan
         queries.push({
+          service: 'orders',
+          params: {
+            query: {
+              id: orderId
+            }
+          }
+        })
+        queries.push({
           service: 'orderPlans',
           params: {
             query: {
               orderId
+            }
+          }
+        })
+      }
+
+      if (currentOrder) {
+        const { consumerAgentId, supplierAgentId } = currentOrder
+        queries.push({
+          service: 'agents',
+          params: {
+            query: {
+              id: {
+                $in: [consumerAgentId, supplierAgentId]
+              }
+            }
+          }
+        })
+        queries.push({
+          service: 'profiles',
+          params: {
+            query: {
+              agentId: {
+                $in: [consumerAgentId, supplierAgentId]
+              }
             }
           }
         })
@@ -132,11 +166,14 @@ export default compose(
       if (status.isPending) return false
 
       const { taskPlan } = props.ownProps
-      const { currentOrderOrderPlansByAgent } = props.selected
+      const { currentOrder, currentOrderOrderPlansByAgent } = props.selected
 
       // wait for task plan before re-query
       if (isNil(taskPlan)) return false
 
+      if (isNil(currentOrder)) return true
+      if (currentOrderMissingAgents(currentOrder)) return true
+      if (currentOrderMissingProfiles(currentOrder)) return true
       if (isEmpty(currentOrderOrderPlansByAgent)) return true
       if (anyOrderPlansMissingPriceSpecs(currentOrderOrderPlansByAgent)) return true
       if (anyOrderPlansMissingAgents(currentOrderOrderPlansByAgent)) return true
