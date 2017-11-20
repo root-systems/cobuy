@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, path, isEmpty, pipe, any, prop, difference, keys, tap, not, map } from 'ramda'
+import { isNil, path, isEmpty, pipe, any, prop, difference, keys, tap, not, map, merge } from 'ramda'
 
 import TaskStepper from './TaskStepper'
 import SelectAgentForOrder from '../../agents/components/SelectAgentForOrder'

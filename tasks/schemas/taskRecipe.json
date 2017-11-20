@@ -29,9 +29,11 @@
         "completeOrderSetup",
         "completeOrderSetupWithPrereqs",
         "startOrder",
+        "closeOrder",
         "castIntent",
         "finishPrereqs",
-        "createProfile"
+        "createProfile",
+        "viewOrderSummary"
       ]
     }
   },
