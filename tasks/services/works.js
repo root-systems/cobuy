@@ -31,31 +31,36 @@ function completeOrderSetupTaskWork (hook) {
 
 function createCastOrderIntentTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
   const relationships = hook.app.service('relationships')
   const taskRecipeId = taskRecipes.castIntent.id
   const completeOrderTaskPlanId = hook.data.taskPlanId
 
   return taskPlans.get(completeOrderTaskPlanId)
   .then((completeOrderTaskPlan) => {
-    const groupId = completeOrderTaskPlan.params.consumerAgentId
     const orderId = completeOrderTaskPlan.params.orderId
-    const supplierAgentId = completeOrderTaskPlan.params.supplierAgentId
-    const params = { orderId, consumerAgentId: groupId, supplierAgentId }
-
-    return relationships.find({
-      query: {
-        sourceId: groupId,
-        relationshipType: 'member'
-      }
-    })
-    .then((relationships) => {
-      return Promise.all(
-        map((relationship) => {
-          const assigneeId = prop('targetId', relationship)
-          return taskPlans.create({ taskRecipeId, params, assigneeId })
-        }, relationships)
-      )
-    })
+    return orders.get(orderId)
+  })
+  .then((order) => {
+    const { id, consumerAgentId, supplierAgentId, adminAgentId } = order
+    const params = { orderId: id, consumerAgentId, supplierAgentId, adminAgentId }
+    return Promise.all([
+      Promise.resolve(params),
+      relationships.find({
+        query: {
+          sourceId: consumerAgentId,
+          relationshipType: 'member'
+        }
+      })
+    ])
+  })
+  .then(([params, relationships]) => {
+    return Promise.all(
+      map((relationship) => {
+        const assigneeId = prop('targetId', relationship)
+        return taskPlans.create({ taskRecipeId, params, assigneeId })
+      }, relationships)
+    )
   })
   .then(() => hook)
 }
