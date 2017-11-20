@@ -1,7 +1,10 @@
 export default {
   container: ({ theme }) => ({
-    width: '250px',
-    minWidth: '200px',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    // width: '250px',
+    // minWidth: '200px',
     padding: theme.space[2],
     margin: theme.space[1]
   }),
@@ -10,10 +13,13 @@ export default {
   image: () => ({
     display: 'flex',
     flex: 1,
-    width: '100%',
-    height: '230px',
+    maxWidth: '50px',
+    maxHeight: '50px',
     objectFit: 'contain'
   }),
   textContainer: () => ({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   })
 }

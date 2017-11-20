@@ -4,6 +4,15 @@ import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import { Link } from 'react-router-dom'
 import FlatButton from 'material-ui/FlatButton'
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+  TableFooter
+} from 'material-ui/Table'
 
 import { FormattedMessage } from '../../lib/Intl'
 
@@ -22,30 +31,28 @@ function ListViewProduct (props) {
   const { name, description, image } = resourceType
   const sortedPriceSpecs = sortPriceSpecs(priceSpecs)
   return (
-    h('div', {
-      className: styles.container
-    }, [
-      h('div', {
-        className: styles.imageContainer
-      }, [
+    h(TableRow, {}, [
+      h(TableRowColumn, { style: { width: '50px' } }, [
         h('img', {
           className: styles.image,
           src: image
         })
       ]),
-      h('div', {
-        className: styles.textContainer
-      }, [
+      h(TableRowColumn, {}, [
         h('h3', {
           className: styles.nameText
         }, [
           name
         ]),
+      ]),
+      h(TableRowColumn, {}, [
         h('p', {
           className: styles.productText
         }, [
           description
         ]),
+      ]),
+      h(TableRowColumn, { style: { width: '100px' } }, [
         h('p', {
           className: styles.priceText
         }, [
@@ -59,12 +66,21 @@ function ListViewProduct (props) {
           })
         ])
       ]),
-      h(FlatButton, {
-        onClick: (ev) => {
-          onNavigate(product)
-        }
-      },
-      ['click here'])
+      h(TableRowColumn, {}, [
+        h('p', {
+          className: styles.productText
+        }, [
+          description
+        ]),
+      ]),
+      h(TableRowColumn, {}, [
+        h(FlatButton, {
+          onClick: (ev) => {
+            onNavigate(product)
+          }
+        },
+        ['click here'])
+      ])
     ])
   )
 }
@@ -72,3 +88,48 @@ function ListViewProduct (props) {
 export default compose(
   connectFela(styles)
 )(ListViewProduct)
+
+// h('div', {
+//   className: styles.container
+// }, [
+//   h('div', {
+//     className: styles.imageContainer
+//   }, [
+//     h('img', {
+//       className: styles.image,
+//       src: image
+//     })
+//   ]),
+//   h('div', {
+//     className: styles.textContainer
+//   }, [
+//     h('h3', {
+//       className: styles.nameText
+//     }, [
+//       name
+//     ]),
+//     h('p', {
+//       className: styles.productText
+//     }, [
+//       description
+//     ]),
+//     h('p', {
+//       className: styles.priceText
+//     }, [
+//       h(FormattedMessage, {
+//         id: 'ordering.fromPrice',
+//         className: styles.fromText,
+//         values: {
+//           currency: sortedPriceSpecs[0].currency,
+//           price: sortedPriceSpecs[0].price
+//         }
+//       })
+//     ])
+//   ]),
+//   h(FlatButton, {
+//     onClick: (ev) => {
+//       onNavigate(product)
+//     }
+//   },
+//   ['click here'])
+// ])
