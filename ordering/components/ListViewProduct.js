@@ -1,5 +1,5 @@
 import { compose } from 'recompose'
-import { merge, isNil, sortBy, map, values, pipe, prop, sum, indexBy } from 'ramda'
+import { merge, isNil, sortBy, map, values, pipe, prop, sum, indexBy, toPairs, fromPairs, tap, reduce, toString, mapObjIndexed, nth } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import { Link } from 'react-router-dom'
@@ -18,9 +18,7 @@ import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/ListViewProduct'
 
-const sortPriceSpecs = sortBy((priceSpec) => {
-  return priceSpec.price
-})
+const sortByPrice = sortBy(prop('price'))
 
 const indexById = indexBy(prop('id'))
 
@@ -37,13 +35,47 @@ function ListViewProduct (props) {
   if (isNil(priceSpecs)) return null
   if (isNil(resourceType)) return null
   const { name, description, image } = resourceType
-  const sortedPriceSpecs = sortPriceSpecs(priceSpecs)
+  const sortedPriceSpecs = sortByPrice(priceSpecs)
   const quantitiesByPriceSpec = summedQuantitiesByPriceSpec(orderIntentsByPriceAgent)
   const priceSpecsIndexedById = indexById(priceSpecs)
-  console.log(quantitiesByPriceSpec)
-  console.log(priceSpecsIndexedById)
   // TODO: IK: we want to get the relevant priceSpec for the highest quantity that matches the minimum of a priceSpec
-  // either a sorting technique, or iterate over all and record which is highest (reduce?)
+  // TODO: IK: this is ugly af, and has bugs, the whole algorithm needs work to break it down with a good approach
+  // TODO: IK: i.e. at the moment, selecting only a lower priceSpec on a product will break the calculations
+  const deriveCorrectQuantityAndPriceSpec = pipe(
+    toPairs,
+    reduce((matchingPriceSpecAndQuantity, priceSpecAndQuantity) => {
+      // console.log(matchingPriceSpecAndQuantity, priceSpecAndQuantity)
+      // priceSpecAndQuantity is an array of ['priceSpecId', quantity]
+      const iteratingPriceSpec = priceSpecsIndexedById[priceSpecAndQuantity[0]]
+      if (matchingPriceSpecAndQuantity && iteratingPriceSpec.minimum < priceSpecsIndexedById[matchingPriceSpecAndQuantity[0]].minimum) {
+        // if the iterated priceSpec minimum is less than the already matchingPriceSpecAndQuantity minimum, return early
+        return matchingPriceSpecAndQuantity
+      }
+      if (priceSpecAndQuantity[1] > iteratingPriceSpec.minimum) {
+        return priceSpecAndQuantity
+      }
+      return matchingPriceSpecAndQuantity
+    }, null),
+    (pairs) => {
+      // if there was no matchingPriceSpecAndQuantity, we haven't reached the minimum of the highest priceSpec yet
+      // just show the highest priceSpec
+      if (isNil(pairs)) {
+        const highestPriceSpecId = sortedPriceSpecs[0].id
+        const currentCollectiveQuantity = quantitiesByPriceSpec[highestPriceSpecId] || 0
+        return [toString(highestPriceSpecId), currentCollectiveQuantity]
+      }
+      return pairs
+    },
+    (pairs) => { return [pairs] },
+    fromPairs,
+    mapObjIndexed((v, k) => ({ quantity: v, priceSpecId: k })),
+    values,
+    nth(0)
+  )
+  const correctQuantityAndPriceSpec = deriveCorrectQuantityAndPriceSpec(quantitiesByPriceSpec)
+  const correctQuantity = correctQuantityAndPriceSpec.quantity
+  const correctPriceSpecId = correctQuantityAndPriceSpec.priceSpecId
+
   return (
     h(TableRow, {}, [
       h(TableRowColumn, { style: { width: '50px' } }, [
@@ -74,8 +106,8 @@ function ListViewProduct (props) {
             id: 'ordering.fromPrice',
             className: styles.fromText,
             values: {
-              currency: sortedPriceSpecs[0].currency,
-              price: sortedPriceSpecs[0].price
+              currency: priceSpecsIndexedById[correctPriceSpecId].currency,
+              price: priceSpecsIndexedById[correctPriceSpecId].price
             }
           })
         ])
@@ -84,7 +116,7 @@ function ListViewProduct (props) {
         h('p', {
           className: styles.productText
         }, [
-          description
+          correctQuantity
         ]),
       ]),
       h(TableRowColumn, {}, [
@@ -102,48 +134,3 @@ function ListViewProduct (props) {
 export default compose(
   connectFela(styles)
 )(ListViewProduct)
-
-// h('div', {
-//   className: styles.container
-// }, [
-//   h('div', {
-//     className: styles.imageContainer
-//   }, [
-//     h('img', {
-//       className: styles.image,
-//       src: image
-//     })
-//   ]),
-//   h('div', {
-//     className: styles.textContainer
-//   }, [
-//     h('h3', {
-//       className: styles.nameText
-//     }, [
-//       name
-//     ]),
-//     h('p', {
-//       className: styles.productText
-//     }, [
-//       description
-//     ]),
-//     h('p', {
-//       className: styles.priceText
-//     }, [
-//       h(FormattedMessage, {
-//         id: 'ordering.fromPrice',
-//         className: styles.fromText,
-//         values: {
-//           currency: sortedPriceSpecs[0].currency,
-//           price: sortedPriceSpecs[0].price
-//         }
-//       })
-//     ])
-//   ]),
-//   h(FlatButton, {
-//     onClick: (ev) => {
-//       onNavigate(product)
-//     }
-//   },
-//   ['click here'])
-// ])
