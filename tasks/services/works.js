@@ -38,7 +38,6 @@ function taskRecipeIsCloseOrder (hook) {
 }
 
 function createOrderPlans (hook) {
-  // TODO: IK: this is half done, aiming towards creating an orderPlan for each user who created an orderIntent for an order when that order closes
   // would also be triggered by taskRecipeIsCloseOrder
   const orders = hook.app.service('orders')
   const taskPlans = hook.app.service('taskPlans')
@@ -110,20 +109,21 @@ function createCastOrderIntentTaskPlan (hook) {
 
 function createCloseOrderTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
   const taskRecipeId = taskRecipes.closeOrder.id
-  // TODO: IK: at the moment the assigneeId is automatically the user who completesOrderSetup, should be the order admin
-  const assigneeId = hook.params.agent.id
   const completedTaskPlanId = hook.result.taskPlanId
 
   return taskPlans.get(completedTaskPlanId)
     .then((completedTaskPlan) => {
       const { orderId } = completedTaskPlan.params
+      return orders.get(orderId)
+    })
+    .then((order) => {
+      const { id, adminAgentId } = order
       const params = {
-        // consumerAgentId: hook.data.consumerAgentId,
-        // supplierAgentId: hook.data.supplierAgentId,
-        orderId
+        orderId: id,
       }
-      return taskPlans.create({ taskRecipeId, params, assigneeId })
+      return taskPlans.create({ taskRecipeId, params, assigneeId: adminAgentId })
     })
     .then(() => {
       return hook
@@ -167,16 +167,19 @@ function createCastOrderIntentTaskWorks (hook) {
 
 function createViewOrderSummaryTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
   const taskRecipeId = taskRecipes.viewOrderSummary.id
-  // TODO: IK: at the moment the assigneeId is automatically the user who closes the order, should be the order admin
-  const assigneeId = hook.params.agent.id
   const closeOrderTaskPlanId = hook.data.taskPlanId
 
   return taskPlans.get(closeOrderTaskPlanId)
     .then((closeOrderTaskPlan) => {
       const orderId = closeOrderTaskPlan.params.orderId
-      const params = { orderId }
-      return taskPlans.create({ taskRecipeId, params, assigneeId })
+      return orders.get(orderId)
+    })
+    .then((order) => {
+      const { id, adminAgentId } = order
+      const params = { orderId: id }
+      return taskPlans.create({ taskRecipeId, params, assigneeId: adminAgentId })
     })
     .then(() => {
       return hook
