@@ -1,4 +1,4 @@
-import { isNil, path, isEmpty } from 'ramda'
+import { isNil, path, isEmpty, pipe, any, prop, difference, keys, tap, not, map } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -8,7 +8,15 @@ import { agents, relationships, profiles } from 'dogstack-agents/actions'
 import getStartOrderTaskProps from '../getters/getStartOrderTaskProps'
 import StartOrderTask from '../components/StartOrderTask'
 
+import currentAgentMissingAnyGroupProfiles from '../util/currentAgentMissingAnyGroupProfiles'
+
 const getOrderIdFromTaskPlan = path(['params', 'orderId'])
+const getIdsFromProfiles = map(prop('id'))
+const missingAnyProfiles = pipe(
+  difference,
+  isEmpty,
+  not
+)
 
 /*
 queries:
@@ -30,7 +38,7 @@ export default compose(
     query: (props) => {
       var queries = []
       const { taskPlan, selected } = props
-      const { currentAgent, currentAgentGroupIds, currentAgentGroupSupplierIds, currentAgentGroupMemberIds } = selected
+      const { currentAgent, currentAgentGroupIds, currentAgentGroupSupplierIds, currentAgentGroupSupplierProfiles, currentAgentGroupMemberIds, currentAgentGroupMemberProfiles } = selected
 
       if (taskPlan) {
         const { params: { orderId } } = taskPlan
@@ -40,78 +48,75 @@ export default compose(
         })
       }
 
+      // get groups and profiles currentAgent is part of
       if (currentAgent) {
         queries.push({
           service: 'relationships',
           params: {
             query: {
-              targetId: currentAgent.id
-            }
-          }
-        })
-      }
-
-      if (currentAgentGroupIds) {
-        queries.push({
-          service: 'profiles',
-          params: {
-            query: {
-              agentId: {
-                $in: currentAgentGroupIds
+              targetId: currentAgent.id,
+              relationshipType: {
+                $in: ['member', 'admin']
               }
             }
           }
         })
-        // get suppliers with a relationship to any groups of the currentAgent
-        queries.push({
-          service: 'relationships',
-          params: {
-            query: {
-              sourceId: {
-                $in: currentAgentGroupIds
-              },
-              relationshipType: 'supplier'
-            }
-          }
-        })
-        // get members with a relationship to any groups of the currentAgent
-        queries.push({
-          service: 'relationships',
-          params: {
-            query: {
-              sourceId: {
-                $in: currentAgentGroupIds
-              },
-              relationshipType: 'member'
-            }
-          }
-        })
-      }
 
-      if (currentAgentGroupSupplierIds) {
-        queries.push({
-          service: 'profiles',
-          params: {
-            query: {
-              agentId: {
-                $in: currentAgentGroupSupplierIds
+        if (!isEmpty(currentAgentGroupIds)) {
+          // get members / suppliers with a relationship to any groups of the currentAgent
+          queries.push({
+            service: 'relationships',
+            params: {
+              query: {
+                sourceId: {
+                  $in: currentAgentGroupIds
+                },
+                relationshipType: {
+                  $in: ['member', 'supplier']
+                }
               }
             }
-          }
-        })
-      }
+          })
+        }
 
-      if (currentAgentGroupMemberIds) {
-        queries.push({
-          service: 'profiles',
-          params: {
-            query: {
-              agentId: {
-                $in: currentAgentGroupMemberIds
+        if (currentAgentMissingAnyGroupProfiles(currentAgent)) {
+          queries.push({
+            service: 'profiles',
+            params: {
+              query: {
+                agentId: {
+                  $in: currentAgentGroupIds
+                }
               }
             }
-          }
-        })
+          })
+        }
+
+        if (missingAnyProfiles(currentAgentGroupSupplierIds, getIdsFromProfiles(currentAgentGroupSupplierProfiles))) {
+          queries.push({
+            service: 'profiles',
+            params: {
+              query: {
+                agentId: {
+                  $in: currentAgentGroupSupplierIds
+                }
+              }
+            }
+          })
+        }
+
+        if (missingAnyProfiles(currentAgentGroupMemberIds, getIdsFromProfiles(currentAgentGroupMemberProfiles))) {
+          queries.push({
+            service: 'profiles',
+            params: {
+              query: {
+                agentId: {
+                  $in: currentAgentGroupMemberIds
+                }
+              }
+            }
+          })
+        }
       }
 
       return queries
@@ -122,15 +127,13 @@ export default compose(
       const { taskPlan } = props.ownProps
       const {
         currentAgent,
-        relationships,
         currentAgentGroupIds,
-        currentAgentGroupProfiles,
         currentAgentGroupSupplierIds,
         currentAgentGroupSupplierProfiles,
         currentAgentGroupMemberIds,
         currentAgentGroupMemberProfiles
       } = props.selected
-      
+
        // wait for task plan before re-query
       if (isNil(taskPlan)) return false
 
@@ -140,20 +143,13 @@ export default compose(
       if (isNil(orderId)) return true
 
       if (isNil(currentAgent)) return true
-
       if (isEmpty(currentAgentGroupIds)) return true
-      //
-      if (isEmpty(currentAgentGroupProfiles)) return true
-      //
-      if (isEmpty(currentAgentGroupSupplierIds)) return true
 
-      if (isEmpty(currentAgentGroupSupplierProfiles)) return true
+      if (currentAgentMissingAnyGroupProfiles(currentAgent)) return true
 
-      // TODO: IK: not sure how we should do this one, given the currentAgent is always part of currentAgentGroupMemberIds
-      // but they also could legitimately be the only one
-      // if (isEmpty(currentAgentGroupMemberIds)) return true
+      if (missingAnyProfiles(currentAgentGroupSupplierIds, getIdsFromProfiles(currentAgentGroupSupplierProfiles))) return true
 
-      // if (isEmpty(currentAgentGroupMemberProfiles)) return true
+      if (missingAnyProfiles(currentAgentGroupMemberIds, getIdsFromProfiles(currentAgentGroupMemberProfiles))) return true
 
       return false
     }
