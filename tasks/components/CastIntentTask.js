@@ -4,7 +4,7 @@ import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
 import renameBy from '../../lib/renameBy'
-import ProductList from '../../ordering/components/ProductList'
+import ProductsForOrder from '../../ordering/components/ProductsForOrder'
 import SingleViewProduct from '../../ordering/components/SingleViewProduct'
 
 const forAgent = pipe(propOr({}), map)
@@ -85,7 +85,7 @@ function ManyProducts (props) {
     actions.router.push(`/tasks/${taskPlanId}?productId=${productId}`)
   }
   const nextProps = merge(props, { onNavigate })
-  return h(ProductList, nextProps)
+  return h(ProductsForOrder, nextProps)
 }
 
 export default CastIntentTask

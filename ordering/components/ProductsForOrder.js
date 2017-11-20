@@ -3,10 +3,10 @@ import { map, values } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 
-import ListViewProduct from './ListViewProduct'
-import styles from '../styles/ProductList'
+import GridViewProduct from './GridViewProduct'
+import styles from '../styles/ProductsForOrder'
 
-function ProductList (props) {
+function ProductsForOrder (props) {
   const { styles, products, onNavigate } = props
 
   return (
@@ -14,7 +14,7 @@ function ProductList (props) {
       className: styles.container
     }, [
       values(map((product) => {
-        return h(ListViewProduct, {
+        return h(GridViewProduct, {
           product: product,
           key: product.id,
           onNavigate
@@ -26,4 +26,4 @@ function ProductList (props) {
 
 export default compose(
   connectFela(styles)
-)(ProductList)
+)(ProductsForOrder)
