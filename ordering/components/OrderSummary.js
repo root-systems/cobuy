@@ -12,9 +12,11 @@ import {
 import { FormattedMessage } from '../../lib/Intl'
 
 import AgentOrderSummary from './AgentOrderSummary'
+import SupplierOrderSummary from './SupplierOrderSummary'
 
 function OrderSummary (props) {
-  const { currentOrderOrderPlansByAgent } = props
+  const { currentOrder, summedOrderPlansPerProduct, currentOrderOrderPlansByAgent } = props
+  console.log(props)
 
   // all the plans grouped by agent, may be > 1 per agent
   // const groupedAgentPlans = groupBy((plan) => plan.agent.profile.id)(order.orderPlans)
@@ -24,6 +26,14 @@ function OrderSummary (props) {
   //     orderPlans: groupedAgentPlans[key]
   //   }
   // })
+
+  return h('div', [
+    // h(AgentOrderSummary, { orderPlans: currentOrderOrderPlansByAgent }),
+    h(SupplierOrderSummary, {
+      order: currentOrder,
+      orderPlans: summedOrderPlansPerProduct
+    }),
+  ])
 
   const renderAgentOrderSummary = (orderPlans) => {
     return h(AgentOrderSummary, { orderPlans }, [])

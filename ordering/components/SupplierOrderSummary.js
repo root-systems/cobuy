@@ -37,11 +37,11 @@ const summariseOrder = pipe(
 
 const getPriceFromPlan = (plan) => find(propEq('id', plan.priceSpecId))(plan.product.priceSpecs).price
 
-function SupplierOrderSummary ({ order }) {
-  const summarisedOrder = summariseOrder(order.orderPlans)
-  const orderTotal = reduce(add, 0, summarisedOrder.map((plan) => mul(getPriceFromPlan(plan), plan.quantity)))
-  const groupProfile = order.group.profile
-  const supplier = order.supplier.profile
+function SupplierOrderSummary ({ order, orderPlans }) {
+  // const summarisedOrder = summariseOrder(order.orderPlans)
+  const orderTotal = reduce(add, 0, orderPlans.map((plan) => mul(getPriceFromPlan(plan), plan.quantity)))
+  const groupProfile = order.consumerAgent.profile
+  const supplier = order.supplierAgent.profile
 
   return (
     h('div', {}, [
@@ -54,16 +54,12 @@ function SupplierOrderSummary ({ order }) {
       h('div', {}, [
         h('h3', {}, 'To:'),
         h('h4', {}, supplier.name),
-        h('p', {}, supplier.contactInfo.deliveryAddress.deliveryAddress),
-        h('p', {}, supplier.contactInfo.deliveryAddress.city),
-        h('p', {}, supplier.contactInfo.deliveryAddress.postcode)
+        h('p', {}, supplier.address)
       ]),
       h('div', {}, [
         h('h3', {}, 'From:'),
         h('h4', {}, groupProfile.name),
-        h('p', {}, groupProfile.contactInfo.deliveryAddress.deliveryAddress),
-        h('p', {}, groupProfile.contactInfo.deliveryAddress.city),
-        h('p', {}, groupProfile.contactInfo.deliveryAddress.postcode)
+        h('p', {}, groupProfile.address)
       ]),
       h(Table, {}, [
         h(TableHeader, { displaySelectAll: false }, [
@@ -75,7 +71,7 @@ function SupplierOrderSummary ({ order }) {
           ])
         ]),
         h(TableBody, { displayRowCheckbox: false }, [
-          summarisedOrder.map((plan) => {
+          orderPlans.map((plan) => {
             const { product, quantity } = plan
             const price = getPriceFromPlan(plan)
             return h(TableRow, {}, [

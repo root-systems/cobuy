@@ -4,11 +4,13 @@ const { flatten, map, pick, merge } = require('ramda')
 const groups = [
   {
     name: "Ruru Kāhui Ako",
-    description: "Ruru Kāhui Ako"
+    description: "Ruru Kāhui Ako",
+    address: "23 The Street, The Town, 1234"
   },
   {
     name: "School Supplies R'Us",
-    description: "If you're yearning for some learning, we'll set your mind churning"
+    description: "If you're yearning for some learning, we'll set your mind churning",
+    address: "46 The Lane, The City, 4321"
   }
 ]
 
