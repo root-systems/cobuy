@@ -21,5 +21,11 @@ export default {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+  }),
+  tableRow: ({ theme }) => ({
+    ':hover': {
+      backgroundColor: theme.colors.greys[1],
+      cursor: 'pointer'
+    }
   })
 }

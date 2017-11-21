@@ -3,7 +3,6 @@ import { merge, isNil, sortBy, map, values, pipe, prop, sum, indexBy, toPairs, f
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import { Link } from 'react-router-dom'
-import FlatButton from 'material-ui/FlatButton'
 import {
   Table,
   TableBody,
@@ -77,7 +76,9 @@ function ListViewProduct (props) {
   const correctPriceSpecId = correctQuantityAndPriceSpec.priceSpecId
 
   return (
-    h(TableRow, {}, [
+    h(TableRow, { className: styles.tableRow, onClick: (ev) => {
+      onNavigate(product)
+    } }, [
       h(TableRowColumn, { style: { width: '50px' } }, [
         h('img', {
           className: styles.image,
@@ -112,20 +113,12 @@ function ListViewProduct (props) {
           })
         ])
       ]),
-      h(TableRowColumn, {}, [
+      h(TableRowColumn, { style: { width: '100px' } }, [
         h('p', {
           className: styles.productText
         }, [
           correctQuantity
         ]),
-      ]),
-      h(TableRowColumn, {}, [
-        h(FlatButton, {
-          onClick: (ev) => {
-            onNavigate(product)
-          }
-        },
-        ['click here'])
       ])
     ])
   )
