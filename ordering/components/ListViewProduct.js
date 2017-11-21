@@ -113,7 +113,7 @@ function ListViewProduct (props) {
           })
         ])
       ]),
-      h(TableRowColumn, { style: { width: '100px' } }, [
+      h(TableRowColumn, { style: { width: '200px' } }, [
         h('p', {
           className: styles.productText
         }, [

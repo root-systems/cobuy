@@ -11,6 +11,7 @@ import {
   TableFooter
 } from 'material-ui/Table'
 import FlatButton from 'material-ui/FlatButton'
+import FontIcon from 'material-ui/FontIcon'
 import { compose, withState, withHandlers } from 'recompose'
 
 import GridViewProduct from './GridViewProduct'
@@ -42,7 +43,7 @@ function renderList (props) {
         h(TableHeaderColumn, {}, 'name'),
         h(TableHeaderColumn, {}, 'description'),
         h(TableHeaderColumn, { style: { width: '100px' } }, 'current price'),
-        h(TableHeaderColumn, { style: { width: '100px' } }, 'current quantity')
+        h(TableHeaderColumn, { style: { width: '200px' } }, 'current quantity')
       ])
     ]),
     h(TableBody, {}, [
@@ -63,11 +64,13 @@ function ProductsForOrder (props) {
 
   // TODO: IK: a toggle switch to change between grid view and list view of the products
   // probably using state handlers from recompose, just a local state thang
+  const listIcon = h(FontIcon, { className: `fa fa-list` })
+  const gridIcon = h(FontIcon, { className: `fa fa-th` })
   return (
     h('div', { className: styles.container }, [
       h('div', { className: styles.buttonsContainer }, [
-        h(FlatButton, { onClick: (ev) => setListView(true) }, ['LIST']),
-        h(FlatButton, { onClick: (ev) => setListView(false) }, ['GRID'])
+        h(FlatButton, { icon: listIcon, label: 'LIST', onClick: (ev) => setListView(true) }),
+        h(FlatButton, { icon: gridIcon, label: 'GRID', onClick: (ev) => setListView(false) })
       ]),
       isListView ? renderList(props) : renderGrid(props)
     ])
