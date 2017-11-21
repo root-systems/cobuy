@@ -10,11 +10,12 @@ module.exports = {
   },
 
   development: {
-    client: 'sqlite3',
+    client: 'postgresql',
     connection: {
-      filename: join(__dirname, 'dev.sqlite')
-    },
-    useNullAsDefault: true
+      host: 'localhost',
+      user: "postgres",
+      database: 'cobuy_development'
+    }
   },
 
   test: {
