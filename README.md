@@ -25,6 +25,8 @@ Before we start, please
 
 - [install `node@8` and `npm@5`](https://dogstack.js.org/guides/how-to-install-js.html)
 - [install Git LFS](https://git-lfs.github.com/)
+- [install and set up Postgres for your system](https://dogstack.js.org/guides/how-to-setup-sql-db.html)
+- create a database in Postgres named `cobuy_development` (i.e. using a command like `CREATE DATABASE cobuy_development;` in `psql`)
 
 ```shell
 git lfs install
