@@ -13,7 +13,8 @@ module.exports = {
     client: 'postgresql',
     connection: {
       host: 'localhost',
-      user: "postgres",
+      user: 'postgres',
+      password: 'password',
       database: 'cobuy_development'
     }
   },
