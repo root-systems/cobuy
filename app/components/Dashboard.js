@@ -4,11 +4,8 @@ import { pipe } from 'ramda'
 import Divider from 'material-ui/Divider'
 
 import styles from '../styles/Dashboard'
-import { FormattedMessage } from '../../lib/Intl'
-import DashboardTasks from '../../tasks/components/DashboardTasks'
+import { FormattedMessage } from 'dogstack/intl'
 import DashboardOrders from '../../ordering/components/DashboardOrders'
-
-import { mockFullParentTaskPlan } from '../../tasks/data/mock'
 
 function Dashboard (props) {
   const { styles, actions, taskPlans, currentAgent } = props
@@ -24,13 +21,6 @@ function Dashboard (props) {
         <DashboardOrders actions={actions} />
       </div>
       <Divider className={styles.divider} />
-      <div className={styles.tasksContainer}>
-        <DashboardTasks
-          taskPlans={taskPlans}
-          actions={actions}
-          currentAgent={currentAgent}
-        />
-      </div>
     </div>
   )
 }

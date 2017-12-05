@@ -6,6 +6,7 @@ import Dashboard from './app/containers/Dashboard'
 
 import Invited from './agents/containers/Invited'
 
+import TasksPage from './tasks/containers/TasksPage'
 import TaskWorker from './tasks/containers/TaskWorker'
 import OrderSummary from './ordering/containers/OrderSummary'
 
@@ -78,6 +79,16 @@ export default [
     name: 'invited',
     path: '/invited/:jwt',
     Component: UserIsNotAuthenticated(Invited)
+  },
+  {
+    name: 'tasks',
+    path: '/tasks',
+    exact: true,
+    Component: UserIsAuthenticated(TasksPage),
+    navigation: {
+      title: 'tasks.tasks',
+      icon: 'fa fa-check-circle'
+    }
   },
   {
     name: 'task',

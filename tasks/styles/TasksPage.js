@@ -1,7 +1,5 @@
 export default {
   container: () => ({
-    width: '50%',
-    minWidth: '3rem',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -10,11 +8,11 @@ export default {
   labelText: () => ({
     textTransform: 'capitalize'
   }),
-  intro: () => ({
+  intro: ({ theme }) => ({
     textAlign: 'center',
-    fontSize: '2rem'
+    fontSize: theme.fontSizes[2]
   }),
-  ordersContainer: () => ({
-    paddingTop: '1rem'
+  taskNameText: () => ({
+    textTransform: 'capitalize'
   })
 }
