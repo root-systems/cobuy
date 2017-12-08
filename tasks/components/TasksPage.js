@@ -6,7 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { List, ListItem } from 'material-ui/List'
 import { Link } from 'react-router-dom'
 
-import styles from '../styles/DashboardTasks'
+import styles from '../styles/TasksPage'
 import { FormattedMessage } from 'dogstack/intl'
 
 function TasksPage (props) {
