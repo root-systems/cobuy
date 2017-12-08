@@ -8,6 +8,7 @@ import Invited from './agents/containers/Invited'
 
 import TasksPage from './tasks/containers/TasksPage'
 import TaskWorker from './tasks/containers/TaskWorker'
+import OrderCreator from './ordering/containers/OrderCreator'
 import OrderSummary from './ordering/containers/OrderSummary'
 
 import {
@@ -79,6 +80,12 @@ export default [
     name: 'invited',
     path: '/invited/:jwt',
     Component: UserIsNotAuthenticated(Invited)
+  },
+  {
+    name: 'createOrder',
+    path: '/createOrder', // TODO: /orders/create, but need to fix feathers REST path bug
+    exact: true,
+    Component: UserIsAuthenticated(OrderCreator)
   },
   {
     name: 'tasks',
