@@ -1,4 +1,5 @@
-import { isNil, path, isEmpty, pipe, any, prop, difference, keys, tap, not, map } from 'ramda'
+import h from 'react-hyperscript'
+import { isNil, merge, path, isEmpty, pipe, any, prop, difference, keys, tap, not, map } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -139,4 +140,20 @@ export default compose(
       return false
     }
   })
-)(OrderCreator)
+)(OrderCreatorContainer)
+
+function OrderCreatorContainer (props) {
+  const { actions } = props
+
+  function handleSubmit (values) {
+    // TODO handle NEW_CONSUMER
+    // TODO handle NEW_SUPPLIER
+    console.log('values', values)
+  } 
+
+  const nextProps = merge(props, {
+    onSubmit: handleSubmit
+  })
+
+  return h(OrderCreator, nextProps)
+}
