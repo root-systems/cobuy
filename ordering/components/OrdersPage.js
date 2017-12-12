@@ -7,13 +7,13 @@ import FlatButton from 'material-ui/FlatButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { compose, withState, withHandlers } from 'recompose'
 
-import styles from '../styles/Dashboard'
+import styles from '../styles/OrdersPage'
 import { FormattedMessage } from 'dogstack/intl'
-import DashboardOrders from '../../ordering/components/DashboardOrders'
-import OrderCreator from '../../ordering/containers/OrderCreator'
+import OrdersList from './OrdersList'
+import OrderCreator from '../containers/OrderCreator'
 
-function Dashboard (props) {
-  const { styles, actions, taskPlans, currentAgent } = props
+function OrdersPage (props) {
+  const { styles, actions, taskPlans, currentAgent, orders } = props
   const { isDialogOpen, closeDialog, openDialog } = props
   return (
     h('div', {
@@ -30,8 +30,9 @@ function Dashboard (props) {
       h('div', {
         className: styles.ordersContainer
       }, [
-        h(DashboardOrders, {
-          actions
+        h(OrdersList, {
+          actions,
+          orders
         })
       ]),
       h(Dialog, {
@@ -79,4 +80,4 @@ export default compose(
     openDialog: ({ setDialogOpen }) => () => setDialogOpen(true),
     closeDialog: ({ setDialogOpen }) => () => setDialogOpen(false),
   })
-)(Dashboard)
+)(OrdersPage)
