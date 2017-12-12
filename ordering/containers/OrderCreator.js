@@ -146,9 +146,9 @@ function OrderCreatorContainer (props) {
   const { actions } = props
 
   function handleSubmit (values) {
-    // TODO handle NEW_CONSUMER
-    // TODO handle NEW_SUPPLIER
-    console.log('values', values)
+    if (values.consumerAgentId === 'NEW_CONSUMER') values.consumerAgentId = null
+    if (values.supplierAgentId === 'NEW_SUPPLIER') values.supplierAgentId = null
+    actions.orders.create(values)
   } 
 
   const nextProps = merge(props, {
