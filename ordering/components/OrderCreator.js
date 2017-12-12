@@ -58,7 +58,7 @@ const OrderCreator = (props) => {
       id: form
     }, [
       h(Field, {
-        name: 'consumer',
+        name: 'consumerAgentId',
         component: SelectField,
         onChange: (ev) => {
           // TODO: IK: filter the supplier profiles based on which group was selected
@@ -79,7 +79,7 @@ const OrderCreator = (props) => {
         renderAgentsAsMenuItems(currentAgentGroupProfiles)
       ]),
       h(Field, {
-        name: 'supplier',
+        name: 'supplierAgentId',
         component: SelectField,
         floatingLabelText: (
           h(FormattedMessage, {
@@ -95,6 +95,7 @@ const OrderCreator = (props) => {
         }),
         renderAgentsAsMenuItems(currentAgentGroupSupplierProfiles)
       ]),
+      /*
       h(Field, {
         name: 'name',
         component: TextField,
@@ -106,6 +107,7 @@ const OrderCreator = (props) => {
         ),
         validate: [required()]
       }),
+      */
     ])
   )
 }
