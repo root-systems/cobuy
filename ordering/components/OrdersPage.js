@@ -41,7 +41,8 @@ function OrdersPage (props) {
           h(RaisedButton, {
             type: 'submit',
             form: 'orderCreator',
-            className: styles.button
+            className: styles.button,
+            onClick: closeDialog
           }, [
             h(FormattedMessage, {
               id: 'orders.createOrder',

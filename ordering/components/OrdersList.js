@@ -1,11 +1,27 @@
 import h from 'react-hyperscript'
 import { connect as connectFela } from 'react-fela'
-import { pipe, map, values } from 'ramda'
+import { pipe, map, values, path } from 'ramda'
 import RaisedButton from 'material-ui/RaisedButton'
 import { FormattedMessage } from 'dogstack/intl'
 import { Link } from 'react-router-dom'
+import ProfileIcon from '../../agents/components/ProfileIcon'
 
 import styles from '../styles/OrdersList'
+
+function OrderAgentIcon (props) {
+  const { styles, role, agent } = props
+  return (
+    h('div', {
+      className: styles[role]
+    }, [
+      role,
+      h(ProfileIcon, {
+        agent,
+        format: 'icon'
+      })
+    ])
+  )
+}
 
 function OrdersListItem (props) {
   const { styles, actions, order } = props
@@ -17,22 +33,23 @@ function OrdersListItem (props) {
       className: 'item',
     }, [
       h('div', {
-        className: 'supplier'
+        className: styles.agents
       }, [
-        'supplier: ',
-        order.supplierAgentId
-      ]),
-      h('div', {
-        className: 'consumer'
-      }, [
-        'consumer: ',
-        order.consumerAgentId
-      ]),
-      h('div', {
-        className: 'admin'
-      }, [
-        'admin: ',
-        order.adminAgentId
+        h(OrderAgentIcon, {
+          styles,
+          role: 'consumer',
+          agent: order.consumerAgent
+        }),
+        h(OrderAgentIcon, {
+          styles,
+          role: 'supplier',
+          agent: order.supplierAgent
+        }),
+        h(OrderAgentIcon, {
+          styles,
+          role: 'admin',
+          agent: order.adminAgent
+        })
       ])
     ])
   ])
