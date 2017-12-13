@@ -18,11 +18,12 @@ const hooks = {
   before: {
     create: [
       getCurrentUser,
-      iff(hasNoGroupAgent, createGroupAgent),
+      iff(hasNoConsumerAgent, createConsumerAgent),
       iff(hasNoSupplierAgent, createSupplierAgent),
-      iff(hasNoRelation, createRelation),
-      iff(groupHasNoAdminRelation, createGroupAdminRelation),
-      iff(userIsNotMemberOfGroup, createGroupMemberRelation)
+      iff(hasNoSupplierRelation, createSupplierRelation),
+      iff(groupHasNoAdminRelation, createGroupAdminRelation), // TODO this should be agent.create hook
+      iff(userIsNotMemberOfGroup, createGroupMemberRelation), // TODO this should be agent.create hook
+      iff(hasNoAdminAgent, createAdminAgent)
     ]
   },
   after: {
@@ -85,7 +86,7 @@ function createGroupAdminRelation (hook) {
   })
 }
 
-function createGroupAgent (hook) {
+function createConsumerAgent (hook) {
   const agents = hook.app.service('agents')
   return agents.create({ type: 'group' })
   .then((agent) => {
@@ -94,19 +95,19 @@ function createGroupAgent (hook) {
   })
 }
 
-function hasNoGroupAgent (hook) {
+function hasNoConsumerAgent (hook) {
   return isNil(hook.data.consumerAgentId)
 }
 
-function hasNoRelation (hook) {
+function hasNoSupplierRelation (hook) {
   const relationships = hook.app.service('relationships')
   const supplierAgentId = hook.data.supplierAgentId
-  return relationships.find({ query: { sourceId: supplierAgentId } }).then((relationship) => {
-    return isEmpty(relationship)
-  })
+  return relationships
+  .find({ query: { sourceId: supplierAgentId } })
+  .then(isEmpty)
 }
 
-function createRelation (hook) {
+function createSupplierRelation (hook) {
   const relationships = hook.app.service('relationships')
   const consumerAgentId = hook.data.consumerAgentId
   const supplierAgentId = hook.data.supplierAgentId
@@ -114,9 +115,8 @@ function createRelation (hook) {
     relationshipType: 'supplier',
     sourceId: consumerAgentId,
     targetId: supplierAgentId
-  }).then(() => {
-    return hook
   })
+  .then(() => hook)
 }
 
 const hasLengthOne = pipe(length, equals(1))
@@ -157,6 +157,16 @@ function createSupplierAgent (hook) {
 
 function hasNoSupplierAgent (hook) {
   return isNil(hook.data.supplierAgentId)
+}
+
+function createAdminAgent (hook) {
+  hook.data.adminAgentId = hook.params.agent.id
+  return hook
+}
+
+
+function hasNoAdminAgent (hook) {
+  return isNil(hook.data.adminAgentId)
 }
 
 function hasNotCompletedGroupOrSupplierProfile (hook) {

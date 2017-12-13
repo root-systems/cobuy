@@ -17,7 +17,6 @@ export default createSelector(
         supplierAgent,
         adminAgent
       })
-      return order
     })
     return mapOrders(orders)
   }
