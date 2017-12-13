@@ -1,6 +1,7 @@
 const hasher = require('feathers-authentication-local/lib/utils/hash')
 
 exports.seed = function (knex, Promise) {
+  return
   // insert person agent
   const devPersonAgent = {}
   return knex('agents').insert(devPersonAgent).returning('id')
