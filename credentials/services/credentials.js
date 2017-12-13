@@ -46,7 +46,7 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
       subject: `You're invited to join Cobuy!`,
       html: `
         Hi -name-. You've been invited by -admin- to join -group- on Cobuy! Click <a href=
-        ${hook.app.get('url')}/invited/${token.jwt}>here</a> to set your password and start co-buying!
+        ${hook.app.get('app').url}/invited/${token.jwt}>here</a> to set your password and start co-buying!
       `
     })
   })
