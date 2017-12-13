@@ -5,6 +5,7 @@ import { isNil, path, isEmpty, pipe, any, prop, difference, keys, tap, not, map,
 import { TextField, SelectField } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
+import CircularProgress from 'material-ui/CircularProgress'
 import { FormattedMessage } from 'dogstack/intl'
 import { required } from '@root-systems/redux-form-validators'
 
@@ -44,11 +45,17 @@ const OrderCreator = (props) => {
     currentAgentGroupMemberProfiles
   } = props
 
-  if (isNil(currentAgent)) return null
-  if (isEmpty(currentAgentGroupIds)) return null
-  if (currentAgentMissingAnyGroupProfiles(currentAgent)) return null
-  if (missingAnyProfiles(currentAgentGroupSupplierIds, getIdsFromProfiles(currentAgentGroupSupplierProfiles))) return null
-  if (missingAnyProfiles(currentAgentGroupMemberIds, getIdsFromProfiles(currentAgentGroupMemberProfiles))) return null
+  if (
+    isNil(currentAgent) ||
+    isEmpty(currentAgentGroupIds) ||
+    currentAgentMissingAnyGroupProfiles(currentAgent) ||
+    missingAnyProfiles(currentAgentGroupSupplierIds, getIdsFromProfiles(currentAgentGroupSupplierProfiles)) ||
+    missingAnyProfiles(currentAgentGroupMemberIds, getIdsFromProfiles(currentAgentGroupMemberProfiles))
+  ) {
+    return (
+      h(CircularProgress)
+    )
+  }
 
   console.log('props', props)
 
