@@ -57,7 +57,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, removeMember, f
           }),
           h(Field, {
             name: `${member}.roles.admin`,
-            floatingLabelText: (
+            label: (
               h(FormattedMessage, {
                 id: 'agents.admin',
                 className: styles.labelText
