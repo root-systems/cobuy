@@ -25,6 +25,8 @@ Before we start, please
 
 - [install `node@8` and `npm@5`](https://dogstack.js.org/guides/how-to-install-js.html)
 - [install Git LFS](https://git-lfs.github.com/)
+- [install and set up Postgres for your system](https://dogstack.js.org/guides/how-to-setup-sql-db.html)
+- create a database in Postgres named `cobuy_development` (i.e. using a command like `CREATE DATABASE cobuy_development;` in `psql`)
 
 ```shell
 git lfs install
@@ -209,6 +211,34 @@ npm run db seed:run
 Anything that a developer working on Cobuy should know about.
 
 TODO organize all the miscy mushy magic
+
+### Postgres DEV setup
+
+Use a [`~/.pgpass`](https://www.postgresql.org/docs/current/static/libpq-pgpass.html) file to automate your passwords!
+
+```shell
+echo "localhost:5432:*:postgres:password" > ~/.pgpass
+chmod 600 ~/.pgpass
+```
+
+Create your database with:
+
+```shell
+createdb cobuy_development -h localhost -U postgres
+```
+
+Drop your database with:
+
+
+```shell
+dropdb cobuy_development -h localhost -U postgres
+```
+
+Connect to your database with:
+
+```shell
+psql -h localhost -U postgres -d cobuy_development
+```
 
 ### How to get private development config
 
