@@ -34,6 +34,7 @@
   "agents.inviteMembers": "invite members",
   "agents.member": "member",
   "agents.admin": "admin",
+  "agents.saveInvitedPassword": "save password",
   "agents.labelText": "{agentType}",
   "resources.resourceType": "resource type",
   "resources.resourceTypeName": "Resource name",
