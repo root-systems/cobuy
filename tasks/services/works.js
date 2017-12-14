@@ -6,6 +6,8 @@ import getCurrentOrderApplicableOrderIntentsFlattened from '../../ordering/gette
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
 
+import queryByOrder from '../hooks/queryByOrder'
+
 module.exports = function () {
   const app = this
   const db = app.get('db')
@@ -18,7 +20,11 @@ module.exports = function () {
 }
 
 const hooks = {
-  before: {},
+  before: {
+    find: [
+      queryByOrder
+    ]
+  },
   after: {
     create: [
       iff(taskRecipeIsCompleteOrderSetup, createCastOrderIntentTaskPlan),

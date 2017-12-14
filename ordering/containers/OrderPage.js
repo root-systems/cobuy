@@ -32,9 +32,7 @@ export default connect({
       service: 'taskPlans',
       params: {
         query: {
-          params: {
-            orderId
-          }
+          orderId
         }
       }
     })
@@ -43,9 +41,7 @@ export default connect({
       service: 'taskWorks',
       params: {
         query: {
-          params: {
-            orderId
-          }
+          orderId
         }
       }
     })

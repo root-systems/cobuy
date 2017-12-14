@@ -47,7 +47,7 @@ const OrderCreator = (props) => {
 
   if (
     isNil(currentAgent) ||
-    isEmpty(currentAgentGroupIds) ||
+    isNil(currentAgentGroupIds) ||
     currentAgentMissingAnyGroupProfiles(currentAgent) ||
     missingAnyProfiles(currentAgentGroupSupplierIds, getIdsFromProfiles(currentAgentGroupSupplierProfiles)) ||
     missingAnyProfiles(currentAgentGroupMemberIds, getIdsFromProfiles(currentAgentGroupMemberProfiles))
@@ -56,8 +56,6 @@ const OrderCreator = (props) => {
       h(CircularProgress)
     )
   }
-
-  console.log('props', props)
 
   return (
     h('form', {
