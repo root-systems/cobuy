@@ -9,18 +9,14 @@ import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/GridViewProduct'
 
- const sortPriceSpecs = sortBy((priceSpec) => {
-   return priceSpec.price
- })
-
 function ListViewProduct (props) {
-  const { styles, product, onNavigate } = props
+  const { styles, product, onNavigate, applicablePriceSpec, collectiveQuantity } = props
   if (isNil(product)) return null
   const { resourceType, facets, priceSpecs } = product
   if (isNil(priceSpecs)) return null
   if (isNil(resourceType)) return null
   const { name, description, image } = resourceType
-  const sortedPriceSpecs = sortPriceSpecs(priceSpecs)
+
   return (
     h('div', {
       className: styles.container
@@ -53,8 +49,8 @@ function ListViewProduct (props) {
             id: 'ordering.fromPrice',
             className: styles.fromText,
             values: {
-              currency: sortedPriceSpecs[0].currency,
-              price: sortedPriceSpecs[0].price
+              currency: applicablePriceSpec.currency,
+              price: applicablePriceSpec.price
             }
           })
         ])

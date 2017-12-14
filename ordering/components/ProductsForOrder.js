@@ -19,13 +19,19 @@ import ListViewProduct from './ListViewProduct'
 import styles from '../styles/ProductsForOrder'
 
 function renderGrid (props) {
-  const { styles, products, orderIntentsByProductPriceAgent, onNavigate, isListView, setListView } = props
+  const { styles, products, onNavigate, isListView, setListView, applicablePriceSpecByProduct, collectiveQuantityByProduct } = props
+
   return h('div', {
     className: styles.gridContainer
   }, [
     values(map((product) => {
+      const applicablePriceSpec = applicablePriceSpecByProduct[product.id] || {}
+      const collectiveQuantity = collectiveQuantityByProduct[product.id] || 0
+
       return h(GridViewProduct, {
-        product: product,
+        product,
+        applicablePriceSpec,
+        collectiveQuantity,
         key: product.id,
         onNavigate
       })
@@ -34,7 +40,7 @@ function renderGrid (props) {
 }
 
 function renderList (props) {
-  const { styles, products, orderIntentsByProductPriceAgent, onNavigate, isListView, setListView } = props
+  const { styles, products, onNavigate, isListView, setListView, applicablePriceSpecByProduct, collectiveQuantityByProduct } = props
 
   return h(Table, {}, [
     h(TableHeader, { displaySelectAll: false, adjustForCheckbox: false }, [
@@ -48,9 +54,13 @@ function renderList (props) {
     ]),
     h(TableBody, {}, [
       values(map((product) => {
+        const applicablePriceSpec = applicablePriceSpecByProduct[product.id] || {}
+        const collectiveQuantity = collectiveQuantityByProduct[product.id] || 0
+
         return h(ListViewProduct, {
-          product: product,
-          orderIntentsByPriceAgent: orderIntentsByProductPriceAgent[product.id] || {},
+          product,
+          applicablePriceSpec,
+          collectiveQuantity,
           key: product.id,
           onNavigate
         })

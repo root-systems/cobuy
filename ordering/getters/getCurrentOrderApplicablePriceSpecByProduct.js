@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { pipe, prop, mapObjIndexed, find } from 'ramda'
+import { pipe, prop, mapObjIndexed, find, map, isNil } from 'ramda'
 
 import getCurrentOrderCollectiveQuantityByProductPrice from './getCurrentOrderCollectiveQuantityByProductPrice'
 import getSortedByMinPriceSpecsByProduct from '../../supply/getters/getSortedByMinPriceSpecsByProduct'
@@ -8,12 +8,18 @@ export default createSelector(
   getSortedByMinPriceSpecsByProduct,
   getCurrentOrderCollectiveQuantityByProductPrice,
   (priceSpecsByProduct, collectiveQuantityByProductPrice) => {
-    return mapObjIndexed((quantityByPrice, productId) => {
-      const priceSpecs = priceSpecsByProduct[productId]
+    return mapObjIndexed((priceSpecs, productId) => {
+      const quantityByPrice = collectiveQuantityByProductPrice[productId]
+
+      // if no quantityByPrice, return the priceSpec with the smallest minimum for that product
+      if (isNil(quantityByPrice)) {
+        return priceSpecs[priceSpecs.length - 1]
+      }
+
       return find((priceSpec) => {
         const { id, minimum } = priceSpec
         return quantityByPrice[id] >= minimum
       }, priceSpecs)
-    }, collectiveQuantityByProductPrice)
+    }, priceSpecsByProduct)
   }
 )
