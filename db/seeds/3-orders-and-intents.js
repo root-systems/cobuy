@@ -1,4 +1,5 @@
 exports.seed = function (knex, Promise) {
+  return
   const order = {
     consumerAgentId: 2,
     supplierAgentId: 3,

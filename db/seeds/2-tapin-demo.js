@@ -156,6 +156,7 @@ const agents = [
 ]
 
 exports.seed = function (knex, Promise) {
+  return
   var groupId, supplierId
   // insert group / supplier agents
   return Promise.all([
