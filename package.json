@@ -14,7 +14,7 @@
     "db": "dog db",
     "storybook": "start-storybook -p 6006",
     "burnthemall": "rm -rf package-lock.json node_modules; npm i",
-    "burnthedb": "rm db/dev.sqlite; dog db migrate:latest; dog db seed:run"
+    "burnthedb": "dropdb cobuy_development -h localhost -U postgres; createdb cobuy_development -h localhost -U postgres; dog db migrate:latest; dog db seed:run"
   },
   "browserify": {
     "transform": [

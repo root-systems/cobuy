@@ -212,6 +212,34 @@ Anything that a developer working on Cobuy should know about.
 
 TODO organize all the miscy mushy magic
 
+### Postgres DEV setup
+
+Use a [`~/.pgpass`](https://www.postgresql.org/docs/current/static/libpq-pgpass.html) file to automate your passwords!
+
+```shell
+echo "localhost:5432:*:postgres:password" > ~/.pgpass
+chmod 600 ~/.pgpass
+```
+
+Create your database with:
+
+```shell
+createdb cobuy_development -h localhost -U postgres
+```
+
+Drop your database with:
+
+
+```shell
+dropdb cobuy_development -h localhost -U postgres
+```
+
+Connect to your database with:
+
+```shell
+psql -h localhost -U postgres -d cobuy_development
+```
+
 ### How to get private development config
 
 Our development config is stored in a private repository:
