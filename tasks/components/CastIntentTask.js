@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, merge, pipe, mapObjIndexed, split, prop, propOr, nth, values, path, forEach, assoc, __, map } from 'ramda'
+import { isNil, isEmpty, merge, pipe, mapObjIndexed, split, prop, propOr, nth, values, path, forEach, assoc, __, map } from 'ramda'
 import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
@@ -12,11 +12,13 @@ const forAgent = pipe(propOr({}), map)
 // import styles from '../styles/CastIntentTask'
 
 function CastIntentTask (props) {
-  const { currentAgent, product } = props
+  const { currentAgent, product, orderIntentsByProductPriceAgent, applicablePriceSpecByProduct, collectiveQuantityByProductPrice } = props
+  console.log(props)
 
-  if(isNil(currentAgent)) {
-    return null
-  }
+  if (isNil(currentAgent)) return null
+  if (isEmpty(orderIntentsByProductPriceAgent)) return null
+  if (isEmpty(applicablePriceSpecByProduct)) return null
+  if (isEmpty(collectiveQuantityByProductPrice)) return null
 
   if (product) {
     return h(SingleProduct, props)

@@ -62,8 +62,6 @@ function renderList (props) {
 function ProductsForOrder (props) {
   const { styles, isListView, setListView } = props
 
-  // TODO: IK: a toggle switch to change between grid view and list view of the products
-  // probably using state handlers from recompose, just a local state thang
   const listIcon = h(FontIcon, { className: `fa fa-list` })
   const gridIcon = h(FontIcon, { className: `fa fa-th` })
   return (
