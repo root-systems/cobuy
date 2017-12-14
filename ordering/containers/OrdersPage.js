@@ -65,10 +65,8 @@ export default connect({
         service: 'taskPlans',
         params: {
           query: {
-            params: {
-              orderId: {
-                $in: orderIds
-              }
+            orderId: {
+              $in: orderIds
             }
           }
         }
@@ -80,10 +78,8 @@ export default connect({
         service: 'taskWorks',
         params: {
           query: {
-            params: {
-              orderId: {
-                $in: orderIds
-              }
+            orderId: {
+              $in: orderIds
             }
           }
         }

@@ -1,10 +1,11 @@
 const feathersKnex = require('feathers-knex')
-import { isEmpty, ifElse, is, assoc, prop, map, pipe, __ } from 'ramda'
+import { isEmpty, ifElse, is, assoc, prop, map, pipe, omit, __ } from 'ramda'
 const { iff, validateSchema } = require('feathers-hooks-common')
 const taskPlanSchema = require('../schemas/taskPlan')
 import ajv from '../../app/schemas'
 import * as taskRecipes from '../../tasks/data/recipes'
 
+import queryByOrder from '../hooks/queryByOrder'
 import { encode as encodeParams, decode as decodeParams } from '../../lib/paramsCodec'
 
 module.exports = function () {
@@ -20,6 +21,9 @@ module.exports = function () {
 
 const hooks = {
   before: {
+    find: [
+      queryByOrder
+    ],
     create: [
       validateSchema(taskPlanSchema, ajv),
       encodeParams

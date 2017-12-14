@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, merge, path, isEmpty, pipe, any, prop, difference, keys, tap, not, map } from 'ramda'
+import { isNil, equals, uniq, pipe, prop, values, groupBy, either, isEmpty, merge } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -10,14 +10,6 @@ import getOrderCreatorProps from '../getters/getOrderCreatorProps'
 import OrderCreator from '../components/OrderCreator'
 
 import currentAgentMissingAnyGroupProfiles from '../../tasks/util/currentAgentMissingAnyGroupProfiles'
-
-const getOrderIdFromTaskPlan = path(['params', 'orderId'])
-const getIdsFromProfiles = map(prop('id'))
-const missingAnyProfiles = pipe(
-  difference,
-  isEmpty,
-  not
-)
 
 /*
 queries:
@@ -39,7 +31,7 @@ export default compose(
     query: (props) => {
       var queries = []
       const { selected } = props
-      const { currentAgent, currentAgentGroupIds, currentAgentGroupSupplierIds, currentAgentGroupSupplierProfiles, currentAgentGroupMemberIds, currentAgentGroupMemberProfiles } = selected
+      const { currentAgent, currentAgentGroupIds } = selected
 
       // get groups and profiles currentAgent is part of
       if (currentAgent) {
@@ -72,75 +64,51 @@ export default compose(
           })
         }
 
-        if (currentAgentMissingAnyGroupProfiles(currentAgent)) {
-          queries.push({
-            service: 'profiles',
-            params: {
-              query: {
-                agentId: {
-                  $in: currentAgentGroupIds
-                }
+        const agentIds = getAgentIds(props.selected)
+        queries.push({
+          service: 'profiles',
+          params: {
+            query: {
+              agentId: {
+                $in: agentIds
               }
             }
-          })
-        }
-
-        if (missingAnyProfiles(currentAgentGroupSupplierIds, getIdsFromProfiles(currentAgentGroupSupplierProfiles))) {
-          queries.push({
-            service: 'profiles',
-            params: {
-              query: {
-                agentId: {
-                  $in: currentAgentGroupSupplierIds
-                }
-              }
-            }
-          })
-        }
-
-        if (missingAnyProfiles(currentAgentGroupMemberIds, getIdsFromProfiles(currentAgentGroupMemberProfiles))) {
-          queries.push({
-            service: 'profiles',
-            params: {
-              query: {
-                agentId: {
-                  $in: currentAgentGroupMemberIds
-                }
-              }
-            }
-          })
-        }
+          }
+        })
       }
 
       return queries
     },
-    shouldQueryAgain: (props, status) => {
+    shouldQueryAgain: (props, status, prevProps) => {
       if (status.isPending) return false
 
-      const {
-        currentAgent,
-        currentAgentGroupIds,
-        currentAgentGroupSupplierIds,
-        currentAgentGroupSupplierProfiles,
-        currentAgentGroupMemberIds,
-        currentAgentGroupMemberProfiles
-      } = props.selected
-
+      const { currentAgent } = props.selected
       if (isNil(currentAgent)) return false
-      //if (isNil(currentAgent)) return true // INFINITE LOOP
 
-      if (isEmpty(currentAgentGroupIds)) return true
+      if (hasNotQueriedForRelated(status)) return true
 
-      if (currentAgentMissingAnyGroupProfiles(currentAgent)) return true
-
-      if (missingAnyProfiles(currentAgentGroupSupplierIds, getIdsFromProfiles(currentAgentGroupSupplierProfiles))) return true
-
-      if (missingAnyProfiles(currentAgentGroupMemberIds, getIdsFromProfiles(currentAgentGroupMemberProfiles))) return true
+      const agentIds = getAgentIds(props.selected)
+      const prevAgentIds = getAgentIds(prevProps.selected)
+      if (!equals(agentIds, prevAgentIds)) return true
 
       return false
     }
   })
 )(OrderCreatorContainer)
+
+function getAgentIds (selected) {
+  const {
+    currentAgentGroupIds,
+    currentAgentGroupSupplierIds,
+    currentAgentGroupMemberIds
+  } = selected
+  const agentIds = uniq([
+    ...currentAgentGroupIds,
+    ...currentAgentGroupMemberIds,
+    ...currentAgentGroupSupplierIds
+  ])
+  return agentIds
+}
 
 function OrderCreatorContainer (props) {
   const { actions } = props
@@ -157,3 +125,13 @@ function OrderCreatorContainer (props) {
 
   return h(OrderCreator, nextProps)
 }
+
+const hasNotQueriedForRelated = pipe(
+  prop('requests'),
+  values,
+  groupBy(prop('service')),
+  either(
+    pipe(prop('relationships'), either(isNil, isEmpty)),
+    pipe(prop('profiles'), either(isNil, isEmpty))
+  )
+)
