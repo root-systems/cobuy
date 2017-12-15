@@ -45,6 +45,9 @@ function getCurrentUser (hook) {
 
 function userIsNotMemberOfGroup (hook) {
   const relationships = hook.app.service('relationships')
+  console.log('hook data', hook.data)
+
+  // GK: this is weeeeeird! the current user id isn't even part of this query?
   const groupId = hook.data.consumerAgentId
   relationships
     .find({ query: { sourceId: groupId, relationshipType: 'member' } })
