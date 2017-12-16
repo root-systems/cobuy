@@ -1,12 +1,13 @@
 import { createSelector } from 'reselect'
-import { pipe, values, map, prop, path, merge, indexBy, groupBy } from 'ramda'
+import { isNil, pipe, values, map, prop, path, merge, indexBy, groupBy } from 'ramda'
 
+import { orderStatuses, getOrderStatus, getTaskPlansByStatus } from '../util/orderStatuses'
 import getOrdersState from './getOrdersState'
 import { getAgents } from 'dogstack-agents/getters'
-import getTasks from '../../tasks/getters/getTaskPlans'
+import getTaskPlans from '../../tasks/getters/getTaskPlans'
 
-const getTasksByOrderRecipe = createSelector(
-  getTasks,
+const getTaskPlansByOrderRecipe = createSelector(
+  getTaskPlans,
   pipe(
     values,
     groupBy(path(['params', 'orderId'])),
@@ -17,15 +18,29 @@ const getTasksByOrderRecipe = createSelector(
 export default createSelector(
   getOrdersState,
   getAgents,
-  getTasksByOrderRecipe,
-  (orders, agents, tasksByOrderRecipe) => {
+  getTaskPlansByOrderRecipe,
+  (orders, agents, taskPlansByOrderRecipe) => {
     const mapOrders = map(order => {
-      const tasksByRecipe = tasksByOrderRecipe[order.id]
-      console.log(order, tasksByRecipe)
+      const taskPlansByRecipe = taskPlansByOrderRecipe[order.id]
+      const status = getOrderStatus({ order, taskPlansByRecipe })
+      const statusIndex = orderStatuses.indexOf(status)
+      const taskPlansByStatus = getTaskPlansByStatus({ order, taskPlansByRecipe })
+
+      const steps = orderStatuses.map((orderStatus, index) => ({
+        name: orderStatus.name,
+        index,
+        taskPlan: taskPlansByStatus[orderStatus.name],
+        completed: status && index > statusIndex,
+        ready: status && index - statusIndex === 1
+      }))
+
       const consumerAgent = agents[order.consumerAgentId]
       const supplierAgent = agents[order.supplierAgentId]
       const adminAgent = agents[order.adminAgentId]
+
       return merge(order, {
+        status,
+        steps,
         consumerAgent,
         supplierAgent,
         adminAgent
@@ -34,5 +49,3 @@ export default createSelector(
     return mapOrders(orders)
   }
 )
-
-

@@ -1,25 +1,28 @@
 import { createSelector } from 'reselect'
-import { map, merge, defaultTo, isNil, filter, propEq } from 'ramda'
+import { map, merge, defaultTo, either, isNil, isEmpty } from 'ramda'
 
 import { getAgents } from 'dogstack-agents/getters'
 import getRawTaskPlans from './getRawTaskPlans'
-import getRawTaskWorks from './getRawTaskWorks'
+import getTaskWorksByPlan from './getTaskWorksByPlan'
 import getRawTaskRecipes from './getRawTaskRecipes'
 
 const defaultToEmptyObject = defaultTo({})
+const isNilOrEmpty = either(isNil, isEmpty)
 
 const getEnhancedTaskPlans = createSelector(
   getRawTaskPlans,
   getRawTaskRecipes,
   getAgents,
-  getRawTaskWorks,
-  (taskPlans, taskRecipes, agents, taskWorks) => {
+  getTaskWorksByPlan,
+  (taskPlans, taskRecipes, agents, taskWorksByPlan) => {
     const enhanceTaskPlan = (taskPlan) => {
       const { taskRecipeId, assigneeId, id } = taskPlan
       const params = defaultToEmptyObject(taskPlan.params)
       const taskRecipe = taskRecipes[taskRecipeId]
       const assignee = agents[assigneeId]
-      const taskWork = filter(propEq('taskPlanId', id))(taskWorks)
+
+      const taskWorks = taskWorksByPlan[id]
+      const hasWork = !isNilOrEmpty(taskWorks)
 
       const { consumerAgentId, supplierAgentId } = params
       const consumerAgent = isNil(consumerAgentId)
@@ -36,7 +39,8 @@ const getEnhancedTaskPlans = createSelector(
       return merge(taskPlan, {
         taskRecipe,
         assignee,
-        taskWork,
+        taskWorks,
+        hasWork,
         params: nextParams
       })
     }

@@ -1,8 +1,12 @@
 import h from 'react-hyperscript'
-import { isNil } from 'ramda'
+import { isNil, map } from 'ramda'
 import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import { FormattedMessage } from 'dogstack/intl'
+import { Link } from 'react-router-dom'
+import FontIcon from 'material-ui/FontIcon'
+
+import { getTaskPlanFromOrder } from '../util/orderStatuses'
 import ProfileIcon from '../../agents/components/ProfileIcon'
 
 import styles from '../styles/OrderPage'
@@ -26,6 +30,11 @@ function OrderPage (props) {
   const { styles, actions, order } = props
 
   if (isNil(order)) return null
+  const { id, status, steps, consumerAgent, supplierAgent, adminAgent } = order
+
+  const renderOrderStepLinks = map(step => {
+    return h(OrderStepLink, { step, styles })
+  })
 
   return (
     h('div', {
@@ -34,7 +43,7 @@ function OrderPage (props) {
       h('h1', {
         className: styles.title
       }, [
-        `order ${order.id}`
+        `order ${id}`
       ]),
       h('div', {
         className: styles.agents
@@ -42,20 +51,49 @@ function OrderPage (props) {
         h(OrderAgentIcon, {
           styles,
           role: 'consumer',
-          agent: order.consumerAgent
+          agent: consumerAgent
         }),
         h(OrderAgentIcon, {
           styles,
           role: 'supplier',
-          agent: order.supplierAgent
+          agent: supplierAgent
         }),
         h(OrderAgentIcon, {
           styles,
           role: 'admin',
-          agent: order.adminAgent
+          agent: adminAgent
         })
+      ]),
+      h('h2', {
+        className: styles.title
+      }, [
+        `status: ${status}`,
+        renderOrderStepLinks(steps)
       ])
     ])
+  )
+}
+
+function OrderStepLink ({ step, styles }) {
+  const { name, description, icon, taskPlan, completed, ready } = step
+
+  const hasTaskPlan = !isNil(taskPlan)
+  const maybeLink = children => {
+    return hasTaskPlan
+      ? h(Link, { to: `/tasks/${taskPlan.id}` }, children)
+      : children
+  }
+
+  return (
+    h('div', {
+      key: name,
+    }, maybeLink([
+      h(FontIcon, {
+        className: icon
+      }),
+      name,
+      description
+    ]))
   )
 }
 
