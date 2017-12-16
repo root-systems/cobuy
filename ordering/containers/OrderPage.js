@@ -37,11 +37,11 @@ export default connect({
       }
     })
 
+    // TODO search for only relevant task works
     queries.push({
       service: 'taskWorks',
       params: {
         query: {
-          orderId
         }
       }
     })

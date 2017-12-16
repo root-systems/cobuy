@@ -59,8 +59,6 @@ export default connect({
 
       const orderIds = getIds(orders)
 
-      // TODO searching on json params doesn't actually work.
-      // probably returns all task works ?
       queries.push({
         service: 'taskPlans',
         params: {
@@ -72,15 +70,11 @@ export default connect({
         }
       })
 
-      // TODO searching on json params doesn't actually work.
-      // probably returns all task works ?
+      // TODO search for only relevant task works
       queries.push({
         service: 'taskWorks',
         params: {
           query: {
-            orderId: {
-              $in: orderIds
-            }
           }
         }
       })
