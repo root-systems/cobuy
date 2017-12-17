@@ -46,10 +46,16 @@ function getCurrentUser (hook) {
 
 function userIsNotMemberOfGroup (hook) {
   const relationships = hook.app.service('relationships')
+  console.log('hook params', hook.params)
+  console.log('hook data', hook.data)
   const groupId = hook.data.consumerAgentId
   return relationships
     .find({ query: { sourceId: groupId, relationshipType: 'member' } })
     .then(isEmpty)
+    .then((result) => {
+      console.log('userIsNotMemberOfGroup', result)
+      return result
+    })
 }
 
 function createGroupMemberRelation (hook) {
@@ -71,6 +77,10 @@ function groupHasNoAdminRelation (hook) {
   return relationships
     .find({ query: { sourceId: groupId, relationshipType: 'admin' } })
     .then(isEmpty)
+    .then((result) => {
+      console.log('groupHasNoAdminRelation', result)
+      return result
+    })
 }
 
 function createGroupAdminRelation (hook) {
@@ -96,7 +106,9 @@ function createConsumerAgent (hook) {
 }
 
 function hasNoConsumerAgent (hook) {
-  return isNil(hook.data.consumerAgentId)
+  const hasNoConsumerAgent = isNil(hook.data.consumerAgentId)
+  console.log('hasNoConsumerAgent', hasNoConsumerAgent)
+  return hasNoConsumerAgent
 }
 
 function hasNoSupplierRelation (hook) {
@@ -105,6 +117,10 @@ function hasNoSupplierRelation (hook) {
   return relationships
   .find({ query: { sourceId: supplierAgentId } })
   .then(isEmpty)
+  .then((result) => {
+    console.log('hasNoSupplierRelation', hasNoSupplierRelation)
+    return result
+  })
 }
 
 function createSupplierRelation (hook) {
@@ -156,7 +172,9 @@ function createSupplierAgent (hook) {
 }
 
 function hasNoSupplierAgent (hook) {
-  return isNil(hook.data.supplierAgentId)
+  const hasNoSupplierAgent = isNil(hook.data.supplierAgentId)
+  console.log('hasNoSupplierAgent', hasNoSupplierAgent)
+  return hasNoSupplierAgent
 }
 
 function createAdminAgent (hook) {
@@ -166,7 +184,8 @@ function createAdminAgent (hook) {
 
 
 function hasNoAdminAgent (hook) {
-  return isNil(hook.data.adminAgentId)
+  const hasNoAdminAgent = isNil(hook.data.adminAgentId)
+  return hasNoAdminAgent
 }
 
 function hasNotCompletedGroupOrSupplierProfile (hook) {
