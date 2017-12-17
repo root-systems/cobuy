@@ -193,10 +193,10 @@ function hasNotCompletedGroupOrSupplierProfile (hook) {
   const relationshipsService = hook.app.service('relationships')
   const profilesService = hook.app.service('profiles')
 
-  return relationshipsService.find({ query: { sourceId: agentId, relationshipType: 'admin' }})
+  return relationshipsService.find({ query: { targetId: agentId, relationshipType: 'admin' }})
   .then(groupRelationships => {
-    const groupIds = map((relationship) => { return relationship.targetId }, groupRelationships)
-    return relationshipsService.find({ query: { targetId: { $in: groupIds }, relationshipType: 'supplier' }})
+    const groupIds = map((relationship) => { return relationship.sourceId }, groupRelationships)
+    return relationshipsService.find({ query: { sourceId: { $in: groupIds }, relationshipType: 'supplier' }})
     .then((supplierRelationships) => {
       const supplierIds = map((relationship) => { return relationship.sourceId }, supplierRelationships)
       return Promise.all([
@@ -205,14 +205,16 @@ function hasNotCompletedGroupOrSupplierProfile (hook) {
       ])
     })
   })
-  .then(profilesArray => {
-    // TODO: IK: need to return true if either the 'find' for group profiles with a name OR supplier profiles with a name returns true
-    return any(
+  .then(groupAndSupplierProfiles => {
+    console.log('combined array of group and supplier profiles', flatten(groupAndSupplierProfiles))
+    const profileNames = map((profile) => { return profile.name }, flatten(groupAndSupplierProfiles))
+    console.log('profileNames array', profileNames)
+    const namesDoNotExistForSupplierAndGroup = any(
       isNil,
-      map((profiles) => {
-        find(pipe(prop('name'), isNil, not))
-      }, profilesArray)
+      profileNames
     )
+    console.log('names have not been filled out for any supplier/group profile', namesDoNotExistForSupplierAndGroup)
+    return namesDoNotExistForSupplierAndGroup
   })
 }
 
