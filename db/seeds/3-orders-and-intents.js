@@ -1,4 +1,6 @@
 exports.seed = function (knex, Promise) {
+  // early return to test app without dummy data
+  return
   const order = {
     consumerAgentId: 2,
     supplierAgentId: 3,
