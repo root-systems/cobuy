@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { pipe, prop, mapObjIndexed, find, map, isNil } from 'ramda'
+import { mapObjIndexed, find, isNil } from 'ramda'
 
 import getCurrentOrderCollectiveQuantityByProductPrice from './getCurrentOrderCollectiveQuantityByProductPrice'
 import getSortedByMinPriceSpecsByProduct from '../../supply/getters/getSortedByMinPriceSpecsByProduct'

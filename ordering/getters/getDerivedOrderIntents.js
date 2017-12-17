@@ -27,7 +27,9 @@ export default createSelector(
         const nextPriceSpecs = slice(i, arr.length, arr)
         const nextBestPriceSpec = find((ps) => intents[ps.id], nextPriceSpecs)
 
-        if (isNil(nextBestPriceSpec)) return null
+        // this is a bit sub-optimal, leads to { undefined: {} } in indexedIntents at end of this getter
+        // could fix by removing all non-number keys after?
+        if (isNil(nextBestPriceSpec)) return {}
         // consider omitting the intent id, as it doesn't make sense when same intent id is across multiple priceSpecs
         return merge(intents[nextBestPriceSpec.id], { priceSpecId: id })
       }, allPriceSpecsForProduct)
