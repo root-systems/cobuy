@@ -1,6 +1,8 @@
 const hasher = require('feathers-authentication-local/lib/utils/hash')
 
 exports.seed = function (knex, Promise) {
+  // early return to test app without dummy data
+  return
   // insert person agent
   return
   const devPersonAgent = {}
