@@ -45,7 +45,7 @@ function OrdersPage (props) {
             onClick: closeDialog
           }, [
             h(FormattedMessage, {
-              id: 'orders.createOrder',
+              id: 'ordering.createOrder',
               className: styles.labelText
             })
           ]),
