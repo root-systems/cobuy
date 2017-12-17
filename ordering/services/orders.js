@@ -1,6 +1,6 @@
 const feathersKnex = require('feathers-knex')
 const { iff, iffElse } = require('feathers-hooks-common')
-import { pipe, equals, length, isNil, isEmpty, map, any, find, not, prop } from 'ramda'
+import { pipe, equals, length, isNil, isEmpty, map, any, find, not, prop, all, flatten } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 module.exports = function () {
@@ -45,10 +45,18 @@ function getCurrentUser (hook) {
 
 function userIsNotMemberOfGroup (hook) {
   const relationships = hook.app.service('relationships')
+  console.log('hook params', hook.params)
+  console.log('hook data', hook.data)
+
+  // GK: this is weeeeeird! the current user id isn't even part of this query?
   const groupId = hook.data.consumerAgentId
-  return relationships
+  relationships
     .find({ query: { sourceId: groupId, relationshipType: 'member' } })
     .then(isEmpty)
+    .then((result) => {
+      console.log('userIsNotMemberOfGroup', result)
+      return result
+    })
 }
 
 function createGroupMemberRelation (hook) {
@@ -67,9 +75,13 @@ function createGroupMemberRelation (hook) {
 function groupHasNoAdminRelation (hook) {
   const relationships = hook.app.service('relationships')
   const groupId = hook.data.consumerAgentId
-  return relationships
+  relationships
     .find({ query: { sourceId: groupId, relationshipType: 'admin' } })
     .then(isEmpty)
+    .then((result) => {
+      console.log('groupHasNoAdminRelation', result)
+      return result
+    })
 }
 
 function createGroupAdminRelation (hook) {
@@ -95,15 +107,21 @@ function createGroupAgent (hook) {
 }
 
 function hasNoGroupAgent (hook) {
-  return isNil(hook.data.consumerAgentId)
+  const hasNoGroupAgent = isNil(hook.data.consumerAgentId)
+  console.log('hasNoGroupAgent', hasNoGroupAgent)
+  return hasNoGroupAgent
 }
 
 function hasNoRelation (hook) {
   const relationships = hook.app.service('relationships')
   const supplierAgentId = hook.data.supplierAgentId
-  return relationships.find({ query: { sourceId: supplierAgentId } }).then((relationship) => {
-    return isEmpty(relationship)
-  })
+  relationships
+    .find({ query: { sourceId: supplierAgentId } })
+    .then(isEmpty)
+    .then((result) => {
+      console.log('hasNoRelation', result)
+      return result
+    })
 }
 
 function createRelation (hook) {
@@ -156,7 +174,9 @@ function createSupplierAgent (hook) {
 }
 
 function hasNoSupplierAgent (hook) {
-  return isNil(hook.data.supplierAgentId)
+  const hasNoSupplierAgent = isNil(hook.data.supplierAgentId)
+  console.log('hasNoSupplierAgent', hasNoSupplierAgent)
+  return hasNoSupplierAgent
 }
 
 function hasNotCompletedGroupOrSupplierProfile (hook) {
@@ -164,10 +184,10 @@ function hasNotCompletedGroupOrSupplierProfile (hook) {
   const relationshipsService = hook.app.service('relationships')
   const profilesService = hook.app.service('profiles')
 
-  return relationshipsService.find({ query: { sourceId: agentId, relationshipType: 'admin' }})
+  return relationshipsService.find({ query: { targetId: agentId, relationshipType: 'admin' }})
   .then(groupRelationships => {
-    const groupIds = map((relationship) => { return relationship.targetId }, groupRelationships)
-    return relationshipsService.find({ query: { targetId: { $in: groupIds }, relationshipType: 'supplier' }})
+    const groupIds = map((relationship) => { return relationship.sourceId }, groupRelationships)
+    return relationshipsService.find({ query: { sourceId: { $in: groupIds }, relationshipType: 'supplier' }})
     .then((supplierRelationships) => {
       const supplierIds = map((relationship) => { return relationship.sourceId }, supplierRelationships)
       return Promise.all([
@@ -176,14 +196,16 @@ function hasNotCompletedGroupOrSupplierProfile (hook) {
       ])
     })
   })
-  .then(profilesArray => {
-    // TODO: IK: need to return true if either the 'find' for group profiles with a name OR supplier profiles with a name returns true
-    return any(
+  .then(groupAndSupplierProfiles => {
+    console.log('combined array of group and supplier profiles', flatten(groupAndSupplierProfiles))
+    const profileNames = map((profile) => { return profile.name }, flatten(groupAndSupplierProfiles))
+    console.log('profileNames array', profileNames)
+    const namesDoNotExistForSupplierAndGroup = any(
       isNil,
-      map((profiles) => {
-        find(pipe(prop('name'), isNil, not))
-      }, profilesArray)
+      profileNames
     )
+    console.log('names have not been filled out for any supplier/group profile', namesDoNotExistForSupplierAndGroup)
+    return namesDoNotExistForSupplierAndGroup
   })
 }
 
