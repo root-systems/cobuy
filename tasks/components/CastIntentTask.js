@@ -12,13 +12,12 @@ const forAgent = pipe(propOr({}), map)
 // import styles from '../styles/CastIntentTask'
 
 function CastIntentTask (props) {
-  const { currentAgent, product, orderIntentsByProductPriceAgent, applicablePriceSpecByProduct, collectiveQuantityByProductPrice, collectiveQuantityByProduct } = props
+  const { currentAgent, product, orderIntentsByProductPriceAgent, applicablePriceSpecByProduct, collectiveQuantityByProduct } = props
 
   if (isNil(currentAgent)) return null
-  if (isEmpty(orderIntentsByProductPriceAgent)) return null
+  // if (isEmpty(orderIntentsByProductPriceAgent)) return null
   if (isEmpty(applicablePriceSpecByProduct)) return null
-  if (isEmpty(collectiveQuantityByProductPrice)) return null
-  if (isEmpty(collectiveQuantityByProduct)) return null
+  // if (isEmpty(collectiveQuantityByProduct)) return null
 
   if (product) {
     return h(SingleProduct, props)
