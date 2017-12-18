@@ -46,11 +46,10 @@ function getCurrentUser (hook) {
 
 function userIsNotMemberOfGroup (hook) {
   const relationships = hook.app.service('relationships')
-  console.log('hook params', hook.params)
-  console.log('hook data', hook.data)
+  const currentUserId = hook.params.agent.id
   const groupId = hook.data.consumerAgentId
   return relationships
-    .find({ query: { sourceId: groupId, relationshipType: 'member' } })
+    .find({ query: { sourceId: groupId, targetId: currentUserId, relationshipType: 'member' } })
     .then(isEmpty)
     .then((result) => {
       console.log('userIsNotMemberOfGroup', result)
@@ -113,12 +112,14 @@ function hasNoConsumerAgent (hook) {
 
 function hasNoSupplierRelation (hook) {
   const relationships = hook.app.service('relationships')
+  const consumerAgentId = hook.data.consumerAgentId
   const supplierAgentId = hook.data.supplierAgentId
+  console.log('supplierAgentId', supplierAgentId)
   return relationships
-  .find({ query: { sourceId: supplierAgentId } })
+  .find({ query: { sourceId: consumerAgentId, targetId: supplierAgentId, relationshipType: 'supplier' } })
   .then(isEmpty)
   .then((result) => {
-    console.log('hasNoSupplierRelation', hasNoSupplierRelation)
+    console.log('hasNoSupplierRelation', result)
     return result
   })
 }
@@ -172,6 +173,7 @@ function createSupplierAgent (hook) {
 }
 
 function hasNoSupplierAgent (hook) {
+  console.log('hasNoSupplierAgent supplierAgentId', hook.data.supplierAgentId)
   const hasNoSupplierAgent = isNil(hook.data.supplierAgentId)
   console.log('hasNoSupplierAgent', hasNoSupplierAgent)
   return hasNoSupplierAgent
@@ -189,26 +191,12 @@ function hasNoAdminAgent (hook) {
 }
 
 function hasNotCompletedGroupOrSupplierProfile (hook) {
-  const agentId = hook.params.agent.id
-  const relationshipsService = hook.app.service('relationships')
   const profilesService = hook.app.service('profiles')
-
-  return relationshipsService.find({ query: { targetId: agentId, relationshipType: 'admin' }})
-  .then(groupRelationships => {
-    const groupIds = map((relationship) => { return relationship.sourceId }, groupRelationships)
-    return relationshipsService.find({ query: { sourceId: { $in: groupIds }, relationshipType: 'supplier' }})
-    .then((supplierRelationships) => {
-      const supplierIds = map((relationship) => { return relationship.sourceId }, supplierRelationships)
-      return Promise.all([
-        profilesService.find({ query: { agentId: { $in: groupIds }}}),
-        profilesService.find({ query: { agentId: { $in: supplierIds }}})
-      ])
-    })
-  })
+  const supplierAgentId = hook.data.supplierAgentId
+  const consumerAgentId = hook.data.consumerAgentId
+  return profilesService.find({ query: { agentId: { $in: [supplierAgentId, consumerAgentId] } } })
   .then(groupAndSupplierProfiles => {
-    console.log('combined array of group and supplier profiles', flatten(groupAndSupplierProfiles))
-    const profileNames = map((profile) => { return profile.name }, flatten(groupAndSupplierProfiles))
-    console.log('profileNames array', profileNames)
+    const profileNames = map((profile) => { return profile.name }, groupAndSupplierProfiles)
     const namesDoNotExistForSupplierAndGroup = any(
       isNil,
       profileNames
