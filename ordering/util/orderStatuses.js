@@ -21,7 +21,7 @@ const orderStatuses = [
     name: 'commitment',
     description: '...',
     icon: 'fa fa-lock',
-    recipeId: 'viewOrderSummary'
+    recipeId: 'commitOrder'
   },
 ]
 
@@ -44,7 +44,7 @@ function getOrderStatus ({ order, taskPlansByRecipe }) {
     (completeOrderSetupWithPrereqs && completeOrderSetupWithPrereqs.hasWork)
   )) {
     return 'setup'
-  } else if (!closeOrder.hasWork) {
+  } else if (!(closeOrder && closeOrder.hasWork)) {
     return 'intent'
   } else {
     return 'commitment'
