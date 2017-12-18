@@ -71,3 +71,11 @@ export const viewOrderSummary = {
   Component: ViewOrderSummaryTask,
   childTaskRecipes: []
 }
+
+export const commitOrder = {
+  id: 'commitOrder',
+  childTaskRecipes: [
+    closeOrder,
+    viewOrderSummary
+  ]
+}

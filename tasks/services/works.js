@@ -18,14 +18,14 @@ module.exports = function () {
 }
 
 const hooks = {
-  before: {},
+  before: {
+  },
   after: {
     create: [
       iff(taskRecipeIsCompleteOrderSetup, createCastOrderIntentTaskPlan),
-      iff(taskRecipeIsCompleteOrderSetup, createCloseOrderTaskPlan),
+      iff(taskRecipeIsCompleteOrderSetup, createCommitOrderTaskPlan),
       iff(taskRecipeIsCloseOrder, createCastOrderIntentTaskWorks),
-      iff(taskRecipeIsCloseOrder, createOrderPlans),
-      iff(taskRecipeIsCloseOrder, createViewOrderSummaryTaskPlan)
+      iff(taskRecipeIsCloseOrder, createOrderPlans)
     ]
   },
   error: {}
@@ -125,10 +125,10 @@ function createCastOrderIntentTaskPlan (hook) {
   .then(() => hook)
 }
 
-function createCloseOrderTaskPlan (hook) {
+function createCommitOrderTaskPlan (hook) {
   const taskPlans = hook.app.service('taskPlans')
   const orders = hook.app.service('orders')
-  const taskRecipeId = taskRecipes.closeOrder.id
+  const taskRecipeId = taskRecipes.commitOrder.id
   const completedTaskPlanId = hook.result.taskPlanId
 
   return taskPlans.get(completedTaskPlanId)
@@ -184,25 +184,4 @@ function createCastOrderIntentTaskWorks (hook) {
         })
     })
     .then(() => hook)
-}
-
-function createViewOrderSummaryTaskPlan (hook) {
-  const taskPlans = hook.app.service('taskPlans')
-  const orders = hook.app.service('orders')
-  const taskRecipeId = taskRecipes.viewOrderSummary.id
-  const closeOrderTaskPlanId = hook.data.taskPlanId
-
-  return taskPlans.get(closeOrderTaskPlanId)
-    .then((closeOrderTaskPlan) => {
-      const orderId = closeOrderTaskPlan.params.orderId
-      return orders.get(orderId)
-    })
-    .then((order) => {
-      const { id, adminAgentId } = order
-      const params = { orderId: id }
-      return taskPlans.create({ taskRecipeId, params, assigneeId: adminAgentId })
-    })
-    .then(() => {
-      return hook
-    })
 }

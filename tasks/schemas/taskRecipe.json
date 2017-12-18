@@ -28,10 +28,11 @@
         "setupSupplier",
         "completeOrderSetup",
         "completeOrderSetupWithPrereqs",
-        "startOrder",
-        "closeOrder",
-        "castIntent",
         "finishPrereqs",
+        "startOrder",
+        "castIntent",
+        "commitOrder",
+        "closeOrder",
         "createProfile",
         "viewOrderSummary"
       ]

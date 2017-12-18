@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types'
-import React from 'react'
+import h from 'react-hyperscript'
 import { connect } from 'react-fela'
+import { isNil } from 'ramda'
 
 import styles from '../styles/ProfileIcon'
 
+// TODO (mw) use mui Avatar directly?
 import Avatar from './Avatar'
 
 const imageSizePerFormat = {
@@ -11,30 +12,32 @@ const imageSizePerFormat = {
   icon: 'small'
 }
 
-// https://ant.design/components/avatar/
 function ProfileIcon (props) {
   const {
-    format,
     styles,
-    agent: { profile: { name, avatar } }
+    format,
+    agent
   } = props
-  return (
-    <div>
-      <Avatar
-        size={imageSizePerFormat[format]}
-        avatar={avatar}
-      />
-      <span className={styles.name}>{name}</span>
-    </div>
-  )
-}
+  if (isNil(agent)) return null
+  const { profile } = agent
+  if (isNil(profile)) return null
+  const { name, avatar } = profile
 
-ProfileIcon.propTypes = {
-  agent: PropTypes.shape({
-    name: PropTypes.string,
-    avatar: PropTypes.string
-  }).isRequired,
-  format: PropTypes.oneOf(['page', 'icon'])
+  return (
+    h('div', {
+      className: styles.container
+    }, [
+      h(Avatar, {
+        size: imageSizePerFormat[format],
+        avatar
+      }),
+      h('span', {
+        className: styles.name
+      }, [
+        name
+      ])
+    ])
+  )
 }
 
 ProfileIcon.defaultProps = {
