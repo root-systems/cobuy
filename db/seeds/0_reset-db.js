@@ -5,6 +5,7 @@ exports.seed = function (knex, Promise) {
     knex('taskWorks').del(),
     knex('priceSpecs').del(),
     knex('orderIntents').del(),
+    knex('orderPlans').del(),
     knex('relationships').del(),
     knex('tokenConsumes').del()
   ]).then(() => Promise.all([
