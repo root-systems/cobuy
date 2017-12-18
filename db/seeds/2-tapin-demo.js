@@ -156,6 +156,7 @@ const agents = [
 ]
 
 exports.seed = function (knex, Promise) {
+  // early return to test app without dummy data
   return
   var groupId, supplierId
   // insert group / supplier agents

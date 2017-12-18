@@ -1,10 +1,10 @@
 import h from 'react-hyperscript'
-import { isNil, merge, pipe, mapObjIndexed, split, prop, propOr, nth, values, path, forEach, assoc, __, map } from 'ramda'
+import { isNil, isEmpty, merge, pipe, mapObjIndexed, split, prop, propOr, nth, values, path, forEach, assoc, __, map } from 'ramda'
 import { reduxForm as connectForm, Field } from 'redux-form'
 import { compose } from 'recompose'
 
 import renameBy from '../../lib/renameBy'
-import ProductList from '../../ordering/components/ProductList'
+import ProductsForOrder from '../../ordering/components/ProductsForOrder'
 import SingleViewProduct from '../../ordering/components/SingleViewProduct'
 
 const forAgent = pipe(propOr({}), map)
@@ -12,11 +12,12 @@ const forAgent = pipe(propOr({}), map)
 // import styles from '../styles/CastIntentTask'
 
 function CastIntentTask (props) {
-  const { currentAgent, product } = props
+  const { currentAgent, product, orderIntentsByProductPriceAgent, applicablePriceSpecByProduct, collectiveQuantityByProduct } = props
 
-  if(isNil(currentAgent)) {
-    return null
-  }
+  if (isNil(currentAgent)) return null
+  // if (isEmpty(orderIntentsByProductPriceAgent)) return null
+  if (isEmpty(applicablePriceSpecByProduct)) return null
+  // if (isEmpty(collectiveQuantityByProduct)) return null
 
   if (product) {
     return h(SingleProduct, props)
@@ -85,7 +86,7 @@ function ManyProducts (props) {
     actions.router.push(`/tasks/${taskPlanId}?productId=${productId}`)
   }
   const nextProps = merge(props, { onNavigate })
-  return h(ProductList, nextProps)
+  return h(ProductsForOrder, nextProps)
 }
 
 export default CastIntentTask

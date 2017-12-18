@@ -2,11 +2,11 @@ import { Route } from 'react-router-dom'
 
 // Top Level Containers
 import Home from './app/containers/Home'
-import Dashboard from './app/containers/Dashboard'
-
 import Invited from './agents/containers/Invited'
-
+import TasksPage from './tasks/containers/TasksPage'
 import TaskWorker from './tasks/containers/TaskWorker'
+import OrdersPage from './ordering/containers/OrdersPage'
+import OrderPage from './ordering/containers/OrderPage'
 import OrderSummary from './ordering/containers/OrderSummary'
 
 import {
@@ -36,15 +36,21 @@ export default [
     }
   },
   {
-    name: 'dashboard',
+    name: 'orders',
     path: '/',
     exact: true,
-    Component: Dashboard,
+    Component: OrdersPage,
     selector: getIsAuthenticated,
     navigation: {
-      title: 'app.dashboard',
-      icon: 'fa fa-dashboard'
+      title: 'app.orders',
+      icon: 'fa fa-shopping-basket'
     }
+  },
+  {
+    name: 'order',
+    path: '/o/:orderId',
+    Component: OrderPage,
+    selector: getIsAuthenticated
   },
   {
     name: 'signIn',
@@ -78,6 +84,16 @@ export default [
     name: 'invited',
     path: '/invited/:jwt',
     Component: UserIsNotAuthenticated(Invited)
+  },
+  {
+    name: 'tasks',
+    path: '/tasks',
+    exact: true,
+    Component: UserIsAuthenticated(TasksPage),
+    navigation: {
+      title: 'tasks.tasks',
+      icon: 'fa fa-check-circle'
+    }
   },
   {
     name: 'task',

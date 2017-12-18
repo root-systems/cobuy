@@ -7,6 +7,8 @@ import getCurrentProduct from '../../supply/getters/getCurrentProduct'
 import getResourceTypes from '../../resources/getters/getResourceTypes'
 import getPriceSpecs from '../../supply/getters/getPriceSpecs'
 import getCurrentOrderIntentsByProductPriceAgent from '../../ordering/getters/getCurrentOrderIntentsByProductPriceAgent'
+import getCurrentOrderApplicablePriceSpecByProduct from '../../ordering/getters/getCurrentOrderApplicablePriceSpecByProduct'
+import getCurrentOrderCollectiveQuantityByProduct from '../../ordering/getters/getCurrentOrderCollectiveQuantityByProduct'
 
 export default createStructuredSelector({
   currentAgent: getCurrentAgent,
@@ -14,5 +16,8 @@ export default createStructuredSelector({
   agents: getOrderAgents,
   products: getCurrentOrderProducts,
   product: getCurrentProduct,
-  orderIntentsByProductPriceAgent: getCurrentOrderIntentsByProductPriceAgent
+  priceSpecs: getPriceSpecs,
+  orderIntentsByProductPriceAgent: getCurrentOrderIntentsByProductPriceAgent,
+  applicablePriceSpecByProduct: getCurrentOrderApplicablePriceSpecByProduct,
+  collectiveQuantityByProduct: getCurrentOrderCollectiveQuantityByProduct
 })

@@ -1,21 +1,13 @@
 import { compose } from 'recompose'
-import { isNil } from 'ramda'
+import { merge, isNil, sortBy } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import { Link } from 'react-router-dom'
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn,
-  TableFooter
-} from 'material-ui/Table'
+import FlatButton from 'material-ui/FlatButton'
 
 import { FormattedMessage } from '../../lib/Intl'
 
-import styles from '../styles/ListViewProduct'
+import styles from '../styles/GridViewProduct'
 
 function ListViewProduct (props) {
   const { styles, product, onNavigate, applicablePriceSpec, collectiveQuantity } = props
@@ -26,30 +18,30 @@ function ListViewProduct (props) {
   const { name, description, image } = resourceType
 
   return (
-    h(TableRow, { className: styles.tableRow, onClick: (ev) => {
-      onNavigate(product)
-    } }, [
-      h(TableRowColumn, { style: { width: '50px' } }, [
+    h('div', {
+      className: styles.container
+    }, [
+      h('div', {
+        className: styles.imageContainer
+      }, [
         h('img', {
           className: styles.image,
           src: image
         })
       ]),
-      h(TableRowColumn, {}, [
+      h('div', {
+        className: styles.textContainer
+      }, [
         h('h3', {
           className: styles.nameText
         }, [
           name
         ]),
-      ]),
-      h(TableRowColumn, {}, [
         h('p', {
           className: styles.productText
         }, [
           description
         ]),
-      ]),
-      h(TableRowColumn, { style: { width: '100px' } }, [
         h('p', {
           className: styles.priceText
         }, [
@@ -63,13 +55,12 @@ function ListViewProduct (props) {
           })
         ])
       ]),
-      h(TableRowColumn, { style: { width: '200px' } }, [
-        h('p', {
-          className: styles.productText
-        }, [
-          collectiveQuantity
-        ]),
-      ])
+      h(FlatButton, {
+        onClick: (ev) => {
+          onNavigate(product)
+        }
+      },
+      ['click here'])
     ])
   )
 }

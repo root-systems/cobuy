@@ -16,8 +16,5 @@ export default {
   }),
   ordersContainer: () => ({
     paddingTop: '1rem'
-  }),
-  tasksContainer: () => ({
-    paddingTop: '1rem'
   })
 }

@@ -1,18 +1,16 @@
 import { connect } from 'feathers-action-react'
 import { isNil, isEmpty, prop, groupBy, pipe, either, values } from 'ramda'
 
-import Dashboard from '../components/Dashboard'
+import TasksPage from '../components/TasksPage'
 import { actions as taskPlanActions } from '../../tasks/dux/plans'
 import { actions as taskWorkActions } from '../../tasks/dux/works'
-import { actions as orderActions } from '../../ordering/dux/orders'
-import getDashboardProps from '../getters/getDashboardProps'
+import getTaskPageProps from '../getters/getTaskPageProps'
 
 export default connect({
-  selector: getDashboardProps,
+  selector: getTaskPageProps,
   actions: {
     taskPlans: taskPlanActions,
-    taskWorks: taskWorkActions,
-    orders: orderActions
+    taskWorks: taskWorkActions
   },
   query: (props) => {
     var queries = []
@@ -43,7 +41,7 @@ export default connect({
     if (currentAgent && hasNotQueriedForTaskPlans(status)) return true
     return false
   }
-})(Dashboard)
+})(TasksPage)
 
 const hasNotQueriedForTaskPlans = pipe(
   prop('requests'),

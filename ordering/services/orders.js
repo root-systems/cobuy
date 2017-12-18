@@ -18,11 +18,12 @@ const hooks = {
   before: {
     create: [
       getCurrentUser,
-      iff(hasNoGroupAgent, createGroupAgent),
+      iff(hasNoConsumerAgent, createConsumerAgent),
       iff(hasNoSupplierAgent, createSupplierAgent),
-      iff(hasNoRelation, createRelation),
-      iff(groupHasNoAdminRelation, createGroupAdminRelation),
-      iff(userIsNotMemberOfGroup, createGroupMemberRelation)
+      iff(hasNoSupplierRelation, createSupplierRelation),
+      iff(groupHasNoAdminRelation, createGroupAdminRelation), // TODO this should be agent.create hook
+      iff(userIsNotMemberOfGroup, createGroupMemberRelation), // TODO this should be agent.create hook
+      iff(hasNoAdminAgent, createAdminAgent)
     ]
   },
   after: {
@@ -45,10 +46,14 @@ function getCurrentUser (hook) {
 
 function userIsNotMemberOfGroup (hook) {
   const relationships = hook.app.service('relationships')
+  const currentUserId = hook.params.agent.id
   const groupId = hook.data.consumerAgentId
   return relationships
-    .find({ query: { sourceId: groupId, relationshipType: 'member' } })
+    .find({ query: { sourceId: groupId, targetId: currentUserId, relationshipType: 'member' } })
     .then(isEmpty)
+    .then((result) => {
+      return result
+    })
 }
 
 function createGroupMemberRelation (hook) {
@@ -70,6 +75,9 @@ function groupHasNoAdminRelation (hook) {
   return relationships
     .find({ query: { sourceId: groupId, relationshipType: 'admin' } })
     .then(isEmpty)
+    .then((result) => {
+      return result
+    })
 }
 
 function createGroupAdminRelation (hook) {
@@ -85,7 +93,7 @@ function createGroupAdminRelation (hook) {
   })
 }
 
-function createGroupAgent (hook) {
+function createConsumerAgent (hook) {
   const agents = hook.app.service('agents')
   return agents.create({ type: 'group' })
   .then((agent) => {
@@ -94,19 +102,24 @@ function createGroupAgent (hook) {
   })
 }
 
-function hasNoGroupAgent (hook) {
-  return isNil(hook.data.consumerAgentId)
+function hasNoConsumerAgent (hook) {
+  const hasNoConsumerAgent = isNil(hook.data.consumerAgentId)
+  return hasNoConsumerAgent
 }
 
-function hasNoRelation (hook) {
+function hasNoSupplierRelation (hook) {
   const relationships = hook.app.service('relationships')
+  const consumerAgentId = hook.data.consumerAgentId
   const supplierAgentId = hook.data.supplierAgentId
-  return relationships.find({ query: { sourceId: supplierAgentId } }).then((relationship) => {
-    return isEmpty(relationship)
+  return relationships
+  .find({ query: { sourceId: consumerAgentId, targetId: supplierAgentId, relationshipType: 'supplier' } })
+  .then(isEmpty)
+  .then((result) => {
+    return result
   })
 }
 
-function createRelation (hook) {
+function createSupplierRelation (hook) {
   const relationships = hook.app.service('relationships')
   const consumerAgentId = hook.data.consumerAgentId
   const supplierAgentId = hook.data.supplierAgentId
@@ -114,9 +127,8 @@ function createRelation (hook) {
     relationshipType: 'supplier',
     sourceId: consumerAgentId,
     targetId: supplierAgentId
-  }).then(() => {
-    return hook
   })
+  .then(() => hook)
 }
 
 const hasLengthOne = pipe(length, equals(1))
@@ -156,34 +168,33 @@ function createSupplierAgent (hook) {
 }
 
 function hasNoSupplierAgent (hook) {
-  return isNil(hook.data.supplierAgentId)
+  const hasNoSupplierAgent = isNil(hook.data.supplierAgentId)
+  return hasNoSupplierAgent
+}
+
+function createAdminAgent (hook) {
+  hook.data.adminAgentId = hook.params.agent.id
+  return hook
+}
+
+
+function hasNoAdminAgent (hook) {
+  const hasNoAdminAgent = isNil(hook.data.adminAgentId)
+  return hasNoAdminAgent
 }
 
 function hasNotCompletedGroupOrSupplierProfile (hook) {
-  const agentId = hook.params.agent.id
-  const relationshipsService = hook.app.service('relationships')
   const profilesService = hook.app.service('profiles')
-
-  return relationshipsService.find({ query: { sourceId: agentId, relationshipType: 'admin' }})
-  .then(groupRelationships => {
-    const groupIds = map((relationship) => { return relationship.targetId }, groupRelationships)
-    return relationshipsService.find({ query: { targetId: { $in: groupIds }, relationshipType: 'supplier' }})
-    .then((supplierRelationships) => {
-      const supplierIds = map((relationship) => { return relationship.sourceId }, supplierRelationships)
-      return Promise.all([
-        profilesService.find({ query: { agentId: { $in: groupIds }}}),
-        profilesService.find({ query: { agentId: { $in: supplierIds }}})
-      ])
-    })
-  })
-  .then(profilesArray => {
-    // TODO: IK: need to return true if either the 'find' for group profiles with a name OR supplier profiles with a name returns true
-    return any(
+  const supplierAgentId = hook.data.supplierAgentId
+  const consumerAgentId = hook.data.consumerAgentId
+  return profilesService.find({ query: { agentId: { $in: [supplierAgentId, consumerAgentId] } } })
+  .then(groupAndSupplierProfiles => {
+    const profileNames = map((profile) => { return profile.name }, groupAndSupplierProfiles)
+    const namesDoNotExistForSupplierAndGroup = any(
       isNil,
-      map((profiles) => {
-        find(pipe(prop('name'), isNil, not))
-      }, profilesArray)
+      profileNames
     )
+    return namesDoNotExistForSupplierAndGroup
   })
 }
 
