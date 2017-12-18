@@ -52,7 +52,6 @@ function userIsNotMemberOfGroup (hook) {
     .find({ query: { sourceId: groupId, targetId: currentUserId, relationshipType: 'member' } })
     .then(isEmpty)
     .then((result) => {
-      console.log('userIsNotMemberOfGroup', result)
       return result
     })
 }
@@ -77,7 +76,6 @@ function groupHasNoAdminRelation (hook) {
     .find({ query: { sourceId: groupId, relationshipType: 'admin' } })
     .then(isEmpty)
     .then((result) => {
-      console.log('groupHasNoAdminRelation', result)
       return result
     })
 }
@@ -106,7 +104,6 @@ function createConsumerAgent (hook) {
 
 function hasNoConsumerAgent (hook) {
   const hasNoConsumerAgent = isNil(hook.data.consumerAgentId)
-  console.log('hasNoConsumerAgent', hasNoConsumerAgent)
   return hasNoConsumerAgent
 }
 
@@ -114,12 +111,10 @@ function hasNoSupplierRelation (hook) {
   const relationships = hook.app.service('relationships')
   const consumerAgentId = hook.data.consumerAgentId
   const supplierAgentId = hook.data.supplierAgentId
-  console.log('supplierAgentId', supplierAgentId)
   return relationships
   .find({ query: { sourceId: consumerAgentId, targetId: supplierAgentId, relationshipType: 'supplier' } })
   .then(isEmpty)
   .then((result) => {
-    console.log('hasNoSupplierRelation', result)
     return result
   })
 }
@@ -173,9 +168,7 @@ function createSupplierAgent (hook) {
 }
 
 function hasNoSupplierAgent (hook) {
-  console.log('hasNoSupplierAgent supplierAgentId', hook.data.supplierAgentId)
   const hasNoSupplierAgent = isNil(hook.data.supplierAgentId)
-  console.log('hasNoSupplierAgent', hasNoSupplierAgent)
   return hasNoSupplierAgent
 }
 
@@ -201,7 +194,6 @@ function hasNotCompletedGroupOrSupplierProfile (hook) {
       isNil,
       profileNames
     )
-    console.log('names have not been filled out for any supplier/group profile', namesDoNotExistForSupplierAndGroup)
     return namesDoNotExistForSupplierAndGroup
   })
 }
