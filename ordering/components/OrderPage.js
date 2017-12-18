@@ -8,6 +8,7 @@ import FontIcon from 'material-ui/FontIcon'
 
 import { getTaskPlanFromOrder } from '../util/orderStatuses'
 import ProfileIcon from '../../agents/components/ProfileIcon'
+import OrderStep from './OrderStep'
 
 import styles from '../styles/OrderPage'
 
@@ -32,8 +33,8 @@ function OrderPage (props) {
   if (isNil(order)) return null
   const { id, status, steps, consumerAgent, supplierAgent, adminAgent } = order
 
-  const renderOrderStepLinks = map(step => {
-    return h(OrderStepLink, { step, styles })
+  const renderOrderSteps = map(step => {
+    return h(OrderStep, { key: step.name, step, styles })
   })
 
   return (
@@ -50,6 +51,7 @@ function OrderPage (props) {
       }, [
         h(OrderAgentIcon, {
           styles,
+          className: styles.icon,
           role: 'consumer',
           agent: consumerAgent
         }),
@@ -64,36 +66,12 @@ function OrderPage (props) {
           agent: adminAgent
         })
       ]),
-      h('h2', {
-        className: styles.title
+      h('ol', {
+        className: styles.steps
       }, [
-        `status: ${status}`,
-        renderOrderStepLinks(steps)
+        renderOrderSteps(steps)
       ])
     ])
-  )
-}
-
-function OrderStepLink ({ step, styles }) {
-  const { name, description, icon, taskPlan, completed, ready } = step
-
-  const hasTaskPlan = !isNil(taskPlan)
-  const maybeLink = children => {
-    return hasTaskPlan
-      ? h(Link, { to: `/tasks/${taskPlan.id}` }, children)
-      : children
-  }
-
-  return (
-    h('div', {
-      key: name,
-    }, maybeLink([
-      h(FontIcon, {
-        className: icon
-      }),
-      name,
-      description
-    ]))
   )
 }
 

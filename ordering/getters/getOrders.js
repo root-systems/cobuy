@@ -6,6 +6,8 @@ import getOrdersState from './getOrdersState'
 import { getAgents } from 'dogstack-agents/getters'
 import getTaskPlans from '../../tasks/getters/getTaskPlans'
 
+const orderStatusNames = map(prop('name'), orderStatuses)
+
 const getTaskPlansByOrderRecipe = createSelector(
   getTaskPlans,
   pipe(
@@ -23,15 +25,17 @@ export default createSelector(
     const mapOrders = map(order => {
       const taskPlansByRecipe = taskPlansByOrderRecipe[order.id]
       const status = getOrderStatus({ order, taskPlansByRecipe })
-      const statusIndex = orderStatuses.indexOf(status)
+      const stepIndex = orderStatusNames.indexOf(status)
       const taskPlansByStatus = getTaskPlansByStatus({ order, taskPlansByRecipe })
 
       const steps = orderStatuses.map((orderStatus, index) => ({
         name: orderStatus.name,
+        description: orderStatus.description,
+        icon: orderStatus.icon,
         index,
         taskPlan: taskPlansByStatus[orderStatus.name],
-        completed: status && index > statusIndex,
-        ready: status && index - statusIndex === 1
+        completed: status && index < stepIndex,
+        ready: status && index === stepIndex
       }))
 
       const consumerAgent = agents[order.consumerAgentId]
@@ -41,6 +45,7 @@ export default createSelector(
       return merge(order, {
         status,
         steps,
+        stepIndex,
         consumerAgent,
         supplierAgent,
         adminAgent
