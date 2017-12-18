@@ -1,7 +1,9 @@
-import baseTheme from './app/themes/base'
+// TODO: IK: figure out how / best way to dynamically load a theme based on app config
+
+import tapinTheme from './app/themes/tapin'
 
 export default {
-  theme: baseTheme,
+  theme: tapinTheme,
   setup: (renderer) => {
     renderer.renderStatic(
       {
@@ -9,7 +11,8 @@ export default {
         height: '100%',
         margin: 0,
         padding: 0,
-        fontFamily: 'Roboto'
+        fontFamily: 'Roboto',
+        backgroundColor: tapinTheme.colors.canvas
       },
       'html,body,#app'
     )

@@ -32,7 +32,10 @@ function hasNoAuthorization (hook) {
 }
 
 function createPatchCredentialsTokenAndInviteMail (hook) {
+  const appConfig = hook.app.get('app')
   const { id, agentId, email } = hook.result
+
+  // TODO: IK: get the agent name, admin name, group name
   return hook.app.service('tokens').create({
     agentId,
     service: 'credentials',
@@ -42,14 +45,13 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
   // TODO: add .env variables to change from 'Tapin' in copy
   .then((token) => {
     return hook.app.service('mailer').create({
-      from: 'hello@cobuy.nz',
+      from: `${appConfig.email}`,
       to: email || 'no@email.com',
-      subject: `You're invited to join TapinBuy!`,
+      subject: `You're invited to join ${appConfig.name}!`,
       html: `
-        Hi. You've been invited to join a group on TapinBuy! 
+        Hi. You're invited to join a group on ${appConfig.name}! 
 
-        TapinBuy is an easy way for schools and ECE providers to make group purchases so they can take
-advantage of price points through economies of scale.
+        ${appConfig.bodyText}
 
         Click <a href=${hook.app.get('app').url}/invited/${token.jwt}>here</a> to set your password and start buying together!
       `

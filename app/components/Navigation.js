@@ -1,16 +1,21 @@
 import h from 'react-hyperscript'
 import { connect as connectFela } from 'react-fela'
-import { not, pipe, map, values } from 'ramda'
+import { not, pipe, map, values, path } from 'ramda'
 import AppBar from 'material-ui/AppBar'
+import IconButton from 'material-ui/IconButton'
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
 import { withState, withHandlers, compose } from 'recompose'
 import { NavLink } from 'react-router-dom'
 import { LogOut } from 'dogstack-agents/components'
+import NavTitle from './NavTitle'
 
 import styles from '../styles/Navigation'
 import { FormattedMessage } from 'dogstack/intl'
+
+const getAssetsUrlFromConfig = path(['assets', 'url'])
 
 function Navigation (props) {
   const {
@@ -81,16 +86,14 @@ function Navigation (props) {
   return (
     h('div', [
       h(AppBar, {
-        title: (
-          h(FormattedMessage, {
-            id: 'app.name',
-            className: styles.labelText,
-            values: {
-              appName
-            }
-          })
-        ),
-        onLeftIconButtonTouchTap: toggleDrawer
+        title: h(NavTitle, { src: `${getAssetsUrlFromConfig(config)}/images/tapinBuy.png` }),
+        onLeftIconButtonTouchTap: toggleDrawer,
+        style: { backgroundColor: 'white' }, // for some reason can't style backgroundColor of AppBar with class?
+        iconElementLeft: (
+          h(IconButton, {}, [
+            h(NavigationMenu, { color: 'black' })
+          ])
+        )
       }),
       h(Drawer, {
         open: isDrawerOpen

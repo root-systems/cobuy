@@ -1,6 +1,7 @@
 {
   "app.name": "{appName}",
-  "app.tagline": "Helping you buy good food, together",
+  "app.tagline": "{tagline}",
+  "app.bodyText": "{bodyText}",
   "app.closeMenu": "close menu",
   "app.home": "home",
   "app.dashboard": "dashboard",
