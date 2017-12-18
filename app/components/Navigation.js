@@ -1,6 +1,6 @@
 import h from 'react-hyperscript'
 import { connect as connectFela } from 'react-fela'
-import { not, pipe, map, values } from 'ramda'
+import { not, pipe, map, values, path } from 'ramda'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
@@ -8,9 +8,12 @@ import Divider from 'material-ui/Divider'
 import { withState, withHandlers, compose } from 'recompose'
 import { NavLink } from 'react-router-dom'
 import { LogOut } from 'dogstack-agents/components'
+import NavTitle from './NavTitle'
 
 import styles from '../styles/Navigation'
 import { FormattedMessage } from 'dogstack/intl'
+
+const getAssetsUrlFromConfig = path(['assets', 'url'])
 
 function Navigation (props) {
   const {
@@ -81,15 +84,16 @@ function Navigation (props) {
   return (
     h('div', [
       h(AppBar, {
-        title: (
-          h(FormattedMessage, {
-            id: 'app.name',
-            className: styles.labelText,
-            values: {
-              appName
-            }
-          })
-        ),
+        // title: (
+        //   h(FormattedMessage, {
+        //     id: 'app.name',
+        //     className: styles.labelText,
+        //     values: {
+        //       appName
+        //     }
+        //   })
+        // ),
+        title: h(NavTitle, { src: `${getAssetsUrlFromConfig(config)}/images/tapinBuy.png` }),
         onLeftIconButtonTouchTap: toggleDrawer
       }),
       h(Drawer, {
