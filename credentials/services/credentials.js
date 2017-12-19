@@ -40,13 +40,18 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
     params: { serviceId: id }
   })
   .then((token) => {
+    // TODO: add .env variables to change from 'Tapin' in copy
     return hook.app.service('mailer').create({
       from: 'hello@cobuy.nz',
       to: email || 'no@email.com',
-      subject: `You're invited to join Cobuy!`,
+      subject: `You're invited to join TapinBuy!`,
       html: `
-        Hi -name-. You've been invited by -admin- to join -group- on Cobuy! Click <a href=
-        ${hook.app.get('app').url}/invited/${token.jwt}>here</a> to set your password and start co-buying!
+        Hi. You've been invited to join a group on TapinBuy! 
+        
+        TapinBuy is an easy way for schools and ECE providers to make group purchases so they can take
+advantage of price points through economies of scale.
+
+        Click <a href=${hook.app.get('app').url}/invited/${token.jwt}>here</a> to set your password and start buying together!
       `
     })
   })
