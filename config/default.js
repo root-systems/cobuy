@@ -11,7 +11,11 @@ var config = {
   },
   assets: {
     root: 'app/assets',
-    url: 'http://localhost:3000/'
+    url: 'http://localhost:3000/',
+    background: {
+      small: 'cobuy-bg-sml-1080.jpg',
+      large: 'cobuy-bg-lrg-1440.jpg'
+    }
   },
   bundler: {
     head: `
