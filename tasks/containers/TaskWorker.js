@@ -114,9 +114,17 @@ export default compose(
   }
 
   function handleCancel (taskPlan) {
-    const { parentTaskPlan } = taskPlan
-    const nextRoute = isNil(parentTaskPlan)
-      ? '/' : `/tasks/${parentTaskPlan.id}`
+    const {
+      parentTaskPlan,
+      params: { orderId } = {}
+    } = taskPlan
+    const nextRoute = (
+      (!isNil(parentTaskPlan))
+        ? `/tasks/${parentTaskPlan.id}`
+        : (!isNil(orderId))
+          ? `/o/${orderId}`
+          : `/tasks`
+    )
     actions.router.push(nextRoute)
   }
 
