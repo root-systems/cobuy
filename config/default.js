@@ -8,6 +8,7 @@ var config = {
     tagline: 'Helping you buy good food, together',
     bodyText: 'Cobuy is an app that makes buying groups easy to start, maintain, and grow. Using the collective buying power of a group, we can buy food in bulk directly from wholesalers. By cutting out retailers, we effectively eliminate retail food waste, save money and have access to a wider range of better quality products.',
     url: 'http://localhost:3000',
+    email: 'support@cobuy.nz'
   },
   assets: {
     root: 'app/assets',
