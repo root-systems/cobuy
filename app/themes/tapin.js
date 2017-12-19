@@ -115,8 +115,8 @@ export default {
     ],
     text: darkBlack,
     alternateText: white,
-    canvas: grey300,
-    border: grey500,
+    canvas: white,
+    border: grey300,
     shadow: fullBlack
   },
   fontWeights: {
