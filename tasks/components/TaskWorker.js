@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect as connectFela } from 'react-fela'
-import { pipe, length, gt, all, prop, propOr, path, either, complement, not, isNil, isEmpty, tap } from 'ramda'
+import { pipe, length, gt, all, prop, propOr, path, either, complement, not, isNil, isEmpty } from 'ramda'
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
