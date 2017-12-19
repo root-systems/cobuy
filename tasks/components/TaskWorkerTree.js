@@ -16,7 +16,7 @@ function TaskWorkerTree (props) {
   const { styles, childTaskPlans, onNavigate } = props
 
   const mapSubTasks = map(childTaskPlan => {
-    const { taskRecipe: childTaskRecipe, taskWork: childTaskWork } = childTaskPlan
+    const { taskRecipe: childTaskRecipe, hasWork: childHasWork } = childTaskPlan
     const { id: childTaskRecipeId } = childTaskRecipe
     return (
       <ListItem className={styles.childTaskItem}>
@@ -27,7 +27,7 @@ function TaskWorkerTree (props) {
               className={styles.childTaskNameText}
             />
           }
-          checked={not(isEmpty(childTaskWork))}
+          checked={childHasWork}
           className={styles.childTaskCheckbox}
           onCheck={handleNavigate(childTaskPlan)}
         />
