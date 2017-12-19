@@ -8,8 +8,8 @@ const isArray = is(Array)
 
 const orderStatuses = [
   {
-    name: 'setup',
-    description: '...',
+    name: 'setup', // TODO intl
+    description: 'Setup details and start order.', // TODO intl
     Icon: BuildIcon,
     recipeId: [
       'completeOrderSetupWithPrereqs',
@@ -17,14 +17,14 @@ const orderStatuses = [
     ],
   },
   {
-    name: 'intent',
-    description: '...',
+    name: 'intend', // TODO intl
+    description: 'Share intents to buy!', // TODO intl
     Icon: AssignmentIcon,
     recipeId: 'castIntent'
   },
   {
-    name: 'commitment',
-    description: '...',
+    name: 'commit', // TODO intl
+    description: 'Close order, combine intents and commit to a purchase order.', // TODO intl
     Icon: CompareIcon,
     recipeId: 'commitOrder'
   },
@@ -50,9 +50,9 @@ function getOrderStatus ({ order, taskPlansByRecipe }) {
   )) {
     return 'setup'
   } else if (!(closeOrder && closeOrder.hasWork)) {
-    return 'intent'
+    return 'intend'
   } else {
-    return 'commitment'
+    return 'commit'
   }
   return null
 }

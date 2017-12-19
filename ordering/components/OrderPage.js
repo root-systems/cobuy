@@ -17,7 +17,7 @@ function OrderAgentIcon (props) {
   const { styles, role, agent } = props
   return (
     h('div', {
-      className: styles[role]
+      className: `${styles.agent} ${styles[role]}`
     }, [
       role,
       h(ProfileIcon, {

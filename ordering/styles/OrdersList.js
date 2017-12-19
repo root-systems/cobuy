@@ -1,23 +1,30 @@
 export default {
   container: () => ({
     display: 'flex',
+    flexDirection: 'column'
+  }),
+  intro: ({ theme }) => ({
+    textAlign: 'center',
+    fontSize: theme.fontSizes[8]
+  }),
+  list: () => ({
+    display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
+    listStyleType: 'none'
   }),
   labelText: () => ({
     textTransform: 'capitalize'
   }),
-  intro: ({ theme }) => ({
-    textAlign: 'center',
-    fontSize: theme.fontSizes[2]
-  }),
-  buttonContainer: () => ({
+  header: ({ theme }) => ({
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: 'baseline',
+    justifyContent: 'space-between'
   }),
-  button: () => ({
-    width: '100%'
+  title: ({ theme }) => ({
+    fontSize: theme.fontSizes[5]
+  }),
+  agents: () => ({
+    display: 'flex',
+    justifyContent: 'flex-end'
   })
 }
