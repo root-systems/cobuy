@@ -10,7 +10,8 @@ export default {
   },
   logo: (props) => {
     return {
-      height: '90%'
+      height: '100%',
+      padding: '8px'
     }
   }
 }
