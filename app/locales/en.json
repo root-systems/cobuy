@@ -91,5 +91,6 @@
   "tasks.steps.selectGroup": "Select a group",
   "tasks.steps.selectSupplier": "Select a supplier",
   "tasks.steps.selectAdmin": "Select an admin",
-  "tasks.recipes.setupSupplier": "setup supplier profile and products"
+  "tasks.recipes.setupSupplier": "setup supplier profile and products",
+  "tasks.recipes.commitOrder": "Commit order"
 }
