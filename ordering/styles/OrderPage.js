@@ -1,9 +1,16 @@
 export default {
   container: () => ({}),
-  title: () => ({}),
+  title: ({ theme }) => ({
+    fontSize: theme.fontSizes[8],
+    color: theme.colors.text
+  }),
   agents: () => ({
     display: 'flex',
     justifyContent: 'space-around'
   }),
-  steps: () => ({})
+  agent: ({ theme }) => ({
+    fontSize: theme.fontSizes[3],
+    color: theme.colors.text
+  }),
+  stepper: () => ({})
 }

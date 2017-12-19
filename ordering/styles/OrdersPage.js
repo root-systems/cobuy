@@ -1,20 +1,20 @@
 export default {
-  container: () => ({
+  container: ({ theme }) => ({
     width: '50%',
-    minWidth: '3rem',
+    minWidth: theme.space[4],
+    margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: 'center'
   }),
   labelText: () => ({
     textTransform: 'capitalize'
   }),
-  intro: () => ({
-    textAlign: 'center',
-    fontSize: '2rem'
+  ordersContainer: ({ theme }) => ({
+    maginTop: theme.space[2],
+    width: '100%'
   }),
-  ordersContainer: () => ({
-    paddingTop: '1rem'
+  action: ({ theme }) => ({
+    margin: '0 auto'
   })
 }

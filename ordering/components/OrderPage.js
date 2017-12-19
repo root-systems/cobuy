@@ -5,10 +5,11 @@ import { connect as connectFela } from 'react-fela'
 import { FormattedMessage } from 'dogstack/intl'
 import { Link } from 'react-router-dom'
 import FontIcon from 'material-ui/FontIcon'
+import { Stepper } from 'material-ui/Stepper'
 
 import { getTaskPlanFromOrder } from '../util/orderStatuses'
 import ProfileIcon from '../../agents/components/ProfileIcon'
-import OrderStep from './OrderStep'
+import OrderSteps from './OrderSteps'
 
 import styles from '../styles/OrderPage'
 
@@ -16,7 +17,7 @@ function OrderAgentIcon (props) {
   const { styles, role, agent } = props
   return (
     h('div', {
-      className: styles[role]
+      className: `${styles.agent} ${styles[role]}`
     }, [
       role,
       h(ProfileIcon, {
@@ -31,11 +32,7 @@ function OrderPage (props) {
   const { styles, actions, order } = props
 
   if (isNil(order)) return null
-  const { id, status, steps, consumerAgent, supplierAgent, adminAgent } = order
-
-  const renderOrderSteps = map(step => {
-    return h(OrderStep, { key: step.name, step, styles })
-  })
+  const { id, steps, stepIndex, consumerAgent, supplierAgent, adminAgent } = order
 
   return (
     h('div', {
@@ -66,11 +63,13 @@ function OrderPage (props) {
           agent: adminAgent
         })
       ]),
-      h('ol', {
-        className: styles.steps
-      }, [
-        renderOrderSteps(steps)
-      ])
+      h(OrderSteps, {
+        steps,
+        stepIndex,
+        orientation: 'vertical',
+        isStatic: false,
+        onNavigate: actions.router.push
+      })
     ])
   )
 }

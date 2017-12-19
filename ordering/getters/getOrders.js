@@ -31,7 +31,7 @@ export default createSelector(
       const steps = orderStatuses.map((orderStatus, index) => ({
         name: orderStatus.name,
         description: orderStatus.description,
-        icon: orderStatus.icon,
+        Icon: orderStatus.Icon,
         index,
         taskPlan: taskPlansByStatus[orderStatus.name],
         completed: status && index < stepIndex,

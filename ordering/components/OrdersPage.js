@@ -19,14 +19,6 @@ function OrdersPage (props) {
     h('div', {
       className: styles.container
     }, [
-      h('p', {
-        className: styles.intro
-      }, [
-        h(FormattedMessage, {
-          id: 'app.dashboard',
-          className: styles.labelText
-        })
-      ]),
       h('div', {
         className: styles.ordersContainer
       }, [
@@ -66,6 +58,7 @@ function OrdersPage (props) {
         h(OrderCreator)
       ]),
       h(FloatingActionButton, {
+        className: styles.action,
         onClick: openDialog
       }, [
         h(ContentAdd)
