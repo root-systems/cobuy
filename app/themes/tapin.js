@@ -20,7 +20,7 @@ import {
   white
 } from 'material-ui/styles/colors'
 
-const tapinColours = {
+const tapin = {
   darkBlue: '#394b82',
   orange: '#ef7743',
   teal: '#42bec5',
@@ -95,12 +95,12 @@ export default {
     logo: '"Lobster Two", cursive'
   },
   colors: {
-    primary1: tapinColours.darkBlue,
-    primary2: tapinColours.darkBlue,
-    primary3: tapinColours.darkBlue,
-    accent1: tapinColours.orange,
-    accent2: tapinColours.orange,
-    accent3: tapinColours.orange,
+    primary1: tapin.darkBlue,
+    primary2: tapin.darkBlue,
+    primary3: tapin.darkBlue,
+    accent1: tapin.orange,
+    accent2: tapin.orange,
+    accent3: tapin.orange,
     greys: [
       grey50, // [0]
       grey100, // [1]
