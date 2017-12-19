@@ -47,22 +47,20 @@ export default compose(
           }
         })
 
-        if (!isEmpty(currentAgentGroupIds)) {
-          // get members / suppliers with a relationship to any groups of the currentAgent
-          queries.push({
-            service: 'relationships',
-            params: {
-              query: {
-                sourceId: {
-                  $in: currentAgentGroupIds
-                },
-                relationshipType: {
-                  $in: ['member', 'supplier']
-                }
+        // get members / suppliers with a relationship to any groups of the currentAgent
+        queries.push({
+          service: 'relationships',
+          params: {
+            query: {
+              sourceId: {
+                $in: currentAgentGroupIds
+              },
+              relationshipType: {
+                $in: ['member', 'supplier']
               }
             }
-          })
-        }
+          }
+        })
 
         const agentIds = getAgentIds(props.selected)
         queries.push({
