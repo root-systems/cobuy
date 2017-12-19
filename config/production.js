@@ -2,7 +2,10 @@ var config = {
   port: process.env.PORT,
   app: {
     name: process.env.APP_NAME,
+    tagline: process.env.APP_TAGLINE,
+    bodyText: process.env.APP_BODY_TEXT,
     url: process.env.APP_URL,
+    email: process.env.APP_EMAIL
   },
   assets: {
     url: process.env.ASSETS_URL

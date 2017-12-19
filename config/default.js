@@ -58,5 +58,3 @@ module.exports = deepExtend(
   require('dogstack-agents/config'),
   config
 )
-
-console.log('config', module.exports)
