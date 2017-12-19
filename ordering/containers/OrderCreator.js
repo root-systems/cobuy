@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, equals, uniq, pipe, prop, values, groupBy, either, isEmpty, merge, none, reduce, map, flatten } from 'ramda'
+import { isNil, equals, uniq, pipe, prop, values, groupBy, either, isEmpty, merge, none, reduce, map, flatten, path, unless } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -128,13 +128,13 @@ function OrderCreatorContainer (props) {
 
 const variadicEither = (head, ...tail) => reduce(either, head, tail)
 
-const hasQueriedForSupplierAgentId = (relationships) => {
-  if (isNil(relationships)) return
-  const queriedRelationshipTypes = flatten(map((relationship) => {
-    return relationship.args.params.query.relationshipType.$in
-  }, relationships))
-  return none(x => x === 'supplier', queriedRelationshipTypes)
-}
+const hasNotQueriedForSupplierAgentIds = unless(isNil, pipe(
+    map(path(['args', 'params', 'query', 'relationshipType', '$in'])),
+    flatten,
+    uniq,
+    none(equals('supplier'))
+  )
+)
 
 const hasNotQueriedForRelated = pipe(
   prop('requests'),
@@ -142,7 +142,7 @@ const hasNotQueriedForRelated = pipe(
   groupBy(prop('service')),
   variadicEither(
     pipe(prop('relationships'), either(isNil, isEmpty)),
-    pipe(prop('relationships'), hasQueriedForSupplierAgentId),
+    pipe(prop('relationships'), hasNotQueriedForSupplierAgentIds),
     pipe(prop('profiles'), either(isNil, isEmpty))
   )
 )
