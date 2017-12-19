@@ -5,5 +5,5 @@ export default {
     display: 'flex',
     justifyContent: 'space-around'
   }),
-  steps: () => ({})
+  stepper: () => ({})
 }

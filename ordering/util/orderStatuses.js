@@ -1,11 +1,16 @@
 import { isNil, is, find, map, indexBy, prop, __ } from 'ramda'
+
+import BuildIcon from 'material-ui/svg-icons/action/build'
+import AssignmentIcon from 'material-ui/svg-icons/action/assignment'
+import CompareIcon from 'material-ui/svg-icons/action/compare-arrows'
+
 const isArray = is(Array)
 
 const orderStatuses = [
   {
     name: 'setup',
     description: '...',
-    icon: 'fa fa-lightbulb-o',
+    Icon: BuildIcon,
     recipeId: [
       'completeOrderSetupWithPrereqs',
       'completeOrderSetup'
@@ -14,13 +19,13 @@ const orderStatuses = [
   {
     name: 'intent',
     description: '...',
-    icon: 'fa fa-cart-plus',
+    Icon: AssignmentIcon,
     recipeId: 'castIntent'
   },
   {
     name: 'commitment',
     description: '...',
-    icon: 'fa fa-lock',
+    Icon: CompareIcon,
     recipeId: 'commitOrder'
   },
 ]
