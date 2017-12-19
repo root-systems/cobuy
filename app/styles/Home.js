@@ -8,6 +8,8 @@ if (typeof window === 'undefined') {
 const { path } = require('ramda')
 
 const getAssetsUrlFromConfig = path(['assets', 'url'])
+const getSmallBackgroundUrlFromConfig = path(['assets', 'background', 'small'])
+const getLargeBackgroundUrlFromConfig = path(['assets', 'background', 'large'])
 
 export default {
   container: ({ theme }) => {
@@ -46,7 +48,7 @@ export default {
           opacity: 0.6,
           zIndex: -1,
           backgroundColor: theme.colors.canvas,
-          backgroundImage: `url("${getAssetsUrlFromConfig(config)}/images/cobuy-bg-sml-1080.jpg")`,
+          backgroundImage: `url("${getAssetsUrlFromConfig(config)}/images/${getSmallBackgroundUrlFromConfig(config)}")`,
           backgroundSize: 'cover'
         },
         [`@media (min-width: ${theme.breakpoints.desktop})`]: {
@@ -59,7 +61,7 @@ export default {
           opacity: 0.6,
           zIndex: -1,
           backgroundColor: theme.colors.canvas,
-          backgroundImage: `url("${getAssetsUrlFromConfig(config)}/images/cobuy-bg-lrg-1440.jpg")`,
+          backgroundImage: `url("${getAssetsUrlFromConfig(config)}/images/${getLargeBackgroundUrlFromConfig(config)}")`,
           backgroundSize: 'cover'
         }
       }

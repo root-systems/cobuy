@@ -32,7 +32,10 @@ function hasNoAuthorization (hook) {
 }
 
 function createPatchCredentialsTokenAndInviteMail (hook) {
+  const appConfig = hook.app.get('app')
   const { id, agentId, email } = hook.result
+
+  // TODO: IK: get the agent name, admin name, group name
   return hook.app.service('tokens').create({
     agentId,
     service: 'credentials',
@@ -41,12 +44,12 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
   })
   .then((token) => {
     return hook.app.service('mailer').create({
-      from: 'hello@cobuy.nz',
+      from: `${appConfig.email}`,
       to: email || 'no@email.com',
-      subject: `You're invited to join Cobuy!`,
+      subject: `You're invited to join ${appConfig.name}!`,
       html: `
-        Hi -name-. You've been invited by -admin- to join -group- on Cobuy! Click <a href=
-        ${hook.app.get('app').url}/invited/${token.jwt}>here</a> to set your password and start co-buying!
+        Hi -name-. You've been invited by -admin- to join -group- on ${appConfig.name}! Click <a href=
+        ${appConfig.url}/invited/${token.jwt}>here</a> to set your password.
       `
     })
   })
