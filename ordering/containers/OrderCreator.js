@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, equals, uniq, pipe, prop, values, groupBy, either, isEmpty, merge } from 'ramda'
+import { isNil, equals, uniq, pipe, prop, values, groupBy, either, isEmpty, merge, none, reduce, map, flatten, path, unless } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -117,7 +117,7 @@ function OrderCreatorContainer (props) {
     if (values.consumerAgentId === 'NEW_CONSUMER') values.consumerAgentId = null
     if (values.supplierAgentId === 'NEW_SUPPLIER') values.supplierAgentId = null
     actions.orders.create(values)
-  } 
+  }
 
   const nextProps = merge(props, {
     onSubmit: handleSubmit
@@ -126,12 +126,23 @@ function OrderCreatorContainer (props) {
   return h(OrderCreator, nextProps)
 }
 
+const variadicEither = (head, ...tail) => reduce(either, head, tail)
+
+const hasNotQueriedForSupplierAgentIds = unless(isNil, pipe(
+    map(path(['args', 'params', 'query', 'relationshipType', '$in'])),
+    flatten,
+    uniq,
+    none(equals('supplier'))
+  )
+)
+
 const hasNotQueriedForRelated = pipe(
   prop('requests'),
   values,
   groupBy(prop('service')),
-  either(
+  variadicEither(
     pipe(prop('relationships'), either(isNil, isEmpty)),
+    pipe(prop('relationships'), hasNotQueriedForSupplierAgentIds),
     pipe(prop('profiles'), either(isNil, isEmpty))
   )
 )
