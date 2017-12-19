@@ -1,9 +1,12 @@
 import h from 'react-hyperscript'
 import { connect as connectFela } from 'react-fela'
-import { pipe, map, values, path } from 'ramda'
+import { pipe, isNil, map, values, path } from 'ramda'
 import { FormattedMessage } from 'dogstack/intl'
 import { Link } from 'react-router-dom'
+import Divider from 'material-ui/Divider'
+
 import ProfileIcon from '../../agents/components/ProfileIcon'
+import OrderSteps from './OrderSteps'
 
 import styles from '../styles/OrdersList'
 
@@ -24,7 +27,11 @@ function OrderAgentIcon (props) {
 function OrdersListItem (props) {
   const { styles, actions, order } = props
 
+  if (isNil(order)) return null
+  const { steps, stepIndex } = order
+
   return h(Link, {
+    className: styles.link,
     to: `/o/${order.id}`
   }, [
     h('li', {
@@ -57,7 +64,14 @@ function OrdersListItem (props) {
             agent: order.adminAgent
           })
         ])
-      ])
+      ]),
+      h(OrderSteps, {
+        steps,
+        stepIndex,
+        orientation: 'horizontal',
+        isStatic: true
+      }),
+      h(Divider)
     ])
   ])
 }

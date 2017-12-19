@@ -65,7 +65,9 @@ function OrderPage (props) {
       ]),
       h(OrderSteps, {
         steps,
-        stepIndex
+        stepIndex,
+        orientation: 'vertical',
+        isStatic: false
       })
     ])
   )

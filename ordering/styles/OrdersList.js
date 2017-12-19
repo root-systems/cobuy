@@ -3,6 +3,9 @@ export default {
     display: 'flex',
     flexDirection: 'column'
   }),
+  link: () => ({
+    textDecoration: 'none'
+  }),
   intro: ({ theme }) => ({
     textAlign: 'center',
     fontSize: theme.fontSizes[8]

@@ -6,21 +6,27 @@ import { Stepper } from 'material-ui/Stepper'
 import OrderStep from './OrderStep'
 
 function OrderSteps (props) {
-  const { steps, stepIndex, setStepIndex } = props
+  const {
+    steps,
+    stepIndex, setStepIndex,
+    orientation,
+    isStatic
+  } = props
 
   const renderOrderSteps = map(step => {
     return h(OrderStep, {
       key: step.name,
       step,
       stepIndex,
-      setStepIndex
+      setStepIndex,
+      isStatic
     })
   })
 
   return (
     h(Stepper, {
       linear: false,
-      orientation: 'vertical'
+      orientation
     }, [
       renderOrderSteps(steps)
     ])

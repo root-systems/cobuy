@@ -14,6 +14,14 @@ function OrderStep (props) {
 
   const hasTaskPlan = !isNil(taskPlan)
 
+  const statusColor = (
+    ready
+      ? theme.colors.primary2
+      : completed
+        ? theme.colors.text
+        : theme.colors.greys[3]
+  )
+
   return (
     h(Step, {
       className: styles.container,
@@ -24,13 +32,7 @@ function OrderStep (props) {
         className: styles.header,
         icon: (
           h(Icon, {
-            color: (
-              ready
-                ? theme.colors.primary2
-                : completed
-                  ? theme.colors.text
-                  : theme.colors.greys[3]
-            )
+            color: statusColor
           })
         ),
         onClick: isStatic ? null : () => {
@@ -38,7 +40,10 @@ function OrderStep (props) {
         }
       }, [
         h('h3', {
-          className: styles.name
+          className: styles.name,
+          style: {
+            color: statusColor
+          }
         }, [
           name
         ])
