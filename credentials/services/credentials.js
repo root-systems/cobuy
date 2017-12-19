@@ -49,9 +49,15 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
       to: email || 'no@email.com',
       subject: `You're invited to join ${appConfig.name}!`,
       html: `
-        Hi. You're invited to join a group on ${appConfig.name}! 
+        Hi. You're invited to join a group on ${appConfig.name}!
+
+        <br />
+        <br />
 
         ${appConfig.bodyText}
+
+        <br />
+        <br />
 
         Click <a href=${hook.app.get('app').url}/invited/${token.jwt}>here</a> to set your password and start buying together!
       `
