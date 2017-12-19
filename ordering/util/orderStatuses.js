@@ -24,7 +24,7 @@ const orderStatuses = [
   },
   {
     name: 'commit', // TODO intl
-    description: 'Close order, combine intents and commit to a purchase order.', // TODO intl
+    description: 'Close an order, combine individual intents and commit to a purchase order ready to send to a supplier. Your group will no longer be able to go through the Intent phase.', // TODO intl
     Icon: CompareIcon,
     recipeId: 'commitOrder'
   },
