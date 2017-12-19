@@ -12,7 +12,7 @@ import styles from '../styles/TaskWorker'
 import TaskWorkerTree from './TaskWorkerTree'
 
 const getSubTaskPlans = propOr([], 'childTaskPlans')
-const getIsTaskComplete = pipe(prop('taskWork'), (taskwork) => not(isEmpty(taskwork)))
+const getIsTaskComplete = pipe(prop('hasWork'))
 const getAreAllSubTasksComplete = pipe(getSubTaskPlans, all(getIsTaskComplete))
 const getHasSubTasks = pipe(getSubTaskPlans, childTaskPlans => gt(length(childTaskPlans), 0))
 const getIsTaskReadyToComplete = either(complement(getHasSubTasks), getAreAllSubTasksComplete)
@@ -24,7 +24,6 @@ function TaskWorker (props) {
   const { taskRecipe } = taskPlan
   const { id: taskRecipeId } = taskRecipe
   const childTaskPlans = getSubTaskPlans(taskPlan)
-
   const hasSubTasks = getHasSubTasks(taskPlan)
   const isTaskComplete = getIsTaskComplete(taskPlan)
   const isTaskReadyToComplete = getIsTaskReadyToComplete(taskPlan)
@@ -32,7 +31,6 @@ function TaskWorker (props) {
   const Component = isNil(taskComponent)
     ? TaskWorkerTree
     : taskComponent
-
   const statusIconName = isTaskComplete
     ? 'check-circle'
     : 'circle-o'
