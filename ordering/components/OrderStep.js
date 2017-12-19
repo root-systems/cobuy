@@ -9,7 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import styles from '../styles/OrderStep'
 
 function OrderStep (props) {
-  const { styles, theme, step, stepIndex, setStepIndex, isStatic = false } = props
+  const { styles, theme, step, stepIndex, setStepIndex, isStatic = false, onNavigate } = props
   const { index, name, description, Icon, taskPlan, completed, ready } = step
 
   const hasTaskPlan = !isNil(taskPlan)
@@ -59,7 +59,7 @@ function OrderStep (props) {
           h(RaisedButton, {
             onClick: () => {
               const route = `/tasks/${taskPlan.id}`
-              console.log('navigate!', route)
+              onNavigate(route)
             }
           }, [
             h(FormattedMessage, {

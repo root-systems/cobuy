@@ -7,6 +7,7 @@
   "app.startOrder": "start order",
   "app.dashboard.tasks": "your active tasks",
   "app.dashboard.orders": "your orders",
+  "app.orders": "orders",
   "app.cancel": "cancel",
   "agents.nameLabel": "name",
   "agents.descriptionLabel": "description",

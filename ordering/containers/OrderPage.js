@@ -1,5 +1,6 @@
 import { connect } from 'feathers-action-react'
 import { isNil, forEach, isEmpty, prop, groupBy, pipe, either, values, props, equals } from 'ramda'
+import { push } from 'react-router-redux'
 
 import OrderPage from '../components/OrderPage'
 import { actions as taskPlanActions } from '../../tasks/dux/plans'
@@ -17,7 +18,12 @@ export default connect({
     taskPlans: taskPlanActions,
     taskWorks: taskWorkActions,
     agents: agentActions,
-    profiles: profileActions
+    profiles: profileActions,
+    // `feathers-action-react` wraps every
+    //  action creator in a cid creator.
+    router: {
+      push: (cid, ...args) => push(...args)
+    }
   },
   query: (props) => {
     var queries = []

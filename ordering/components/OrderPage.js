@@ -67,7 +67,8 @@ function OrderPage (props) {
         steps,
         stepIndex,
         orientation: 'vertical',
-        isStatic: false
+        isStatic: false,
+        onNavigate: actions.router.push
       })
     ])
   )

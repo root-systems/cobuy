@@ -10,7 +10,8 @@ function OrderSteps (props) {
     steps,
     stepIndex, setStepIndex,
     orientation,
-    isStatic
+    isStatic,
+    onNavigate
   } = props
 
   const renderOrderSteps = map(step => {
@@ -19,7 +20,8 @@ function OrderSteps (props) {
       step,
       stepIndex,
       setStepIndex,
-      isStatic
+      isStatic,
+      onNavigate
     })
   })
 

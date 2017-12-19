@@ -8,7 +8,7 @@ export default {
     display: 'flex',
     justifyContent: 'space-around'
   }),
-  agent: () => ({
+  agent: ({ theme }) => ({
     fontSize: theme.fontSizes[3],
     color: theme.colors.text
   }),
