@@ -39,15 +39,15 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
     method: 'patch',
     params: { serviceId: id }
   })
+  // TODO: add .env variables to change from 'Tapin' in copy
   .then((token) => {
-    // TODO: add .env variables to change from 'Tapin' in copy
     return hook.app.service('mailer').create({
       from: 'hello@cobuy.nz',
       to: email || 'no@email.com',
       subject: `You're invited to join TapinBuy!`,
       html: `
         Hi. You've been invited to join a group on TapinBuy! 
-        
+
         TapinBuy is an easy way for schools and ECE providers to make group purchases so they can take
 advantage of price points through economies of scale.
 
