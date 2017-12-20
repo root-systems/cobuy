@@ -6,6 +6,7 @@ import getStartOrderTaskProps from '../getters/getStartOrderTaskProps'
 import StartOrderTask from '../components/StartOrderTask'
 
 import { actions as orders } from '../../ordering/dux/orders'
+import { profiles } from 'dogstack-agents/actions'
 
 const getAgentIds = props(['adminAgentId', 'consumerAgentId', 'supplierAgentId'])
 
@@ -13,7 +14,8 @@ export default compose(
   connectFeathers({
     selector: getStartOrderTaskProps,
     actions: {
-      orders
+      orders,
+      profiles
     },
     query: (props) => {
       var queries = []
