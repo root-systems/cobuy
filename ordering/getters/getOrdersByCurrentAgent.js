@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { filter, contains } from 'ramda'
+import { filter, contains, __ } from 'ramda'
 
 import getCurrentAgentGroupIds from '../../agents/getters/getCurrentAgentGroupIds'
 import getCurrentAgentId from 'dogstack-agents/agents/getters/getCurrentAgentId'
@@ -10,11 +10,15 @@ const getOrdersByCurrentAgent = createSelector(
   getOrders,
   getCurrentAgentId,
   (groupIds, orders, currentAgentId) => {
-    return filter((order) => {
+    const isConsumerGroupForCurrentAgent = contains(__, groupIds)
+    const filterOnlyCurrentAgentOrders = filter((order) => {
       const { adminAgentId, consumerAgentId } = order
-      return (adminAgentId === currentAgentId || contains(consumerAgentId, groupIds))
-    }, orders
-    )
+      return (
+        adminAgentId === currentAgentId ||
+        isConsumerGroupForCurrentAgent(consumerAgentId)
+      )
+    })
+    return filterOnlyCurrentAgentOrders(orders)
   }
 )
 

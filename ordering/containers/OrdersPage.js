@@ -5,9 +5,14 @@ import OrdersPage from '../components/OrdersPage'
 import { actions as taskPlanActions } from '../../tasks/dux/plans'
 import { actions as taskWorkActions } from '../../tasks/dux/works'
 import { actions as orderActions } from '../../ordering/dux/orders'
-import { agents as agentActions, profiles as profileActions } from 'dogstack-agents/actions'
+import { agents as agentActions, profiles as profileActions, relationships as relationshipActions } from 'dogstack-agents/actions'
 import getOrdersPageProps from '../getters/getOrdersPageProps'
 
+const getConsumerAgentIdsFromOrders = pipe(
+  values,
+  map(prop('consumerAgentId')),
+  uniq
+)
 const getAgentIdsFromOrders = pipe(
   values,
   map(props(['consumerAgentId', 'supplierAgentId', 'adminAgentId'])),
@@ -23,16 +28,17 @@ export default connect({
     taskPlans: taskPlanActions,
     taskWorks: taskWorkActions,
     agents: agentActions,
-    profiles: profileActions
+    profiles: profileActions,
+    relationships: relationshipActions
   },
   query: (props) => {
     var queries = []
-    const { orders } = props.selected
+    const { allOrders: orders } = props.selected
 
     queries.push({
       service: 'orders'
     })
-    
+
     if (!isEmpty(orders)) {
       const agentIds = getAgentIdsFromOrders(orders)
 
@@ -52,6 +58,21 @@ export default connect({
           query: {
             agentId: {
               $in: agentIds
+            }
+          }
+        }
+      })
+
+      const consumerAgentIds = getConsumerAgentIdsFromOrders(orders)
+      queries.push({
+        service: 'relationships',
+        params: {
+          query: {
+            sourceId: {
+              $in: consumerAgentIds
+            },
+            relationshipType: {
+              $in: ['member', 'admin', 'supplier']
             }
           }
         }
@@ -83,7 +104,7 @@ export default connect({
   },
   shouldQueryAgain: (props, status, prevProps) => {
     if (status.isPending) return false
-    const { orders } = props.selected
+    const { allOrders: orders } = props.selected
     if (!isEmpty(orders) && hasNotQueriedForRelated(status)) return true
     const agentIds = getAgentIdsFromOrders(orders)
     const { orders: prevOrders } = prevProps.selected

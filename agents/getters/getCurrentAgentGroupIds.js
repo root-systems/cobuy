@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect'
-import { filter, map, prop, values } from 'ramda'
+import { map, prop } from 'ramda'
 
-import getRelationships from 'dogstack-agents/relationships/getters/getRelationships'
 import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
 
 const getCurrentAgentGroupIds = createSelector(
