@@ -107,7 +107,7 @@ export default connect({
     const { allOrders: orders } = props.selected
     if (!isEmpty(orders) && hasNotQueriedForRelated(status)) return true
     const agentIds = getAgentIdsFromOrders(orders)
-    const { orders: prevOrders } = prevProps.selected
+    const { allOrders: prevOrders } = prevProps.selected
     const prevAgentIds = getAgentIdsFromOrders(prevOrders)
     if (!equals(agentIds, prevAgentIds)) return true
     return false
