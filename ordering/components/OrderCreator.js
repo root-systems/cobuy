@@ -1,5 +1,6 @@
 import h from 'react-hyperscript'
 import { reduxForm, Field } from 'redux-form'
+import { connect as connectFela } from 'react-fela'
 import { compose } from 'recompose'
 import { isNil, path, isEmpty, pipe, any, prop, difference, keys, tap, not, map, merge } from 'ramda'
 import { TextField, SelectField } from 'redux-form-material-ui'
@@ -33,6 +34,7 @@ const renderAgentsAsMenuItems = map(agent => {
 
 const OrderCreator = (props) => {
   const {
+    styles,
     actions,
     form,
     handleSubmit,
@@ -60,7 +62,8 @@ const OrderCreator = (props) => {
   return (
     h('form', {
       onSubmit: handleSubmit,
-      id: form
+      id: form,
+      className: styles.container
     }, [
       h(Field, {
         name: 'consumerAgentId',
@@ -120,5 +123,6 @@ const OrderCreator = (props) => {
 export default compose(
   reduxForm({
     form: 'orderCreator'
-  })
+  }),
+  connectFela(styles)
 )(OrderCreator)

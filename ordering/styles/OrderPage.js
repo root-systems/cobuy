@@ -1,6 +1,7 @@
 export default {
   container: () => ({}),
   title: ({ theme }) => ({
+    textAlign: 'center',
     fontSize: theme.fontSizes[8],
     color: theme.colors.text
   }),
