@@ -7,6 +7,8 @@ import StartOrderTask from '../components/StartOrderTask'
 
 import { actions as orders } from '../../ordering/dux/orders'
 
+const getAgentIds = props(['adminAgentId', 'consumerAgentId', 'supplierAgentId'])
+
 export default compose(
   connectFeathers({
     selector: getStartOrderTaskProps,
@@ -28,7 +30,7 @@ export default compose(
       }
 
       if (currentOrder) {
-        const agentIds = props(['adminAgentId', 'consumerAgentId', 'supplierAgentId'], currentOrder)
+        const agentIds = getAgentIds(currentOrder)
         queries.push({
           service: 'profiles',
           params: {
