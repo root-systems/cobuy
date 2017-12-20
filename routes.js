@@ -92,6 +92,7 @@ export default [
     Component: UserIsAuthenticated(TasksPage),
     navigation: {
       title: 'tasks.tasks',
+      selector: getIsAuthenticated,
       icon: 'fa fa-check-circle'
     }
   },
