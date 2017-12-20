@@ -16,11 +16,6 @@ export default {
       },
       'html,body,#app'
     )
-    renderer.renderFont('Roboto', [
-      'https://fonts.googleapis.com/css?family=Roboto:400,400i,700'
-    ])
-    renderer.renderFont('Lobster Two', [
-      'https://fonts.googleapis.com/css?family=Lobster+Two:700'
-    ])
+    // TODO: IK: get fela renderer.renderFont working properly for fonts
   }
 }
