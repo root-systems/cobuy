@@ -91,9 +91,17 @@ export default compose(
         isNil(nextProps.feathersData[nextProps.createTaskWorkerCid].error)
       ) {
         const { setTaskWorkerId, taskPlan, actions } = nextProps
-        const { parentTaskPlan } = taskPlan
-        const nextRoute = isNil(parentTaskPlan)
-          ? '/' : `/tasks/${parentTaskPlan.id}`
+        const {
+          parentTaskPlan,
+          params: { orderId } = {}
+        } = taskPlan
+        const nextRoute = (
+          (!isNil(parentTaskPlan))
+            ? `/tasks/${parentTaskPlan.id}`
+            : (!isNil(orderId))
+              ? `/o/${orderId}`
+              : `/tasks`
+        )
         setTaskWorkerId(null)
         actions.router.push(nextRoute)
       }
