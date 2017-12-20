@@ -3,8 +3,9 @@ export default {
     display: 'flex',
     flexDirection: 'column'
   }),
-  link: () => ({
-    textDecoration: 'none'
+  link: ({ theme }) => ({
+    textDecoration: 'none',
+    color: 'unset'
   }),
   intro: ({ theme }) => ({
     textAlign: 'center',
