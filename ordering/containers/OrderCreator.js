@@ -28,7 +28,7 @@ export default compose(
       relationships,
       profiles
     },
-    query: (props) => {
+    query: (props, status) => {
       var queries = []
       const { selected } = props
       const { currentAgent, currentAgentGroupIds } = selected
@@ -48,19 +48,26 @@ export default compose(
         })
 
         // get members / suppliers with a relationship to any groups of the currentAgent
-        queries.push({
-          service: 'relationships',
-          params: {
-            query: {
-              sourceId: {
-                $in: currentAgentGroupIds
-              },
-              relationshipType: {
-                $in: ['member', 'supplier']
+
+        // UGLY HACK
+        // we need this query to run _after_ the relationships query (and profiles can run too)
+        // if this file changes number of queries, MUST update these numbers to reflect orders
+        // please we need feathers-action-react@3 to save us from this hell...
+        if (status.cids.length === 2 || status.cids.length === 3) {
+          queries.push({
+            service: 'relationships',
+            params: {
+              query: {
+                sourceId: {
+                  $in: currentAgentGroupIds
+                },
+                relationshipType: {
+                  $in: ['supplier']
+                }
               }
             }
-          }
-        })
+          })
+        }
 
         const agentIds = getAgentIds(props.selected)
         queries.push({
@@ -134,6 +141,14 @@ const hasNotQueriedForSupplierAgentIds = unless(isNil, pipe(
   )
 )
 
+const hasNotQueriedForConsumerAgentIds = unless(isNil, pipe(
+    map(path(['args', 'params', 'query', 'relationshipType', '$in'])),
+    flatten,
+    uniq,
+    none(equals('admin'))
+  )
+)
+
 const hasNotQueriedForRelated = pipe(
   prop('requests'),
   values,
@@ -141,6 +156,7 @@ const hasNotQueriedForRelated = pipe(
   variadicEither(
     pipe(prop('relationships'), either(isNil, isEmpty)),
     pipe(prop('relationships'), hasNotQueriedForSupplierAgentIds),
+    pipe(prop('relationships'), hasNotQueriedForConsumerAgentIds),
     pipe(prop('profiles'), either(isNil, isEmpty))
   )
 )
