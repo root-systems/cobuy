@@ -1,4 +1,4 @@
-import { concat } from 'redux-fp'
+import { concat, handleAction, constantState } from 'redux-fp'
 
 import { updater as agents } from 'dogstack-agents'
 import { updater as tokens } from './tokens/dux/tokens'
@@ -13,7 +13,17 @@ import { updater as resourceTypes } from './resources/dux/resourceTypes'
 import { updater as orderIntents } from './ordering/dux/orderIntents'
 import { updater as orderPlans } from './ordering/dux/orderPlans'
 
+import { authentication as authenticationActions } from 'dogstack-agents/actions'
+
+const resetOnLogOut = handleAction(
+  authenticationActions.logOutSuccess.toString(),
+  constantState({
+    config: window.config
+  })
+)
+
 export default concat(
+  resetOnLogOut,
   agents,
   tokens,
   tokenConsumes,
