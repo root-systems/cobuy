@@ -36,17 +36,6 @@ export default [
     }
   },
   {
-    name: 'orders',
-    path: '/',
-    exact: true,
-    Component: OrdersPage,
-    selector: getIsAuthenticated,
-    navigation: {
-      title: 'app.orders',
-      icon: 'fa fa-shopping-basket'
-    }
-  },
-  {
     name: 'order',
     path: '/o/:orderId',
     Component: OrderPage,
@@ -84,6 +73,17 @@ export default [
     name: 'invited',
     path: '/invited/:jwt',
     Component: UserIsNotAuthenticated(Invited)
+  },
+  {
+    name: 'orders',
+    path: '/',
+    exact: true,
+    Component: OrdersPage,
+    selector: getIsAuthenticated,
+    navigation: {
+      title: 'app.orders',
+      icon: 'fa fa-shopping-basket'
+    }
   },
   {
     name: 'tasks',
