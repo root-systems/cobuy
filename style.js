@@ -11,8 +11,7 @@ export default {
         height: '100%',
         margin: 0,
         padding: 0,
-        fontFamily: 'Roboto',
-        backgroundColor: tapinTheme.colors.canvas
+        fontFamily: 'Roboto'
       },
       'html,body,#app'
     )
