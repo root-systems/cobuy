@@ -124,8 +124,15 @@ function OrderCreatorContainer (props) {
     actions.orders.create(values)
   }
 
+  const hasNoCurrentAgentGroupProfiles = isEmpty(props.currentAgentGroupProfiles)
+
   const nextProps = merge(props, {
-    onSubmit: handleSubmit
+    onSubmit: handleSubmit,
+    hasNoCurrentAgentGroupProfiles,
+    initialValues: {
+      supplierAgentId: hasNoCurrentAgentGroupProfiles ? 'NEW_SUPPLIER' : '',
+      consumerAgentId: hasNoCurrentAgentGroupProfiles ? 'NEW_CONSUMER' : ''
+    }
   })
 
   return h(OrderCreator, nextProps)

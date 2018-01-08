@@ -44,7 +44,8 @@ const OrderCreator = (props) => {
     currentAgentGroupSupplierIds,
     currentAgentGroupSupplierProfiles,
     currentAgentGroupMemberIds,
-    currentAgentGroupMemberProfiles
+    currentAgentGroupMemberProfiles,
+    hasNoCurrentAgentGroupProfiles
   } = props
 
   if (
@@ -63,11 +64,12 @@ const OrderCreator = (props) => {
     h('form', {
       onSubmit: handleSubmit,
       id: form,
-      className: styles.container
+      className: styles.container,
     }, [
       h(Field, {
         name: 'consumerAgentId',
         component: SelectField,
+        disabled: hasNoCurrentAgentGroupProfiles,
         onChange: (ev) => {
           // TODO: IK: filter the supplier profiles based on which group was selected
           // TODO: IK: filter the admin profiles based on which group was selected
@@ -89,6 +91,7 @@ const OrderCreator = (props) => {
       h(Field, {
         name: 'supplierAgentId',
         component: SelectField,
+        disabled: hasNoCurrentAgentGroupProfiles,
         floatingLabelText: (
           h(FormattedMessage, {
             id: 'agents.supplier',
