@@ -2,12 +2,13 @@ import h from 'react-hyperscript'
 import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import { map, partial } from 'ramda'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ProductListEditor'
 import ProductEditor from '../../supply/components/ProductEditor'
 
-import RaisedButton from 'material-ui/RaisedButton'
 
 const ProductListEditor = compose(
   connectFela(styles)
@@ -28,16 +29,13 @@ const ProductListEditor = compose(
   return h('div', {
     className: styles.container
   }, [
-    h(RaisedButton, {
+    renderProducts(products),
+    h(FloatingActionButton, {
       className: styles.addProductButton,
       onClick: () => createProduct()
     }, [
-      h(FormattedMessage, {
-        id: 'supply.createProduct',
-        className: styles.labelText
-      })
-    ]),
-    renderProducts(products)
+      h(ContentAdd)
+    ])
   ])
 })
 
