@@ -8,7 +8,7 @@ import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
 import { withState, withHandlers, compose } from 'recompose'
-import { Link } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { LogOut } from 'dogstack-agents/components'
 import NavTitle from './NavTitle'
 
@@ -59,7 +59,7 @@ function Navigation (props) {
       }
 
       return (
-        h(Link, {
+        h(NavLink, {
           to: path,
           key: name
         }, [
