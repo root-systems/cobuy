@@ -27,6 +27,7 @@ export default (props) => {
     },
     {
       id: 'tasks.steps.supplierProducts',
+      // TODO (mw) move methods to product editor container
       content: h(ProductListEditor, {
         products,
         createProduct: () => {
@@ -34,18 +35,29 @@ export default (props) => {
             supplierAgentId: supplierAgent.id
           })
         },
-        updateResourceType: (resourceType) => {
-          actions.resourceTypes.update(resourceType.id, resourceType)
-        },
-        savePriceSpecs: (productId, priceSpecs) => {
-          priceSpecs.forEach(priceSpec => {
-            const nextPriceSpec = merge(priceSpec, { productId })
-            if (nextPriceSpec.id) {
-              actions.priceSpecs.update(nextPriceSpec.id, nextPriceSpec)
-            } else {
-              actions.priceSpecs.create(nextPriceSpec)
-            }
-          })
+        saveProduct: (product) => {
+          const {
+            id: productId,
+            resourceType,
+            priceSpecs
+          } = product
+
+          console.log('saving product', product)
+
+          if (resourceType != null) {
+            actions.resourceTypes.update(resourceType.id, resourceType)
+          }
+
+          if (priceSpecs != null) {
+            priceSpecs.forEach(priceSpec => {
+              const nextPriceSpec = merge(priceSpec, { productId })
+              if (nextPriceSpec.id) {
+                actions.priceSpecs.update(nextPriceSpec.id, nextPriceSpec)
+              } else {
+                actions.priceSpecs.create(nextPriceSpec)
+              }
+            })
+          }
         }
       })
     }

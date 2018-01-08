@@ -1,7 +1,7 @@
 import h from 'react-hyperscript'
 import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
-import { map, partial } from 'ramda'
+import { isNil, map } from 'ramda'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 
@@ -13,16 +13,19 @@ import ProductEditor from '../../supply/components/ProductEditor'
 const ProductListEditor = compose(
   connectFela(styles)
 )(props => {
-  const { styles, createProduct, products, updateResourceType, savePriceSpecs } = props
-
-  console.log('products', products)
+  const { styles, createProduct, products, saveProduct } = props
 
   const renderProducts = map(product => {
+    if (isNil(product)) return null
+
+    console.log('product', product)
+
     return h(ProductEditor, {
       product,
       key: product.id,
-      updateResourceType,
-      savePriceSpecs: partial(savePriceSpecs, [product.id])
+      form: `product-${product.id}`,
+      initialValues: product,
+      onSubmit: saveProduct
     })
   })
 

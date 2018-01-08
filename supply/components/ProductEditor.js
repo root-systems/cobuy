@@ -1,30 +1,42 @@
 import h from 'react-hyperscript'
 import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
-import { isNil } from 'ramda'
+import { isNil, merge } from 'ramda'
+import RaisedButton from 'material-ui/RaisedButton'
+import { reduxForm as connectForm, FormSection, FieldArray } from 'redux-form'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ProductEditor'
 import ResourceTypeEditor from '../../resources/components/ResourceTypeEditor'
 import PriceSpecsEditor from '../../supply/components/PriceSpecsEditor'
 
-const ProductEditor = compose(
+export default compose(
+  connectForm({
+    form: 'product',
+//    enableReinitialize: true, // to set id on price specs when created
+  }),
   connectFela(styles)
-)(props => {
-  const { styles, product, updateResourceType, savePriceSpecs } = props
+)(function ProductEditor (props) {
+  const { styles, product, handleSubmit } = props
   const { resourceType, priceSpecs } = product
 
-  // ResourceTypeEditor and PriceSpecsEditor can't handle
-  // not having a resourceType, so don't render without one.
-  // this happens temporarily when a new product is created.
-  if (isNil(resourceType)) return null
-
-  return h('div', {
-    className: styles.container
+  return h('form', {
+    className: styles.container,
+    onSubmit: handleSubmit
   }, [
-    h(ResourceTypeEditor, { resourceType, updateResourceType }),
-    h(PriceSpecsEditor, { resourceType, priceSpecs, savePriceSpecs })
+    h(FormSection, {
+      name: 'resourceType'
+    }, [
+      h(ResourceTypeEditor),
+    ]),
+    h(FieldArray, {
+      name: 'priceSpecs',
+      component: PriceSpecsEditor
+    }),
+    h(RaisedButton, {
+      type: 'submit'
+    }, [
+      'SAVE'
+    ])
   ])
 })
-
-export default ProductEditor

@@ -1,47 +1,24 @@
 import h from 'react-hyperscript'
 import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
-import { reduxForm, FieldArray, Field } from 'redux-form'
+import { reduxForm, Field } from 'redux-form'
 import { SelectField, TextField } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
-import { merge, pipe, prop } from 'ramda'
+import { } from 'ramda'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/PriceSpecsEditor'
 
-const PriceSpecsEditor = (props) => {
-  const {
-    resourceType,
-    priceSpecs,
-    savePriceSpecs
-  } = props
-  const { id = 'tmp' } = resourceType
-  const nextProps = merge(props, {
-    form: `priceSpecs-${id}`,
-    initialValues: {
-      priceSpecs
-    },
-    enableReinitialize: true, // to set id when created
-    onSubmit: savePriceSpecs
-  })
-  return h(PriceSpecsForm, nextProps)
-}
-
-export default PriceSpecsEditor
-
-const PriceSpecsForm = compose(
-  connectFela(styles),
-  reduxForm({})
-)(props => {
-  const { styles, resourceType, handleSubmit, onSubmit } = props
+export default compose(
+  connectFela(styles)
+)(PriceSpecsEditor)
+  
+function PriceSpecsEditor (props) {
+  const { styles, fields } = props
   return (
-    h('form', {
-      onSubmit: handleSubmit(pipe(
-        prop('priceSpecs'),
-        onSubmit
-      )),
-      className: styles.container
+    h('div', {
+      className: styles.priceSpecsContainer
     }, [
       h('p', {
         className: styles.intro
@@ -51,38 +28,12 @@ const PriceSpecsForm = compose(
           className: styles.labelText
         })
       ]),
-      h(FieldArray, {
-        name: 'priceSpecs',
-        component: PriceSpecs,
-        styles,
-        resourceType
-      }),
-      h(RaisedButton, {
-        type: 'submit',
-        className: styles.submitButton
-      }, [
-        h(FormattedMessage, {
-          id: 'supply.savePriceSpecs',
-          className: styles.buttonText
-        })
-      ])
-    ])
-  )
-})
-
-const PriceSpecs = (props) => {
-  const { styles, resourceType, fields } = props
-  return (
-    h('div', {
-      className: styles.priceSpecsContainer
-    }, [
       fields.map((field, index) => (
         h(PriceSpec, {
           key: index,
           field,
           removeField: () => fields.remove(index),
-          styles,
-          resourceType
+          styles
         })
       )),
       h(RaisedButton, {
@@ -100,7 +51,7 @@ const PriceSpecs = (props) => {
 }
 
 const PriceSpec = (props) => {
-  const { styles, resourceType, field, removeField } = props
+  const { styles, field, removeField } = props
 
   return (
     h('div', {
