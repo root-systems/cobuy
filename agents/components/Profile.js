@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { compose, withState, withHandlers } from 'recompose'
 import h from 'react-hyperscript'
 import { FormattedMessage } from 'dogstack/intl'
+import { required, email } from '@root-systems/redux-form-validators'
 
 import styles from '../styles/Profile'
 import AvatarField from '../../app/components/AvatarField'
@@ -17,6 +18,8 @@ function Profile (props) {
     toggleEdit()
     updateProfile(nextProfile)
   }
+
+  const isSupplierProfile = agentType === 'supplier'
 
   return h('form', {
     className: styles.container,
@@ -58,7 +61,8 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          disabled: not(isEditing)
+          disabled: not(isEditing),
+          validate: required()
         }),
         h(Field, {
           name: 'description',
@@ -84,7 +88,8 @@ function Profile (props) {
           ),
           component: TextField,
           fullWidth: true,
-          disabled: not(isEditing)
+          disabled: not(isEditing),
+          validate: [required(), email()]
         }),
         h(Field, {
           name: 'phone',
@@ -122,7 +127,8 @@ function Profile (props) {
           fullWidth: true,
           multiLine: true,
           rowsMax: 5,
-          disabled: not(isEditing)
+          disabled: not(isEditing),
+          validate: isSupplierProfile ? required() : null
         })
       ])
     ]),
