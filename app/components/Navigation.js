@@ -8,7 +8,7 @@ import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
 import { withState, withHandlers, compose } from 'recompose'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { LogOut } from 'dogstack-agents/components'
 import NavTitle from './NavTitle'
 
@@ -59,7 +59,7 @@ function Navigation (props) {
       }
 
       return (
-        h(NavLink, {
+        h(Link, {
           to: path,
           key: name
         }, [
@@ -86,7 +86,7 @@ function Navigation (props) {
   return (
     h('div', [
       h(AppBar, {
-        title: h(NavTitle, { src: `${getAssetsUrlFromConfig(config)}/images/tapinBuy.png` }),
+        title: h(Link, { to: '/' }, h(NavTitle, { src: `${getAssetsUrlFromConfig(config)}/images/tapinBuy.png` })),
         onLeftIconButtonTouchTap: toggleDrawer,
         style: { backgroundColor: 'white' }, // for some reason can't style backgroundColor of AppBar with class?
         iconElementLeft: (
