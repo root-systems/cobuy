@@ -124,8 +124,16 @@ function OrderCreatorContainer (props) {
     actions.orders.create(values)
   }
 
+  const hasNoCurrentAgentGroupProfiles = isEmpty(props.currentAgentGroupProfiles)
+
+  // GK: for now we will use the 'new supplier/consumer' as default, will want to look later at making this more responsive
   const nextProps = merge(props, {
-    onSubmit: handleSubmit
+    onSubmit: handleSubmit,
+    hasNoCurrentAgentGroupProfiles,
+    initialValues: {
+      supplierAgentId: 'NEW_SUPPLIER',
+      consumerAgentId: 'NEW_CONSUMER'
+    }
   })
 
   return h(OrderCreator, nextProps)
