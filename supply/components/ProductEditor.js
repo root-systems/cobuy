@@ -10,11 +10,6 @@ import styles from '../styles/ProductEditor'
 import ResourceTypeEditor from '../../resources/components/ResourceTypeEditor'
 import PriceSpecsEditor from '../../supply/components/PriceSpecsEditor'
 
-const hasNoId = pipe(prop('id'), isNil)
-const hasId = pipe(hasNoId, not)
-const anyHaveNoId = any(hasNoId)
-const allHaveId = all(hasId)
-
 export default compose(
   connectForm({
     form: 'product',
