@@ -33,8 +33,7 @@ function OrdersPage (props) {
           h(RaisedButton, {
             type: 'submit',
             form: 'orderCreator',
-            className: styles.button,
-            onClick: closeDialog
+            className: styles.button
           }, [
             h(FormattedMessage, {
               id: 'ordering.createOrder',
@@ -55,7 +54,9 @@ function OrdersPage (props) {
         open: isDialogOpen,
         onRequestClose: closeDialog
       }, [
-        h(OrderCreator)
+        h(OrderCreator, {
+          onSubmit: closeDialog
+        })
       ]),
       h(FloatingActionButton, {
         className: styles.action,
