@@ -45,7 +45,11 @@ export default (props) => {
           console.log('saving product', product)
 
           if (resourceType != null) {
-            actions.resourceTypes.update(resourceType.id, resourceType)
+            if (resourceType.id) {
+              actions.resourceTypes.update(resourceType.id, resourceType)
+            } else {
+              actions.resourceTypes.create(resourceType)
+            }
           }
 
           if (priceSpecs != null) {
