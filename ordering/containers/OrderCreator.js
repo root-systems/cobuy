@@ -116,9 +116,10 @@ function getAgentIds (selected) {
 }
 
 function OrderCreatorContainer (props) {
-  const { actions } = props
+  const { actions, onSubmit } = props
 
   function handleSubmit (values) {
+    if (onSubmit) onSubmit(values)
     if (values.consumerAgentId === 'NEW_CONSUMER') values.consumerAgentId = null
     if (values.supplierAgentId === 'NEW_SUPPLIER') values.supplierAgentId = null
     actions.orders.create(values)
