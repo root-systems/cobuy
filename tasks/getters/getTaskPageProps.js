@@ -1,11 +1,11 @@
 import { createStructuredSelector } from 'reselect'
 import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
 
-import getActiveParentTaskPlans from './getActiveParentTaskPlans'
+import getCurrentAgentActiveParentTaskPlans from './getCurrentAgentActiveParentTaskPlans'
 
 const getDashboardProps = createStructuredSelector({
   currentAgent: getCurrentAgent,
-  taskPlans: getActiveParentTaskPlans
+  taskPlans: getCurrentAgentActiveParentTaskPlans
 })
 
 export default getDashboardProps
