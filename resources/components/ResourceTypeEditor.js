@@ -18,14 +18,6 @@ export default compose(
   return h('div', {
     className: styles.container
   }, [
-    h('p', {
-      className: styles.resourceHeader
-    }, [
-      h(FormattedMessage, {
-        id: 'resources.resourceTypes',
-        className: styles.labelText
-      })
-    ]),
     h(Field, {
       name: 'name',
       floatingLabelText: (

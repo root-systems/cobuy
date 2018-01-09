@@ -4,6 +4,7 @@ import { connect as connectFela } from 'react-fela'
 import { isNil, map } from 'ramda'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
+import Divider from 'material-ui/Divider'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/ProductListEditor'
@@ -18,15 +19,16 @@ const ProductListEditor = compose(
   const renderProducts = map(product => {
     if (isNil(product)) return null
 
-    console.log('product', product)
-
-    return h(ProductEditor, {
-      product,
-      key: product.id,
-      form: `product-${product.id}`,
-      initialValues: product,
-      onSubmit: saveProduct
-    })
+    return [
+      h(ProductEditor, {
+        product,
+        key: product.id,
+        form: `product-${product.id}`,
+        initialValues: product,
+        onSubmit: saveProduct
+      }),
+      h(Divider)
+    ]
   })
 
   return h('div', {
