@@ -1,4 +1,4 @@
-import { isNil, path, prop, pipe, values, any, forEach, either } from 'ramda'
+import { isNil, path, prop, pipe, values, any, forEach, either, map, isEmpty, groupBy, ifElse, equals } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -79,7 +79,7 @@ export default compose(
 
       return queries
     },
-    shouldQueryAgain: (props, status) => {
+    shouldQueryAgain: (props, status, prevProps, prevStatus) => {
       if (status.isPending) return false
 
       const { taskPlan } = props.ownProps
@@ -91,16 +91,41 @@ export default compose(
       const supplierAgent = getSupplierAgentFromTaskPlan(taskPlan)
       if (isNil(supplierAgent)) return true
 
-      if (anyProductsAreMissingDetails(props.selected)) {
+      const { selected } = props
+      if (hasNotQueriedForProducts({ selected, status })) {
         return true
       }
+
+      const productIds = getProductIds(props.selected)
+      const prevProductIds = getProductIds(prevProps.selected)
+      if (!equals(productIds, prevProductIds)) return true
 
       return false
     }
   })
 )(SetupSupplierTask)
 
-const anyProductsAreMissingDetails = pipe(
+const getProductIds = pipe(
   prop('products'),
-  any(pipe(path(['resourceType', 'id']), isNil))
+  map(prop('id'))
+)
+
+const hasNotQueriedForProducts = ifElse(
+  pipe(path(['selected', 'products']), isEmpty),
+  pipe(
+    path(['status', 'requests']),
+    values,
+    groupBy(prop('service')),
+    pipe(prop('products'), either(isNil, isEmpty)),
+  ),
+  pipe(
+    path(['status', 'requests']),
+    values,
+    groupBy(prop('service')),
+    either(
+      pipe(prop('products'), either(isNil, isEmpty)),
+      pipe(prop('resourceTypes'), either(isNil, isEmpty)),
+      pipe(prop('priceSpecs'), either(isNil, isEmpty))
+    )
+  )
 )

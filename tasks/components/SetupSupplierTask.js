@@ -1,10 +1,12 @@
 import h from 'react-hyperscript'
-import { isNil, merge, isEmpty } from 'ramda'
+import { isNil, merge, mergeAll, isEmpty, find, pipe, prop, equals } from 'ramda'
 
 import TaskStepper from './TaskStepper'
 import Profile from '../../agents/components/Profile'
 import ProductListEditor from '../../supply/components/ProductListEditor'
 import ResourceTypeEditor from '../../resources/components/ResourceTypeEditor'
+
+const findById = id => find(pipe(prop('id'), equals(id)))
 
 export default (props) => {
   const { taskPlan, actions, products } = props
@@ -27,6 +29,7 @@ export default (props) => {
     },
     {
       id: 'tasks.steps.supplierProducts',
+      // TODO (mw) move methods to product editor container
       content: h(ProductListEditor, {
         products,
         createProduct: () => {
@@ -34,18 +37,38 @@ export default (props) => {
             supplierAgentId: supplierAgent.id
           })
         },
-        updateResourceType: (resourceType) => {
-          actions.resourceTypes.update(resourceType.id, resourceType)
-        },
-        savePriceSpecs: (productId, priceSpecs) => {
-          priceSpecs.forEach(priceSpec => {
-            const nextPriceSpec = merge(priceSpec, { productId })
-            if (nextPriceSpec.id) {
-              actions.priceSpecs.update(nextPriceSpec.id, nextPriceSpec)
+        saveProduct: (product) => {
+          const {
+            id: productId,
+            resourceType,
+            priceSpecs
+          } = product
+
+          const prevProduct = findById(productId)(products)
+          const {
+            resourceType: prevResourceType,
+            priceSpecs: prevPriceSpecs
+          } = prevProduct
+
+          if (resourceType != null) {
+            if (prevResourceType.id) {
+              actions.resourceTypes.update(prevResourceType.id, resourceType)
             } else {
-              actions.priceSpecs.create(nextPriceSpec)
+              actions.resourceTypes.create(resourceType)
             }
-          })
+          }
+
+          if (priceSpecs != null) {
+            priceSpecs.forEach((priceSpec, index) => {
+              const prevPriceSpec = isNil(prevPriceSpecs) ? null : prevPriceSpecs[index]
+              const nextPriceSpec = mergeAll([prevPriceSpec, priceSpec, { productId }])
+              if (nextPriceSpec.id) {
+                actions.priceSpecs.update(nextPriceSpec.id, nextPriceSpec)
+              } else {
+                actions.priceSpecs.create(nextPriceSpec)
+              }
+            })
+          }
         }
       })
     }
