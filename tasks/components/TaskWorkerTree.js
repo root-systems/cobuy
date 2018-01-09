@@ -8,6 +8,7 @@ import Checkbox from 'material-ui/Checkbox'
 import Subheader from 'material-ui/Subheader'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
+import { Link } from 'react-router-dom'
 
 import { FormattedMessage } from '../../lib/Intl'
 import styles from '../styles/TaskWorkerTree'
@@ -19,19 +20,23 @@ function TaskWorkerTree (props) {
     const { taskRecipe: childTaskRecipe, hasWork: childHasWork } = childTaskPlan
     const { id: childTaskRecipeId } = childTaskRecipe
     return (
-      <ListItem className={styles.childTaskItem}>
-        <Checkbox
-          label={
-            <FormattedMessage
-              id={`tasks.recipes.${childTaskRecipeId}`}
-              className={styles.childTaskNameText}
-            />
-          }
-          checked={childHasWork}
-          className={styles.childTaskCheckbox}
-          onCheck={handleNavigate(childTaskPlan)}
-        />
-      </ListItem>
+      <Link to={`/tasks/${childTaskPlan.id}`} style={{ textDecoration: 'none' }}>
+        <ListItem className={styles.childTaskItem}>
+          <Checkbox
+            label={
+              <FormattedMessage
+                id={`tasks.recipes.${childTaskRecipeId}`}
+                className={styles.childTaskNameText}
+              />
+            }
+            checked={childHasWork}
+            className={styles.childTaskCheckbox}
+            // GK: onCheck event handler callback not responding consistently
+            // GK: using Link wrapper as a workaround for now
+            // onCheck={handleNavigate(childTaskPlan)}
+          />
+        </ListItem>
+      </Link>
     )
   })
 
