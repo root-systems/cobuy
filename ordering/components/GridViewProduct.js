@@ -9,7 +9,7 @@ import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/GridViewProduct'
 
-function ListViewProduct (props) {
+function GridViewProduct (props) {
   const { styles, product, onNavigate, applicablePriceSpec, collectiveQuantity } = props
   if (isNil(product)) return null
   const { resourceType, facets, priceSpecs } = product
@@ -19,7 +19,10 @@ function ListViewProduct (props) {
 
   return (
     h('div', {
-      className: styles.container
+      className: styles.container,
+      onClick: (ev) => {
+        onNavigate(product)
+      }
     }, [
       h('div', {
         className: styles.imageContainer
@@ -54,17 +57,11 @@ function ListViewProduct (props) {
             }
           })
         ])
-      ]),
-      h(FlatButton, {
-        onClick: (ev) => {
-          onNavigate(product)
-        }
-      },
-      ['click here'])
+      ])
     ])
   )
 }
 
 export default compose(
   connectFela(styles)
-)(ListViewProduct)
+)(GridViewProduct)
