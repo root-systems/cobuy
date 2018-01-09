@@ -3,7 +3,10 @@ export default {
     width: '250px',
     minWidth: '200px',
     padding: theme.space[2],
-    margin: theme.space[1]
+    margin: theme.space[1],
+    ':hover': {
+      cursor: 'pointer'
+    }
   }),
   imageContainer: () => ({
   }),
