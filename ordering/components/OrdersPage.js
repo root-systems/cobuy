@@ -11,7 +11,6 @@ import styles from '../styles/OrdersPage'
 import { FormattedMessage } from 'dogstack/intl'
 import OrdersList from './OrdersList'
 import OrderCreator from '../containers/OrderCreator'
-import Hint from '../../app/components/Hint'
 
 function OrdersPage (props) {
   const { styles, actions, taskPlans, currentAgent, orders } = props
@@ -20,9 +19,6 @@ function OrdersPage (props) {
     h('div', {
       className: styles.container
     }, [
-      h(Hint, {
-        messageId: 'test'
-      }),
       h('div', {
         className: styles.ordersContainer
       }, [

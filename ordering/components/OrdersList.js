@@ -5,6 +5,7 @@ import { FormattedMessage } from 'dogstack/intl'
 import { Link } from 'react-router-dom'
 import Divider from 'material-ui/Divider'
 
+import Hint from '../../app/components/Hint'
 import ProfileIcon from '../../agents/components/ProfileIcon'
 import OrderSteps from './OrderSteps'
 
@@ -102,6 +103,9 @@ function OrdersList (props) {
           id: 'ordering.yourOrders',
           className: styles.labelText
         }),
+        h(Hint, {
+          messageId: 'ordering.whatIsAnOrder',
+          position: 'top-right'
         })
       ]),
       h('ul', {
