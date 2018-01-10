@@ -139,16 +139,18 @@ function Profile (props) {
       isEditing
       ? h(RaisedButton, {
         className: styles.button,
-        type: 'submit'
+        type: 'submit',
+        primary: true
       }, [
         h(FormattedMessage, {
           id: 'agents.saveProfile',
-          className: styles.labelText
+          className: styles.buttonText
         })
       ])
       : h(RaisedButton, {
         className: styles.button,
         type: 'button',
+        secondary: true,
         onClick: (ev) => {
           // GK: not entirely clear why this is necessary considering the button type, but preventing default anyway
           ev.preventDefault()
@@ -157,7 +159,7 @@ function Profile (props) {
       }, [
         h(FormattedMessage, {
           id: 'agents.editProfile',
-          className: styles.labelText
+          className: styles.buttonText
         })
       ])
     ])

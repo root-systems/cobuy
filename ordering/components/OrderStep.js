@@ -60,7 +60,9 @@ function OrderStep (props) {
             onClick: () => {
               const route = `/tasks/${taskPlan.id}`
               onNavigate(route)
-            }
+            },
+            secondary: true,
+            className: styles.button
           }, [
             h(FormattedMessage, {
               id: `tasks.recipes.${taskPlan.taskRecipeId}`,

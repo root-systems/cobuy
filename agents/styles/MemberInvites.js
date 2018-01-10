@@ -36,7 +36,8 @@ export default {
   button: () => ({
     width: '10rem'
   }),
-  buttonText: () => ({
-    textTransform: 'capitalize'
+  buttonText: ({ theme }) => ({
+    textTransform: 'capitalize',
+    color: theme.colors.alternateText
   })
 }

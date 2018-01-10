@@ -15,7 +15,8 @@ export default {
   canvas: () => ({}),
   error: () => ({}),
   warning: () => ({}),
-  buttonText: () => ({
-    textTransform: 'capitalize'
+  buttonText: ({ theme }) => ({
+    textTransform: 'capitalize',
+    color: theme.colors.alternateText
   })
 }

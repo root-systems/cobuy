@@ -71,6 +71,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, removeMember, f
             h(RaisedButton, {
               type: 'button',
               className: styles.button,
+              secondary: true,
               onClick: () => {
                 const memberVal = memberVals[index]
                 const { agentId } = memberVal
@@ -92,6 +93,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, removeMember, f
         h(RaisedButton, {
           type: 'button',
           className: styles.button,
+          secondary: true,
           onClick: () => fields.push({})
         }, [
           h(FormattedMessage, {
@@ -131,7 +133,8 @@ function MemberInvites (props) {
       }, [
         h(RaisedButton, {
           type: 'submit',
-          className: styles.button
+          className: styles.button,
+          primary: true
         }, [
           h(FormattedMessage, {
             id: 'agents.inviteMembers',
