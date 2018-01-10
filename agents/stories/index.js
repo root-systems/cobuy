@@ -1,6 +1,5 @@
 require('./Avatar')
 require('./Profile')
-require('./ProfileIcon')
 require('./MemberInvites')
 require('./SignIn')
 require('./Register')

@@ -5,10 +5,17 @@ const containerPaddingBySize = {
   large: '2rem'
 }
 
-// https://ant.design/components/avatar/
+// (mw) just for fun, not for real
+const nameFontSizeByFormat = {
+  large: '2rem',
+  medium: '1rem'
+}
 
 export default {
   container: ({ size = 'small' }) => ({
     padding: containerPaddingBySize[size]
+  }),
+  name: ({ size }) => ({
+    fontSize: nameFontSizeBySize[size]
   })
 }
