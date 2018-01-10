@@ -33,20 +33,22 @@ function OrdersPage (props) {
           h(RaisedButton, {
             type: 'submit',
             form: 'orderCreator',
-            className: styles.button
+            className: styles.button,
+            primary: true
           }, [
             h(FormattedMessage, {
               id: 'ordering.createOrder',
-              className: styles.labelText
+              className: styles.buttonText
             })
           ]),
-          h(FlatButton, {
+          h(RaisedButton, {
             className: styles.button,
-            onClick: closeDialog
+            onClick: closeDialog,
+            secondary: true
           }, [
             h(FormattedMessage, {
               id: 'app.cancel',
-              className: styles.labelText
+              className: styles.buttonText
             })
           ])
         ],
