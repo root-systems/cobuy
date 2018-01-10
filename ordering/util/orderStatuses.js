@@ -6,7 +6,7 @@ import CompareIcon from 'material-ui/svg-icons/action/compare-arrows'
 
 const isArray = is(Array)
 
-const orderStatuses = [
+export const orderStatuses = [
   {
     name: 'setup', // TODO intl
     description: 'Setup details and start order.', // TODO intl
@@ -30,17 +30,9 @@ const orderStatuses = [
   },
 ]
 
-const orderStatusesByName = indexBy(prop('name'), orderStatuses)
+export const orderStatusesByName = indexBy(prop('name'), orderStatuses)
 
-module.exports = {
-  orderStatuses,
-  orderStatusesByName,
-  getOrderStatus,
-  getTaskPlanForStatus,
-  getTaskPlansByStatus
-}
-
-function getOrderStatus ({ order, taskPlansByRecipe }) {
+export function getOrderStatus ({ order, taskPlansByRecipe }) {
   if (isNil(taskPlansByRecipe)) return null
 
   const { completeOrderSetup, completeOrderSetupWithPrereqs, closeOrder } = taskPlansByRecipe
@@ -58,7 +50,7 @@ function getOrderStatus ({ order, taskPlansByRecipe }) {
 }
 
 
-function getTaskPlanForStatus ({ order, status, taskPlansByRecipe }) {
+export function getTaskPlanForStatus ({ order, status, taskPlansByRecipe }) {
   if (isNil(taskPlansByRecipe)) return null
   var { recipeId } = orderStatusesByName[status]
   if (isArray(recipeId)) {
@@ -68,7 +60,7 @@ function getTaskPlanForStatus ({ order, status, taskPlansByRecipe }) {
   return taskPlansByRecipe[recipeId]
 }
 
-function getTaskPlansByStatus ({ order, taskPlansByRecipe }) {
+export function getTaskPlansByStatus ({ order, taskPlansByRecipe }) {
   const getTaskPlansForEachStatus = map(({ name: status }) => {
     return getTaskPlanForStatus({ order, status, taskPlansByRecipe })
   })

@@ -8,10 +8,18 @@ import FontIcon from 'material-ui/FontIcon'
 import { Stepper } from 'material-ui/Stepper'
 
 import { getTaskPlanFromOrder } from '../util/orderStatuses'
-import ProfileIcon from '../../agents/components/ProfileIcon'
+import Avatar from '../../agents/components/Avatar'
 import OrderSteps from './OrderSteps'
 
 import styles from '../styles/OrderPage'
+
+// TODO (mw) share code with OrdersList
+
+const iconByRole = {
+  admin: 'user',
+  consumer: 'users',
+  supplier: 'shopping-cart'
+}
 
 function OrderAgentIcon (props) {
   const { styles, role, agent } = props
@@ -20,9 +28,10 @@ function OrderAgentIcon (props) {
       className: `${styles.agent} ${styles[role]}`
     }, [
       role,
-      h(ProfileIcon, {
+      h(Avatar, {
         agent,
-        format: 'icon'
+        size: 'medium',
+        icon: iconByRole[role]
       })
     ])
   )

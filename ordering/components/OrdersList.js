@@ -6,10 +6,18 @@ import { Link } from 'react-router-dom'
 import Divider from 'material-ui/Divider'
 
 import Hint from '../../app/components/Hint'
-import ProfileIcon from '../../agents/components/ProfileIcon'
+import Avatar from '../../agents/components/Avatar'
 import OrderSteps from './OrderSteps'
 
 import styles from '../styles/OrdersList'
+
+// TODO (mw) share code with OrderPage
+
+const iconByRole = {
+  admin: 'user',
+  consumer: 'users',
+  supplier: 'shopping-cart'
+}
 
 function OrderAgentIcon (props) {
   const { styles, role, agent } = props
@@ -17,9 +25,10 @@ function OrderAgentIcon (props) {
     h('div', {
       className: styles[role]
     }, [
-      h(ProfileIcon, {
+      h(Avatar, {
         agent,
-        format: 'icon'
+        size: 'small',
+        icon: iconByRole[role]
       })
     ])
   )
