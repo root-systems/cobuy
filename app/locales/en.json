@@ -1,4 +1,5 @@
 {
+  "test": "test",
   "app.name": "{appName}",
   "app.tagline": "{tagline}",
   "app.bodyText": "{bodyText}",

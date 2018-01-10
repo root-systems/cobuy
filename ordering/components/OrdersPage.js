@@ -21,7 +21,7 @@ function OrdersPage (props) {
       className: styles.container
     }, [
       h(Hint, {
-        text: 'test'
+        messageId: 'test'
       }),
       h('div', {
         className: styles.ordersContainer
