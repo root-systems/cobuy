@@ -84,6 +84,7 @@
     "nodemailer": "^4.0.1",
     "passport-github": "^1.1.0",
     "pg": "^6.1.5",
+    "prop-types": "^15.6.0",
     "query-string": "^5.0.0",
     "ramda": "^0.23.0",
     "react": "^15.5.4",
