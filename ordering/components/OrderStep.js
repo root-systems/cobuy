@@ -61,7 +61,7 @@ function OrderStep (props) {
               const route = `/tasks/${taskPlan.id}`
               onNavigate(route)
             },
-            secondary: true,
+            primary: true,
             className: styles.button
           }, [
             h(FormattedMessage, {

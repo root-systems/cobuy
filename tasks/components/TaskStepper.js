@@ -54,15 +54,16 @@ function TaskStepper (props) {
           label='Next'
           disableTouchRipple
           disableFocusRipple
-          secondary
+          primary
           onTouchTap={handleNext}
         />
         {index > 0 && (
-          <FlatButton
+          <RaisedButton
             label='Back'
             disableTouchRipple
             disableFocusRipple
             onTouchTap={handlePrev}
+            secondary
           />
         )}
       </div>

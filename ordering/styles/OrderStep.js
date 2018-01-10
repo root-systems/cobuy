@@ -7,9 +7,9 @@ export default {
     fontSize: theme.fontSizes[5]
   }),
   taskNameText: ({ theme }) => ({
+    color: theme.colors.alternateText
   }),
   button: ({ theme }) => ({
-    width: '20%',
-    color: 'white'
+    width: '20%'
   })
 }
