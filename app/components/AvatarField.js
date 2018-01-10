@@ -109,7 +109,7 @@ class AvatarEditor extends React.Component {
               sliderStyle={{ padding: 0, margin: 0 }}
             />
           </div>
-          <RaisedButton onClick={() => { this.handleSaveImage() }} type='button'>
+          <RaisedButton onClick={() => { this.handleSaveImage() }} type='button' primary={true}>
             <FormattedMessage
               id='agents.saveAvatar'
               className={this.props.styles.buttonText}
@@ -127,7 +127,7 @@ class AvatarEditor extends React.Component {
         />
         {
           isEditingProfile
-          ? <RaisedButton type='button' onClick={() => { this.setState({ isEditing: true }) }}>
+          ? <RaisedButton type='button' secondary={true} onClick={() => { this.setState({ isEditing: true }) }}>
               <FormattedMessage
                 id='agents.editAvatar'
                 className={this.props.styles.buttonText}

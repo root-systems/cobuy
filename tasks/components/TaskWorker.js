@@ -62,9 +62,10 @@ function TaskWorker (props) {
             />
           }
         />
-        <FlatButton
+        <RaisedButton
           className={styles.cancelButton}
           onClick={handleCancel}
+          secondary={true}
           label={
             <FormattedMessage
               id={`tasks.cancelTask`}

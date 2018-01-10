@@ -18,9 +18,10 @@ export default {
     margin: '0 auto'
   }),
   button: ({ theme }) => ({
-    paddingLeft: theme.space[2],
-    paddingRight: theme.space[2],
-    paddingTop: theme.space[1],
-    paddingBottom: theme.space[1]
+    width: '20%'
+  }),
+  buttonText: ({ theme }) => ({
+    textTransform: 'capitalize',
+    color: theme.colors.alternateText
   })
 }

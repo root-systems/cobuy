@@ -12,7 +12,7 @@ import styles from '../styles/ResourceTypeEditor'
 
 export default compose(
   connectFela(styles)
-)(function ResourceTypeEditor (props)  {
+)(function ResourceTypeEditor (props) {
   const { styles } = props
 
   return h('div', {
@@ -20,6 +20,7 @@ export default compose(
   }, [
     h(Field, {
       name: 'name',
+      className: styles.field,
       floatingLabelText: (
         h(FormattedMessage, {
           id: 'resources.resourceTypeName',
@@ -30,6 +31,7 @@ export default compose(
     }),
     h(Field, {
       name: 'description',
+      className: styles.field,
       floatingLabelText: (
         h(FormattedMessage, {
           id: 'resources.resourceTypeDescription',
@@ -40,6 +42,7 @@ export default compose(
     }),
     h(Field, {
       name: 'image',
+      className: styles.field,
       floatingLabelText: (
         h(FormattedMessage, {
           id: 'resources.resourceTypeImage',

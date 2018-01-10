@@ -24,6 +24,10 @@ export default {
   labelText: () => ({
     textTransform: 'capitalize'
   }),
+  buttonText: ({ theme }) => ({
+    textTransform: 'capitalize',
+    color: theme.colors.alternateText
+  }),
   intro: () => ({
     textAlign: 'center',
     fontSize: '2rem'

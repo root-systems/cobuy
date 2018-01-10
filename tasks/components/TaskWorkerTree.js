@@ -42,12 +42,6 @@ function TaskWorkerTree (props) {
 
   return (
     <List className={styles.childTaskList}>
-      <Subheader className={styles.childTasksHeader}>
-        <FormattedMessage
-          id='tasks.tasks'
-          className={styles.childTasksHeaderText}
-        />
-      </Subheader>
       {mapSubTasks(childTaskPlans)}
     </List>
   )

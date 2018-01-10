@@ -18,10 +18,15 @@ export default {
     alignItems: 'center'
   }),
   addPriceSpecButton: () => ({
+    width: '20%',
+    margin: '10px'
   }),
   removePriceSpecButton: () => ({
+    width: '20%',
+    margin: '10px'
   }),
-  buttonText: () => ({
-    textTransform: 'capitalize'
+  buttonText: ({ theme }) => ({
+    textTransform: 'capitalize',
+    color: theme.colors.alternateText
   })
 }
