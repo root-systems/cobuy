@@ -48,8 +48,8 @@ function renderList (props) {
         h(TableHeaderColumn, { style: { width: '50px' } }),
         h(TableHeaderColumn, {}, 'name'),
         h(TableHeaderColumn, {}, 'description'),
-        h(TableHeaderColumn, { style: { width: '100px' } }, 'current price'),
-        h(TableHeaderColumn, { style: { width: '200px' } }, 'current quantity')
+        h(TableHeaderColumn, { style: { width: '100px' }, tooltip: 'The current price given the quantity the group has ordered so far' }, 'current price'),
+        h(TableHeaderColumn, { style: { width: '200px' }, tooltip: 'The current quantity the group has ordered so far for the current price' }, 'current quantity')
       ])
     ]),
     h(TableBody, {}, [
