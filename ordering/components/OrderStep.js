@@ -6,11 +6,12 @@ import { FormattedMessage } from 'dogstack/intl'
 import { Step, StepButton, StepLabel, StepContent } from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import Hint from '../../app/components/Hint'
 import styles from '../styles/OrderStep'
 
 function OrderStep (props) {
   const { styles, theme, step, stepIndex, setStepIndex, isStatic = false, onNavigate } = props
-  const { index, name, description, Icon, taskPlan, completed, ready } = step
+  const { index, name, description, Icon, taskPlan, completed, ready, hint } = step
 
   const hasTaskPlan = !isNil(taskPlan)
 
@@ -53,7 +54,12 @@ function OrderStep (props) {
         h('p', {
           className: styles.description
         }, [
-          description
+          description,
+          h(Hint, {
+            messageId: hint,
+            position: 'top-right',
+            iconSize: '24px'
+          })
         ]),
         hasTaskPlan && (
           h(RaisedButton, {

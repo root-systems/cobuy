@@ -15,18 +15,21 @@ export const orderStatuses = [
       'completeOrderSetupWithPrereqs',
       'completeOrderSetup'
     ],
+    hint: 'ordering.whatIsSetup'
   },
   {
     name: 'intend', // TODO intl
     description: 'Share intents to buy!', // TODO intl
     Icon: AssignmentIcon,
-    recipeId: 'castIntent'
+    recipeId: 'castIntent',
+    hint: 'ordering.whatIsIntent'
   },
   {
     name: 'commit', // TODO intl
     description: 'Close an order, combine individual intents and commit to a purchase order ready to send to a supplier. Your group will no longer be able to go through the Intent phase.', // TODO intl
     Icon: CompareIcon,
-    recipeId: 'commitOrder'
+    recipeId: 'commitOrder',
+    hint: 'ordering.whatIsCommit'
   },
 ]
 

@@ -35,7 +35,8 @@ export default createSelector(
         index,
         taskPlan: taskPlansByStatus[orderStatus.name],
         completed: status && index < stepIndex,
-        ready: status && index === stepIndex
+        ready: status && index === stepIndex,
+        hint: orderStatus.hint
       }))
 
       const consumerAgent = agents[order.consumerAgentId]

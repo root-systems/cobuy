@@ -10,6 +10,7 @@ import { Stepper } from 'material-ui/Stepper'
 import { getTaskPlanFromOrder } from '../util/orderStatuses'
 import Avatar from '../../agents/components/Avatar'
 import OrderSteps from './OrderSteps'
+import Hint from '../../app/components/Hint'
 
 import styles from '../styles/OrderPage'
 
@@ -50,7 +51,12 @@ function OrderPage (props) {
       h('h1', {
         className: styles.title
       }, [
-        `order ${id}`
+        `order ${id}`,
+        h(Hint, {
+          messageId: 'ordering.whatIsAnOrder',
+          position: 'top-right',
+          iconSize: '24px'
+        })
       ]),
       h('div', {
         className: styles.agents
