@@ -114,7 +114,8 @@ function OrdersList (props) {
         }),
         h(Hint, {
           messageId: 'ordering.whatIsAnOrder',
-          position: 'top-right'
+          position: 'top-right',
+          iconSize: '24px'
         })
       ]),
       h('ul', {

@@ -16,6 +16,7 @@ import { compose, withState, withHandlers } from 'recompose'
 
 import GridViewProduct from './GridViewProduct'
 import ListViewProduct from './ListViewProduct'
+import Hint from '../../app/components/Hint'
 import styles from '../styles/ProductsForOrder'
 
 function renderGrid (props) {
@@ -24,19 +25,19 @@ function renderGrid (props) {
   return h('div', {
     className: styles.gridContainer
   }, [
-    values(map((product) => {
-      const applicablePriceSpec = applicablePriceSpecByProduct[product.id] || {}
-      const collectiveQuantity = collectiveQuantityByProduct[product.id] || 0
+      values(map((product) => {
+        const applicablePriceSpec = applicablePriceSpecByProduct[product.id] || {}
+        const collectiveQuantity = collectiveQuantityByProduct[product.id] || 0
 
-      return h(GridViewProduct, {
-        product,
-        applicablePriceSpec,
-        collectiveQuantity,
-        key: product.id,
-        onNavigate
-      })
-    }, products))
-  ])
+        return h(GridViewProduct, {
+          product,
+          applicablePriceSpec,
+          collectiveQuantity,
+          key: product.id,
+          onNavigate
+        })
+      }, products))
+    ])
 }
 
 function renderList (props) {
@@ -48,8 +49,16 @@ function renderList (props) {
         h(TableHeaderColumn, { style: { width: '50px' } }),
         h(TableHeaderColumn, {}, 'name'),
         h(TableHeaderColumn, {}, 'description'),
-        h(TableHeaderColumn, { style: { width: '100px' }, tooltip: 'The current price given the quantity the group has ordered so far' }, 'current price'),
-        h(TableHeaderColumn, { style: { width: '200px' }, tooltip: 'The current quantity the group has ordered so far for the current price' }, 'current quantity')
+        h(TableHeaderColumn, { style: { width: '100px' } }, [
+          'current price',
+          h(Hint, {
+            messageId: 'ordering.whatIsCurrentPrice'
+          })]),
+        h(TableHeaderColumn, { style: { width: '200px' } }, [
+          'current quantity',
+          h(Hint, {
+            messageId: 'ordering.whatIsCurrentQuantity'
+          })])
       ])
     ]),
     h(TableBody, {}, [
