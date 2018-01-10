@@ -32,7 +32,12 @@ function OrdersPage (props) {
         })
       ]),
       h(Dialog, {
-        title: 'Create Order', // TODO intl
+        title: (
+          h(FormattedMessage, {
+            id: 'ordering.orderCreator',
+            className: styles.title
+          })
+        ),
         actions: [
           h(RaisedButton, {
             type: 'submit',

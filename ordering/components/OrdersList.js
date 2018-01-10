@@ -99,8 +99,9 @@ function OrdersList (props) {
         className: styles.intro
       }, [
         h(FormattedMessage, {
-          id: 'app.dashboard.orders',
+          id: 'ordering.yourOrders',
           className: styles.labelText
+        }),
         })
       ]),
       h('ul', {
