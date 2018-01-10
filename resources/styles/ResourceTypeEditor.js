@@ -8,6 +8,9 @@ export default {
     display: 'flex',
     fontSize: '2rem'
   }),
+  field: ({ empty }) => ({
+    margin: '10px'
+  }),
   submitButton: () => ({
   }),
   contains: () => ({

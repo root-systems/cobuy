@@ -13,7 +13,7 @@ import styles from '../styles/PriceSpecsEditor'
 export default compose(
   connectFela(styles)
 )(PriceSpecsEditor)
-  
+
 function PriceSpecsEditor (props) {
   const { styles, fields } = props
   return (
@@ -39,6 +39,7 @@ function PriceSpecsEditor (props) {
       h(RaisedButton, {
         type: 'button',
         className: styles.addPriceSpecButton,
+        secondary: true,
         onClick: () => fields.push({})
       }, [
         h(FormattedMessage, {
@@ -100,6 +101,7 @@ const PriceSpec = (props) => {
       h(RaisedButton, {
         type: 'button',
         className: styles.removePriceSpecButton,
+        secondary: true,
         onClick: () => removeField()
       }, [
         h(FormattedMessage, {

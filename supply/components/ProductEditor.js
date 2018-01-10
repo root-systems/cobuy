@@ -33,7 +33,9 @@ export default compose(
       component: PriceSpecsEditor
     }),
     h(RaisedButton, {
-      type: 'submit'
+      type: 'submit',
+      primary: true,
+      className: styles.saveButton
     }, [
       h(FormattedMessage, {
         id: 'supply.saveProduct',
