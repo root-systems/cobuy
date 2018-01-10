@@ -16,17 +16,20 @@ function Hint (props) {
   const {
     styles,
     messageId,
-    icon
+    icon,
+    position
   } = props
 
   return (
     h(IconButton, {
+      disableTouchRipple: true,
       tooltip: (
         h(FormattedMessage, {
           id: messageId,
           className: styles.tooltip
         })
-      )
+      ),
+      tooltipPosition: position
     }, [
       h(FontIcon, {
         className: `fa fa-${icon}-circle`
@@ -40,9 +43,18 @@ Hint.propTypes = {
   icon: PropTypes.oneOf([
     'info',
     'question'
+  ]),
+  position: PropTypes.oneOf([
+    'bottom-right',
+    'bottom-center',
+    'bottom-left',
+    'top-right',
+    'top-center',
+    'top-left'
   ])
 }
 
 Hint.defaultProps = {
-  icon: 'info'
+  icon: 'info',
+  position: 'bottom-center'
 }
