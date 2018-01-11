@@ -5,6 +5,7 @@ import { TextField } from 'redux-form-material-ui'
 import h from 'react-hyperscript'
 import { indexBy, prop, propEq, pipe, values, map, complement, filter, isNil, tap } from 'ramda'
 
+import Hint from '../../app/components/Hint'
 import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/ProductPriceSpec'
@@ -73,6 +74,11 @@ function ProductPriceSpec (props) {
           className: styles.qtyTextField,
           component: TextField,
           type: 'number'
+        }),
+        h(Hint, {
+          messageId: 'ordering.whatIsAPricePointIntent',
+          position: 'top-right',
+          iconSize: '24px'
         })
       ]),
       renderOtherMemberOrderIntents(orderIntentsByAgent)

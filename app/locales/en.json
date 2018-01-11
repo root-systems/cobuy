@@ -78,6 +78,7 @@
   "ordering.whatIsSetup": "The Setup stage is where the group admin enters prerequisite information on their buying group and supplier",
   "ordering.whatIsIntent": "The Intent stage is where each group member decides how much of a product they want for each price point",
   "ordering.whatIsCommit": "The Commit stage is where the group admin confirms and commits the group order",
+  "ordering.whatIsAPricePointIntent": "Specify how much/many of the product you'd want at this price point",
   "tasks.tasks": "tasks",
   "tasks.completeTask": "done",
   "tasks.cancelTask": "cancel",
