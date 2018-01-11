@@ -108,14 +108,26 @@ const props = {
   orderIntentsByPriceAgent: {
     456: {
       1: {
+        desiredQuantity: '5'
+      },
+      1: {
         desiredQuantity: '10'
       },
     },
     457: {
       1: {
-        desiredQuantity: '15'
+        desiredQuantity: '20'
+      },
+      2: {
+        desiredQuantity: '30'
       }
     }
+  },
+  applicablePriceSpec: mockProductInfo.priceSpecs[0],
+  collectiveQuantity: '15',
+  collectiveQuantityByPrice: {
+    456: '15',
+    457: '50'
   },
   onSubmit: action('submit')
 }

@@ -1,5 +1,5 @@
 import { compose } from 'recompose'
-import { map, isNil, pipe, values } from 'ramda'
+import { map, isNil, pipe, values, prop, reduce, max } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import { reduxForm as connectForm, FormSection } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -35,7 +35,15 @@ const renderFacets = map((facet) => {
 })
 
 function SingleViewProduct (props) {
-  const { styles, product, orderIntentsByPriceAgent, currentAgent, agents, handleSubmit } = props
+  const {
+    styles,
+    product,
+    orderIntentsByPriceAgent,
+    collectiveQuantityByPrice,
+    currentAgent,
+    agents,
+    handleSubmit
+  } = props
   if (isNil(product)) return null
   const { resourceType, facets, priceSpecs } = product
   if (isNil(priceSpecs)) return null
@@ -67,22 +75,19 @@ function SingleViewProduct (props) {
           }, [
             h('h3', {
               className: styles.nameText
-            }, name),
+            }, [
+              name
+            ]),
             h('p', {
               className: styles.productText
-            }, description),
-            h('p', {
-              className: styles.priceText
             }, [
-              h(FormattedMessage, {
-                id: 'ordering.fromPrice',
-                className: styles.fromText,
-                values: {
-                  currency: priceSpecs[0].currency,
-                  price: priceSpecs[0].price
-                }
-              })
-            ])
+              description
+            ]),
+            h(NewPriceSpecs, {
+              styles,
+              priceSpecs,
+              collectiveQuantityByPrice
+            })
           ]),
           h('div', {
             className: styles.facetsContainer
@@ -126,3 +131,61 @@ export default compose(
     enableReinitialize: true
   })
 )(SingleViewProduct)
+
+const getMaximumPriceSpecMinimum = pipe(
+  map(prop('minimum')),
+  reduce(max, 0)
+)
+
+function NewPriceSpecs (props) {
+  const {
+    styles,
+    priceSpecs,
+    collectiveQuantityByPrice
+  } = props
+
+  // id
+  // minimum
+  // price
+  // currency
+
+  const maximumPriceSpecMinimum = getMaximumPriceSpecMinimum(priceSpecs)
+
+  const renderPriceSpecPoints = map(priceSpec => {
+    const distance = priceSpec.minimum / maximumPriceSpecMinimum
+    return (
+      h('div', {
+        style: {
+          marginLeft: `${distance * 100}%`
+        }
+      }, [
+        'o'
+      ])
+    )
+  })
+
+  const renderPriceSpecProgress = map(priceSpec => {
+    const collectiveQuantity = collectiveQuantityByPrice[priceSpec.id] || 0
+    const progress = collectiveQuantity / maximumPriceSpecMinimum
+    return (
+      h('div', {
+        style: {
+          padding: '2px',
+          backgroundColor: 'black',
+          width: `${progress * 100}%`
+        }
+      })
+    )
+  })
+
+  console.log('priceSpecs', priceSpecs)
+
+  return (
+    h('div', {
+      className: styles.newPriceSpecsContainer
+    }, [
+      renderPriceSpecPoints(priceSpecs),
+      renderPriceSpecProgress(priceSpecs)
+    ])
+  )
+}
