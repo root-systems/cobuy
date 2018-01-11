@@ -8,6 +8,7 @@ import h from 'react-hyperscript'
 import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/SingleViewProduct'
+import ProductPricePoints from './ProductPricePoints'
 import ProductPriceSpec from './ProductPriceSpec'
 import ProductFacet from './ProductFacet'
 
@@ -83,8 +84,7 @@ function SingleViewProduct (props) {
             }, [
               description
             ]),
-            h(NewPriceSpecs, {
-              styles,
+            h(ProductPricePoints, {
               priceSpecs,
               collectiveQuantityByPrice
             })
@@ -131,61 +131,3 @@ export default compose(
     enableReinitialize: true
   })
 )(SingleViewProduct)
-
-const getMaximumPriceSpecMinimum = pipe(
-  map(prop('minimum')),
-  reduce(max, 0)
-)
-
-function NewPriceSpecs (props) {
-  const {
-    styles,
-    priceSpecs,
-    collectiveQuantityByPrice
-  } = props
-
-  // id
-  // minimum
-  // price
-  // currency
-
-  const maximumPriceSpecMinimum = getMaximumPriceSpecMinimum(priceSpecs)
-
-  const renderPriceSpecPoints = map(priceSpec => {
-    const distance = priceSpec.minimum / maximumPriceSpecMinimum
-    return (
-      h('div', {
-        style: {
-          marginLeft: `${distance * 100}%`
-        }
-      }, [
-        'o'
-      ])
-    )
-  })
-
-  const renderPriceSpecProgress = map(priceSpec => {
-    const collectiveQuantity = collectiveQuantityByPrice[priceSpec.id] || 0
-    const progress = collectiveQuantity / maximumPriceSpecMinimum
-    return (
-      h('div', {
-        style: {
-          padding: '2px',
-          backgroundColor: 'black',
-          width: `${progress * 100}%`
-        }
-      })
-    )
-  })
-
-  console.log('priceSpecs', priceSpecs)
-
-  return (
-    h('div', {
-      className: styles.newPriceSpecsContainer
-    }, [
-      renderPriceSpecPoints(priceSpecs),
-      renderPriceSpecProgress(priceSpecs)
-    ])
-  )
-}
