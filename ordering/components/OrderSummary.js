@@ -2,7 +2,7 @@ import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import Paper from 'material-ui/Paper'
-import { groupBy, map, pipe, values, isNil } from 'ramda'
+import { groupBy, map, pipe, values, isNil, isEmpty } from 'ramda'
 import {
   Table,
   TableHeader,
@@ -14,7 +14,9 @@ import { FormattedMessage } from '../../lib/Intl'
 import AgentOrderSummary from './AgentOrderSummary'
 
 function OrderSummary (props) {
-  const { currentOrderOrderPlansByAgent, currentOrder } = props
+  const { currentOrderOrderPlansByAgent, currentOrder, currentOrderOrderIntentsByAgent } = props
+  const orderInfoByAgent = !isEmpty(currentOrderOrderPlansByAgent) ? currentOrderOrderPlansByAgent
+                                                                   : currentOrderOrderIntentsByAgent
 
   // all the plans grouped by agent, may be > 1 per agent
   // const groupedAgentPlans = groupBy((plan) => plan.agent.profile.id)(order.orderPlans)
@@ -50,7 +52,7 @@ function OrderSummary (props) {
           ])
         ])
       ]),
-      renderOrderPlansByAgent(values(currentOrderOrderPlansByAgent))
+      renderOrderPlansByAgent(values(orderInfoByAgent))
     ])
   )
 }
