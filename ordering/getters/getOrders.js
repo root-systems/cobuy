@@ -30,12 +30,14 @@ export default createSelector(
 
       const steps = orderStatuses.map((orderStatus, index) => ({
         name: orderStatus.name,
+        nameIntlId: orderStatus.nameIntlId,
         description: orderStatus.description,
         Icon: orderStatus.Icon,
         index,
         taskPlan: taskPlansByStatus[orderStatus.name],
         completed: status && index < stepIndex,
-        ready: status && index === stepIndex
+        ready: status && index === stepIndex,
+        hint: orderStatus.hint
       }))
 
       const consumerAgent = agents[order.consumerAgentId]
