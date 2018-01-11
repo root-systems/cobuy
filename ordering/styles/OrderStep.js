@@ -11,5 +11,11 @@ export default {
   }),
   button: ({ theme }) => ({
     width: '20%'
+  }),
+  labelText: ({ theme }) => ({
+    textTransform: 'capitalize'
+  }),
+  descriptionText: ({ theme }) => ({
+    textTransform: 'initial'
   })
 }

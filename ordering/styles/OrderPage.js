@@ -13,5 +13,8 @@ export default {
     fontSize: theme.fontSizes[3],
     color: theme.colors.text
   }),
-  stepper: () => ({})
+  stepper: () => ({}),
+  labelText: ({ theme }) => ({
+    textTransform: 'capitalize'
+  })
 }

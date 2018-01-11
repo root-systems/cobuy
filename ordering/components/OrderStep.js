@@ -11,7 +11,7 @@ import styles from '../styles/OrderStep'
 
 function OrderStep (props) {
   const { styles, theme, step, stepIndex, setStepIndex, isStatic = false, onNavigate } = props
-  const { index, name, description, Icon, taskPlan, completed, ready, hint } = step
+  const { index, name, description, Icon, taskPlan, completed, ready, hint, nameIntlId } = step
 
   const hasTaskPlan = !isNil(taskPlan)
 
@@ -46,7 +46,10 @@ function OrderStep (props) {
             color: statusColor
           }
         }, [
-          name
+          h(FormattedMessage, {
+            id: nameIntlId,
+            className: styles.labelText
+          }),
         ])
       ]),
       h(StepContent, {
@@ -54,7 +57,10 @@ function OrderStep (props) {
         h('p', {
           className: styles.description
         }, [
-          description,
+          h(FormattedMessage, {
+            id: description,
+            className: styles.descriptionText
+          }),
           h(Hint, {
             messageId: hint,
             position: 'top-right',

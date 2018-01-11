@@ -8,8 +8,9 @@ const isArray = is(Array)
 
 export const orderStatuses = [
   {
-    name: 'setup', // TODO intl
-    description: 'Setup details and start order.', // TODO intl
+    name: 'setup',
+    nameIntlId: 'ordering.setup',
+    description: 'ordering.setupStageDescription',
     Icon: BuildIcon,
     recipeId: [
       'completeOrderSetupWithPrereqs',
@@ -18,15 +19,17 @@ export const orderStatuses = [
     hint: 'ordering.whatIsSetup'
   },
   {
-    name: 'intend', // TODO intl
-    description: 'Share intents to buy!', // TODO intl
+    name: 'intend',
+    nameIntlId: 'ordering.intend',
+    description: 'ordering.intentStageDescription',
     Icon: AssignmentIcon,
     recipeId: 'castIntent',
     hint: 'ordering.whatIsIntent'
   },
   {
-    name: 'commit', // TODO intl
-    description: 'Close an order, combine individual intents and commit to a purchase order ready to send to a supplier. Your group will no longer be able to go through the Intent phase.', // TODO intl
+    name: 'commit',
+    nameIntlId: 'ordering.commit',
+    description: 'ordering.commitStageDescription',
     Icon: CompareIcon,
     recipeId: 'commitOrder',
     hint: 'ordering.whatIsCommit'

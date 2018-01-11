@@ -30,6 +30,7 @@ export default createSelector(
 
       const steps = orderStatuses.map((orderStatus, index) => ({
         name: orderStatus.name,
+        nameIntlId: orderStatus.nameIntlId,
         description: orderStatus.description,
         Icon: orderStatus.Icon,
         index,

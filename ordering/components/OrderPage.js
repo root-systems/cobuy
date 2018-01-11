@@ -23,12 +23,15 @@ const iconByRole = {
 }
 
 function OrderAgentIcon (props) {
-  const { styles, role, agent } = props
+  const { styles, role, agent, roleIntlId } = props
   return (
     h('div', {
       className: `${styles.agent} ${styles[role]}`
     }, [
-      role,
+      h(FormattedMessage, {
+        id: roleIntlId,
+        className: styles.labelText
+      }),
       h(Avatar, {
         agent,
         size: 'medium',
@@ -65,16 +68,19 @@ function OrderPage (props) {
           styles,
           className: styles.icon,
           role: 'consumer',
+          roleIntlId: 'ordering.consumer',
           agent: consumerAgent
         }),
         h(OrderAgentIcon, {
           styles,
           role: 'supplier',
+          roleIntlId: 'ordering.supplier',
           agent: supplierAgent
         }),
         h(OrderAgentIcon, {
           styles,
           role: 'admin',
+          roleIntlId: 'ordering.admin',
           agent: adminAgent
         })
       ]),
