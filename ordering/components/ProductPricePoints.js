@@ -12,6 +12,7 @@ export default compose(
 )(ProductPricePoints)
 
 const Point = createComponent(styles.point)
+const PointMarker = createComponent(styles.pointMarker)
 const ProgressBar = createComponent(styles.progressBar)
 const ProgressMarker = createComponent(styles.progressMarker)
 
@@ -62,6 +63,15 @@ function ProductPricePoints (props) {
     )
   })
 
+  const renderPriceSpecPointMarkers = map(priceSpec => {
+    const point = priceSpec.minimum / maximumPriceSpecMinimum
+    return (
+      h(PointMarker, {
+        point
+      })
+    )
+  })
+
   const numPriceSpecs = length(priceSpecs)
   // TODO (mw) once we upgrade to latest React with fragment support,
   // we won't need to do this hack where we pass in component to run
@@ -95,6 +105,7 @@ function ProductPricePoints (props) {
       className: styles.container
     }, [
       renderPriceSpecPoints(priceSpecs),
+      renderPriceSpecPointMarkers(priceSpecs),
       h('div', {
         className: styles.horizon
       }),

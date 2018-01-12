@@ -7,17 +7,18 @@ const subText = ({ theme }) => ({
 
 const horizontalLine = ({ theme }) => ({
   position: 'absolute',
-  top: theme.space[5],
+  top: `calc(${theme.space[6]} + ${theme.space[4]})`,
   height: theme.space[2]
 })
 
 export default {
   container: ({ theme }) => ({
     position: 'relative',
-    marginTop: theme.space[4],
-    marginBottom: theme.space[4],
-    marginLeft: theme.space[5],
-    marginRight: theme.space[5]
+    marginTop: theme.space[3],
+    marginBottom: theme.space[3],
+    height: `calc(${theme.space[6]} + ${theme.space[5]})`,
+    marginLeft: `calc(${theme.space[5]} + ${theme.space[3]})`,
+    marginRight: `calc(${theme.space[5]} + ${theme.space[3]})`
   }),
   // this is used by a react-fela.createComponent
   point: ({ theme, point }) => ({
@@ -37,6 +38,16 @@ export default {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center'
+  }),
+  pointMarker: ({ theme, point }) => ({
+    position: 'absolute',
+    zIndex: 99,
+    backgroundColor: theme.colors.primary1,
+    top: theme.space[6],
+    height: theme.space[5],
+    left: `${point * 100}%`,
+    transform: 'translate(-100%, 0);',
+    width: theme.space[1]
   }),
   price: ({ theme }) => ({
     fontSize: theme.fontSizes[2],
@@ -60,8 +71,8 @@ export default {
     position: 'absolute',
     zIndex: 2,
     backgroundColor: theme.colors.greys[getGreyIndex({ index, length: numPriceSpecs })],
-    top: `-${theme.space[3]}`,
-    height: `calc(${theme.space[6]} + ${theme.space[4]})`,
+    top: `calc(${theme.space[6]} + ${theme.space[2]})`,
+    height: theme.space[4],
     left: `${progress * 100}%`,
     transform: 'translate(-100%, 0);',
     width: theme.space[1]
