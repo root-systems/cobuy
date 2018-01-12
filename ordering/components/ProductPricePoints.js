@@ -1,7 +1,7 @@
 import h from 'react-hyperscript'
 import { compose } from 'recompose'
 import { connect as connectFela, createComponent } from 'react-fela'
-import { map, pipe, prop, reduce, max } from 'ramda'
+import { map, pipe, prop, reduce, max, addIndex, sortBy, merge, length, reverse } from 'ramda'
 import { FormattedMessage } from 'dogstack/intl'
 import BigMath from 'bigmath'
 
@@ -12,7 +12,8 @@ export default compose(
 )(ProductPricePoints)
 
 const Point = createComponent(styles.point)
-const Progress = createComponent(styles.progress)
+const ProgressBar = createComponent(styles.progressBar)
+const ProgressMarker = createComponent(styles.progressMarker)
 
 function ProductPricePoints (props) {
   const {
@@ -61,27 +62,49 @@ function ProductPricePoints (props) {
     )
   })
 
-  const renderPriceSpecProgress = map(priceSpec => {
-    const collectiveQuantity = collectiveQuantityByPrice[priceSpec.id] || 0
-    const progress = collectiveQuantity / maximumPriceSpecMinimum
-    return (
-      h(Progress, {
+  const numPriceSpecs = length(priceSpecs)
+  // TODO (mw) once we upgrade to latest React with fragment support,
+  // we won't need to do this hack where we pass in component to run
+  // this render twice at the same dom level
+  const renderPriceSpecProgress = Component => pipe(
+    map(priceSpec => {
+      const collectiveQuantity = collectiveQuantityByPrice[priceSpec.id] || 0
+      const progress = collectiveQuantity / maximumPriceSpecMinimum
+      return merge(priceSpec, {
         progress
       })
-    )
-  })
+    }),
+    sortBy(prop('progress')),
+    reverse,
+    mapIndexed((priceSpec, index) => {
+      const { progress } = priceSpec
+      return (
+        h(Component, {
+          progress,
+          index,
+          numPriceSpecs
+        })
+      )
+    })
+  )
 
   console.log('priceSpecs', priceSpecs)
 
   return (
     h('div', {
-      className: styles.newPriceSpecsContainer
+      className: styles.container
     }, [
       renderPriceSpecPoints(priceSpecs),
-      renderPriceSpecProgress(priceSpecs)
+      h('div', {
+        className: styles.horizon
+      }),
+      renderPriceSpecProgress(ProgressBar)(priceSpecs),
+      renderPriceSpecProgress(ProgressMarker)(priceSpecs)
     ])
   )
 }
+
+const mapIndexed = addIndex(map)
 
 const getMaximumPriceSpecMinimum = pipe(
   map(prop('minimum')),

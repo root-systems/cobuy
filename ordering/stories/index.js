@@ -1,6 +1,7 @@
 require('./MemberIntentField')
 // require('./ProductList')
 require('./SingleViewProduct')
+require('./ProductPricePoints')
 require('./ProductFacet')
 require('./ProductPriceSpec')
 require('./OrderSummary')
