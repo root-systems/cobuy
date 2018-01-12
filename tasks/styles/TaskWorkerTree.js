@@ -18,5 +18,8 @@ export default {
     textTransform: 'capitalize'
   }),
   subTaskCheckbox: () => ({
+  }),
+  childTaskNameText: () => ({
+    textTransform: 'capitalize'
   })
 }
