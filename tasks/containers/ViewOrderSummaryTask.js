@@ -33,6 +33,8 @@ export default compose(
       const { taskPlan, selected } = props
       const { currentOrderOrderPlansByAgent, currentOrderOrderIntentsByAgent } = selected
 
+      console.log('selected on query is: ', selected)
+
       // order has been commited/closed if order plans exist
       const orderInfoByAgent = !isEmpty(currentOrderOrderPlansByAgent) ? currentOrderOrderPlansByAgent
                                                                        : currentOrderOrderIntentsByAgent
@@ -80,8 +82,8 @@ export default compose(
           }
         })
       }
-
       if (!isEmpty(orderInfoByAgent)) {
+        console.log('orderInfo is not empty')
         queries.push({
           service: 'priceSpecs',
           params: {
@@ -156,19 +158,20 @@ export default compose(
       const { taskPlan } = props.ownProps
       const { currentOrderOrderPlansByAgent, currentOrderOrderIntentsByAgent } = props.selected
 
-      // wait for task plan before re-query
-      if (isNil(taskPlan)) return false
-
       console.log('orderPlans: ', currentOrderOrderPlansByAgent)
       console.log('orderIntents: ', currentOrderOrderIntentsByAgent)
 
+      // wait for task plan before re-query
+      if (isNil(taskPlan)) return false
+
+      console.log('is everything empty?: ', (isEmpty(currentOrderOrderPlansByAgent) && isEmpty(currentOrderOrderIntentsByAgent)))
       if (isEmpty(currentOrderOrderPlansByAgent) && isEmpty(currentOrderOrderIntentsByAgent)) return true
       if (anyOrderPlansMissingPriceSpecs(currentOrderOrderPlansByAgent) && anyOrderPlansMissingPriceSpecs(currentOrderOrderIntentsByAgent)) return true
       if (anyOrderPlansMissingAgents(currentOrderOrderPlansByAgent) && anyOrderPlansMissingAgents(currentOrderOrderIntentsByAgent)) return true
       if (anyOrderPlansMissingProducts(currentOrderOrderPlansByAgent) && anyOrderPlansMissingProducts(currentOrderOrderIntentsByAgent)) return true
       if (anyOrderPlansMissingAgentProfiles(currentOrderOrderPlansByAgent) && anyOrderPlansMissingAgentProfiles(currentOrderOrderIntentsByAgent)) return true
       if (anyOrderPlansMissingProductResourceTypes(currentOrderOrderPlansByAgent) && anyOrderPlansMissingProductResourceTypes(currentOrderOrderIntentsByAgent)) return true
-
+      
       return false
     }
   })
