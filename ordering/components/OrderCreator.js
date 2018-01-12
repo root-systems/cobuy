@@ -106,7 +106,6 @@ const OrderCreator = (props) => {
         }),
         renderAgentsAsMenuItems(currentAgentGroupSupplierProfiles)
       ]),
-      /*
       h(Field, {
         name: 'name',
         component: TextField,
@@ -118,7 +117,6 @@ const OrderCreator = (props) => {
         ),
         validate: [required()]
       }),
-      */
     ])
   )
 }
