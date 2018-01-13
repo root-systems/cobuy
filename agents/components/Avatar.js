@@ -26,10 +26,10 @@ function Avatar (props) {
     agent,
     size,
     icon,
-    dirtyAvatar
+    dirtyAvatar = ''
   } = props
 
-  const hasDirtyAvatar = not(isEmpty(String(dirtyAvatar)))
+  const hasDirtyAvatar = not(isEmpty(dirtyAvatar))
 
   const hasIcon = not(isNil(icon))
 
@@ -44,11 +44,22 @@ function Avatar (props) {
   const hasName = not(isNil(name))
   const hasAvatar = not(isNil(avatar))
 
-  console.log('hasDirtyAvatar', hasDirtyAvatar)
   console.log('hasAvatar', hasAvatar)
-  // console.log('avatar', avatar)
+  console.log('hasDirtyAvatar', hasDirtyAvatar)
+  console.log('dirtyAvatar', dirtyAvatar)
+  console.log('dirtyAvatar isNil?', isNil(dirtyAvatar))
+  console.log('dirtyAvatar isEmpty?', isEmpty(dirtyAvatar))
+  console.log('hasName', hasName)
   console.log('hasIcon', hasIcon)
-  console.log('shouldDisplayIcon', and(and(not(hasAvatar), not(hasDirtyAvatar), not(hasName)), hasIcon))
+
+  // debugger
+
+  // GK: when accessing profile, dirtyAvatar shows up as empty string
+  // GK: i suspect it may be undefined or null when coming from orders page
+
+  const shouldDisplayIcon = and(not(hasAvatar), not(hasDirtyAvatar), not(hasName), hasIcon)
+
+  const src = hasDirtyAvatar ? dirtyAvatar : hasAvatar ? avatar : null
 
   return (
     h('div', {
@@ -64,8 +75,7 @@ function Avatar (props) {
               })
             : null
         ),
-        // src: hasDirtyAvatar ? dirtyAvatar : avatar
-        src: String(dirtyAvatar)
+        src: src
       }, [
         and(not(hasAvatar), hasName)
           ? name.substring(0, 1)
