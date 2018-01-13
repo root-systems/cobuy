@@ -24,8 +24,11 @@ const iconByRole = {
 
 function OrderAgentIcon (props) {
   const { styles, role, agent, roleIntlId } = props
-  // const { profile } = agent
-  console.log('agent', agent)
+
+  if (isNil(agent)) return null
+
+  const { profile } = agent
+
   return (
     h('div', {
       className: `${styles.agent} ${styles[role]}`
@@ -39,7 +42,7 @@ function OrderAgentIcon (props) {
         size: 'medium',
         icon: iconByRole[role]
       }),
-      // h('p', either(isNil(agent), isNil(profile)) ? null : profile.name)
+      h('p', isNil(profile) ? null : profile.name)
     ])
   )
 }
