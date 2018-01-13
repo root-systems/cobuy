@@ -2,7 +2,7 @@ import h from 'react-hyperscript'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
 import { connect as connectStyles } from 'react-fela'
-import { isNil, not, and } from 'ramda'
+import { isNil, not, and, either, isEmpty } from 'ramda'
 import MuiAvatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -25,8 +25,11 @@ function Avatar (props) {
     styles,
     agent,
     size,
-    icon
+    icon,
+    dirtyAvatar
   } = props
+
+  const hasDirtyAvatar = not(isEmpty(String(dirtyAvatar)))
 
   const hasIcon = not(isNil(icon))
 
@@ -41,6 +44,12 @@ function Avatar (props) {
   const hasName = not(isNil(name))
   const hasAvatar = not(isNil(avatar))
 
+  console.log('hasDirtyAvatar', hasDirtyAvatar)
+  console.log('hasAvatar', hasAvatar)
+  // console.log('avatar', avatar)
+  console.log('hasIcon', hasIcon)
+  console.log('shouldDisplayIcon', and(and(not(hasAvatar), not(hasDirtyAvatar), not(hasName)), hasIcon))
+
   return (
     h('div', {
       className: styles.container
@@ -49,25 +58,19 @@ function Avatar (props) {
         className: styles.avatar,
         size: sizeInPx[size],
         icon: (
-          and(and(not(hasAvatar), not(hasName)), hasIcon)
+          and(and(not(hasAvatar), not(hasDirtyAvatar), not(hasName)), hasIcon)
             ? h(FontIcon, {
                 className: `fa fa-${icon}`
               })
             : null
         ),
-        src: avatar
+        // src: hasDirtyAvatar ? dirtyAvatar : avatar
+        src: String(dirtyAvatar)
       }, [
         and(not(hasAvatar), hasName)
           ? name.substring(0, 1)
           : null
-      ]),
-      (size !== 'small') && (
-        h('span', {
-          className: styles.name
-        }, [
-          name
-        ])
-      )
+      ])
     ])
   )
 }

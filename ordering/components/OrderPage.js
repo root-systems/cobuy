@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, map } from 'ramda'
+import { isNil, map, either } from 'ramda'
 import { compose } from 'recompose'
 import { connect as connectFela } from 'react-fela'
 import { FormattedMessage } from 'dogstack/intl'
@@ -24,6 +24,8 @@ const iconByRole = {
 
 function OrderAgentIcon (props) {
   const { styles, role, agent, roleIntlId } = props
+  // const { profile } = agent
+  console.log('agent', agent)
   return (
     h('div', {
       className: `${styles.agent} ${styles[role]}`
@@ -36,7 +38,8 @@ function OrderAgentIcon (props) {
         agent,
         size: 'medium',
         icon: iconByRole[role]
-      })
+      }),
+      // h('p', either(isNil(agent), isNil(profile)) ? null : profile.name)
     ])
   )
 }
