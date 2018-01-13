@@ -1,6 +1,25 @@
 import { combineRules } from 'fela'
 
-const subText = ({ theme }) => ({
+const point = ({ theme }) => ({
+  position: 'absolute',
+  transform: 'translate(-50%, 0);',
+  textAlign: 'center',
+  width: theme.space[6],
+  height: theme.space[6],
+  borderWidth: theme.space[1],
+  borderStyle: 'solid',
+  backgroundColor: theme.colors.canvas,
+  zIndex: 100,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center'
+})
+
+const pointMainText = ({ theme }) => ({
+  fontSize: theme.fontSizes[2],
+  color: theme.colors.greys[9]
+})
+const pointSubText = ({ theme }) => ({
   fontSize: theme.fontSizes[1],
   color: theme.colors.greys[7]
 })
@@ -16,45 +35,30 @@ export default {
     position: 'relative',
     marginTop: theme.space[3],
     marginBottom: theme.space[3],
-    height: `calc(${theme.space[6]} + ${theme.space[5]})`,
+    height: `calc(${theme.space[7]} + ${theme.space[5]})`,
     marginLeft: `calc(${theme.space[5]} + ${theme.space[3]})`,
     marginRight: `calc(${theme.space[5]} + ${theme.space[3]})`
   }),
   // this is used by a react-fela.createComponent
-  point: ({ theme, point }) => ({
-    position: 'absolute',
+  pricePoint: combineRules(point, ({ theme, point, isMet }) => ({
     top: 0,
     left: `${point * 100}%`,
-    transform: 'translate(-50%, 0);',
-    textAlign: 'center',
-    width: theme.space[6],
-    height: theme.space[6],
-    borderRadius: '50%',
-    borderWidth: theme.space[1],
-    borderStyle: 'solid',
-    borderColor: theme.colors.primary1,
-    backgroundColor: theme.colors.canvas,
-    zIndex: 100,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center'
-  }),
-  pointMarker: ({ theme, point }) => ({
+    borderColor: isMet ? theme.colors.primary2 : theme.colors.accent2,
+    borderRadius: '50%'
+  })),
+  pricePointPrice: pointMainText,
+  pricePointMinimum: pointSubText,
+  // this is used by a react-fela.createComponent
+  priceMarker: ({ theme, point, isMet }) => ({
     position: 'absolute',
     zIndex: 99,
-    backgroundColor: theme.colors.primary1,
+    backgroundColor: isMet ? theme.colors.primary2 : theme.colors.accent2,
     top: theme.space[6],
-    height: theme.space[5],
+    height: theme.space[4],
     left: `${point * 100}%`,
     transform: 'translate(-100%, 0);',
     width: theme.space[1]
   }),
-  price: ({ theme }) => ({
-    fontSize: theme.fontSizes[2],
-    color: theme.colors.greys[9]
-  }),
-  quantityToMeetPrice: subText,
-  quantityAtPrice: subText,
   horizon: combineRules(horizontalLine, ({ theme }) => ({
     zIndex: 3,
     backgroundColor: theme.colors.greys[1],
@@ -71,12 +75,20 @@ export default {
     position: 'absolute',
     zIndex: 2,
     backgroundColor: theme.colors.greys[getGreyIndex({ index, length: numPriceSpecs })],
-    top: `calc(${theme.space[6]} + ${theme.space[2]})`,
+    bottom: theme.space[6],
     height: theme.space[4],
     left: `${progress * 100}%`,
     transform: 'translate(-100%, 0);',
     width: theme.space[1]
-  })
+  }),
+  // this is used by a react-fela.createComponent
+  progressPoint: combineRules(point, ({ theme, progress, index, numPriceSpecs }) => ({
+    bottom: 0,
+    left: `${progress * 100}%`,
+    borderColor: theme.colors.greys[getGreyIndex({ index, length: numPriceSpecs })]
+  })),
+  progressPointQuantity: pointMainText,
+  progressPointPrice: pointSubText
 }
 
 function getGreyIndex ({ index, length }) {
