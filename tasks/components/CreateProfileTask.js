@@ -15,6 +15,7 @@ export default (props) => {
     updateProfile: (nextProfile) => {
       actions.profiles.update(currentAgent.profile.id, nextProfile)
     },
-    agentType: 'my'
+    agentType: 'my',
+    isEditing: true
   })
 }
