@@ -25,8 +25,6 @@ export default (props) => {
 
   const { profile, members } = consumerAgent
 
-  console.log('members', members)
-
   const steps = [
     {
       id: 'tasks.steps.groupProfile',
@@ -35,7 +33,8 @@ export default (props) => {
         updateProfile: (nextProfile) => {
           actions.profiles.update(profile.id, merge(nextProfile, { agentId: consumerAgent.id }))
         },
-        agentType: 'group'
+        agentType: 'group',
+        isEditing: true
       })
     },
     {
