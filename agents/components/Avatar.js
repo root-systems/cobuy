@@ -44,19 +44,6 @@ function Avatar (props) {
   const hasName = not(isNil(name))
   const hasAvatar = not(isNil(avatar))
 
-  console.log('hasAvatar', hasAvatar)
-  console.log('hasDirtyAvatar', hasDirtyAvatar)
-  console.log('dirtyAvatar', dirtyAvatar)
-  console.log('dirtyAvatar isNil?', isNil(dirtyAvatar))
-  console.log('dirtyAvatar isEmpty?', isEmpty(dirtyAvatar))
-  console.log('hasName', hasName)
-  console.log('hasIcon', hasIcon)
-
-  // debugger
-
-  // GK: when accessing profile, dirtyAvatar shows up as empty string
-  // GK: i suspect it may be undefined or null when coming from orders page
-
   const shouldDisplayIcon = and(not(hasAvatar), not(hasDirtyAvatar), not(hasName), hasIcon)
 
   const src = hasDirtyAvatar ? dirtyAvatar : hasAvatar ? avatar : null
