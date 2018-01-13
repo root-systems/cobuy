@@ -56,7 +56,7 @@ function Avatar (props) {
         className: styles.avatar,
         size: sizeInPx[size],
         icon: (
-          and(and(not(hasAvatar), not(hasDirtyAvatar), not(hasName)), hasIcon)
+          shouldDisplayIcon
             ? h(FontIcon, {
                 className: `fa fa-${icon}`
               })
