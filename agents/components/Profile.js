@@ -12,10 +12,9 @@ import styles from '../styles/Profile'
 import AvatarField from '../../app/components/AvatarField'
 
 function Profile (props) {
-  const { styles, isEditing, toggleEdit, updateProfile, handleSubmit, agentType } = props
+  const { styles, isEditing, updateProfile, handleSubmit, agentType } = props
 
-  const updateProfileAndToggleEdit = (nextProfile) => {
-    toggleEdit()
+  const saveProfile = (nextProfile) => {
     updateProfile(nextProfile)
   }
 
@@ -23,7 +22,7 @@ function Profile (props) {
 
   return h('form', {
     className: styles.container,
-    onSubmit: handleSubmit(updateProfileAndToggleEdit)
+    onSubmit: handleSubmit(saveProfile)
   }, [
     h('p', {
       className: styles.intro
@@ -128,7 +127,7 @@ function Profile (props) {
           multiLine: true,
           rowsMax: 5,
           disabled: not(isEditing),
-          validate: isSupplierProfile ? required() : null
+          validate: isSupplierProfile ? [required()] : null
         })
       ])
     ]),
@@ -147,21 +146,7 @@ function Profile (props) {
           className: styles.buttonText
         })
       ])
-      : h(RaisedButton, {
-        className: styles.button,
-        type: 'button',
-        secondary: true,
-        onClick: (ev) => {
-          // GK: not entirely clear why this is necessary considering the button type, but preventing default anyway
-          ev.preventDefault()
-          toggleEdit()
-        }
-      }, [
-        h(FormattedMessage, {
-          id: 'agents.editProfile',
-          className: styles.buttonText
-        })
-      ])
+         : null
     ])
 
   ])
@@ -169,10 +154,6 @@ function Profile (props) {
 
 export default compose(
   connectFela(styles),
-  withState('isEditing', 'setEditing', false),
-  withHandlers({
-    toggleEdit: ({ setEditing }) => () => setEditing(not)
-  }),
   connectForm({
     form: 'profile',
     enableReinitialize: true
