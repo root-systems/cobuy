@@ -54,7 +54,7 @@ function OrderPage (props) {
       h('h1', {
         className: styles.title
       }, [
-        `order ${id}`,
+        isNil(order.name) ? `Order ${order.id}` : order.name,
         h(Hint, {
           messageId: 'ordering.whatIsAnOrder',
           position: 'top-right',

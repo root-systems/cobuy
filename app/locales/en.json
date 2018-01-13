@@ -88,6 +88,7 @@
   "ordering.consumer": "buying group",
   "ordering.supplier": "supplier",
   "ordering.admin": "admin",
+  "ordering.orderName": "order name",
   "tasks.tasks": "tasks",
   "tasks.completeTask": "done",
   "tasks.cancelTask": "cancel",

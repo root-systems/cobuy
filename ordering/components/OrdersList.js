@@ -53,7 +53,7 @@ function OrdersListItem (props) {
         h('p', {
           className: styles.title
         }, [
-          `order ${order.id}`
+          isNil(order.name) ? `order ${order.id}` : order.name
         ]),
         h('div', {
           className: styles.agents

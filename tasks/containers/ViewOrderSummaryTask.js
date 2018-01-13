@@ -79,6 +79,14 @@ export default compose(
           }
         })
         queries.push({
+          service: 'orders',
+          params: {
+            query: {
+              id: taskPlan.orderId
+            }
+          }
+        })
+        queries.push({
           service: 'agents',
           params: {
             query: {

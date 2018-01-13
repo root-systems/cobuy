@@ -13,7 +13,8 @@ export default {
     color: theme.colors.text,
     fontSize: theme.fontSizes[3],
     lineHeight: theme.fontSizes[5],
-    fontWeight: theme.fontWeights.regular
+    fontWeight: theme.fontWeights.regular,
+    textTransform: 'capitalize'
   }),
   labelText: () => ({
     textTransform: 'capitalize'
