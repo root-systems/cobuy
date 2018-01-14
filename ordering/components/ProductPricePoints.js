@@ -85,11 +85,15 @@ function ProgressPoint (props) {
 }
 
 function ProductPricePoints (props) {
+  // this is not defensive against bad price specs.
+  // TODO (mw) ensure bad price specs never come here.
+
   const {
     styles,
     priceSpecs,
     collectiveQuantityByPrice
   } = props
+
 
   const maximumPriceSpecMinimum = getMaximumPriceSpecMinimum(priceSpecs)
 
