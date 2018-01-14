@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import h from 'react-hyperscript'
 import jsf from 'json-schema-faker'
+import { values } from 'ramda'
 
 import profileSchema from '../../agents/schemas/profile'
 import SingleViewProduct from '../components/SingleViewProduct'
@@ -102,25 +103,36 @@ const mockProductInfo = {
 
 const props = {
   product: mockProductInfo,
-  agents: mockAgents,
-  currentAgent: mockAgents[0],
-  orderIntentsByAgentPrice: {
-    1: {
-      456: {
+  agents: values(mockAgents),
+  currentAgent: mockAgents[1],
+  orderIntentsByPriceAgent: {
+    456: {
+      1: {
+        desiredQuantity: '5'
+      },
+      1: {
         desiredQuantity: '10'
       },
-      457: {
-        desiredQuantity: '15'
+    },
+    457: {
+      1: {
+        desiredQuantity: '20'
+      },
+      2: {
+        desiredQuantity: '30'
       }
     }
+  },
+  applicablePriceSpec: mockProductInfo.priceSpecs[0],
+  collectiveQuantity: '15',
+  collectiveQuantityByPrice: {
+    456: '15',
+    457: '50'
   },
   onSubmit: action('submit')
 }
 
 storiesOf('ordering.SingleViewProduct', module)
   .add('default', () => (
-    h(SingleViewProduct, {
-      product: mockProductInfo,
-      onSubmit: action('submit')
-    })
+    h(SingleViewProduct, props)
   ))

@@ -1,5 +1,5 @@
 import { compose } from 'recompose'
-import { map, isNil, pipe, values } from 'ramda'
+import { map, isNil, pipe, values, prop, reduce, max } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import { reduxForm as connectForm, FormSection } from 'redux-form'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -8,6 +8,7 @@ import h from 'react-hyperscript'
 import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/SingleViewProduct'
+import ProductPricePoints from './ProductPricePoints'
 import ProductPriceSpec from './ProductPriceSpec'
 import ProductFacet from './ProductFacet'
 
@@ -35,7 +36,15 @@ const renderFacets = map((facet) => {
 })
 
 function SingleViewProduct (props) {
-  const { styles, product, orderIntentsByPriceAgent, currentAgent, agents, handleSubmit } = props
+  const {
+    styles,
+    product,
+    orderIntentsByPriceAgent,
+    collectiveQuantityByPrice,
+    currentAgent,
+    agents,
+    handleSubmit
+  } = props
   if (isNil(product)) return null
   const { resourceType, facets, priceSpecs } = product
   if (isNil(priceSpecs)) return null
@@ -67,22 +76,18 @@ function SingleViewProduct (props) {
           }, [
             h('h3', {
               className: styles.nameText
-            }, name),
+            }, [
+              name
+            ]),
             h('p', {
               className: styles.productText
-            }, description),
-            h('p', {
-              className: styles.priceText
             }, [
-              h(FormattedMessage, {
-                id: 'ordering.fromPrice',
-                className: styles.fromText,
-                values: {
-                  currency: priceSpecs[0].currency,
-                  price: priceSpecs[0].price
-                }
-              })
-            ])
+              description
+            ]),
+            h(ProductPricePoints, {
+              priceSpecs,
+              collectiveQuantityByPrice
+            })
           ]),
           h('div', {
             className: styles.facetsContainer
