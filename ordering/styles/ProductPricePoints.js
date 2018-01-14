@@ -95,6 +95,7 @@ export default {
 }
 
 function getProgressColor ({ theme, isMet, hasMet, index, length }) {
+  // first met progress is primary color, subsequent progress are distributed greys
   return (isMet && index === 0)
     ? theme.colors.primary3
     : hasMet

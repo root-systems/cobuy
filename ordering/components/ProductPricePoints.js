@@ -7,6 +7,9 @@ import BigMath from 'bigmath'
 
 import styles, * as cStyles from '../styles/ProductPricePoints'
 
+// we're using both react-fela.connect and react-fela.createComponent.
+// we use createComponent when we need to pass in specific information for that component, rather than the whole container.
+
 export default compose(
   connectFela(styles)
 )(ProductPricePoints)
@@ -94,7 +97,6 @@ function ProductPricePoints (props) {
     collectiveQuantityByPrice
   } = props
 
-
   const maximumPriceSpecMinimum = getMaximumPriceSpecMinimum(priceSpecs)
 
   // TODO (mw) once we upgrade to latest React with fragment support,
@@ -131,6 +133,7 @@ function ProductPricePoints (props) {
     }),
     sortBy(prop('progress')),
     reverse,
+    // filter out any progress below highest met point
     reduce((sofar, next) => {
       if (sofar.isMet) return sofar
       return {
@@ -142,7 +145,7 @@ function ProductPricePoints (props) {
       hasMet: isMet,
       numPoints: length(items)
     })),
-    reverse,
+    reverse, // so indexes are ordered in specific way
     mapIndexed((priceSpec, index) => {
       const { quantityAtPrice, progress, isMet, hasMet, numPoints } = priceSpec
       return (
@@ -159,8 +162,6 @@ function ProductPricePoints (props) {
       )
     })
   )
-
-  console.log('priceSpecs', priceSpecs)
 
   return (
     h('div', {
