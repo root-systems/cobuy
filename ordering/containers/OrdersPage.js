@@ -105,11 +105,14 @@ export default connect({
   shouldQueryAgain: (props, status, prevProps) => {
     if (status.isPending) return false
     const { allOrders: orders } = props.selected
+    const orderIds = getIds(orders)
     if (!isEmpty(orders) && hasNotQueriedForRelated(status)) return true
     const agentIds = getAgentIdsFromOrders(orders)
     const { allOrders: prevOrders } = prevProps.selected
+    const prevOrderIds = getIds(prevOrders)
     const prevAgentIds = getAgentIdsFromOrders(prevOrders)
     if (!equals(agentIds, prevAgentIds)) return true
+    if (!equals(orderIds, prevOrderIds)) return true
     return false
   }
 })(OrdersPage)
