@@ -74,7 +74,7 @@
     "dogstack": "^0.7.0",
     "dogstack-agents": "^0.8.2",
     "feathers-action": "^2.4.0",
-    "feathers-action-react": "^2.3.0",
+    "feathers-action-react": "github:root-systems/feathers-action-react#feature/prev-props-now-from-prev-request",
     "feathers-errors": "^2.6.2",
     "feathers-hooks-common": "^3.0.0",
     "feathers-knex": "^2.6.3",
