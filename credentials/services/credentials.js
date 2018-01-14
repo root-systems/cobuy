@@ -1,5 +1,6 @@
 const { iff } = require('feathers-hooks-common')
 import { isNil, all } from 'ramda'
+import welcomeMjml from '../../app/mjml/welcome'
 
 module.exports = function () {
   const app = this

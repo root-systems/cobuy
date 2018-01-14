@@ -2,6 +2,7 @@ import { map, prop, groupBy, sum, mapObjIndexed, values, pipe, uniq, pick, sortB
 import * as taskRecipes from '../../tasks/data/recipes'
 
 import getCurrentOrderApplicableOrderIntentsFlattened from '../../ordering/getters/getCurrentOrderApplicableOrderIntentsFlattened'
+import welcomeMjml from '../../app/mjml/welcome'
 
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
@@ -132,19 +133,7 @@ function prepareWelcomeEmail (options) {
     from: `${appConfig.email}`,
     to: credential.email || 'no@email.com',
     subject: `You're invited to join ${appConfig.name}!`,
-    html: `
-      Hi. You're invited to join a group on ${appConfig.name}!
-
-      <br />
-      <br />
-
-      ${appConfig.bodyText}
-
-      <br />
-      <br />
-
-      Click <a href=${appConfig.url}/invited/${token.jwt}/${order.id}>here</a> to set your password and start buying together!
-    `
+    html: welcomeMjml
   }
 }
 
