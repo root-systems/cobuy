@@ -2,7 +2,7 @@ import h from 'react-hyperscript'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
 import { connect as connectStyles } from 'react-fela'
-import { isNil, not, and, either, isEmpty } from 'ramda'
+import { isNil, not, and, either, isEmpty, all } from 'ramda'
 import MuiAvatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -44,7 +44,7 @@ function Avatar (props) {
   const hasName = not(isNil(name))
   const hasAvatar = not(isNil(avatar))
 
-  const shouldDisplayIcon = and(not(hasAvatar), not(hasDirtyAvatar), not(hasName), hasIcon)
+  const shouldDisplayIcon = and(and(not(hasAvatar), not(hasDirtyAvatar)), and(not(hasName), hasIcon))
 
   const src = hasDirtyAvatar ? dirtyAvatar : hasAvatar ? avatar : null
 
@@ -64,7 +64,7 @@ function Avatar (props) {
         ),
         src: src
       }, [
-        and(not(hasAvatar), hasName)
+        and(and(not(hasAvatar), not(hasDirtyAvatar)), hasName)
           ? name.substring(0, 1)
           : null
       ])
