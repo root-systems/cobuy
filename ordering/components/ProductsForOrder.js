@@ -96,5 +96,5 @@ function ProductsForOrder (props) {
 
 export default compose(
   connectFela(styles),
-  withState('isListView', 'setListView', true),
+  withState('isListView', 'setListView', false),
 )(ProductsForOrder)
