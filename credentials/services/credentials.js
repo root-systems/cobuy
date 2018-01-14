@@ -1,5 +1,6 @@
 const { iff } = require('feathers-hooks-common')
 import { isNil, all } from 'ramda'
+import welcomeMjml from '../../app/mjml/welcome'
 
 module.exports = function () {
   const app = this
@@ -44,23 +45,20 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
   })
   // TODO: add .env variables to change from 'Tapin' in copy
   .then((token) => {
+    const appConfig = hook.app.get('app')
+    const mjmlOutput = welcomeMjml({
+      app: appConfig,
+      token
+    })
+    if (mjmlOutput.errors) {
+      // uhhhhh...?
+      mjmlOutput.errors.forEach(console.error)
+    }
     return hook.app.service('mailer').create({
       from: `${appConfig.email}`,
       to: email || 'no@email.com',
       subject: `You're invited to join ${appConfig.name}!`,
-      html: `
-        Hi. You're invited to join a group on ${appConfig.name}!
-
-        <br />
-        <br />
-
-        ${appConfig.bodyText}
-
-        <br />
-        <br />
-
-        Click <a href=${hook.app.get('app').url}/invited/${token.jwt}>here</a> to set your password and start buying together!
-      `
+      html: mjmlOutput.html
     })
   })
   .then(() => hook)
