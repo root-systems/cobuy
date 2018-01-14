@@ -2,7 +2,7 @@ import h from 'react-hyperscript'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
 import { connect as connectStyles } from 'react-fela'
-import { isNil, not, and } from 'ramda'
+import { isNil, not, and, either, isEmpty, all } from 'ramda'
 import MuiAvatar from 'material-ui/Avatar'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -25,8 +25,11 @@ function Avatar (props) {
     styles,
     agent,
     size,
-    icon
+    icon,
+    dirtyAvatar = ''
   } = props
+
+  const hasDirtyAvatar = not(isEmpty(dirtyAvatar))
 
   const hasIcon = not(isNil(icon))
 
@@ -41,6 +44,10 @@ function Avatar (props) {
   const hasName = not(isNil(name))
   const hasAvatar = not(isNil(avatar))
 
+  const shouldDisplayIcon = and(and(not(hasAvatar), not(hasDirtyAvatar)), and(not(hasName), hasIcon))
+
+  const src = hasDirtyAvatar ? dirtyAvatar : hasAvatar ? avatar : null
+
   return (
     h('div', {
       className: styles.container
@@ -49,25 +56,18 @@ function Avatar (props) {
         className: styles.avatar,
         size: sizeInPx[size],
         icon: (
-          and(and(not(hasAvatar), not(hasName)), hasIcon)
+          shouldDisplayIcon
             ? h(FontIcon, {
                 className: `fa fa-${icon}`
               })
             : null
         ),
-        src: avatar
+        src: src
       }, [
-        and(not(hasAvatar), hasName)
+        and(and(not(hasAvatar), not(hasDirtyAvatar)), hasName)
           ? name.substring(0, 1)
           : null
-      ]),
-      (size !== 'small') && (
-        h('span', {
-          className: styles.name
-        }, [
-          name
-        ])
-      )
+      ])
     ])
   )
 }

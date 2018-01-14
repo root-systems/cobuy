@@ -11,8 +11,14 @@ import { required, email } from '@root-systems/redux-form-validators'
 import styles from '../styles/Profile'
 import AvatarField from '../../app/components/AvatarField'
 
+const iconByAgentType = {
+  my: 'user',
+  group: 'users',
+  supplier: 'shopping-cart'
+}
+
 function Profile (props) {
-  const { styles, isEditing, updateProfile, handleSubmit, agentType } = props
+  const { styles, isEditing, updateProfile, handleSubmit, agentType, agent } = props
 
   const saveProfile = (nextProfile) => {
     updateProfile(nextProfile)
@@ -44,7 +50,9 @@ function Profile (props) {
         h(Field, {
           name: 'avatar',
           component: AvatarField,
-          isEditingProfile: isEditing
+          isEditingProfile: isEditing,
+          agent: agent,
+          icon: iconByAgentType[agentType]
         })
       ]),
       h('div', {

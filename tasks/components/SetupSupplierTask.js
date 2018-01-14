@@ -25,7 +25,8 @@ export default (props) => {
           actions.profiles.update(profile.id, merge(nextProfile, { agentId: supplierAgent.id }))
         },
         agentType: 'supplier',
-        isEditing: true
+        isEditing: true,
+        agent: supplierAgent
       })
     },
     {
