@@ -5,18 +5,18 @@ import { map, pipe, prop, reduce, max, addIndex, sortBy, merge, length, reverse 
 import { FormattedMessage } from 'dogstack/intl'
 import BigMath from 'bigmath'
 
-import styles from '../styles/ProductPricePoints'
+import styles, * as cStyles from '../styles/ProductPricePoints'
 
 export default compose(
   connectFela(styles)
 )(ProductPricePoints)
 
-const PriceBox = createComponent(styles.pricePoint)
-const PriceMarker = createComponent(styles.priceMarker)
+const PriceBox = createComponent(cStyles.pricePoint)
+const PriceMarker = createComponent(cStyles.priceMarker)
 
-const ProgressBox = createComponent(styles.progressPoint)
-const ProgressBar = createComponent(styles.progressBar)
-const ProgressMarker = createComponent(styles.progressMarker)
+const ProgressBox = createComponent(cStyles.progressPoint)
+const ProgressBar = createComponent(cStyles.progressBar)
+const ProgressMarker = createComponent(cStyles.progressMarker)
 
 function PricePoint (props) {
   const {
@@ -26,7 +26,6 @@ function PricePoint (props) {
     quantityAtPrice,
     isMet
   } = props
-
 
   return (
     h(PriceBox, {
@@ -55,24 +54,28 @@ function ProgressPoint (props) {
     priceSpec,
     quantityAtPrice,
     progress,
+    isMet,
+    hasMet,
     index,
-    numPriceSpecs
+    numPoints
   } = props
 
   return (
     h(ProgressBox, {
       progress,
+      isMet,
+      hasMet,
       index,
-      numPriceSpecs
+      numPoints
     }, [
-      FormattedMessage({
+      h(FormattedMessage, {
         id: 'ordering.quantityIntended',
         values: {
           quantity: quantityAtPrice
         },
         className: styles.progressPointQuantity
       }),
-      FormattedMessage({
+      h(FormattedMessage, {
         id: 'ordering.atPrice',
         values: priceSpec,
         className: styles.progressPointPrice
@@ -88,11 +91,6 @@ function ProductPricePoints (props) {
     collectiveQuantityByPrice
   } = props
 
-  // id
-  // minimum
-  // price
-  // currency
-
   const maximumPriceSpecMinimum = getMaximumPriceSpecMinimum(priceSpecs)
 
   // TODO (mw) once we upgrade to latest React with fragment support,
@@ -100,7 +98,7 @@ function ProductPricePoints (props) {
   // this render twice at the same dom level
   const renderPrice = Component => map(priceSpec => {
     const quantityAtPrice = collectiveQuantityByPrice[priceSpec.id] || 0
-    const point = priceSpec.minimum / maximumPriceSpecMinimum
+    const point = BigMath.div(priceSpec.minimum, maximumPriceSpecMinimum)
     const needed = BigMath.sub(priceSpec.minimum, quantityAtPrice)
     const isMet = BigMath.lessThan(needed, '0')
     return h(Component, {
@@ -108,36 +106,51 @@ function ProductPricePoints (props) {
       priceSpec,
       quantityAtPrice,
       point,
-      needed,
       isMet
     })
   })
 
-  const numPriceSpecs = length(priceSpecs)
   // TODO (mw) once we upgrade to latest React with fragment support,
   // we won't need to do this hack where we pass in component to run
   // this render twice at the same dom level
   const renderProgress = Component => pipe(
     map(priceSpec => {
       const quantityAtPrice = collectiveQuantityByPrice[priceSpec.id] || 0
-      const progress = quantityAtPrice / maximumPriceSpecMinimum
+      const progress = BigMath.div(quantityAtPrice, maximumPriceSpecMinimum)
+      const needed = BigMath.sub(priceSpec.minimum, quantityAtPrice)
+      const isMet = BigMath.lessThan(needed, '0')
       return merge(priceSpec, {
         quantityAtPrice,
-        progress
+        progress,
+        isMet
       })
     }),
     sortBy(prop('progress')),
     reverse,
+    reduce((sofar, next) => {
+      if (sofar.isMet) return sofar
+      return {
+        items: [...sofar.items, next],
+        isMet: next.isMet
+      }
+    }, { items: [], isMet: false }),
+    ({ items, isMet }) => items.map(merge({
+      hasMet: isMet,
+      numPoints: length(items)
+    })),
+    reverse,
     mapIndexed((priceSpec, index) => {
-      const { quantityAtPrice, progress } = priceSpec
+      const { quantityAtPrice, progress, isMet, hasMet, numPoints } = priceSpec
       return (
         h(Component, {
           styles,
           priceSpec,
           quantityAtPrice,
           progress,
+          isMet,
+          hasMet,
           index,
-          numPriceSpecs
+          numPoints
         })
       )
     })
@@ -165,6 +178,6 @@ const mapIndexed = addIndex(map)
 
 const getMaximumPriceSpecMinimum = pipe(
   map(prop('minimum')),
-  reduce(max, 0)
+  reduce(BigMath.max, 0)
 )
 
