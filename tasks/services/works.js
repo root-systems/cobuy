@@ -94,12 +94,50 @@ function createOrderPlans (hook) {
     .then(() => hook)
 }
 
-function sendStartOrderEmails (hook) {
-  const taskPlans = hook.app.service('taskPlans')
-  const orders = hook.app.service('orders')
-  const relationships = hook.app.service('relationships')
-  // const agents = hook.app.service('agents')
-  const credentials = hook.app.service('credentials')
+function sendOrderStartEmail (credential, appConfig, mailer, order) {
+  const orderName = order.name ? order.name : `Order ${order.id}`
+  return mailer.create({
+    from: `${appConfig.email}`,
+    to: credential.email || 'no@email.com',
+    subject: `An order has been started on ${appConfig.name}!`,
+    html: `
+      Hi. You're invited to join an order, ${orderName}, on ${appConfig.name}!
+
+      <br />
+      <br />
+
+      ${appConfig.bodyText}
+
+      <br />
+      <br />
+
+      Click <a href=${appConfig.url}/o/${order.id}>here</a> to join the order!
+    `
+  })
+}
+
+function sendWelcomeEmail (credential, appConfig, mailer, order, token) {
+  return mailer.create({
+    from: `${appConfig.email}`,
+    to: credential.email || 'no@email.com',
+    subject: `You're invited to join ${appConfig.name}!`,
+    html: `
+      Hi. You're invited to join a group on ${appConfig.name}!
+
+      <br />
+      <br />
+
+      ${appConfig.bodyText}
+
+      <br />
+      <br />
+
+      Click <a href=${appConfig.url}/invited/${token.jwt}>here</a> to set your password and start buying together!
+    `
+  })
+}
+
+function sendEmailBasedOnPasswordStatus (hook, order) {
   const tokens = hook.app.service('tokens')
   const appConfig = hook.app.get('app')
   const mailer = hook.app.service('mailer')
@@ -108,58 +146,29 @@ function sendStartOrderEmails (hook) {
     return not(isNil(credential.password))
   }
 
-  const sendEmailBasedOnPasswordStatus = (order) => {
-    const orderName = order.name ? order.name : `Order ${order.id}`
-    return (credential) => {
-      if (hasPassword(credential)) {
-        return mailer.create({
-          from: `${appConfig.email}`,
-          to: credential.email || 'no@email.com',
-          subject: `An order has been started on ${appConfig.name}!`,
-          html: `
-            Hi. You're invited to join an order, ${orderName}, on ${appConfig.name}!
-
-            <br />
-            <br />
-
-            ${appConfig.bodyText}
-
-            <br />
-            <br />
-
-            Click <a href=${appConfig.url}/o/${order.id}>here</a> to join the order!
-          `
-        })
-      } else {
-        return tokens.create({
-          agentId: credential.agentId,
-          service: 'credentials',
-          method: 'patch',
-          params: { serviceId: credential.id }
-        })
-        .then((token) => {
-          return mailer.create({
-            from: `${appConfig.email}`,
-            to: credential.email || 'no@email.com',
-            subject: `You're invited to join ${appConfig.name}!`,
-            html: `
-              Hi. You're invited to join a group on ${appConfig.name}!
-
-              <br />
-              <br />
-
-              ${appConfig.bodyText}
-
-              <br />
-              <br />
-
-              Click <a href=${appConfig.url}/invited/${token.jwt}>here</a> to set your password and start buying together!
-            `
-          })
-        })
-      }
+  return (credential) => {
+    if (hasPassword(credential)) {
+      return sendOrderStartEmail(credential, appConfig, mailer, order)
+    } else {
+      return tokens.create({
+        agentId: credential.agentId,
+        service: 'credentials',
+        method: 'patch',
+        params: { serviceId: credential.id }
+      })
+      .then((token) => {
+        return sendWelcomeEmail(credential, appConfig, mailer, order, token)
+      })
     }
   }
+}
+
+function sendStartOrderEmails (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
+  const relationships = hook.app.service('relationships')
+  // const agents = hook.app.service('agents')
+  const credentials = hook.app.service('credentials')
 
   return taskPlans.get(hook.data.taskPlanId)
   .then((taskPlanResult) => {
@@ -181,7 +190,7 @@ function sendStartOrderEmails (hook) {
           }
         })
         .then((credentialResults) => {
-          const sendEmail = sendEmailBasedOnPasswordStatus(orderResult)
+          const sendEmail = sendEmailBasedOnPasswordStatus(hook, orderResult)
           return Promise.all(map(sendEmail, credentialResults))
         })
       })
