@@ -94,9 +94,14 @@ function createOrderPlans (hook) {
     .then(() => hook)
 }
 
-function sendOrderStartEmail (credential, appConfig, mailer, order) {
+function prepareStartOrderEmail (options) {
+  const {
+    credential,
+    appConfig,
+    order
+  } = options
   const orderName = order.name ? order.name : `Order ${order.id}`
-  return mailer.create({
+  return {
     from: `${appConfig.email}`,
     to: credential.email || 'no@email.com',
     subject: `An order has been started on ${appConfig.name}!`,
@@ -113,11 +118,17 @@ function sendOrderStartEmail (credential, appConfig, mailer, order) {
 
       Click <a href=${appConfig.url}/o/${order.id}>here</a> to join the order!
     `
-  })
+  }
 }
 
-function sendWelcomeEmail (credential, appConfig, mailer, order, token) {
-  return mailer.create({
+function prepareWelcomeEmail (options) {
+  const {
+    credential,
+    appConfig,
+    order,
+    token
+  } = options
+  return {
     from: `${appConfig.email}`,
     to: credential.email || 'no@email.com',
     subject: `You're invited to join ${appConfig.name}!`,
@@ -134,7 +145,7 @@ function sendWelcomeEmail (credential, appConfig, mailer, order, token) {
 
       Click <a href=${appConfig.url}/invited/${token.jwt}>here</a> to set your password and start buying together!
     `
-  })
+  }
 }
 
 function sendEmailBasedOnPasswordStatus (hook, order) {
@@ -148,7 +159,7 @@ function sendEmailBasedOnPasswordStatus (hook, order) {
 
   return (credential) => {
     if (hasPassword(credential)) {
-      return sendOrderStartEmail(credential, appConfig, mailer, order)
+      return mailer.create(prepareStartOrderEmail({ credential, appConfig, order }))
     } else {
       return tokens.create({
         agentId: credential.agentId,
@@ -157,7 +168,7 @@ function sendEmailBasedOnPasswordStatus (hook, order) {
         params: { serviceId: credential.id }
       })
       .then((token) => {
-        return sendWelcomeEmail(credential, appConfig, mailer, order, token)
+        return mailer.create(prepareWelcomeEmail({ credential, appConfig, order, token }))
       })
     }
   }
