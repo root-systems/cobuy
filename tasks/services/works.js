@@ -1,4 +1,4 @@
-import { map, prop, groupBy, sum, mapObjIndexed, values, pipe, uniq, pick, sortBy, reverse, find, filter, contains, isNil, concat, indexOf, remove, reduce, where, equals, omit, merge, not } from 'ramda'
+import { map, prop, groupBy, sum, mapObjIndexed, values, pipe, uniq, pick, sortBy, reverse, find, filter, contains, isNil, concat, indexOf, remove, reduce, where, equals, omit, merge, not, tap } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 import getCurrentOrderApplicableOrderIntentsFlattened from '../../ordering/getters/getCurrentOrderApplicableOrderIntentsFlattened'
@@ -177,12 +177,14 @@ function sendStartOrderEmails (hook) {
   const orders = hook.app.service('orders')
   const relationships = hook.app.service('relationships')
   const credentials = hook.app.service('credentials')
+  const getTargetAgentIds = map(prop('targetId'))
 
   return taskPlans.get(hook.data.taskPlanId)
   .then((taskPlanResult) => {
     return orders.get(taskPlanResult.params.orderId)
   })
   .then((orderResult) => {
+    const sendEmail = sendEmailBasedOnPasswordStatus(hook, orderResult)
     return relationships.find({
       query: {
         sourceId: orderResult.consumerAgentId,
@@ -190,16 +192,15 @@ function sendStartOrderEmails (hook) {
       }
     })
     .then((relationshipResults) => {
-      const agentIds = map((r) => r.targetId, relationshipResults)
+      const targetAgentIds = getTargetAgentIds(relationshipResults)
       return credentials.find({
         query: {
           agentId: {
-            $in: agentIds
+            $in: targetAgentIds
           }
         }
       })
       .then((credentialResults) => {
-        const sendEmail = sendEmailBasedOnPasswordStatus(hook, orderResult)
         return Promise.all(map(sendEmail, credentialResults))
       })
     })
