@@ -1,25 +1,31 @@
 export default {
   container: ({ theme }) => ({
     display: 'flex',
-    flex: 1,
+    flexDirection: 'column',
     padding: theme.space[4]
   }),
+  header: ({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    fontSize: theme.fontSizes[3]
+  }),
   imageContainer: ({ theme }) => ({
-    height: '300px',
-    width: '300px',
-    minWidth: '150px',
+    flex: 0.5,
     marginRight: theme.space[4]
   }),
   image: () => ({
-    display: 'flex',
-    flex: 1,
-    width: '100%',
-    height: '100%',
     objectFit: 'contain'
   }),
-  infoContainer: () => ({
+  details: ({ theme }) => ({
+    padding: theme.space[2],
     display: 'flex',
-    flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent: 'center'
+  }),
+  name: ({ theme }) => ({
+    fontSize: theme.fontSizes[3]
+  }),
+  description: ({ theme }) => ({
+    fontSize: theme.fontSizes[0]
   })
 }

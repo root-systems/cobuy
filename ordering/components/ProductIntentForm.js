@@ -1,14 +1,69 @@
-import { compose } from 'recompose'
-import { connect as connectFela } from 'react-fela'
-import { Field } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'
 import h from 'react-hyperscript'
+import { compose } from 'recompose'
 import { indexBy, prop, propEq, pipe, values, map, complement, filter, isNil, tap } from 'ramda'
-import { FormattedMessage } from 'react/intl'
+import { connect as connectStyles } from 'react-fela'
+import { reduxForm as connectForm, Field } from 'redux-form'
+import RaisedButton from 'material-ui/RaisedButton'
+import { TextField } from 'redux-form-material-ui'
+import { FormattedMessage } from 'dogstack/intl'
 
 import Hint from '../../app/components/Hint'
 
-import styles from '../styles/ProductPriceSpec'
+import styles from '../styles/ProductIntentForm'
+
+export default compose(
+  connectStyles(styles),
+  connectForm({
+    form: 'productIntentForm'
+  })
+)(ProductIntentForm)
+
+function ProductIntentForm (props) {
+  const {
+    styles,
+    product,
+    orderIntentsByPriceAgent,
+    currentAgent,
+    agents,
+    handleSubmit
+  } = props
+  if (isNil(product)) return null
+  const { resourceType, priceSpecs } = product
+  if (isNil(priceSpecs)) return null
+  if (isNil(resourceType)) return null
+  const { name, description, image } = resourceType
+
+  const renderPriceSpecs = RenderPriceSpecs({ styles, orderIntentsByPriceAgent, currentAgent, agents })
+
+  return (
+    h('form', {
+      onSubmit: handleSubmit
+    }, [
+      h('div', {
+        className: styles.container
+      }, [
+        renderPriceSpecs(priceSpecs)
+      ])
+    ])
+  )
+}
+
+const RenderPriceSpecs = ({ styles, orderIntentsByPriceAgent, currentAgent, agents }) => {
+  return pipe(
+    map((priceSpec) => {
+      const orderIntentsByAgent = orderIntentsByPriceAgent[priceSpec.id] || {}
+      return h(ProductPriceSpec, {
+        key: priceSpec.id,
+        styles,
+        priceSpec,
+        orderIntentsByAgent,
+        currentAgent,
+        agents
+      })
+    }),
+    values
+  )
+}
 
 const indexById = indexBy(prop('id'))
 
@@ -55,7 +110,7 @@ function ProductPriceSpec (props) {
 
   return (
     h('div', {
-      className: styles.container
+      className: styles.priceSpecContainer
     }, [
       h(FormattedMessage, {
         id: 'ordering.priceSpec',
@@ -67,11 +122,11 @@ function ProductPriceSpec (props) {
         }
       }),
       h('div', {
-        className: styles.qtyContainer
+        className: styles.quantityContainer
       }, [
         h(Field, {
           name: `priceSpec-${priceSpec.id}`,
-          className: styles.qtyTextField,
+          className: styles.quantityTextField,
           component: TextField,
           type: 'number'
         }),
@@ -85,7 +140,3 @@ function ProductPriceSpec (props) {
     ])
   )
 }
-
-export default compose(
-  connectFela(styles)
-)(ProductPriceSpec)

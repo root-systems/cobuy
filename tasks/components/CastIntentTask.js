@@ -41,7 +41,7 @@ const getSubmittedPriceSpecs = pipe(
 )
 
 function SingleProduct (props) {
-  const { actions, product, currentAgent, taskPlan, agents, orderIntentsByProductPriceAgent, applicablePriceSpecByProduct, collectiveQuantityByProduct, collectiveQuantityByProductPrice } = props
+  const { actions, product, currentAgent, taskPlan, agents, orderIntentsByProductPriceAgent, hasIntentByProductAgent, applicablePriceSpecByProduct, collectiveQuantityByProduct, collectiveQuantityByProductPrice } = props
   const { id: taskPlanId } = taskPlan
 
   const onSubmit = pipe(
@@ -68,12 +68,13 @@ function SingleProduct (props) {
   )
 
   const orderIntentsByPriceAgent = orderIntentsByProductPriceAgent[product.id] || {}
+  const hasIntentByAgent = hasIntentByProductAgent[product.id] || {}
   const initialValues = getInitialValues(forAgent(currentAgent.id)(orderIntentsByPriceAgent))
   const applicablePriceSpec = applicablePriceSpecByProduct[product.id]
   const collectiveQuantity = collectiveQuantityByProduct[product.id] || 0
   const collectiveQuantityByPrice = collectiveQuantityByProductPrice[product.id] || {}
 
-  const nextProps = merge(props, { onSubmit, agents, orderIntentsByPriceAgent, initialValues, applicablePriceSpec, collectiveQuantity, collectiveQuantityByPrice })
+  const nextProps = merge(props, { onSubmit, agents, orderIntentsByPriceAgent, hasIntentByAgent, initialValues, applicablePriceSpec, collectiveQuantity, collectiveQuantityByPrice })
 
   // TODO pass onNavigate to allow SingleViewProduct
   // to navigate back to list product view

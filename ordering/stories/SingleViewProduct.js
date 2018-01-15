@@ -123,6 +123,12 @@ const props = {
       }
     }
   },
+  hasIntentByAgent: {
+    1: true,
+    2: true,
+    3: false,
+    4: false
+  },
   applicablePriceSpec: mockProductInfo.priceSpecs[0],
   collectiveQuantity: '15',
   collectiveQuantityByPrice: {
