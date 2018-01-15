@@ -25,10 +25,6 @@ const hooks = {
       iff(taskRecipeIsCompleteOrderSetup, createCastOrderIntentTaskPlan),
       iff(taskRecipeIsCompleteOrderSetup, createCommitOrderTaskPlan),
       iff(taskRecipeIsStartOrder, sendStartOrderEmails),
-        // iff(userHasNotSetPassword,
-        //   sendWelcomeEmail,
-        //   sendOrderEmail)
-        // ),
       iff(taskRecipeIsCloseOrder, createCastOrderIntentTaskWorks),
       iff(taskRecipeIsCloseOrder, createOrderPlans)
     ]
@@ -205,60 +201,6 @@ function sendStartOrderEmails (hook) {
       })
     })
   })
-}
-
-
-function createPatchCredentialsTokenAndInviteMail (hook) {
-  // userHasNotSetPassword { taskPlanId: 80,
-  // taskRecipeId: 'startOrder',
-  // workerAgentId: 1,
-  // params: {} }
-  const appConfig = hook.app.get('app')
-  const { id, agentId, email } = hook.result
-
-  // 1. find order with adminAgentId: workerAgentId,
-  // taskPlanId: taskPlanId
-
-  // 2. get buying group from order, consumerGroupId
-
-  // 3. find all members (Agents) for this buying group, through relationships,
-  // where sourceId: consumerGroupId,
-  // relationshipType: 'member',
-  // get all targetIds
-
-  // 6. get all Credentials for these Agents
-
-  // 5. check each Credential with this function
-
-  // TODO: IK: get the agent name, admin name, group name
-  return hook.app.service('tokens').create({
-    agentId,
-    service: 'credentials',
-    method: 'patch',
-    params: { serviceId: id }
-  })
-  // TODO: add .env variables to change from 'Tapin' in copy
-  .then((token) => {
-    return hook.app.service('mailer').create({
-      from: `${appConfig.email}`,
-      to: email || 'no@email.com',
-      subject: `You're invited to join ${appConfig.name}!`,
-      html: `
-        Hi. You're invited to join a group on ${appConfig.name}!
-
-        <br />
-        <br />
-
-        ${appConfig.bodyText}
-
-        <br />
-        <br />
-
-        Click <a href=${hook.app.get('app').url}/invited/${token.jwt}>here</a> to set your password and start buying together!
-      `
-    })
-  })
-  .then(() => hook)
 }
 
 function createCastOrderIntentTaskPlan (hook) {
