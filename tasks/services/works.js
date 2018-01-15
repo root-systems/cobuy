@@ -95,7 +95,6 @@ function createOrderPlans (hook) {
 }
 
 function sendStartOrderEmails (hook) {
-  console.log('sendStartOrderEmails', hook.data)
   const taskPlans = hook.app.service('taskPlans')
   const orders = hook.app.service('orders')
   const relationships = hook.app.service('relationships')
@@ -106,7 +105,6 @@ function sendStartOrderEmails (hook) {
   const mailer = hook.app.service('mailer')
 
   const hasPassword = (credential) => {
-    console.log('checking if credential has password', credential)
     return not(isNil(credential.password))
   }
 
@@ -114,8 +112,6 @@ function sendStartOrderEmails (hook) {
     const orderName = order.name ? order.name : `Order ${order.id}`
     return (credential) => {
       if (hasPassword(credential)) {
-        console.log('has password, sending start order email')
-        // TODO: get the order in here
         return mailer.create({
           from: `${appConfig.email}`,
           to: credential.email || 'no@email.com',
@@ -135,7 +131,6 @@ function sendStartOrderEmails (hook) {
           `
         })
       } else {
-        console.log(`doesn't have password, sending password email`)
         return tokens.create({
           agentId: credential.agentId,
           service: 'credentials',
@@ -143,7 +138,6 @@ function sendStartOrderEmails (hook) {
           params: { serviceId: credential.id }
         })
         .then((token) => {
-          console.log('token created, now sending email', token)
           return mailer.create({
             from: `${appConfig.email}`,
             to: credential.email || 'no@email.com',
@@ -169,10 +163,8 @@ function sendStartOrderEmails (hook) {
 
   return taskPlans.get(hook.data.taskPlanId)
   .then((taskPlanResult) => {
-    console.log('found taskPlan', taskPlanResult)
     return orders.get(taskPlanResult.params.orderId)
     .then((orderResult) => {
-      console.log('related order', orderResult)
       return relationships.find({
         query: {
           sourceId: orderResult.consumerAgentId,
@@ -180,9 +172,7 @@ function sendStartOrderEmails (hook) {
         }
       })
       .then((relationshipResults) => {
-        console.log('member relationshipResults', relationshipResults)
         const agentIds = map((r) => r.targetId, relationshipResults)
-        console.log('agentIds', agentIds)
         return credentials.find({
           query: {
             agentId: {
@@ -191,7 +181,6 @@ function sendStartOrderEmails (hook) {
           }
         })
         .then((credentialResults) => {
-          console.log('member credentialResults', credentialResults)
           const sendEmail = sendEmailBasedOnPasswordStatus(orderResult)
           return Promise.all(map(sendEmail, credentialResults))
         })
