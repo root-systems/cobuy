@@ -20,7 +20,8 @@ function SingleViewProduct (props) {
     collectiveQuantityByPrice,
     currentAgent,
     agents,
-    handleSubmit
+    initialValues,
+    onSubmit
   } = props
   if (isNil(product)) return null
   const { resourceType, priceSpecs } = product
@@ -59,7 +60,9 @@ function SingleViewProduct (props) {
         agents,
         product,
         orderIntentsByPriceAgent,
-        hasIntentByAgent
+        hasIntentByAgent,
+        initialValues,
+        onSubmit
       }),
       h(ProductPricePoints, {
         priceSpecs,

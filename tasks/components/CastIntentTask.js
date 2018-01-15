@@ -63,8 +63,7 @@ function SingleProduct (props) {
       } else {
         actions.orderIntents.create(submittedOrderIntent)
       }
-    }),
-    () => { actions.router.push(`/tasks/${taskPlanId}`) }
+    })
   )
 
   const orderIntentsByPriceAgent = orderIntentsByProductPriceAgent[product.id] || {}

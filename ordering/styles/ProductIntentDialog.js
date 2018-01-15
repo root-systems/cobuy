@@ -16,7 +16,14 @@ export default {
   labelText: () => ({
     textTransform: 'capitalize'
   }),
-  dialog: ({ theme }) => ({
+  action: ({ theme }) => ({
     margin: '0 auto'
+  }),
+  button: ({ theme }) => ({
+    width: '20%'
+  }),
+  buttonText: ({ theme }) => ({
+    textTransform: 'capitalize',
+    color: theme.colors.alternateText
   })
 }

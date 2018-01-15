@@ -21,14 +21,13 @@ export default compose(
   })
 )(ProductIntentDialog)
 
-console.log('styles', styles)
-
 function ProductIntentDialog (props) {
   const {
     styles,
     isDialogOpen,
     closeDialog,
     openDialog,
+    onSubmit,
     ...otherProps
   } = props
 
@@ -37,10 +36,10 @@ function ProductIntentDialog (props) {
     hasIntentByAgent
   } = otherProps
 
-  const hasCastIntent = hasIntentByAgent[currentAgent.id]
+  const hasIntent = hasIntentByAgent[currentAgent.id]
 
-  const ActionIcon = hasCastIntent ? ContentAdd : ContentEdit
-  const submitMessageId = hasCastIntent ? 'ordering.createIntent' : 'ordering.updateIntent'
+  const ActionIcon = hasIntent ? ContentEdit : ContentAdd
+  const submitMessageId = hasIntent ? 'ordering.updateIntent' : 'ordering.createIntent'
 
   return (
     h('div', {
@@ -82,7 +81,10 @@ function ProductIntentDialog (props) {
       }, [
         h(ProductIntentForm, {
           ...otherProps,
-          onSubmit: closeDialog
+          onSubmit: (...args) => {
+            onSubmit(...args)
+            closeDialog()
+          }
         })
       ]),
       h(FloatingActionButton, {

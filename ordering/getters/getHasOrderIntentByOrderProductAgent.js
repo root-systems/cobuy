@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { map, complement, either, isNil, isEmpty } from 'ramda'
+import { map, complement, either, isNil, isEmpty, ifElse } from 'ramda'
 
 import getOrderIntentsByOrderProductAgentPrice from './getOrderIntentsByOrderProductAgentPrice'
 
