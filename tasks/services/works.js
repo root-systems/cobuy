@@ -1,4 +1,4 @@
-import { map, prop, groupBy, sum, mapObjIndexed, values, pipe, uniq, pick, sortBy, reverse, find, filter, contains, isNil, concat, indexOf, remove, reduce, where, equals, omit, merge, not, tap } from 'ramda'
+import { map, prop, groupBy, sum, mapObjIndexed, values, pipe, uniq, pick, sortBy, reverse, find, filter, contains, isNil, concat, indexOf, remove, reduce, where, equals, omit, merge, not, bind } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 import getCurrentOrderApplicableOrderIntentsFlattened from '../../ordering/getters/getCurrentOrderApplicableOrderIntentsFlattened'
@@ -200,9 +200,10 @@ function sendStartOrderEmails (hook) {
           }
         }
       })
-      .then((credentialResults) => {
-        return Promise.all(map(sendEmail, credentialResults))
-      })
+      .then(pipe(
+        map(sendEmail),
+        bind(Promise.all, Promise)
+      ))
     })
   })
   .then(() => {
