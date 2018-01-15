@@ -1,4 +1,4 @@
-import { map, prop, groupBy, sum, mapObjIndexed, values, pipe, uniq, pick, sortBy, reverse, find, filter, contains, isNil, concat, indexOf, remove, reduce, where, equals, omit, merge } from 'ramda'
+import { map, prop, groupBy, sum, mapObjIndexed, values, pipe, uniq, pick, sortBy, reverse, find, filter, contains, isNil, concat, indexOf, remove, reduce, where, equals, omit, merge, not, bind } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
 
 import getCurrentOrderApplicableOrderIntentsFlattened from '../../ordering/getters/getCurrentOrderApplicableOrderIntentsFlattened'
@@ -24,6 +24,7 @@ const hooks = {
     create: [
       iff(taskRecipeIsCompleteOrderSetup, createCastOrderIntentTaskPlan),
       iff(taskRecipeIsCompleteOrderSetup, createCommitOrderTaskPlan),
+      iff(taskRecipeIsStartOrder, sendStartOrderEmails),
       iff(taskRecipeIsCloseOrder, createCastOrderIntentTaskWorks),
       iff(taskRecipeIsCloseOrder, createOrderPlans)
     ]
@@ -34,6 +35,10 @@ const hooks = {
 function taskRecipeIsCompleteOrderSetup (hook) {
   return hook.data.taskRecipeId === 'completeOrderSetupWithPrereqs'
     || hook.data.taskRecipeId === 'completeOrderSetup'
+}
+
+function taskRecipeIsStartOrder (hook) {
+  return hook.data.taskRecipeId === 'startOrder'
 }
 
 function taskRecipeIsCloseOrder (hook) {
@@ -87,6 +92,123 @@ function createOrderPlans (hook) {
       })
     })
     .then(() => hook)
+}
+
+function prepareStartOrderEmail (options) {
+  const {
+    credential,
+    appConfig,
+    order
+  } = options
+  const orderName = order.name ? order.name : `Order ${order.id}`
+  return {
+    from: `${appConfig.email}`,
+    to: credential.email || 'no@email.com',
+    subject: `An order has been started on ${appConfig.name}!`,
+    html: `
+      Hi. You're invited to join an order, ${orderName}, on ${appConfig.name}!
+
+      <br />
+      <br />
+
+      ${appConfig.bodyText}
+
+      <br />
+      <br />
+
+      Click <a href=${appConfig.url}/o/${order.id}>here</a> to join the order!
+    `
+  }
+}
+
+function prepareWelcomeEmail (options) {
+  const {
+    credential,
+    appConfig,
+    order,
+    token
+  } = options
+  return {
+    from: `${appConfig.email}`,
+    to: credential.email || 'no@email.com',
+    subject: `You're invited to join ${appConfig.name}!`,
+    html: `
+      Hi. You're invited to join a group on ${appConfig.name}!
+
+      <br />
+      <br />
+
+      ${appConfig.bodyText}
+
+      <br />
+      <br />
+
+      Click <a href=${appConfig.url}/invited/${token.jwt}/${order.id}>here</a> to set your password and start buying together!
+    `
+  }
+}
+
+function sendEmailsBasedOnPasswordStatus (hook, order) {
+  const tokens = hook.app.service('tokens')
+  const appConfig = hook.app.get('app')
+  const mailer = hook.app.service('mailer')
+
+  const hasPassword = pipe(prop('password'), isNil, not)
+
+  return (credential) => {
+    if (hasPassword(credential)) {
+      return mailer.create(prepareStartOrderEmail({ credential, appConfig, order }))
+    } else {
+      return tokens.create({
+        agentId: credential.agentId,
+        service: 'credentials',
+        method: 'patch',
+        params: { serviceId: credential.id }
+      })
+      .then((token) => {
+        return mailer.create(prepareWelcomeEmail({ credential, appConfig, order, token }))
+      })
+    }
+  }
+}
+
+function sendStartOrderEmails (hook) {
+  const taskPlans = hook.app.service('taskPlans')
+  const orders = hook.app.service('orders')
+  const relationships = hook.app.service('relationships')
+  const credentials = hook.app.service('credentials')
+  const getTargetAgentIds = map(prop('targetId'))
+
+  return taskPlans.get(hook.data.taskPlanId)
+  .then((taskPlanResult) => {
+    return orders.get(taskPlanResult.params.orderId)
+  })
+  .then((orderResult) => {
+    const sendEmails = sendEmailsBasedOnPasswordStatus(hook, orderResult)
+    return relationships.find({
+      query: {
+        sourceId: orderResult.consumerAgentId,
+        relationshipType: 'member'
+      }
+    })
+    .then((relationshipResults) => {
+      const targetAgentIds = getTargetAgentIds(relationshipResults)
+      return credentials.find({
+        query: {
+          agentId: {
+            $in: targetAgentIds
+          }
+        }
+      })
+      .then(pipe(
+        map(sendEmails),
+        bind(Promise.all, Promise)
+      ))
+    })
+  })
+  .then(() => {
+    return hook
+  })
 }
 
 function createCastOrderIntentTaskPlan (hook) {
