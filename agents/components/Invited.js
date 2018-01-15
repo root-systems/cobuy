@@ -12,12 +12,12 @@ import styles from '../styles/Invited'
 
 function Invited (props) {
   const { styles, handleSubmit, actions: { invited }, config } = props
-  const { jwt } = props.match.params
+  const { jwt, orderId } = props.match.params
 
   return h('form', {
     className: styles.container,
     onSubmit: handleSubmit((data) => {
-      invited.invitedPatchPassword({ jwt, password: data.password })
+      invited.invitedPatchPassword({ jwt, orderId, password: data.password })
     })
   }, [
     h('h2', `You've been invited to ${config.app.name}!`),

@@ -10,8 +10,7 @@ module.exports = function () {
 const hooks = {
   after: {
     create: [
-      createTaskPlan,
-      iff(hasNoAuthorization, createPatchCredentialsTokenAndInviteMail)
+      createTaskPlan
     ]
   }
 }
@@ -25,6 +24,7 @@ function createTaskPlan (hook) {
   })
   .then(() => hook)
 }
+<<<<<<< HEAD
 
 function hasNoAuthorization (hook) {
   const { password } = hook.data
@@ -65,3 +65,5 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
   })
   .then(() => hook)
 }
+=======
+>>>>>>> 7d60ab46042fd1b5510fa3ff3b02b94ad955318a

@@ -9,56 +9,32 @@ import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/SingleViewProduct'
 import ProductPricePoints from './ProductPricePoints'
-import ProductPriceSpec from './ProductPriceSpec'
-import ProductFacet from './ProductFacet'
-
-const RenderPriceSpecs = ({ orderIntentsByPriceAgent, currentAgent, agents }) => {
-  return pipe(
-    map((priceSpec) => {
-      const orderIntentsByAgent = orderIntentsByPriceAgent[priceSpec.id] || {}
-      return h(ProductPriceSpec, {
-        key: priceSpec.id,
-        priceSpec: priceSpec,
-        orderIntentsByAgent,
-        currentAgent,
-        agents
-      })
-    }),
-    values
-  )
-}
-
-const renderFacets = map((facet) => {
-  return h(ProductFacet, {
-    facet: facet,
-    key: facet.id
-  })
-})
+import ProductIntentDialog from './ProductIntentDialog'
 
 function SingleViewProduct (props) {
   const {
     styles,
     product,
     orderIntentsByPriceAgent,
+    hasIntentByAgent,
     collectiveQuantityByPrice,
     currentAgent,
     agents,
-    handleSubmit
+    initialValues,
+    onSubmit
   } = props
   if (isNil(product)) return null
-  const { resourceType, facets, priceSpecs } = product
+  const { resourceType, priceSpecs } = product
   if (isNil(priceSpecs)) return null
   if (isNil(resourceType)) return null
   const { name, description, image } = resourceType
 
-  const renderPriceSpecs = RenderPriceSpecs({ orderIntentsByPriceAgent, currentAgent, agents })
-
   return (
-    h('form', {
-      onSubmit: handleSubmit
+    h('div', {
+      className: styles.container
     }, [
-      h('div', {
-        className: styles.container
+      h('header', {
+        className: styles.header
       }, [
         h('div', {
           className: styles.imageContainer
@@ -69,65 +45,37 @@ function SingleViewProduct (props) {
           })
         ]),
         h('div', {
-          className: styles.infoContainer
+          className: styles.details
         }, [
-          h('div', {
-            className: styles.textContainer
+          h('h3', {
+            className: styles.name
           }, [
-            h('h3', {
-              className: styles.nameText
-            }, [
-              name
-            ]),
-            h('p', {
-              className: styles.productText
-            }, [
-              description
-            ]),
-            h(ProductPricePoints, {
-              priceSpecs,
-              collectiveQuantityByPrice
-            })
+            name
           ]),
-          h('div', {
-            className: styles.facetsContainer
+          h('p', {
+            className: styles.description
           }, [
-            h(FormSection, {
-              name: 'facets',
-            }, [
-              //renderFacets(facets)
-            ])
+            description
           ]),
-          h('div', {
-            className: styles.priceSpecsContainer
-          }, [
-            h(FormSection, {
-              name: 'priceSpecs'
-            }, [
-              renderPriceSpecs(priceSpecs)
-            ])
-          ]),
-          h(RaisedButton, {
-            type: 'submit',
-            primary: true,
-            className: styles.submitButton,
-            label: (
-              h(FormattedMessage, {
-                id: 'ordering.add',
-                className: styles.addButtonText
-              })
-            )
-          })
         ])
-      ])
+      ]),
+      h(ProductIntentDialog, {
+        currentAgent,
+        agents,
+        product,
+        orderIntentsByPriceAgent,
+        hasIntentByAgent,
+        initialValues,
+        onSubmit
+      }),
+      h(ProductPricePoints, {
+        priceSpecs,
+        collectiveQuantityByPrice
+      })
     ])
   )
 }
 
 export default compose(
   connectFela(styles),
-  connectForm({
-    form: 'singleViewProduct',
-    enableReinitialize: true
-  })
 )(SingleViewProduct)
