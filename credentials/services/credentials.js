@@ -46,8 +46,10 @@ function createPatchCredentialsTokenAndInviteMail (hook) {
   // TODO: add .env variables to change from 'Tapin' in copy
   .then((token) => {
     const appConfig = hook.app.get('app')
+    const assetsUrl = hook.app.get('assets').url
     const mjmlOutput = welcomeMjml({
       app: appConfig,
+      assetsUrl,
       token
     })
     if (mjmlOutput.errors) {
