@@ -148,7 +148,7 @@ function prepareWelcomeEmail (options) {
   }
 }
 
-function sendEmailBasedOnPasswordStatus (hook, order) {
+function sendEmailsBasedOnPasswordStatus (hook, order) {
   const tokens = hook.app.service('tokens')
   const appConfig = hook.app.get('app')
   const mailer = hook.app.service('mailer')
@@ -184,7 +184,7 @@ function sendStartOrderEmails (hook) {
     return orders.get(taskPlanResult.params.orderId)
   })
   .then((orderResult) => {
-    const sendEmail = sendEmailBasedOnPasswordStatus(hook, orderResult)
+    const sendEmails = sendEmailsBasedOnPasswordStatus(hook, orderResult)
     return relationships.find({
       query: {
         sourceId: orderResult.consumerAgentId,
@@ -201,7 +201,7 @@ function sendStartOrderEmails (hook) {
         }
       })
       .then(pipe(
-        map(sendEmail),
+        map(sendEmails),
         bind(Promise.all, Promise)
       ))
     })
