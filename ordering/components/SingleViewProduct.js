@@ -36,10 +36,14 @@ function SingleViewProduct (props) {
       h('header', {
         className: styles.header
       }, [
-        h('img', {
-          className: styles.image,
-          src: image
-        }),
+        h('div', {
+          className: styles.imageContainer
+        }, [
+          h('img', {
+            className: styles.image,
+            src: image
+          })
+        ]),
         h('div', {
           className: styles.details
         }, [

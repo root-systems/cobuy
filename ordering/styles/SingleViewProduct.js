@@ -10,12 +10,18 @@ export default {
     flexDirection: 'row',
     fontSize: theme.fontSizes[3]
   }),
+  imageContainer: ({ theme }) => ({
+    flexGrow: '1',
+    flexBasis: '0'
+  }),
   image: () => ({
-    flex: 1,
+    height: '100%',
+    width: '100%',
     objectFit: 'contain'
   }),
   details: ({ theme }) => ({
-    flex: 1,
+    flexGrow: '1',
+    flexBasis: '0',
     padding: theme.space[2],
     display: 'flex',
     flexDirection: 'column',
