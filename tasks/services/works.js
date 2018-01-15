@@ -129,11 +129,22 @@ function prepareWelcomeEmail (options) {
     order,
     token
   } = options
+
+  const assetsUrl = appConfig.url
+  const mjmlOutput = welcomeMjml({
+    app: appConfig,
+    assetsUrl,
+    token
+  })
+  if (mjmlOutput.errors) {
+    // uhhhhh...?
+    mjmlOutput.errors.forEach(console.error)
+  }
   return {
     from: `${appConfig.email}`,
     to: credential.email || 'no@email.com',
     subject: `You're invited to join ${appConfig.name}!`,
-    html: welcomeMjml
+    html: mjmlOutput.html
   }
 }
 
