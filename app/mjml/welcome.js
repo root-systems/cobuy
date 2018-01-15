@@ -38,8 +38,11 @@ export default function welcome ({ app, token, assetsUrl }) {
 
           <mj-section>
             <mj-column>
-              <mj-text>
-                Click <a href=${app.url}/invited/${token.jwt}>here</a> to set your password and start buying together!
+              <mj-text font-size="18" font-weight="bold">
+                <p>Click <a href=${app.url}/invited/${token.jwt}>here</a> to set your password and start buying together!</p>
+              </mj-text>
+              <mj-text font-size="18">
+                <p>Learn more about Tapin <a href="http://tapin.nz">here</a></p>
               </mj-text>
             </mj-column>
           </mj-section>
