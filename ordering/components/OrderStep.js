@@ -63,7 +63,7 @@ function OrderStep (props) {
           }),
           h(Hint, {
             messageId: hint,
-            position: 'top-right',
+            position: 'bottom-right',
             iconSize: '24px'
           })
         ]),
