@@ -3,6 +3,7 @@ import * as taskRecipes from '../../tasks/data/recipes'
 
 import getCurrentOrderApplicableOrderIntentsFlattened from '../../ordering/getters/getCurrentOrderApplicableOrderIntentsFlattened'
 import welcomeMjml from '../../app/mjml/welcome'
+import orderMjml from '../../app/mjml/order'
 
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
@@ -102,23 +103,23 @@ function prepareStartOrderEmail (options) {
     order
   } = options
   const orderName = order.name ? order.name : `Order ${order.id}`
+  const assetsUrl = appConfig.url
+  const mjmlOutput = orderMjml({
+    app: appConfig,
+    assetsUrl,
+    token
+  })
+  if (mjmlOutput.errors) {
+    // uhhhhh...?
+    mjmlOutput.errors.forEach(console.error)
+  }
+
+  console.log('prepareWelcomeEmail')
   return {
     from: `${appConfig.email}`,
     to: credential.email || 'no@email.com',
     subject: `An order has been started on ${appConfig.name}!`,
-    html: `
-      Hi. You're invited to join an order, ${orderName}, on ${appConfig.name}!
-
-      <br />
-      <br />
-
-      ${appConfig.bodyText}
-
-      <br />
-      <br />
-
-      Click <a href=${appConfig.url}/o/${order.id}>here</a> to join the order!
-    `
+    html: mjmlOutput.html
   }
 }
 
