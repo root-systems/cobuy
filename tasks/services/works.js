@@ -194,12 +194,12 @@ function sendStartOrderEmails (hook) {
           console.log('member credentialResults', credentialResults)
           const sendEmail = sendEmailBasedOnPasswordStatus(orderResult)
           return Promise.all(map(sendEmail, credentialResults))
-          .then(() => {
-            return hook
-          })
         })
       })
     })
+  })
+  .then(() => {
+    return hook
   })
 }
 
