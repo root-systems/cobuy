@@ -167,7 +167,6 @@ function sendStartOrderEmails (hook) {
   const taskPlans = hook.app.service('taskPlans')
   const orders = hook.app.service('orders')
   const relationships = hook.app.service('relationships')
-  // const agents = hook.app.service('agents')
   const credentials = hook.app.service('credentials')
 
   return taskPlans.get(hook.data.taskPlanId)
