@@ -153,9 +153,7 @@ function sendEmailBasedOnPasswordStatus (hook, order) {
   const appConfig = hook.app.get('app')
   const mailer = hook.app.service('mailer')
 
-  const hasPassword = (credential) => {
-    return not(isNil(credential.password))
-  }
+  const hasPassword = pipe(prop('password'), isNil, not)
 
   return (credential) => {
     if (hasPassword(credential)) {
@@ -183,26 +181,26 @@ function sendStartOrderEmails (hook) {
   return taskPlans.get(hook.data.taskPlanId)
   .then((taskPlanResult) => {
     return orders.get(taskPlanResult.params.orderId)
-    .then((orderResult) => {
-      return relationships.find({
+  })
+  .then((orderResult) => {
+    return relationships.find({
+      query: {
+        sourceId: orderResult.consumerAgentId,
+        relationshipType: 'member'
+      }
+    })
+    .then((relationshipResults) => {
+      const agentIds = map((r) => r.targetId, relationshipResults)
+      return credentials.find({
         query: {
-          sourceId: orderResult.consumerAgentId,
-          relationshipType: 'member'
+          agentId: {
+            $in: agentIds
+          }
         }
       })
-      .then((relationshipResults) => {
-        const agentIds = map((r) => r.targetId, relationshipResults)
-        return credentials.find({
-          query: {
-            agentId: {
-              $in: agentIds
-            }
-          }
-        })
-        .then((credentialResults) => {
-          const sendEmail = sendEmailBasedOnPasswordStatus(hook, orderResult)
-          return Promise.all(map(sendEmail, credentialResults))
-        })
+      .then((credentialResults) => {
+        const sendEmail = sendEmailBasedOnPasswordStatus(hook, orderResult)
+        return Promise.all(map(sendEmail, credentialResults))
       })
     })
   })

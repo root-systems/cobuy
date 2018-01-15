@@ -34,6 +34,8 @@ export function patchPasswordAndSignIn (action$, store, { feathers }) {
       const password = payload.password
       const patchPasswordPayload = { jwt: payload.jwt, payload: { data: { password } } }
 
+      console.log('patchPasswordPayload', patchPasswordPayload)
+
       return Observable.merge(
         Observable.of(tokenConsumes.create(cid, patchPasswordPayload)),
         tokenConsumesComplete$
