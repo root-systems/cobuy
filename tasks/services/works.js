@@ -143,7 +143,7 @@ function prepareWelcomeEmail (options) {
       <br />
       <br />
 
-      Click <a href=${appConfig.url}/invited/${token.jwt}>here</a> to set your password and start buying together!
+      Click <a href=${appConfig.url}/invited/${token.jwt}/${order.id}>here</a> to set your password and start buying together!
     `
   }
 }

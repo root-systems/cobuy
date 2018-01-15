@@ -71,7 +71,7 @@ export default [
   },
   {
     name: 'invited',
-    path: '/invited/:jwt',
+    path: '/invited/:jwt/:orderId',
     Component: UserIsNotAuthenticated(Invited)
   },
   {

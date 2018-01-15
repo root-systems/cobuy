@@ -34,8 +34,6 @@ export function patchPasswordAndSignIn (action$, store, { feathers }) {
       const password = payload.password
       const patchPasswordPayload = { jwt: payload.jwt, payload: { data: { password } } }
 
-      console.log('patchPasswordPayload', patchPasswordPayload)
-
       return Observable.merge(
         Observable.of(tokenConsumes.create(cid, patchPasswordPayload)),
         tokenConsumesComplete$
@@ -43,7 +41,7 @@ export function patchPasswordAndSignIn (action$, store, { feathers }) {
           .mergeMap(({ result: { email } }) => {
             return Observable.of(authentication.signIn(cid, { strategy: 'local', email, password }))
           }),
-        signInSuccess$.mapTo(push('/')) // TODO this should be configurable
+        signInSuccess$.mapTo(push(`/o/${payload.orderId}`)) // TODO this should be configurable
       )
     })
 }
