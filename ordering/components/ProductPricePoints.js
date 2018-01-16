@@ -106,7 +106,7 @@ function ProductPricePoints (props) {
     const quantityAtPrice = collectiveQuantityByPrice[priceSpec.id] || 0
     const point = BigMath.div(priceSpec.minimum, maximumPriceSpecMinimum)
     const needed = BigMath.sub(priceSpec.minimum, quantityAtPrice)
-    const isMet = BigMath.lessThan(needed, '0')
+    const isMet = BigMath.lessThanOrEqualTo(needed, '0')
     return h(Component, {
       styles,
       priceSpec,
@@ -124,7 +124,7 @@ function ProductPricePoints (props) {
       const quantityAtPrice = collectiveQuantityByPrice[priceSpec.id] || 0
       const progress = BigMath.div(quantityAtPrice, maximumPriceSpecMinimum)
       const needed = BigMath.sub(priceSpec.minimum, quantityAtPrice)
-      const isMet = BigMath.lessThan(needed, '0')
+      const isMet = BigMath.lessThanOrEqualTo(needed, '0')
       return merge(priceSpec, {
         quantityAtPrice,
         progress,
