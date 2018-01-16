@@ -18,7 +18,8 @@ function Hint (props) {
     messageId,
     icon,
     position,
-    iconSize
+    iconSize,
+    iconButtonStyle
   } = props
 
   return (
@@ -33,7 +34,8 @@ function Hint (props) {
       tooltipPosition: position,
       iconStyle: {
         fontSize: iconSize
-      }
+      },
+      style: iconButtonStyle
     }, [
       h(FontIcon, {
         className: `fa fa-${icon}-circle`
