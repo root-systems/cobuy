@@ -3,9 +3,6 @@ import { mjml2html } from 'mjml'
 import style from '../../style'
 
 export default function orderMjml ({ app, assetsUrl, order }) {
-  console.log(order, 'the order')
-  console.log('app', app)
-  console.log('assetsUrl', assetsUrl)
   return mjml2html(`
     <mjml>
       <mj-body>
