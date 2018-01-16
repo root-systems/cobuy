@@ -33,25 +33,14 @@ export default function orderMjml ({ app, assetsUrl, order }) {
             </mj-column>
           </mj-section>
 
-
           <mj-section>
             <mj-column>
               <mj-text font-size="18">
-                <p>Happy Group Buying</p>
-                <p>Team Tapin</p>
+                <p>Happy Group Buying!</p>
+                <p><a href="http://tapin.nz">Team Tapin</a></p>
               </mj-text>
             </mj-column>
           </mj-section>
-
-
-          <mj-section>
-            <mj-column>
-              <mj-text font-size="18">
-                <p>Learn more about Tapin <a href="http://tapin.nz">here</a></p>
-              </mj-text>
-            </mj-column>
-          </mj-section>
-
 
           <mj-section background-color=${style.theme.colors.primary1}>asdasdasdasdasd</mj-section>
 

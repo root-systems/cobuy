@@ -43,7 +43,7 @@ export default function welcomeMjml ({ app, order, token, assetsUrl }) {
                 <p>Click <a href=${app.url}/invited/${token.jwt}/${order.id}>here</a> to set your password, after which you will be taken to the order!</p>
               </mj-text>
               <mj-text font-size="18">
-                <p>Learn more about Tapin <a href="http://tapin.nz">here</a></p>
+                <p>Learn more about Tapin <a href="http://tapin.nz">here</a>.</p>
               </mj-text>
             </mj-column>
           </mj-section>
