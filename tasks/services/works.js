@@ -102,9 +102,8 @@ function prepareStartOrderEmail (options) {
     appConfig,
     order
   } = options
+
   const assetsUrl = appConfig.url
-  console.log('prepareOrderEmail')
-  console.log('prepareOrderEmailorder', order)
   const mjmlOutput = orderMjml({
     app: appConfig,
     assetsUrl,
