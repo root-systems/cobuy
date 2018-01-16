@@ -1,4 +1,4 @@
-import { map, values } from 'ramda'
+import { map, values, pipe } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import {
@@ -19,61 +19,81 @@ import ListViewProduct from './ListViewProduct'
 import Hint from '../../app/components/Hint'
 import styles from '../styles/ProductsForOrder'
 
+function renderProductsCollection (ItemComponent, props) {
+  const {
+    styles,
+    products,
+    onNavigate,
+    currentAgent,
+    applicablePriceSpecByProduct,
+    collectiveQuantityByProduct,
+    orderIntentsByProductAgentPrice
+  } = props
+
+  return pipe(
+    values,
+    map((product) => {
+      const applicablePriceSpec = applicablePriceSpecByProduct[product.id] || {}
+      const collectiveQuantity = collectiveQuantityByProduct[product.id] || 0
+      const orderIntentsByAgentPrice = orderIntentsByProductAgentPrice[product.id] || {}
+
+      return h(ItemComponent, {
+        key: product.id,
+        product,
+        onNavigate,
+        currentAgent,
+        applicablePriceSpec,
+        collectiveQuantity,
+        orderIntentsByAgentPrice
+      })
+    })
+  )(products)
+}
+
 function renderGrid (props) {
-  const { styles, products, onNavigate, isListView, setListView, applicablePriceSpecByProduct, collectiveQuantityByProduct } = props
+  const { styles } = props
 
   return h('div', {
     className: styles.gridContainer
   }, [
-      values(map((product) => {
-        const applicablePriceSpec = applicablePriceSpecByProduct[product.id] || {}
-        const collectiveQuantity = collectiveQuantityByProduct[product.id] || 0
-
-        return h(GridViewProduct, {
-          product,
-          applicablePriceSpec,
-          collectiveQuantity,
-          key: product.id,
-          onNavigate
-        })
-      }, products))
-    ])
+    renderProductsCollection(GridViewProduct, props)
+  ])
 }
 
+// TODO (mw) rename this to table not list
 function renderList (props) {
-  const { styles, products, onNavigate, isListView, setListView, applicablePriceSpecByProduct, collectiveQuantityByProduct } = props
+  const {
+    styles
+  } = props
 
+  // TODO (mw) the table header code should be co-located with table body code
   return h(Table, {}, [
     h(TableHeader, { displaySelectAll: false, adjustForCheckbox: false }, [
       h(TableRow, {}, [
         h(TableHeaderColumn, { style: { width: '50px' } }),
-        h(TableHeaderColumn, {}, 'name'),
-        h(TableHeaderColumn, {}, 'description'),
-        h(TableHeaderColumn, { style: { width: '100px' } }, [
-          'current price',
+        h(TableHeaderColumn, {}, 'name'), // TODO (mw) intl
+        h(TableHeaderColumn, {}, 'description'), // TODO (mw) intl
+        h(TableHeaderColumn, {}, [
+          'current price', // TODO (mw) intl
           h(Hint, {
             messageId: 'ordering.whatIsCurrentPrice'
-          })]),
-        h(TableHeaderColumn, { style: { width: '200px' } }, [
-          'current quantity',
+          })
+        ]),
+        h(TableHeaderColumn, {}, [
+          'current group quantity', // TODO (mw) intl
           h(Hint, {
-            messageId: 'ordering.whatIsCurrentQuantity'
+            messageId: 'ordering.whatIsCurrentGroupQuantity'
+          })
+        ]),
+        h(TableHeaderColumn, {}, [
+          'your current quantity', // TODO (mw) intl
+          h(Hint, {
+            messageId: 'ordering.whatIsYourCurrentQuantity'
           })])
       ])
     ]),
     h(TableBody, {}, [
-      values(map((product) => {
-        const applicablePriceSpec = applicablePriceSpecByProduct[product.id] || {}
-        const collectiveQuantity = collectiveQuantityByProduct[product.id] || 0
-
-        return h(ListViewProduct, {
-          product,
-          applicablePriceSpec,
-          collectiveQuantity,
-          key: product.id,
-          onNavigate
-        })
-      }, products))
+      renderProductsCollection(ListViewProduct, props)
     ])
   ])
 }
@@ -96,5 +116,6 @@ function ProductsForOrder (props) {
 
 export default compose(
   connectFela(styles),
-  withState('isListView', 'setListView', false),
+  // TODO (mw) this should be a "view" enum string, not a isListView boolean... gross
+  withState('isListView', 'setListView', false)
 )(ProductsForOrder)

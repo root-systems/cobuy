@@ -1,5 +1,5 @@
 import { compose } from 'recompose'
-import { isNil } from 'ramda'
+import { isNil, pipe, path, defaultTo } from 'ramda'
 import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import { Link } from 'react-router-dom'
@@ -17,13 +17,30 @@ import { FormattedMessage } from '../../lib/Intl'
 
 import styles from '../styles/ListViewProduct'
 
+const getQuantityForAgent = ({ currentAgent, orderIntentsByAgentPrice, applicablePriceSpec }) => {
+  return pipe(
+    path([currentAgent.id, applicablePriceSpec.id, 'desiredQuantity']),
+    defaultTo('0')
+  )(orderIntentsByAgentPrice)
+}
+
 function ListViewProduct (props) {
-  const { styles, product, onNavigate, applicablePriceSpec, collectiveQuantity } = props
+  const {
+    styles,
+    product,
+    onNavigate,
+    currentAgent,
+    applicablePriceSpec,
+    collectiveQuantity,
+    orderIntentsByAgentPrice
+  } = props
   if (isNil(product)) return null
   const { resourceType, facets, priceSpecs } = product
   if (isNil(priceSpecs)) return null
   if (isNil(resourceType)) return null
   const { name, description, image } = resourceType
+
+  const yourQuantity = getQuantityForAgent({ currentAgent, orderIntentsByAgentPrice, applicablePriceSpec })
 
   return (
     h(TableRow, { className: styles.tableRow, onClick: (ev) => {
@@ -49,7 +66,7 @@ function ListViewProduct (props) {
           description
         ]),
       ]),
-      h(TableRowColumn, { style: { width: '100px' } }, [
+      h(TableRowColumn, {}, [
         h('p', {
           className: styles.priceText
         }, [
@@ -63,11 +80,18 @@ function ListViewProduct (props) {
           })
         ])
       ]),
-      h(TableRowColumn, { style: { width: '200px' } }, [
+      h(TableRowColumn, {}, [
         h('p', {
           className: styles.productText
         }, [
           collectiveQuantity
+        ]),
+      ]),
+      h(TableRowColumn, {}, [
+        h('p', {
+          className: styles.productText
+        }, [
+          yourQuantity
         ]),
       ])
     ])

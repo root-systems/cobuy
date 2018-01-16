@@ -72,7 +72,7 @@ function ProgressPoint (props) {
       numPoints
     }, [
       h(FormattedMessage, {
-        id: 'ordering.quantityIntended',
+        id: 'ordering.groupQuantity',
         values: {
           quantity: quantityAtPrice
         },
