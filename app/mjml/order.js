@@ -37,7 +37,7 @@ export default function orderMjml ({ app, assetsUrl, order }) {
           <mj-section>
             <mj-column>
               <mj-text font-size="18">
-                <p>Happy Group Buying!</p>
+                <p>Happy Group Buying</p>
                 <p>Team Tapin</p>
               </mj-text>
             </mj-column>

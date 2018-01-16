@@ -100,10 +100,10 @@ function prepareStartOrderEmail (options) {
   const {
     credential,
     appConfig,
-    order
+    order,
+    assetsUrl
   } = options
 
-  const assetsUrl = appConfig.url
   const mjmlOutput = orderMjml({
     app: appConfig,
     assetsUrl,
@@ -126,10 +126,10 @@ function prepareWelcomeEmail (options) {
     credential,
     appConfig,
     order,
-    token
+    token,
+    assetsUrl
   } = options
 
-  const assetsUrl = appConfig.url
   const mjmlOutput = welcomeMjml({
     app: appConfig,
     assetsUrl,
@@ -152,12 +152,14 @@ function sendEmailsBasedOnPasswordStatus (hook, order) {
   const tokens = hook.app.service('tokens')
   const appConfig = hook.app.get('app')
   const mailer = hook.app.service('mailer')
+  const assetsConfig = hook.app.get('assets')
+  const assetsUrl = assetsConfig.url
 
   const hasPassword = pipe(prop('password'), isNil, not)
 
   return (credential) => {
     if (hasPassword(credential)) {
-      return mailer.create(prepareStartOrderEmail({ credential, appConfig, order }))
+      return mailer.create(prepareStartOrderEmail({ credential, appConfig, order, assetsUrl }))
     } else {
       return tokens.create({
         agentId: credential.agentId,
@@ -166,7 +168,7 @@ function sendEmailsBasedOnPasswordStatus (hook, order) {
         params: { serviceId: credential.id }
       })
       .then((token) => {
-        return mailer.create(prepareWelcomeEmail({ credential, appConfig, order, token }))
+        return mailer.create(prepareWelcomeEmail({ credential, appConfig, order, token, assetsUrl }))
       })
     }
   }
