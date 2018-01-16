@@ -102,19 +102,18 @@ function prepareStartOrderEmail (options) {
     appConfig,
     order
   } = options
-  const orderName = order.name ? order.name : `Order ${order.id}`
   const assetsUrl = appConfig.url
+  console.log('prepareOrderEmail')
+  console.log('prepareOrderEmailorder', order)
   const mjmlOutput = orderMjml({
     app: appConfig,
     assetsUrl,
-    token
+    order
   })
   if (mjmlOutput.errors) {
     // uhhhhh...?
     mjmlOutput.errors.forEach(console.error)
   }
-
-  console.log('prepareWelcomeEmail')
   return {
     from: `${appConfig.email}`,
     to: credential.email || 'no@email.com',
@@ -135,6 +134,7 @@ function prepareWelcomeEmail (options) {
   const mjmlOutput = welcomeMjml({
     app: appConfig,
     assetsUrl,
+    order,
     token
   })
   if (mjmlOutput.errors) {
