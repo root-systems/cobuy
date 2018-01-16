@@ -28,7 +28,7 @@ export default function orderMjml ({ app, assetsUrl, order }) {
               <mj-text font-size="18" font-weight="bold">
                 <p>You're invited to join an order, ${order.name}, on ${app.name}!</p>
                 <br>
-                <p>Click <a href=${app.url}/o/${order.id}> here </a>to join the order!</p>
+                <p>Click <a href=${app.url}/o/${order.id}>here</a> to add to the order!</p>
               </mj-text>
             </mj-column>
           </mj-section>

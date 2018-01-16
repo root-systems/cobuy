@@ -19,7 +19,8 @@ export default function welcomeMjml ({ app, order, token, assetsUrl }) {
             <mj-column>
               <mj-text font-size="30">
                 <p>Hi there!</p>
-                <p>You're invited to join a buying group on ${app.name}!</p>
+                <p>You're invited to join a buying group on ${app.name},</p>
+                <p>and their order, ${order.name}!</p>
               </mj-text>
             </mj-column>
           </mj-section>
@@ -39,7 +40,7 @@ export default function welcomeMjml ({ app, order, token, assetsUrl }) {
             <mj-column>
               <mj-text font-size="18" font-weight="bold">
                 <p>How do I get started?</p>
-                <p>Click <a href=${app.url}/invited/${token.jwt}/${order.id}>here</a> to set your password and start buying together!</p>
+                <p>Click <a href=${app.url}/invited/${token.jwt}/${order.id}>here</a> to set your password, after which you will be taken to the order!</p>
               </mj-text>
               <mj-text font-size="18">
                 <p>Learn more about Tapin <a href="http://tapin.nz">here</a></p>
