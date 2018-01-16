@@ -12,7 +12,8 @@ export default {
   }),
   imageContainer: ({ theme }) => ({
     flexGrow: '1',
-    flexBasis: '0'
+    flexBasis: '0',
+    height: theme.space[7]
   }),
   image: () => ({
     height: '100%',

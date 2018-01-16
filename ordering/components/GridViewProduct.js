@@ -4,8 +4,10 @@ import { connect as connectFela } from 'react-fela'
 import h from 'react-hyperscript'
 import { Link } from 'react-router-dom'
 import FlatButton from 'material-ui/FlatButton'
+import FontIcon from 'material-ui/FontIcon'
+import { FormattedMessage } from 'dogstack/intl'
 
-import { FormattedMessage } from '../../lib/Intl'
+import Hint from '../../app/components/Hint'
 
 import styles from '../styles/GridViewProduct'
 
@@ -50,49 +52,83 @@ function GridViewProduct (props) {
         })
       ]),
       h('div', {
-        className: styles.textContainer
+        className: styles.details
       }, [
         h('h3', {
-          className: styles.nameText
+          className: styles.name
         }, [
           name
         ]),
         h('p', {
-          className: styles.productText
+          className: styles.description
         }, [
           description // TODO (mw) this should be truncated to number of characters then ...
-        ]),
+        ])
+      ]),
+      h('div', {
+        className: styles.context
+      }, [
         h('p', {
-          className: styles.groupQuantityText
+          className: styles.price
         }, [
-          h(FormattedMessage, {
-            id: 'ordering.groupQuantity',
-            className: styles.messageText,
-            values: {
-              quantity: collectiveQuantity
-            }
-          })
-        ]),
-        h('p', {
-          className: styles.yourQuantityText
-        }, [
-          h(FormattedMessage, {
-            id: 'ordering.yourQuantity',
-            className: styles.messageText,
-            values: {
-              quantity: yourQuantity
-            }
-          })
-        ]),
-        h('p', {
-          className: styles.priceText
-        }, [
+          h(FontIcon, {
+            className: 'fa fa-dollar'
+          }),
           h(FormattedMessage, {
             id: 'ordering.fromPrice',
             className: styles.messageText,
             values: {
               currency: applicablePriceSpec.currency,
               price: applicablePriceSpec.price
+            }
+          }),
+          h(Hint, {
+            messageId: 'ordering.whatIsCurrentPrice',
+            iconButtonStyle: {
+              height: 'unset',
+              padding: 'unset'
+            }
+          })
+        ]),
+        h('p', {
+          className: styles.groupQuantity
+        }, [
+          h(FontIcon, {
+            className: 'fa fa-users'
+          }),
+          h(FormattedMessage, {
+            id: 'ordering.groupQuantity',
+            className: styles.messageText,
+            values: {
+              quantity: collectiveQuantity
+            }
+          }),
+          h(Hint, {
+            messageId: 'ordering.whatIsCurrentGroupQuantity',
+            iconButtonStyle: {
+              height: 'unset',
+              padding: 'unset'
+            }
+          })
+        ]),
+        h('p', {
+          className: styles.yourQuantity
+        }, [
+          h(FontIcon, {
+            className: 'fa fa-user'
+          }),
+          h(FormattedMessage, {
+            id: 'ordering.yourQuantity',
+            className: styles.messageText,
+            values: {
+              quantity: yourQuantity
+            }
+          }),
+          h(Hint, {
+            messageId: 'ordering.whatIsYourCurrentQuantity',
+            iconButtonStyle: {
+              height: 'unset',
+              padding: 'unset'
             }
           })
         ])

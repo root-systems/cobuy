@@ -12,8 +12,7 @@ import {
   TableRowColumn,
   TableFooter
 } from 'material-ui/Table'
-
-import { FormattedMessage } from '../../lib/Intl'
+import { FormattedMessage } from 'dogstack/intl'
 
 import styles from '../styles/ListViewProduct'
 
@@ -57,14 +56,14 @@ function ListViewProduct (props) {
           className: styles.nameText
         }, [
           name
-        ]),
+        ])
       ]),
       h(TableRowColumn, {}, [
         h('p', {
           className: styles.productText
         }, [
           description
-        ]),
+        ])
       ]),
       h(TableRowColumn, {}, [
         h('p', {
@@ -85,14 +84,14 @@ function ListViewProduct (props) {
           className: styles.productText
         }, [
           collectiveQuantity
-        ]),
+        ])
       ]),
       h(TableRowColumn, {}, [
         h('p', {
           className: styles.productText
         }, [
           yourQuantity
-        ]),
+        ])
       ])
     ])
   )

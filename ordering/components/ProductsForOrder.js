@@ -89,7 +89,8 @@ function renderList (props) {
           'your current quantity', // TODO (mw) intl
           h(Hint, {
             messageId: 'ordering.whatIsYourCurrentQuantity'
-          })])
+          })
+        ])
       ])
     ]),
     h(TableBody, {}, [
