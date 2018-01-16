@@ -3,6 +3,7 @@ import { mjml2html } from 'mjml'
 import style from '../../style'
 
 export default function orderMjml ({ app, assetsUrl, order }) {
+  // TODO: tapin banner and website link are hardcoded
   return mjml2html(`
     <mjml>
       <mj-body>
@@ -37,7 +38,7 @@ export default function orderMjml ({ app, assetsUrl, order }) {
             <mj-column>
               <mj-text font-size="18">
                 <p>Happy Group Buying!</p>
-                <p><a href="http://tapin.nz">Team Tapin</a></p>
+                <p><a href="http://tapin.nz">Team ${app.name}</a></p>
               </mj-text>
             </mj-column>
           </mj-section>

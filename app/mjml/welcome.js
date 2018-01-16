@@ -3,6 +3,7 @@ import { mjml2html } from 'mjml'
 import style from '../../style'
 
 export default function welcomeMjml ({ app, order, token, assetsUrl }) {
+  // TODO: tapin banner and website link are hardcoded
   return mjml2html(`
     <mjml>
       <mj-body>
@@ -28,7 +29,7 @@ export default function welcomeMjml ({ app, order, token, assetsUrl }) {
             <mj-column>
               <mj-text font-size="18">
               <p font-weight="bold">What does this mean?</p>
-                <p>Tapin is part of Cobuy - an app that makes buying groups easy to start, maintain, and grow. You're invited to be part of a buying group.</p>
+                <p>${app.name} makes buying groups easy to start, maintain, and grow. You're invited to be part of a buying group.</p>
               <p font-weight-"bold">Why is group buying better?</p>
                 <p>Buying collectively gives you the power to purchase products in bulk, directly from wholesalers. By cutting out the middle men, we promote efficiency, cut down on retail food waste, save money and have access to a wider range of better quality products.</p>
               </mj-text>
@@ -42,7 +43,7 @@ export default function welcomeMjml ({ app, order, token, assetsUrl }) {
                 <p>Click <a href=${app.url}/invited/${token.jwt}/${order.id}>here</a> to set your password, after which you will be taken to the order!</p>
               </mj-text>
               <mj-text font-size="18">
-                <p>Learn more about Tapin <a href="http://tapin.nz">here</a>.</p>
+                <p>Learn more about ${app.name} <a href="http://tapin.nz">here</a>.</p>
               </mj-text>
             </mj-column>
           </mj-section>
@@ -51,7 +52,7 @@ export default function welcomeMjml ({ app, order, token, assetsUrl }) {
             <mj-column>
               <mj-text font-size="30">
                 <p>Happy Group Buying!</p>
-                <p>Team Tapin</p>
+                <p>Team ${app.name}</p>
               </mj-text>
             </mj-column>
           </mj-section>
