@@ -2,6 +2,8 @@ import { map, prop, groupBy, sum, mapObjIndexed, values, pipe, uniq, pick, sortB
 import * as taskRecipes from '../../tasks/data/recipes'
 
 import getCurrentOrderApplicableOrderIntentsFlattened from '../../ordering/getters/getCurrentOrderApplicableOrderIntentsFlattened'
+import welcomeMjml from '../../app/mjml/welcome'
+import orderMjml from '../../app/mjml/order'
 
 const feathersKnex = require('feathers-knex')
 const { iff } = require('feathers-hooks-common')
@@ -100,24 +102,23 @@ function prepareStartOrderEmail (options) {
     appConfig,
     order
   } = options
-  const orderName = order.name ? order.name : `Order ${order.id}`
+  const assetsUrl = appConfig.url
+  console.log('prepareOrderEmail')
+  console.log('prepareOrderEmailorder', order)
+  const mjmlOutput = orderMjml({
+    app: appConfig,
+    assetsUrl,
+    order
+  })
+  if (mjmlOutput.errors) {
+    // uhhhhh...?
+    mjmlOutput.errors.forEach(console.error)
+  }
   return {
     from: `${appConfig.email}`,
     to: credential.email || 'no@email.com',
     subject: `An order has been started on ${appConfig.name}!`,
-    html: `
-      Hi. You're invited to join an order, ${orderName}, on ${appConfig.name}!
-
-      <br />
-      <br />
-
-      ${appConfig.bodyText}
-
-      <br />
-      <br />
-
-      Click <a href=${appConfig.url}/o/${order.id}>here</a> to join the order!
-    `
+    html: mjmlOutput.html
   }
 }
 
@@ -128,23 +129,23 @@ function prepareWelcomeEmail (options) {
     order,
     token
   } = options
+
+  const assetsUrl = appConfig.url
+  const mjmlOutput = welcomeMjml({
+    app: appConfig,
+    assetsUrl,
+    order,
+    token
+  })
+  if (mjmlOutput.errors) {
+    // uhhhhh...?
+    mjmlOutput.errors.forEach(console.error)
+  }
   return {
     from: `${appConfig.email}`,
     to: credential.email || 'no@email.com',
     subject: `You're invited to join ${appConfig.name}!`,
-    html: `
-      Hi. You're invited to join a group on ${appConfig.name}!
-
-      <br />
-      <br />
-
-      ${appConfig.bodyText}
-
-      <br />
-      <br />
-
-      Click <a href=${appConfig.url}/invited/${token.jwt}/${order.id}>here</a> to set your password and start buying together!
-    `
+    html: mjmlOutput.html
   }
 }
 
