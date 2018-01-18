@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { map, addIndex, indexBy, prop, mapObjIndexed, slice, find, isNil, merge, isEmpty } from 'ramda'
+import { map, addIndex, indexBy, prop, mapObjIndexed, slice, find, isNil, merge, isEmpty, filter, complement } from 'ramda'
 
 import getSortedByMinPriceSpecsByProduct from '../../supply/getters/getSortedByMinPriceSpecsByProduct'
 import getOrderIntentsByOrderAgentProductPrice from './getOrderIntentsByOrderAgentProductPrice'
@@ -13,6 +13,7 @@ export default createSelector(
   (orderIntents, priceSpecs) => {
     return map(map(mapObjIndexed((intents, productId) => {
       // intents are by priceSpecId
+      // TODO: IK: i'm not sure why this guard logic is here, should always be priceSpecs for any productId? needs testing before removal though
       const allPriceSpecsForProduct = priceSpecs[productId] || {}
       if (isEmpty(allPriceSpecsForProduct)) return {}
       // now, for each priceSpec in allPriceSpecsForProduct, we want an intent
@@ -27,14 +28,14 @@ export default createSelector(
         const nextPriceSpecs = slice(i, arr.length, arr)
         const nextBestPriceSpec = find((ps) => intents[ps.id], nextPriceSpecs)
 
-        // this is a bit sub-optimal, leads to { undefined: {} } in indexedIntents at end of this getter
-        // could fix by removing all non-number keys after?
         if (isNil(nextBestPriceSpec)) return {}
         // consider omitting the intent id, as it doesn't make sense when same intent id is across multiple priceSpecs
         return merge(intents[nextBestPriceSpec.id], { priceSpecId: id })
       }, allPriceSpecsForProduct)
+      // remove all empty objects (generated if isNil(nextBestPriceSpec) above)
+      const onlyValidIntentsAtEachPriceSpec = filter(complement(isEmpty), intentsAtEachPriceSpec)
 
-      return indexByPriceSpecId(intentsAtEachPriceSpec)
+      return indexByPriceSpecId(onlyValidIntentsAtEachPriceSpec)
     })), orderIntents)
   }
 )
