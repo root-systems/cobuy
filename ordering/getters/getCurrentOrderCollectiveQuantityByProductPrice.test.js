@@ -14,3 +14,11 @@ test('getCurrentOrderCollectiveQuantityByProductPrice: generate correct collecti
 
   t.deepEqual(getCurrentOrderCollectiveQuantityByProductPrice(state, props), expected)
 })
+
+test('getCurrentOrderCollectiveQuantityByProductPrice: return empty obj if no intents', t => {
+  const state = { orderIntents: {}, priceSpecs: mockPriceSpecs }
+  const props = { taskPlan: { params: { orderId: 1 } } }
+  const expected = {}
+
+  t.deepEqual(getCurrentOrderCollectiveQuantityByProductPrice(state, props), expected)
+})

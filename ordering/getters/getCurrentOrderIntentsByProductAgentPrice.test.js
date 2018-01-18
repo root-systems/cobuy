@@ -40,3 +40,11 @@ test('getCurrentOrderIntentsByProductAgentPrice: orderIntents exist on state', t
 
   t.deepEqual(getCurrentOrderIntentsByProductAgentPrice(state, props), expected)
 })
+
+test('getCurrentOrderIntentsByProductAgentPrice: return empty obj if no intents', t => {
+  const state = { orderIntents: {} }
+  const props = { taskPlan: { params: { orderId: 1 } } }
+  const expected = {}
+
+  t.deepEqual(getCurrentOrderIntentsByProductAgentPrice(state, props), expected)
+})
