@@ -23,7 +23,7 @@ module.exports.getJwtOptions = getJwtOptions
 
 const hooks = {
   before: {
-    find: iff(isProvider('external', disallow())),
+    find: iff(isProvider('external', disallow())), // TODO: IK: think this is incorrect syntax, see https://feathers-plus.github.io/v1/feathers-hooks-common/index.html#isprovider
     get: [],
     create: [
       authenticate('jwt'),
@@ -33,7 +33,7 @@ const hooks = {
       encodeParams
     ],
     update: disallow(),
-    patch: iff(isProvider('external', disallow())),
+    patch: iff(isProvider('external', disallow())), // TODO: IK: think this is incorrect syntax, see https://feathers-plus.github.io/v1/feathers-hooks-common/index.html#isprovider
     remove: disallow()
   },
   after: {
