@@ -5,7 +5,6 @@ import { compose } from 'recompose'
 
 import { agents, profiles, relationships, credentials } from 'dogstack-agents/actions'
 import getMyProfileProps from '../getters/getMyProfileProps'
-import MyProfile from '../components/MyProfile'
 import Profile from '../components/Profile'
 
 export default compose(
