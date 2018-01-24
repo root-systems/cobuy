@@ -67,20 +67,14 @@ export default compose(
     }
   })
 )(props => {
-  const { currentAgent, actions, currentAgentGroupProfiles } = props
+  const { currentAgent, currentAgentGroupProfiles } = props
 
   if (isNil(currentAgent)) {
     return null
   }
 
   return h(MyGroups, {
-    initialValues: currentAgent.profile,
-    updateProfile: (nextProfile) => {
-      actions.profiles.update(currentAgent.profile.id, nextProfile)
-    },
-    agentType: 'my',
-    isEditing: true,
-    agent: currentAgent,
+    currentAgent: currentAgent,
     currentAgentGroupProfiles: currentAgentGroupProfiles
   })
 })
