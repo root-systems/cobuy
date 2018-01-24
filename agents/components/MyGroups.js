@@ -1,7 +1,9 @@
 import h from 'react-hyperscript'
-import { isNil } from 'ramda'
+import { isNil, isEmpty, map } from 'ramda'
+import { FormattedMessage } from 'dogstack/intl'
 
 // import Profile from '../../agents/components/Profile'
+import styles from '../styles/MyGroups'
 
 export default (props) => {
   const { actions, currentAgent, currentAgentGroupProfiles } = props
@@ -10,17 +12,32 @@ export default (props) => {
     return null
   }
 
-  return h('div', {
-    // className: styles.container
-  })
+  const renderMyGroups = () => {
+    if (isEmpty(currentAgentGroupProfiles)) return null
+    return h('div', { className: styles.myGroupsContainer }, [
+      h('p', {
+        className: styles.intro
+      }, [
+        h(FormattedMessage, {
+          id: 'agents.myGroups',
+          className: styles.labelText
+        })
+      ]),
+      h('ul', renderCurrentAgentGroupProfiles())
+    ])
+  }
 
-  // return h(Profile, {
-  //   initialValues: currentAgent.profile,
-  //   updateProfile: (nextProfile) => {
-  //     actions.profiles.update(currentAgent.profile.id, nextProfile)
-  //   },
-  //   agentType: 'my',
-  //   isEditing: true,
-  //   agent: currentAgent
-  // })
+  const renderCurrentAgentGroupProfiles = () => {
+    return map(renderCurrentAgentGroupProfile, currentAgentGroupProfiles)
+  }
+
+  const renderCurrentAgentGroupProfile = (profile) => {
+    return h('li', profile.name)
+  }
+
+  return h('div', {
+    className: styles.container
+  }, [
+    renderMyGroups()
+  ])
 }
