@@ -4,6 +4,10 @@ export default {
     flexDirection: 'column',
     flex: 1
   }),
+  intro: () => ({
+    textAlign: 'center',
+    fontSize: '2rem'
+  }),
   labelText: () => ({
     textTransform: 'capitalize'
   }),
