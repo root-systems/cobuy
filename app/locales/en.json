@@ -42,6 +42,7 @@
   "agents.consumer": "buying group",
   "agents.supplier": "supplier",
   "agents.labelText": "{agentType}",
+  "agents.myGroups": "my groups",
   "resources.resourceType": "resource type",
   "resources.resourceTypeName": "Resource name",
   "resources.resourceTypeDescription": "Resource description",

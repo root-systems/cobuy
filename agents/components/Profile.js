@@ -1,6 +1,6 @@
 import { connect as connectFela } from 'react-fela'
 import { Field, reduxForm as connectForm } from 'redux-form'
-import { pipe, isNil, not } from 'ramda'
+import { pipe, isNil, not, map, isEmpty } from 'ramda'
 import { TextField } from 'redux-form-material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
 import { compose, withState, withHandlers } from 'recompose'
@@ -18,13 +18,36 @@ const iconByAgentType = {
 }
 
 function Profile (props) {
-  const { styles, isEditing, updateProfile, handleSubmit, agentType, agent } = props
+  const { styles, isEditing, updateProfile, handleSubmit, agentType, agent, currentAgentGroupProfiles = [] } = props
 
   const saveProfile = (nextProfile) => {
     updateProfile(nextProfile)
   }
 
   const isSupplierProfile = agentType === 'supplier'
+
+  const renderMyGroups = () => {
+    if (isEmpty(currentAgentGroupProfiles)) return null
+    return h('div', { className: styles.myGroupsContainer }, [
+      h('p', {
+        className: styles.intro
+      }, [
+        h(FormattedMessage, {
+          id: 'agents.myGroups',
+          className: styles.labelText
+        })
+      ]),
+      h('ul', renderCurrentAgentGroupProfiles())
+    ])
+  }
+
+  const renderCurrentAgentGroupProfiles = () => {
+    return map(renderCurrentAgentGroupProfile, currentAgentGroupProfiles)
+  }
+
+  const renderCurrentAgentGroupProfile = (profile) => {
+    return h('li', profile.name)
+  }
 
   return h('form', {
     className: styles.container,
@@ -137,9 +160,8 @@ function Profile (props) {
           disabled: not(isEditing),
           validate: isSupplierProfile ? [required()] : null
         })
-      ])
+      ]),
     ]),
-
     h('div', {
       className: styles.buttonContainer
     }, [
@@ -155,8 +177,8 @@ function Profile (props) {
         })
       ])
          : null
-    ])
-
+    ]),
+    renderMyGroups()
   ])
 }
 

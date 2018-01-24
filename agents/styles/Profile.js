@@ -1,9 +1,10 @@
 export default {
   container: () => ({
-    width: '50%',
-    minWidth: '3rem',
+    // width: '50%',
+    // minWidth: '3rem',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    flex: 1
   }),
   innerContainer: () => ({
     display: 'flex',
@@ -35,10 +36,19 @@ export default {
   buttonContainer: () => ({
     paddingTop: '20px',
     display: 'flex',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
   }),
   button: () => ({
     width: '50%'
+  }),
+  myGroupsContainer: () => ({
+    paddingTop: '50px',
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   })
 }
