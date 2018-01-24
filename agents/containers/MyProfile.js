@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, path, prop, pipe, values, any, forEach, either } from 'ramda'
+import { isNil, path, prop, pipe, values, any, forEach, either, not, equals } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -18,7 +18,7 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const { currentAgent } = props
+      const { currentAgent, currentAgentGroupIds } = props.selected
 
       if (currentAgent) {
         queries.push({
@@ -33,7 +33,20 @@ export default compose(
           service: 'relationships',
           params: {
             query: {
-              sourceId: currentAgent.id
+              targetId: currentAgent.id
+            }
+          }
+        })
+      }
+
+      if (currentAgentGroupIds) {
+        queries.push({
+          service: 'profiles',
+          params: {
+            query: {
+              agentId: {
+                $in: currentAgentGroupIds
+              }
             }
           }
         })
@@ -41,14 +54,20 @@ export default compose(
 
       return queries
     },
-    shouldQueryAgain: (props, status) => {
+    shouldQueryAgain: (props, status, prevProps) => {
       if (status.isPending) return false
+
+      const { currentAgent: prevCurrentAgent, currentAgentGroupIds: prevCurrentAgentGroupIds } = prevProps.selected
+      const { currentAgent, currentAgentGroupIds } = props.selected
+
+      if (isNil(prevCurrentAgent) && not(isNil(currentAgent))) return true
+      if (not(equals(prevCurrentAgentGroupIds, currentAgentGroupIds))) return true
 
       return false
     }
   })
 )(props => {
-  const { currentAgent, actions } = props
+  const { currentAgent, actions, currentAgentGroupProfiles } = props
 
   if (isNil(currentAgent)) {
     return null
@@ -61,6 +80,7 @@ export default compose(
     },
     agentType: 'my',
     isEditing: true,
-    agent: currentAgent
+    agent: currentAgent,
+    currentAgentGroupProfiles: currentAgentGroupProfiles
   })
 })
