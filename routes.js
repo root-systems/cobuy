@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom'
 import Home from './app/containers/Home'
 import Invited from './agents/containers/Invited'
 import MyProfilePage from './agents/containers/MyProfile'
+import MyGroupsPage from './agents/containers/MyGroups'
 import TasksPage from './tasks/containers/TasksPage'
 import TaskWorker from './tasks/containers/TaskWorker'
 import OrdersPage from './ordering/containers/OrdersPage'
@@ -115,6 +116,16 @@ export default [
     navigation: {
       title: 'app.myProfile',
       icon: 'fa fa-user'
+    }
+  },
+  {
+    name: 'my-groups',
+    path: '/my-groups',
+    Component: MyGroupsPage,
+    selector: getIsAuthenticated,
+    navigation: {
+      title: 'agents.myGroups',
+      icon: 'fa fa-users'
     }
   },
 ]
