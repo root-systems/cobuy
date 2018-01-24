@@ -10,6 +10,7 @@
   "app.dashboard.tasks": "your active tasks",
   "app.orders": "orders",
   "app.cancel": "cancel",
+  "app.myProfile": "my profile",
   "agents.nameLabel": "name",
   "agents.descriptionLabel": "description",
   "agents.phoneLabel": "Phone",

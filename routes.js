@@ -111,6 +111,10 @@ export default [
     name: 'my-profile',
     path: '/my-profile',
     Component: MyProfilePage,
-    selector: getIsAuthenticated
+    selector: getIsAuthenticated,
+    navigation: {
+      title: 'app.myProfile',
+      icon: 'fa fa-user'
+    }
   },
 ]
