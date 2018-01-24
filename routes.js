@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom'
 // Top Level Containers
 import Home from './app/containers/Home'
 import Invited from './agents/containers/Invited'
+import ProfilePage from './agents/containers/Profile'
 import TasksPage from './tasks/containers/TasksPage'
 import TaskWorker from './tasks/containers/TaskWorker'
 import OrdersPage from './ordering/containers/OrdersPage'
@@ -105,5 +106,11 @@ export default [
     name: 'orderSummary',
     path: '/ordersummary',
     Component: OrderSummary
-  }
+  },
+  {
+    name: 'my-profile',
+    path: '/my-profile',
+    Component: ProfilePage,
+    selector: getIsAuthenticated
+  },
 ]
