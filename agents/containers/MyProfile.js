@@ -1,14 +1,16 @@
+import h from 'react-hyperscript'
 import { isNil, path, prop, pipe, values, any, forEach, either } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
 import { agents, profiles, relationships, credentials } from 'dogstack-agents/actions'
-import getProfileProps from '../getters/getProfileProps'
+import getMyProfileProps from '../getters/getMyProfileProps'
+import MyProfile from '../components/MyProfile'
 import Profile from '../components/Profile'
 
 export default compose(
   connectFeathers({
-    selector: getProfileProps,
+    selector: getMyProfileProps,
     actions: {
       agents,
       profiles,
@@ -17,14 +19,14 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const { agent } = props
+      const { currentAgent } = props
 
-      if (agent) {
+      if (currentAgent) {
         queries.push({
           service: 'profiles',
           params: {
             query: {
-              agentId: agent.id
+              agentId: currentAgent.id
             }
           }
         })
@@ -32,7 +34,7 @@ export default compose(
           service: 'relationships',
           params: {
             query: {
-              sourceId: agent.id
+              sourceId: currentAgent.id
             }
           }
         })
@@ -46,4 +48,20 @@ export default compose(
       return false
     }
   })
-)(Profile)
+)(props => {
+  const { currentAgent, actions } = props
+
+  if (isNil(currentAgent)) {
+    return null
+  }
+
+  return h(Profile, {
+    initialValues: currentAgent.profile,
+    updateProfile: (nextProfile) => {
+      actions.profiles.update(currentAgent.profile.id, nextProfile)
+    },
+    agentType: 'my',
+    isEditing: true,
+    agent: currentAgent
+  })
+})
