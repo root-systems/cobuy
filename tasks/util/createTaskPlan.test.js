@@ -5,8 +5,8 @@ import * as taskRecipes from '../data/recipes'
 
 /*
 TODO fix tests
-
-test('create simple task', (t) => {
+*/
+test.skip('create simple task', (t) => {
   const assignee = Symbol('assignee')
   const taskRecipe = taskRecipes.setupGroup
   const expected = [
@@ -18,7 +18,7 @@ test('create simple task', (t) => {
   t.deepEqual(taskPlans, expected)
 })
 
-test('create nested task', (t) => {
+test.skip('create nested task', (t) => {
   const assignee = Symbol('assignee')
   const taskRecipe = taskRecipes.finishPrereqs
   const expected = [
@@ -30,4 +30,3 @@ test('create nested task', (t) => {
   const taskPlans = createTaskPlan(options)
   t.deepEqual(taskPlans, expected)
 })
-*/
