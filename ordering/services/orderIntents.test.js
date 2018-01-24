@@ -17,6 +17,7 @@ import dbConfig from '../../db'
 process.env.NODE_ENV = 'test'
 
 // TODO: IK: test the authentication hook works as expected (i.e. can't call any methods without being authenticated)
+// TODO: IK: figure out how to reset the incrementing id after each test, brittle tests atm
 var app, credential
 test.before(() => {
   app = feathers()
@@ -63,7 +64,7 @@ test.afterEach(() => {
   return app.service('orderIntents').remove(null, {})
 })
 
-test.serial('OrderIntents: create new intent successfully', t => {
+test.serial('OrderIntents.create: create new intent successfully', t => {
   return app.service('orderIntents').create({
     agentId: 1,
     desiredQuantity: 46,
@@ -81,7 +82,7 @@ test.serial('OrderIntents: create new intent successfully', t => {
   })
 })
 
-test.serial('OrderIntents: may only find intents that relate to groups of current user', t => {
+test.serial('OrderIntents.find: may only find intents that relate to groups of current user', t => {
   // simulate client authentication by just passing the credential in params
   const params = { credential, query: {} }
   return app.service('orderIntents').find(params)
@@ -104,4 +105,31 @@ test.serial('OrderIntents: may only find intents that relate to groups of curren
     ]
     t.deepEqual(intents, expected)
   })
+})
+
+test.serial('OrderIntents.find: omit unauthorised results if directly specified by orderId', t => {
+  const params = { credential, query: { orderId: 99 } }
+  return app.service('orderIntents').find(params)
+  .then(intents => {
+    t.deepEqual(intents, [])
+  })
+})
+
+test.serial('OrderIntents.get: can get authorised result', t => {
+  const params = { credential }
+  // TODO: IK: figure out how to reset the incrementing id after each test
+  return app.service('orderIntents').get(12, params)
+  .then((intent) => {
+    t.is(intent.id, 12)
+    t.is(intent.agentId, 1)
+    t.is(intent.desiredQuantity, 23)
+    t.is(intent.productId, 1)
+    t.is(intent.priceSpecId, 2)
+    t.is(intent.orderId, 1)
+  })
+})
+
+test.serial('OrderIntents.get: omit unauthorised results via get', t => {
+  const params = { credential }
+  return t.throws(app.service('orderIntents').get(16, params))
 })

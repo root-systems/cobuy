@@ -28,7 +28,7 @@ const hooks = {
   before: {
     all: authenticate('jwt'),
     find: restrictToCurrentUsersGroups,
-    // get: disallow(),
+    get: restrictToCurrentUsersGroups,
     // create: iff(isProvider('external'), disallow()),
     // update: disallow(),
     // patch: disallow(),
