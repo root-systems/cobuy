@@ -99,7 +99,7 @@ export default compose(
     }
   })
 )(props => {
-  const { currentAgent, currentAgentGroupProfiles, currentAgentGroupSupplierProfiles, currentAgentGroupSupplierIds } = props
+  const { currentAgent, currentAgentGroupProfiles, currentAgentGroupSupplierProfiles } = props
 
   if (isNil(currentAgent)) {
     return null
@@ -107,6 +107,7 @@ export default compose(
 
   return h(MyGroups, {
     currentAgent: currentAgent,
-    currentAgentGroupProfiles: currentAgentGroupProfiles
+    currentAgentGroupProfiles: currentAgentGroupProfiles,
+    currentAgentGroupSupplierProfiles: currentAgentGroupSupplierProfiles
   })
 })
