@@ -22,7 +22,7 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const { currentAgent, currentAgentGroupIds, currentProfile } = props.selected
+      const { currentProfile } = props.selected
 
       const { profileId } = props.match.params
 
@@ -95,14 +95,19 @@ export default compose(
     }
   })
 )(props => {
-  const { currentAgent, currentAgentGroupProfiles } = props
+  const { currentProfile, relatedAgent } = props
 
-  if (isNil(currentAgent)) {
+  if (isNil(currentProfile)) {
     return null
   }
 
   return h(Profile, {
-    agent: currentAgent,
-    currentAgentGroupProfiles: currentAgentGroupProfiles
+    initialValues: currentProfile,
+    updateProfile: (nextProfile) => {
+      actions.profiles.update(currentAgent.profile.id, nextProfile)
+    },
+    agentType: 'supplier',
+    isEditing: true,
+    agent: relatedAgent,
   })
 })
