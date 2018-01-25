@@ -1,11 +1,19 @@
 import test from 'ava'
 import feathers from 'feathers'
+// import rest from 'feathers-rest'
+// import bodyParser from 'body-parser'
 import feathersHooks from 'feathers-hooks'
 import createDb from 'dogstack/createDb'
 import feathersConfig from 'feathers-configuration'
 import feathersAuth from 'feathers-authentication'
 import feathersAuthJwt from 'feathers-authentication-jwt'
 import { isEmpty } from 'ramda'
+
+// import fetch from 'node-fetch'
+// import feathersClient from 'feathers/client'
+// import restClient from 'feathers-rest/client'
+// import authClient from 'feathers-authentication-client'
+// import localStorage from 'localstorage-memory'
 
 import OrderIntents from './orderIntents'
 import Orders from './orders'
@@ -18,9 +26,12 @@ process.env.NODE_ENV = 'test'
 
 // TODO: IK: test the authentication hook works as expected (i.e. can't call any methods without being authenticated)
 // TODO: IK: figure out how to reset the incrementing id after each test, brittle tests atm
-var app, credential
+var app, credential, client
 test.before(() => {
   app = feathers()
+    // .use(bodyParser.json())
+    // .use(bodyParser.urlencoded({ extended: true }))
+    // .configure(rest())
     .configure(feathersConfig())
     .configure(feathersHooks())
 
@@ -31,6 +42,13 @@ test.before(() => {
   app.configure(Orders)
   app.configure(TaskPlans)
   agentsServices.call(app)
+
+  app.listen(9000)
+
+  // client = feathersClient()
+  //   .configure(restClient('http://localhost:9000').fetch(fetch))
+  //   .configure(feathersHooks())
+  //   .configure(authClient({ storage: localStorage }))
 
   return db.migrate.latest(dbConfig.migrations)
   .then(() => {
@@ -133,3 +151,12 @@ test.serial('OrderIntents.get: omit unauthorised results via get', t => {
   const params = { credential }
   return t.throws(app.service('orderIntents').get(16, params))
 })
+
+// TODO: IK: not sure how to create feathers client correctly to test authentication-related hooks for these tests below
+test.todo("OrderIntents.create: can't create an intent for an agentId that isn't current user id")
+test.todo("OrderIntents.update: can update current user intent")
+test.todo("OrderIntents.update: can't update an intent for an agentId that isn't current user id")
+test.todo("OrderIntents.patch: can patch current user intent")
+test.todo("OrderIntents.patch: can't patch an intent for an agentId that isn't current user id")
+test.todo("OrderIntents.remove: can remove current user intent")
+test.todo("OrderIntents.remove: can't remove an intent for an agentId that isn't current user id")

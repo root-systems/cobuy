@@ -1,6 +1,7 @@
 const feathersKnex = require('feathers-knex')
 import { hooks as authHooks } from 'feathers-authentication'
 const { authenticate } = authHooks
+import { restrictToOwner } from 'feathers-authentication-hooks'
 import { prop, merge, difference, without, contains } from 'ramda'
 
 module.exports = function () {
@@ -14,25 +15,15 @@ module.exports = function () {
   app.service(name).hooks(hooks)
 }
 
-/*
-all: authenticated users only
-find: only return intents that relate to the groups (and subsequent orders) that the current user is a member of (probably quite common hook?)
-get: as above
-create: only if the agentId of the intent is the same as current user id (can only create your own intents)?
-update: as create
-patch: as create
-remove: as create
-*/
-
 const hooks = {
   before: {
     all: authenticate('jwt'),
     find: restrictToCurrentUsersGroups,
     get: restrictToCurrentUsersGroups,
-    // create: iff(isProvider('external'), disallow()),
-    // update: disallow(),
-    // patch: disallow(),
-    // remove: disallow()
+    // create: restrictToOwner({ idField: 'id', ownerField: 'agentId' }), // TODO: IK: restrictToOwner doesn't work with create method, need a custom hook like restrictToOwnerExtended which wraps it and deals with creates
+    update: restrictToOwner({ idField: 'id', ownerField: 'agentId' }),
+    patch: restrictToOwner({ idField: 'id', ownerField: 'agentId' }),
+    remove: restrictToOwner({ idField: 'id', ownerField: 'agentId' })
   }
 }
 
