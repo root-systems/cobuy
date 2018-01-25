@@ -131,7 +131,7 @@ export default [
   },
   {
     name: 'profile',
-    path: '/profiles/:profileId',
+    path: '/p/:profileId',
     Component: ProfilePage,
     selector: getIsAuthenticated
   },
