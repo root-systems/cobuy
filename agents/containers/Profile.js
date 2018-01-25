@@ -22,7 +22,7 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const { currentAgent, currentAgentGroupIds } = props.selected
+      const { currentAgent, currentAgentGroupIds, currentProfile } = props.selected
 
       const { profileId } = props.match.params
 
@@ -30,7 +30,19 @@ export default compose(
         service: 'profiles',
         id: profileId
       })
-      //
+
+      if (currentProfile) {
+        queries.push({
+          service: 'agents',
+          params: {
+            query: {
+              id: currentProfile.agentId
+            }
+          }
+        })
+      }
+
+
       // if (currentAgent) {
       //   queries.push({
       //     service: 'profiles',
@@ -67,7 +79,12 @@ export default compose(
     },
     shouldQueryAgain: (props, status, prevProps) => {
       if (status.isPending) return false
-      // 
+
+      const { currentProfile: prevCurrentProfile } = prevProps.selected
+      const { currentProfile } = props.selected
+
+      if (isNil(prevCurrentProfile) && not(isNil(currentProfile))) return true
+      //
       // const { currentAgent: prevCurrentAgent, currentAgentGroupIds: prevCurrentAgentGroupIds } = prevProps.selected
       // const { currentAgent, currentAgentGroupIds } = props.selected
       //
@@ -85,7 +102,7 @@ export default compose(
   }
 
   return h(Profile, {
-    currentAgent: currentAgent,
+    agent: currentAgent,
     currentAgentGroupProfiles: currentAgentGroupProfiles
   })
 })
