@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect'
 import { prop } from 'ramda'
 
-import getProfiles from './getProfiles'
+import getProfilesState from './getProfilesState'
 import getCurrentProfileId from './getCurrentProfileId'
 
 export default createSelector(
   getCurrentProfileId,
-  getProfiles,
+  getProfilesState,
   prop
 )
