@@ -10,32 +10,47 @@ import styles from '../styles/MyGroups'
 function MyGroups (props) {
   const { styles, currentAgent, currentAgentGroupProfiles = [], currentAgentGroupSupplierProfiles = [] } = props
 
-  const combinedGroupProfiles = concat(currentAgentGroupProfiles, currentAgentGroupSupplierProfiles)
+  // const combinedGroupProfiles = concat(currentAgentGroupProfiles, currentAgentGroupSupplierProfiles)
 
   if (isNil(currentAgent)) {
     return null
   }
 
-  const renderMyGroups = () => {
-    if (isEmpty(combinedGroupProfiles)) return null
+  const renderMyBuyingGroupProfiles = (groupProfiles) => {
+    if (isEmpty(groupProfiles)) return null
     return h('div', { className: styles.myGroupsContainer }, [
       h('p', {
         className: styles.intro
       }, [
         h(FormattedMessage, {
-          id: 'agents.myGroups',
+          id: 'agents.myBuyingGroups',
           className: styles.labelText
         })
       ]),
-      h('ul', renderCurrentAgentGroupProfiles())
+      h('ul', renderGroupProfiles(groupProfiles))
     ])
   }
 
-  const renderCurrentAgentGroupProfiles = () => {
-    return map(renderCurrentAgentGroupProfile, combinedGroupProfiles)
+  const renderMySupplierGroupProfiles = (groupProfiles) => {
+    if (isEmpty(groupProfiles)) return null
+    return h('div', { className: styles.myGroupsContainer }, [
+      h('p', {
+        className: styles.intro
+      }, [
+        h(FormattedMessage, {
+          id: 'agents.mySupplierGroups',
+          className: styles.labelText
+        })
+      ]),
+      h('ul', renderGroupProfiles(groupProfiles))
+    ])
   }
 
-  const renderCurrentAgentGroupProfile = (profile) => {
+  const renderGroupProfiles = (groupProfiles) => {
+    return map(renderGroupProfile, groupProfiles)
+  }
+
+  const renderGroupProfile = (profile) => {
     return h(Link, {
       className: styles.link,
       to: `/p/${profile.id}`
@@ -47,7 +62,8 @@ function MyGroups (props) {
   return h('div', {
     className: styles.container
   }, [
-    renderMyGroups()
+    renderMyBuyingGroupProfiles(currentAgentGroupProfiles),
+    renderMySupplierGroupProfiles(currentAgentGroupSupplierProfiles)
   ])
 }
 
