@@ -9,9 +9,6 @@ export default createSelector(
   getAgents,
   (currentProfile, agents) => {
     if (isNil(currentProfile)) return
-    console.log('getter currentProfile', currentProfile)
-    console.log('getter agents', agents)
-    console.log('getter result', agents[currentProfile.agentId])
     return agents[currentProfile.agentId]
   }
 )
