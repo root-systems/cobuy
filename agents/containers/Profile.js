@@ -22,7 +22,7 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const { currentProfile } = props.selected
+      const { currentProfile, relatedAgent } = props.selected
 
       const { profileId } = props.match.params
 
@@ -37,6 +37,25 @@ export default compose(
           params: {
             query: {
               id: currentProfile.agentId
+            }
+          }
+        })
+      }
+
+      if (relatedAgent) {
+        queries.push({
+          service: 'relationships',
+          params: {
+            query: {
+              targetId: relatedAgent.id
+            }
+          }
+        })
+        queries.push({
+          service: 'relationships',
+          params: {
+            query: {
+              sourceId: relatedAgent.id
             }
           }
         })
@@ -80,10 +99,17 @@ export default compose(
     shouldQueryAgain: (props, status, prevProps) => {
       if (status.isPending) return false
 
-      const { currentProfile: prevCurrentProfile } = prevProps.selected
-      const { currentProfile } = props.selected
+      const {
+        currentProfile: prevCurrentProfile,
+        relatedAgent: prevRelatedAgent
+      } = prevProps.selected
+      const {
+        currentProfile,
+        relatedAgent
+      } = props.selected
 
       if (isNil(prevCurrentProfile) && not(isNil(currentProfile))) return true
+      if (isNil(prevRelatedAgent) && not(isNil(relatedAgent))) return true
       //
       // const { currentAgent: prevCurrentAgent, currentAgentGroupIds: prevCurrentAgentGroupIds } = prevProps.selected
       // const { currentAgent, currentAgentGroupIds } = props.selected
@@ -95,7 +121,7 @@ export default compose(
     }
   })
 )(props => {
-  const { currentProfile, relatedAgent } = props
+  const { currentProfile, relatedAgent, agentType } = props
 
   if (isNil(currentProfile)) {
     return null
@@ -104,10 +130,10 @@ export default compose(
   return h(Profile, {
     initialValues: currentProfile,
     updateProfile: (nextProfile) => {
-      actions.profiles.update(currentAgent.profile.id, nextProfile)
+      actions.profiles.update(relatedAgent.profile.id, nextProfile)
     },
-    agentType: 'supplier',
     isEditing: true,
     agent: relatedAgent,
+    agentType: agentType
   })
 })
