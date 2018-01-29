@@ -153,9 +153,10 @@ export default compose(
     }
   })
 )(props => {
-  const { currentProfile, relatedAgent, agentType, products } = props
+  const { currentProfile, relatedAgent, agentType, products, resourceTypes } = props
 
   console.log('products', products)
+  console.log('resourceTypes', resourceTypes)
 
   if (isNil(currentProfile)) {
     return null
