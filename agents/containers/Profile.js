@@ -1,13 +1,16 @@
 import h from 'react-hyperscript'
-import { isNil, path, prop, pipe, values, any, forEach, either, not, equals } from 'ramda'
+import { isNil, path, prop, pipe, values, any, forEach, either, not, equals, isEmpty, map } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 import { push } from 'react-router-redux'
 
 import { agents, profiles, relationships, credentials } from 'dogstack-agents/actions'
-import { products } from '../../actions'
+import { products, resourceTypes } from '../../actions'
 import getProfileProps from '../getters/getProfileProps'
 import Profile from '../components/Profile'
+
+const getProductIds = map(prop('id'))
+const getResourceTypeIds = map(prop('resourceTypeId'))
 
 export default compose(
   connectFeathers({
@@ -24,7 +27,7 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const { currentProfile, relatedAgent, agentType } = props.selected
+      const { currentProfile, relatedAgent, agentType, products } = props.selected
 
       const { profileId } = props.match.params
 
@@ -74,6 +77,19 @@ export default compose(
         })
       }
 
+      if (!isEmpty(products)) {
+        queries.push({
+          service: 'resourceTypes',
+          params: {
+            query: {
+              id: {
+                $in: getResourceTypeIds(products)
+              }
+            }
+          }
+        })
+      }
+
       // if (currentAgent) {
       //   queries.push({
       //     service: 'profiles',
@@ -114,18 +130,24 @@ export default compose(
       const {
         currentProfile: prevCurrentProfile,
         relatedAgent: prevRelatedAgent,
-        agentType: prevAgentType
+        agentType: prevAgentType,
+        products: prevProducts
       } = prevProps.selected
 
       const {
         currentProfile,
         relatedAgent,
-        agentType
+        agentType,
+        products
       } = props.selected
+
+      const prevProductIds = getProductIds(prevProducts)
+      const productIds = getProductIds(products)
 
       if (isNil(prevCurrentProfile) && not(isNil(currentProfile))) return true
       if (isNil(prevRelatedAgent) && not(isNil(relatedAgent))) return true
       if (isNil(prevAgentType) && not(isNil(agentType))) return true
+      if (!equals(prevProductIds, productIds)) return true
 
       return false
     }
