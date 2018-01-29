@@ -103,6 +103,7 @@ export default compose(
         currentProfile: prevCurrentProfile,
         relatedAgent: prevRelatedAgent
       } = prevProps.selected
+      
       const {
         currentProfile,
         relatedAgent
@@ -110,12 +111,6 @@ export default compose(
 
       if (isNil(prevCurrentProfile) && not(isNil(currentProfile))) return true
       if (isNil(prevRelatedAgent) && not(isNil(relatedAgent))) return true
-      //
-      // const { currentAgent: prevCurrentAgent, currentAgentGroupIds: prevCurrentAgentGroupIds } = prevProps.selected
-      // const { currentAgent, currentAgentGroupIds } = props.selected
-      //
-      // if (isNil(prevCurrentAgent) && not(isNil(currentAgent))) return true
-      // if (not(equals(prevCurrentAgentGroupIds, currentAgentGroupIds))) return true
 
       return false
     }
@@ -130,7 +125,7 @@ export default compose(
   return h(Profile, {
     initialValues: currentProfile,
     updateProfile: (nextProfile) => {
-      actions.profiles.update(relatedAgent.profile.id, nextProfile)
+      profiles.update(relatedAgent.profile.id, nextProfile)
     },
     isEditing: true,
     agent: relatedAgent,
