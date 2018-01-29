@@ -22,7 +22,7 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const { currentProfile, relatedAgent } = props.selected
+      const { currentProfile, relatedAgent, agentType } = props.selected
 
       const { profileId } = props.match.params
 
@@ -61,6 +61,17 @@ export default compose(
         })
       }
 
+      debugger
+      if (agentType && agentType === 'supplier') {
+        queries.push({
+          service: 'products',
+          params: {
+            query: {
+              supplierAgentId: relatedAgent.id
+            }
+          }
+        })
+      }
 
       // if (currentAgent) {
       //   queries.push({
@@ -101,22 +112,28 @@ export default compose(
 
       const {
         currentProfile: prevCurrentProfile,
-        relatedAgent: prevRelatedAgent
+        relatedAgent: prevRelatedAgent,
+        agentType: prevAgentType
       } = prevProps.selected
-      
+
       const {
         currentProfile,
-        relatedAgent
+        relatedAgent,
+        agentType
       } = props.selected
 
       if (isNil(prevCurrentProfile) && not(isNil(currentProfile))) return true
       if (isNil(prevRelatedAgent) && not(isNil(relatedAgent))) return true
+      debugger
+      if (isNil(prevAgentType) && not(isNil(agentType))) return true
 
       return false
     }
   })
 )(props => {
-  const { currentProfile, relatedAgent, agentType } = props
+  const { currentProfile, relatedAgent, agentType, products } = props
+
+  console.log('products', products)
 
   if (isNil(currentProfile)) {
     return null
