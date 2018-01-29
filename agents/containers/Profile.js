@@ -20,7 +20,8 @@ export default compose(
       profiles,
       relationships,
       credentials,
-      products
+      products,
+      resourceTypes
     },
     router: {
       push: (cid, ...args) => push(...args)
@@ -66,7 +67,7 @@ export default compose(
         })
       }
 
-      if (agentType && agentType === 'supplier') {
+      if (agentType === 'supplier') {
         queries.push({
           service: 'products',
           params: {
@@ -77,7 +78,7 @@ export default compose(
         })
       }
 
-      if (!isEmpty(products)) {
+      if (agentType === 'supplier' && !isEmpty(products)) {
         queries.push({
           service: 'resourceTypes',
           params: {
@@ -155,9 +156,6 @@ export default compose(
 )(props => {
   const { currentProfile, relatedAgent, agentType, products, resourceTypes } = props
 
-  console.log('products', products)
-  console.log('resourceTypes', resourceTypes)
-
   if (isNil(currentProfile)) {
     return null
   }
@@ -169,6 +167,7 @@ export default compose(
     },
     isEditing: true,
     agent: relatedAgent,
-    agentType: agentType
+    agentType: agentType,
+    resourceTypes: resourceTypes
   })
 })
