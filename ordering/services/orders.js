@@ -1,7 +1,12 @@
 const feathersKnex = require('feathers-knex')
+import { hooks as authHooks } from 'feathers-authentication'
+const { authenticate } = authHooks
 const { iff, iffElse } = require('feathers-hooks-common')
+import errors from 'feathers-errors'
 import { pipe, equals, length, isNil, isEmpty, map, any, find, not, prop } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
+
+import restrictToCurrentUserGroups from '../../lib/hooks/restrictToCurrentUserGroups'
 
 module.exports = function () {
   const app = this
@@ -16,7 +21,11 @@ module.exports = function () {
 
 const hooks = {
   before: {
+    all: authenticate('jwt'),
+    find: restrictToCurrentUserGroups,
+    get: restrictToCurrentUserGroups,
     create: [
+      restrictToGroupAdmin, // TODO: IK: throwing an error in this hook doesn't stop the remaining hooks from running?
       getCurrentUser,
       iff(hasNoConsumerAgent, createConsumerAgent),
       iff(hasNoSupplierAgent, createSupplierAgent),
@@ -24,14 +33,66 @@ const hooks = {
       iff(groupHasNoAdminRelation, createGroupAdminRelation), // TODO this should be agent.create hook
       iff(userIsNotMemberOfGroup, createGroupMemberRelation), // TODO this should be agent.create hook
       iff(hasNoAdminAgent, createAdminAgent)
-    ]
+    ],
+    update: restrictToOrderOrGroupAdmin,
+    patch: restrictToOrderOrGroupAdmin,
+    remove: restrictToOrderOrGroupAdmin
   },
   after: {
     create: [
       iffElse(hasNotCompletedGroupOrSupplierProfile, createCompleteOrderSetupWithPreReqsTaskPlan, createCompleteOrderSetupTaskPlan)
     ]
-  },
-  error: {}
+  }
+}
+
+function restrictToGroupAdmin (hook) {
+  // If it was an internal call then skip this hook
+  if (!hook.params.provider) {
+    return hook;
+  }
+  const { agentId } = hook.params.credential
+  const { consumerAgentId } = hook.data
+  return hook.app.service('relationships').find({
+    query: {
+      sourceId: consumerAgentId,
+      targetId: agentId,
+      relationshipType: 'admin'
+    }
+  })
+  .then((relationships) => {
+    if (isEmpty(relationships)) {
+      throw new errors.Forbidden('You must be the group admin to create an order.')
+    }
+    return hook
+  })
+}
+
+function restrictToOrderOrGroupAdmin (hook) {
+  // If it was an internal call then skip this hook
+  if (!hook.params.provider) {
+    return hook;
+  }
+  const { agentId } = hook.params.credential
+  const { id } = hook
+  return hook.app.service('orders').get(id, hook.params)
+  .then((order) => {
+    const { adminAgentId, consumerAgentId } = order
+    if (agentId === adminAgentId) return hook
+
+    return hook.app.service('relationships').find({
+      query: {
+        sourceId: consumerAgentId,
+        targetId: agentId,
+        relationshipType: 'admin'
+      }
+    })
+    .then((relationships) => {
+      if (isEmpty(relationships)) {
+        throw new errors.Forbidden('You must be the group admin to create an order.')
+      }
+      return hook
+    })
+  })
 }
 
 function getCurrentUser (hook) {

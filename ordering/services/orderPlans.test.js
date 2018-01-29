@@ -74,21 +74,21 @@ test.serial('OrderPlans.create: create new plan successfully', t => {
     priceSpecId: 1,
     orderId: 1
   })
-  .then(intent => {
-    t.is(intent.id, 4)
-    t.is(intent.agentId, 1)
-    t.is(intent.quantity, '46')
-    t.is(intent.productId, 2)
-    t.is(intent.priceSpecId, 1)
-    t.is(intent.orderId, 1)
+  .then(plan => {
+    t.is(plan.id, 4)
+    t.is(plan.agentId, 1)
+    t.is(plan.quantity, '46')
+    t.is(plan.productId, 2)
+    t.is(plan.priceSpecId, 1)
+    t.is(plan.orderId, 1)
   })
 })
 
-test.serial('OrderPlans.find: may only find intents that relate to groups of current user', t => {
+test.serial('OrderPlans.find: may only find plans that relate to groups of current user', t => {
   // simulate client authentication by just passing the credential in params
   const params = { credential, query: {} }
   return app.service('orderPlans').find(params)
-  .then(intents => {
+  .then(plans => {
     const expected = [
       { id: 5,
         agentId: 1,
@@ -105,15 +105,15 @@ test.serial('OrderPlans.find: may only find intents that relate to groups of cur
         orderId: 1
       }
     ]
-    t.deepEqual(intents, expected)
+    t.deepEqual(plans, expected)
   })
 })
 
 test.serial('OrderPlans.find: omit unauthorised results if directly specified by orderId', t => {
   const params = { credential, query: { orderId: 99 } }
   return app.service('orderPlans').find(params)
-  .then(intents => {
-    t.deepEqual(intents, [])
+  .then(plans => {
+    t.deepEqual(plans, [])
   })
 })
 
@@ -121,13 +121,13 @@ test.serial('OrderPlans.get: can get authorised result', t => {
   const params = { credential }
   // TODO: IK: figure out how to reset the incrementing id after each test
   return app.service('orderPlans').get(12, params)
-  .then((intent) => {
-    t.is(intent.id, 12)
-    t.is(intent.agentId, 1)
-    t.is(intent.quantity, '23')
-    t.is(intent.productId, 1)
-    t.is(intent.priceSpecId, 2)
-    t.is(intent.orderId, 1)
+  .then((plan) => {
+    t.is(plan.id, 12)
+    t.is(plan.agentId, 1)
+    t.is(plan.quantity, '23')
+    t.is(plan.productId, 1)
+    t.is(plan.priceSpecId, 2)
+    t.is(plan.orderId, 1)
   })
 })
 

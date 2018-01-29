@@ -4,7 +4,7 @@ const { authenticate } = authHooks
 import { restrictToOwner } from 'feathers-authentication-hooks'
 import { disallow, isProvider, iff } from 'feathers-hooks-common'
 
-import restrictToCurrentUserGroups from '../../lib/hooks/restrictToCurrentUserGroups'
+import restrictToCurrentUserGroupsOrders from '../../lib/hooks/restrictToCurrentUserGroupsOrders'
 
 module.exports = function () {
   const app = this
@@ -21,8 +21,8 @@ module.exports = function () {
 const hooks = {
   before: {
     all: authenticate('jwt'),
-    find: restrictToCurrentUserGroups,
-    get: restrictToCurrentUserGroups,
+    find: restrictToCurrentUserGroupsOrders,
+    get: restrictToCurrentUserGroupsOrders,
     create: iff(isProvider('external'), disallow()),
     update: restrictToOwner({ idField: 'id', ownerField: 'agentId' }),
     patch: restrictToOwner({ idField: 'id', ownerField: 'agentId' }),

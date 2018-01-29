@@ -3,7 +3,7 @@ import { hooks as authHooks } from 'feathers-authentication'
 const { authenticate } = authHooks
 import { restrictToOwner } from 'feathers-authentication-hooks'
 
-import restrictToCurrentUserGroups from '../../lib/hooks/restrictToCurrentUserGroups'
+import restrictToCurrentUserGroupsOrders from '../../lib/hooks/restrictToCurrentUserGroupsOrders'
 
 module.exports = function () {
   const app = this
@@ -19,8 +19,8 @@ module.exports = function () {
 const hooks = {
   before: {
     all: authenticate('jwt'),
-    find: restrictToCurrentUserGroups,
-    get: restrictToCurrentUserGroups,
+    find: restrictToCurrentUserGroupsOrders,
+    get: restrictToCurrentUserGroupsOrders,
     // create: restrictToOwner({ idField: 'id', ownerField: 'agentId' }), // TODO: IK: restrictToOwner doesn't work with create method, need a custom hook like restrictToOwnerExtended which wraps it and deals with creates
     update: restrictToOwner({ idField: 'id', ownerField: 'agentId' }),
     patch: restrictToOwner({ idField: 'id', ownerField: 'agentId' }),
