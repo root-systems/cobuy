@@ -8,8 +8,8 @@ export default createSelector(
   getRelatedAgent,
   getRelationshipsForThisAgent,
   (relatedAgent, relationships) => {
-    if (isNil(relatedAgent)) return null
-    if (isEmpty(relationships)) return null
+    if (isNil(relatedAgent)) return
+    if (isEmpty(relationships)) return
 
     const isSupplierGroupRelationship = n => n.relationshipType === 'supplier' && n.targetId === relatedAgent.id
     const isBuyingGroupRelationship = n => n.sourceId === relatedAgent.id

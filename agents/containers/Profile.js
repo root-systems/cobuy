@@ -5,6 +5,7 @@ import { compose } from 'recompose'
 import { push } from 'react-router-redux'
 
 import { agents, profiles, relationships, credentials } from 'dogstack-agents/actions'
+import { products } from '../../actions'
 import getProfileProps from '../getters/getProfileProps'
 import Profile from '../components/Profile'
 
@@ -15,7 +16,8 @@ export default compose(
       agents,
       profiles,
       relationships,
-      credentials
+      credentials,
+      products
     },
     router: {
       push: (cid, ...args) => push(...args)
@@ -61,7 +63,6 @@ export default compose(
         })
       }
 
-      debugger
       if (agentType && agentType === 'supplier') {
         queries.push({
           service: 'products',
@@ -124,7 +125,6 @@ export default compose(
 
       if (isNil(prevCurrentProfile) && not(isNil(currentProfile))) return true
       if (isNil(prevRelatedAgent) && not(isNil(relatedAgent))) return true
-      debugger
       if (isNil(prevAgentType) && not(isNil(agentType))) return true
 
       return false
