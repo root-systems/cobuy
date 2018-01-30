@@ -183,7 +183,7 @@ export default compose(
     }
   })
 )(props => {
-  const { currentProfile, relatedAgent, agentType, resourceTypes } = props
+  const { currentProfile, relatedAgent, agentType, resourceTypes, actions } = props
 
   if (isNil(currentProfile)) {
     return null
@@ -192,7 +192,51 @@ export default compose(
   return h(Profile, {
     initialValues: currentProfile,
     updateProfile: (nextProfile) => {
-      profiles.update(relatedAgent.profile.id, nextProfile)
+      actions.profiles.update(relatedAgent.profile.id, nextProfile)
+    },
+    removeMember: (agentId) => {
+      actions.agents.remove(agentId)
+    },
+    createMembers: (membersData) => {
+      return membersData.members.map((member) => {
+        if (isEmpty(member)) return null
+
+        const { agent, roles } = member
+        const {
+          id,
+          type = 'person',
+          profile = {},
+          credential = {}
+        } = agent
+        const rolesToRelationships = (roles = {}) => {
+          var relationships = [
+            { relationshipType: 'member' }
+          ]
+          if (roles.admin) {
+            relationships.push({
+              relationshipType: 'admin'
+            })
+          }
+          return relationships
+        }
+        const relationships = rolesToRelationships(roles)
+        const contextAgentId = relatedAgent.id
+
+        const agentData = {
+          id,
+          type,
+          profile,
+          credential,
+          relationships,
+          contextAgentId
+        }
+
+        if (isNil(agentData.id)) {
+          actions.agents.create(agentData)
+        } else {
+          actions.agents.patch(id, agentData)
+        }
+      })
     },
     isEditing: true,
     agent: relatedAgent,
