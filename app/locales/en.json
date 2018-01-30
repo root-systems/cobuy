@@ -45,6 +45,7 @@
   "agents.myGroups": "my groups",
   "agents.myBuyingGroups": "my buying groups",
   "agents.mySupplierGroups": "my supplier groups",
+  "agents.myResourceTypes": "my products",
   "resources.resourceType": "resource type",
   "resources.resourceTypeName": "Resource name",
   "resources.resourceTypeDescription": "Resource description",

@@ -18,13 +18,38 @@ const iconByAgentType = {
 }
 
 function Profile (props) {
-  const { styles, isEditing, updateProfile, handleSubmit, agentType, agent, currentAgentGroupProfiles = [] } = props
+  const { styles, isEditing, updateProfile, handleSubmit, agentType, agent, currentAgentGroupProfiles = [], resourceTypes = [] } = props
 
   const saveProfile = (nextProfile) => {
     updateProfile(nextProfile)
   }
 
   const isSupplierProfile = agentType === 'supplier'
+  const isMyProfile = agentType === 'my'
+  const isBuyingGroupProfile = agentType === 'group'
+
+  const renderMyResourceTypes = () => {
+    if (isEmpty(resourceTypes)) return null
+    return h('div', { className: styles.myGroupsContainer }, [
+      h('p', {
+        className: styles.intro
+      }, [
+        h(FormattedMessage, {
+          id: 'agents.myResourceTypes',
+          className: styles.labelText
+        })
+      ]),
+      h('ul', renderResourceTypeList())
+    ])
+  }
+
+  const renderResourceTypeList = () => {
+    return map(renderResourceType, resourceTypes)
+  }
+
+  const renderResourceType = (resourceType) => {
+    return h('li', resourceType.name)
+  }
 
   const renderMyGroups = () => {
     if (isEmpty(currentAgentGroupProfiles)) return null
@@ -178,7 +203,8 @@ function Profile (props) {
       ])
          : null
     ]),
-    renderMyGroups()
+    isMyProfile ? renderMyGroups() : null,
+    isSupplierProfile ? renderMyResourceTypes() : null,
   ])
 }
 
