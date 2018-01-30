@@ -28,7 +28,7 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const { currentProfile, relatedAgent, agentType, products, memberAgentIds } = props.selected
+      const { currentProfile, relatedAgent, agentType, products, memberAgentIds, buyingGroupIds } = props.selected
 
       const { profileId } = props.match.params
 
@@ -117,37 +117,24 @@ export default compose(
         })
       }
 
-      // if (currentAgent) {
-      //   queries.push({
-      //     service: 'profiles',
-      //     params: {
-      //       query: {
-      //         agentId: currentAgent.id
-      //       }
-      //     }
-      //   })
-      //   queries.push({
-      //     service: 'relationships',
-      //     params: {
-      //       query: {
-      //         targetId: currentAgent.id
-      //       }
-      //     }
-      //   })
-      // }
-      //
-      // if (currentAgentGroupIds) {
-      //   queries.push({
-      //     service: 'profiles',
-      //     params: {
-      //       query: {
-      //         agentId: {
-      //           $in: currentAgentGroupIds
-      //         }
-      //       }
-      //     }
-      //   })
-      // }
+      if (agentType === 'my' && !isEmpty(buyingGroupIds)) {
+        queries.push({
+          service: 'agents',
+          id: {
+            $in: buyingGroupIds
+          }
+        })
+        queries.push({
+          service: 'profiles',
+          params: {
+            query: {
+              agentId: {
+                $in: buyingGroupIds
+              }
+            }
+          }
+        })
+      }
 
       return queries
     },
@@ -159,7 +146,8 @@ export default compose(
         relatedAgent: prevRelatedAgent,
         agentType: prevAgentType,
         products: prevProducts,
-        memberAgentIds: prevMemberAgentIds
+        memberAgentIds: prevMemberAgentIds,
+        buyingGroupIds: prevBuyingGroupIds
       } = prevProps.selected
 
       const {
@@ -167,7 +155,8 @@ export default compose(
         relatedAgent,
         agentType,
         products,
-        memberAgentIds
+        memberAgentIds,
+        buyingGroupIds
       } = props.selected
 
       const prevProductIds = getProductIds(prevProducts)
@@ -178,12 +167,13 @@ export default compose(
       if (isNil(prevAgentType) && not(isNil(agentType))) return true
       if (!equals(prevProductIds, productIds)) return true
       if (!equals(prevMemberAgentIds, memberAgentIds)) return true
+      if (!equals(prevBuyingGroupIds, buyingGroupIds)) return true
 
       return false
     }
   })
 )(props => {
-  const { currentProfile, relatedAgent, agentType, resourceTypes, actions } = props
+  const { currentProfile, relatedAgent, agentType, resourceTypes, actions, buyingGroupProfiles } = props
 
   if (isNil(currentProfile)) {
     return null
@@ -241,6 +231,7 @@ export default compose(
     isEditing: true,
     agent: relatedAgent,
     agentType: agentType,
-    resourceTypes: resourceTypes
+    resourceTypes: resourceTypes,
+    currentAgentGroupProfiles: buyingGroupProfiles
   })
 })
