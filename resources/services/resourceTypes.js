@@ -18,7 +18,7 @@ module.exports = function () {
 // TODO: IK: not clear to me what the ideal protection is for CUPR... when a resource is created it doesn't necessarily need an existing product, so at the moment it's just restricted to any group admins (not ideal)
 const hooks = {
   before: {
-    // all: authenticate('jwt'),
+    all: authenticate('jwt'),
     find: restrictToCurrentUserGroupsSuppliersProducts,
     get: restrictToCurrentUserGroupsSuppliersProducts,
     create: restrictToAnyGroupAdmin,
