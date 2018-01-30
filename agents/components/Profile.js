@@ -7,6 +7,7 @@ import { compose, withState, withHandlers } from 'recompose'
 import h from 'react-hyperscript'
 import { FormattedMessage } from 'dogstack/intl'
 import { required, email } from '@root-systems/redux-form-validators'
+import { Link } from 'react-router-dom'
 
 import styles from '../styles/Profile'
 import AvatarField from '../../app/components/AvatarField'
@@ -97,7 +98,12 @@ function Profile (props) {
   }
 
   const renderCurrentAgentGroupProfile = (profile) => {
-    return h('li', profile.name)
+    return h(Link, {
+      className: styles.link,
+      to: `/p/${profile.id}`
+    }, [
+      h('li', profile.name)
+    ])
   }
 
   return h('form', {
