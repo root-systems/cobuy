@@ -28,7 +28,7 @@ export default compose(
     },
     query: (props) => {
       var queries = []
-      const { currentProfile, relatedAgent, agentType, products } = props.selected
+      const { currentProfile, relatedAgent, agentType, products, memberAgentIds } = props.selected
 
       const { profileId } = props.match.params
 
@@ -48,6 +48,7 @@ export default compose(
         })
       }
 
+      // TODO: GK: these queries could occur once we have currentProfile?
       if (relatedAgent) {
         queries.push({
           service: 'relationships',
@@ -85,6 +86,35 @@ export default compose(
             query: {
               id: {
                 $in: getResourceTypeIds(products)
+              }
+            }
+          }
+        })
+      }
+
+      if (agentType === 'group' && !isEmpty(memberAgentIds)) {
+        queries.push({
+          service: 'agents',
+          id: {
+            $in: memberAgentIds
+          }
+        })
+        queries.push({
+          service: 'profiles',
+          params: {
+            query: {
+              agentId: {
+                $in: memberAgentIds
+              }
+            }
+          }
+        })
+        queries.push({
+          service: 'credentials',
+          params: {
+            query: {
+              agentId: {
+                $in: memberAgentIds
               }
             }
           }
@@ -132,14 +162,16 @@ export default compose(
         currentProfile: prevCurrentProfile,
         relatedAgent: prevRelatedAgent,
         agentType: prevAgentType,
-        products: prevProducts
+        products: prevProducts,
+        memberAgentIds: prevMemberAgentIds
       } = prevProps.selected
 
       const {
         currentProfile,
         relatedAgent,
         agentType,
-        products
+        products,
+        memberAgentIds
       } = props.selected
 
       const prevProductIds = getProductIds(prevProducts)
@@ -149,12 +181,13 @@ export default compose(
       if (isNil(prevRelatedAgent) && not(isNil(relatedAgent))) return true
       if (isNil(prevAgentType) && not(isNil(agentType))) return true
       if (!equals(prevProductIds, productIds)) return true
+      if (!equals(prevMemberAgentIds, memberAgentIds)) return true
 
       return false
     }
   })
 )(props => {
-  const { currentProfile, relatedAgent, agentType, products, resourceTypes } = props
+  const { currentProfile, relatedAgent, agentType, resourceTypes } = props
 
   if (isNil(currentProfile)) {
     return null

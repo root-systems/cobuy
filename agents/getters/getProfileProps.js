@@ -6,6 +6,7 @@ import getRelationshipsForThisAgent from './getRelationshipsForThisAgent'
 import getTypeForThisAgent from './getTypeForThisAgent'
 import getCurrentSupplierProductsBasedOnProfile from '../../supply/getters/getCurrentSupplierProductsBasedOnProfile'
 import getResourceTypesBasedOnProfile from '../../resources/getters/getResourceTypesBasedOnProfile'
+import getRelatedMemberAgentIds from './getRelatedMemberAgentIds'
 
 const getProfileProps = createStructuredSelector({
   currentProfile: getCurrentProfile,
@@ -13,7 +14,8 @@ const getProfileProps = createStructuredSelector({
   relationshipsForThisAgent: getRelationshipsForThisAgent,
   agentType: getTypeForThisAgent,
   products: getCurrentSupplierProductsBasedOnProfile,
-  resourceTypes: getResourceTypesBasedOnProfile
+  resourceTypes: getResourceTypesBasedOnProfile,
+  memberAgentIds: getRelatedMemberAgentIds
 })
 
 export default getProfileProps
