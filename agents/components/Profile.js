@@ -30,7 +30,8 @@ function Profile (props) {
     agentType,
     agent = {},
     currentAgentGroupProfiles = [],
-    resourceTypes = []
+    resourceTypes = [],
+    isSetupGroupTask
   } = props
   const { members = [] } = agent
   const saveProfile = (nextProfile) => {
@@ -235,9 +236,9 @@ function Profile (props) {
       ])
          : null
     ]),
-    isMyProfile ? renderMyGroups() : null,
-    isSupplierProfile ? renderMyResourceTypes() : null,
-    isBuyingGroupProfile ? renderMyMembers() : null
+    !isSetupGroupTask && isMyProfile ? renderMyGroups() : null,
+    !isSetupGroupTask && isSupplierProfile ? renderMyResourceTypes() : null,
+    !isSetupGroupTask && isBuyingGroupProfile ? renderMyMembers() : null
   ])
 }
 
