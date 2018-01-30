@@ -48,6 +48,7 @@ export default {
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
+    alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center'
   })

@@ -10,6 +10,7 @@ import { required, email } from '@root-systems/redux-form-validators'
 
 import styles from '../styles/Profile'
 import AvatarField from '../../app/components/AvatarField'
+import MemberInvites from './MemberInvites'
 
 const iconByAgentType = {
   my: 'user',
@@ -18,8 +19,8 @@ const iconByAgentType = {
 }
 
 function Profile (props) {
-  const { styles, isEditing, updateProfile, handleSubmit, agentType, agent, currentAgentGroupProfiles = [], resourceTypes = [] } = props
-
+  const { styles, isEditing, updateProfile, handleSubmit, agentType, agent = {}, currentAgentGroupProfiles = [], resourceTypes = [] } = props
+  const { members = [] } = agent
   const saveProfile = (nextProfile) => {
     updateProfile(nextProfile)
   }
@@ -27,6 +28,54 @@ function Profile (props) {
   const isSupplierProfile = agentType === 'supplier'
   const isMyProfile = agentType === 'my'
   const isBuyingGroupProfile = agentType === 'group'
+
+  const renderMyMembers = () => {
+    console.log('members', members)
+    if (isEmpty(members)) return null
+    return h('div', { className: styles.myGroupsContainer },
+      h(MemberInvites, {
+        agent: agent,
+        initialValues: {
+          members
+        },
+        removeMember: (agentId) => {
+          return
+          // actions.agents.remove(agentId)
+        },
+        createMembers: (membersData) => {
+          return
+          // return membersData.members.map((member) => {
+          //   if (isEmpty(member)) return null
+          //
+          //   const { agent, roles } = member
+          //   const {
+          //     id,
+          //     type = 'person',
+          //     profile = {},
+          //     credential = {}
+          //   } = agent
+          //   const relationships = rolesToRelationships(roles)
+          //   const contextAgentId = consumerAgent.id
+          //
+          //   const agentData = {
+          //     id,
+          //     type,
+          //     profile,
+          //     credential,
+          //     relationships,
+          //     contextAgentId
+          //   }
+          //
+          //   if (isNil(agentData.id)) {
+          //     actions.agents.create(agentData)
+          //   } else {
+          //     actions.agents.patch(id, agentData)
+          //   }
+          // })
+        }
+      })
+    )
+  }
 
   const renderMyResourceTypes = () => {
     if (isEmpty(resourceTypes)) return null
@@ -205,6 +254,7 @@ function Profile (props) {
     ]),
     isMyProfile ? renderMyGroups() : null,
     isSupplierProfile ? renderMyResourceTypes() : null,
+    isBuyingGroupProfile ? renderMyMembers() : null
   ])
 }
 
