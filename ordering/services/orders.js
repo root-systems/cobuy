@@ -27,14 +27,14 @@ const hooks = {
     find: restrictToCurrentUserGroups,
     get: restrictToCurrentUserGroups,
     create: [
-      restrictToGroupAdmin, // TODO: IK: throwing an error in this hook doesn't stop the remaining hooks from running?
       getCurrentUser,
       iff(hasNoConsumerAgent, createConsumerAgent),
       iff(hasNoSupplierAgent, createSupplierAgent),
       iff(hasNoSupplierRelation, createSupplierRelation),
       iff(groupHasNoAdminRelation, createGroupAdminRelation), // TODO this should be agent.create hook
       iff(userIsNotMemberOfGroup, createGroupMemberRelation), // TODO this should be agent.create hook
-      iff(hasNoAdminAgent, createAdminAgent)
+      iff(hasNoAdminAgent, createAdminAgent),
+      restrictToGroupAdmin, // IK: this hook must run last as long as creating an order is the segue into creating groups / suppliers as per hooks above
     ],
     update: restrictToOrderOrGroupAdmin,
     patch: restrictToOrderOrGroupAdmin,

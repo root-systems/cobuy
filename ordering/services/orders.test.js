@@ -106,9 +106,9 @@ test.serial('Orders.create: create new order successfully', t => {
 // TODO: IK: need a working test client that provides auth token for this test
 // can manually test by temp removing authenticate('jwt') from service
 test.serial("Orders.create: can't create new order if not group admin", t => {
-  const params = { credential, provider: 'rest' }
+  const params = { credential: otherCredential, provider: 'rest' }
   return t.throws(app.service('orders').create({
-    consumerAgentId: 10,
+    consumerAgentId: 4,
     supplierAgentId: 11,
     adminAgentId: 12,
     name: 'order5'
