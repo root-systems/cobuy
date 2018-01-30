@@ -46,15 +46,11 @@ export default compose(
             }
           }
         })
-      }
-
-      // TODO: GK: these queries could occur once we have currentProfile?
-      if (relatedAgent) {
         queries.push({
           service: 'relationships',
           params: {
             query: {
-              targetId: relatedAgent.id
+              targetId: currentProfile.agentId
             }
           }
         })
@@ -62,7 +58,7 @@ export default compose(
           service: 'relationships',
           params: {
             query: {
-              sourceId: relatedAgent.id
+              sourceId: currentProfile.agentId
             }
           }
         })
