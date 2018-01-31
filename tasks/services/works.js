@@ -6,6 +6,8 @@ import welcomeMjml from '../../app/mjml/welcome'
 import orderMjml from '../../app/mjml/order'
 
 const feathersKnex = require('feathers-knex')
+import { hooks as authHooks } from 'feathers-authentication'
+const { authenticate } = authHooks
 const { iff } = require('feathers-hooks-common')
 
 module.exports = function () {
@@ -21,6 +23,7 @@ module.exports = function () {
 
 const hooks = {
   before: {
+    all: authenticate('jwt'),
   },
   after: {
     create: [
