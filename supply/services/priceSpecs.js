@@ -34,6 +34,10 @@ function restrictToCurrentUserGroupsSuppliersProducts (hook) {
   // IK: NB. this is subtly different to the hook of the same name in resourceTypes service, could surely be refactored together
   // use $in syntax to restrict arrays of results to certain values
   // by adding conditions to the query params
+  // If it was an internal call then skip this hook
+  if (!hook.params.provider) {
+    return hook;
+  }
   const { agentId } = hook.params.credential
   return hook.app.service('relationships').find({
     query: {
