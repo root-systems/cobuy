@@ -106,135 +106,138 @@ function Profile (props) {
       h('li', profile.name)
     ])
   }
-
-  return h('form', {
-    className: styles.container,
-    onSubmit: handleSubmit(saveProfile)
+  return h('div', {
+    className: styles.container
   }, [
-    h('p', {
-      className: styles.intro
+    h('form', {
+      className: styles.formContainer,
+      onSubmit: handleSubmit(saveProfile)
     }, [
-      h(FormattedMessage, {
-        id: 'agents.profile',
-        className: styles.labelText,
-        values: {
-          agentType
-        }
-      })
-    ]),
-    h('div', {
-      className: styles.innerContainer
-    }, [
-      h('div', {
-        className: styles.avatarContainer
-      }, [
-        h(Field, {
-          name: 'avatar',
-          component: AvatarField,
-          isEditingProfile: isEditing,
-          agent: agent,
-          icon: iconByAgentType[agentType]
-        })
-      ]),
-      h('div', {
-        className: styles.infoContainer
-      }, [
-        h(Field, {
-          name: 'name',
-          floatingLabelText: (
-            h(FormattedMessage, {
-              id: 'agents.nameLabel',
-              className: styles.labelText
-            })
-          ),
-          component: TextField,
-          fullWidth: true,
-          disabled: not(isEditing),
-          validate: required()
-        }),
-        h(Field, {
-          name: 'description',
-          floatingLabelText: (
-            h(FormattedMessage, {
-              id: 'agents.descriptionLabel',
-              className: styles.labelText
-            })
-          ),
-          component: TextField,
-          fullWidth: true,
-          multiLine: true,
-          rowsMax: 5,
-          disabled: not(isEditing)
-        }),
-        h(Field, {
-          name: 'email',
-          floatingLabelText: (
-            h(FormattedMessage, {
-              id: 'agents.email',
-              className: styles.labelText
-            })
-          ),
-          component: TextField,
-          fullWidth: true,
-          disabled: not(isEditing),
-          validate: [required(), email()]
-        }),
-        h(Field, {
-          name: 'phone',
-          floatingLabelText: (
-            h(FormattedMessage, {
-              id: 'agents.phoneLabel',
-              className: styles.labelText
-            })
-          ),
-          component: TextField,
-          fullWidth: true,
-          disabled: not(isEditing)
-        }),
-        h(Field, {
-          name: 'website',
-          floatingLabelText: (
-            h(FormattedMessage, {
-              id: 'agents.website',
-              className: styles.labelText
-            })
-          ),
-          component: TextField,
-          fullWidth: true,
-          disabled: not(isEditing)
-        }),
-        h(Field, {
-          name: 'address',
-          floatingLabelText: (
-            h(FormattedMessage, {
-              id: 'agents.address',
-              className: styles.labelText
-            })
-          ),
-          component: TextField,
-          fullWidth: true,
-          multiLine: true,
-          rowsMax: 5,
-          disabled: not(isEditing),
-          validate: isSupplierProfile ? [required()] : null
-        })
-      ]),
-    ]),
-    h('div', {
-      className: styles.buttonContainer
-    }, [
-      isEditing
-      ? h(RaisedButton, {
-        className: styles.button,
-        type: 'submit',
-        primary: true
+      h('p', {
+        className: styles.intro
       }, [
         h(FormattedMessage, {
-          id: 'agents.saveProfile',
-          className: styles.buttonText
+          id: 'agents.profile',
+          className: styles.labelText,
+          values: {
+            agentType
+          }
         })
-      ])
-         : null
+      ]),
+      h('div', {
+        className: styles.innerContainer
+      }, [
+        h('div', {
+          className: styles.avatarContainer
+        }, [
+          h(Field, {
+            name: 'avatar',
+            component: AvatarField,
+            isEditingProfile: isEditing,
+            agent: agent,
+            icon: iconByAgentType[agentType]
+          })
+        ]),
+        h('div', {
+          className: styles.infoContainer
+        }, [
+          h(Field, {
+            name: 'name',
+            floatingLabelText: (
+              h(FormattedMessage, {
+                id: 'agents.nameLabel',
+                className: styles.labelText
+              })
+            ),
+            component: TextField,
+            fullWidth: true,
+            disabled: not(isEditing),
+            validate: required()
+          }),
+          h(Field, {
+            name: 'description',
+            floatingLabelText: (
+              h(FormattedMessage, {
+                id: 'agents.descriptionLabel',
+                className: styles.labelText
+              })
+            ),
+            component: TextField,
+            fullWidth: true,
+            multiLine: true,
+            rowsMax: 5,
+            disabled: not(isEditing)
+          }),
+          h(Field, {
+            name: 'email',
+            floatingLabelText: (
+              h(FormattedMessage, {
+                id: 'agents.email',
+                className: styles.labelText
+              })
+            ),
+            component: TextField,
+            fullWidth: true,
+            disabled: not(isEditing),
+            validate: [required(), email()]
+          }),
+          h(Field, {
+            name: 'phone',
+            floatingLabelText: (
+              h(FormattedMessage, {
+                id: 'agents.phoneLabel',
+                className: styles.labelText
+              })
+            ),
+            component: TextField,
+            fullWidth: true,
+            disabled: not(isEditing)
+          }),
+          h(Field, {
+            name: 'website',
+            floatingLabelText: (
+              h(FormattedMessage, {
+                id: 'agents.website',
+                className: styles.labelText
+              })
+            ),
+            component: TextField,
+            fullWidth: true,
+            disabled: not(isEditing)
+          }),
+          h(Field, {
+            name: 'address',
+            floatingLabelText: (
+              h(FormattedMessage, {
+                id: 'agents.address',
+                className: styles.labelText
+              })
+            ),
+            component: TextField,
+            fullWidth: true,
+            multiLine: true,
+            rowsMax: 5,
+            disabled: not(isEditing),
+            validate: isSupplierProfile ? [required()] : null
+          })
+        ]),
+      ]),
+      h('div', {
+        className: styles.buttonContainer
+      }, [
+        isEditing
+        ? h(RaisedButton, {
+          className: styles.button,
+          type: 'submit',
+          primary: true
+        }, [
+          h(FormattedMessage, {
+            id: 'agents.saveProfile',
+            className: styles.buttonText
+          })
+        ])
+           : null
+      ]),
     ]),
     !isSetupGroupTask && isMyProfile ? renderMyGroups() : null,
     !isSetupGroupTask && isSupplierProfile ? renderMyResourceTypes() : null,
