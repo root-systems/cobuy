@@ -51,8 +51,8 @@ export default (props) => {
         },
         createMembers: (membersData) => {
           const groupMembersById = indexBy(prop('agentId'))
-          const membersById = groupMembersById(membersData.members)
-          const filterDirtyByInitialValuesComparison = memberData => !equals(memberData, membersById[memberData.agentId])
+          const initialMemberValuesById = groupMembersById(members)
+          const filterDirtyByInitialValuesComparison = memberData => !equals(memberData, initialMemberValuesById[memberData.agentId])
           const dirtyMembers = filter(filterDirtyByInitialValuesComparison, membersData.members)
           return dirtyMembers.map((member) => {
             if (isEmpty(member)) return null

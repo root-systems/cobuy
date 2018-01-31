@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, path, prop, pipe, values, any, forEach, either, not, equals, isEmpty, map } from 'ramda'
+import { isNil, path, prop, pipe, values, any, forEach, either, not, equals, isEmpty, map, indexBy, filter } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 import { push } from 'react-router-redux'
@@ -178,6 +178,7 @@ export default compose(
   })
 )(props => {
   const { currentProfile, relatedAgent, agentType, resourceTypes, actions, buyingGroupProfiles } = props
+  const { members = [] } = relatedAgent
 
   if (isNil(currentProfile)) {
     return null
@@ -192,7 +193,11 @@ export default compose(
       actions.agents.remove(agentId)
     },
     createMembers: (membersData) => {
-      return membersData.members.map((member) => {
+      const groupMembersById = indexBy(prop('agentId'))
+      const initialMemberValuesById = groupMembersById(members)
+      const filterDirtyByInitialValuesComparison = memberData => !equals(memberData, initialMemberValuesById[memberData.agentId])
+      const dirtyMembers = filter(filterDirtyByInitialValuesComparison, membersData.members)
+      return dirtyMembers.map((member) => {
         if (isEmpty(member)) return null
 
         const { agent, roles } = member
