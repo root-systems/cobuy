@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, merge, isEmpty } from 'ramda'
+import { isNil, merge, isEmpty, filter, equals, indexBy, prop } from 'ramda'
 
 import TaskStepper from './TaskStepper'
 import Profile from '../../agents/components/Profile'
@@ -50,7 +50,11 @@ export default (props) => {
           actions.agents.remove(agentId)
         },
         createMembers: (membersData) => {
-          return membersData.members.map((member) => {
+          const groupMembersById = indexBy(prop('agentId'))
+          const membersById = groupMembersById(membersData.members)
+          const filterDirtyByInitialValuesComparison = memberData => !equals(memberData, membersById[memberData.agentId])
+          const dirtyMembers = filter(filterDirtyByInitialValuesComparison, membersData.members)
+          return dirtyMembers.map((member) => {
             if (isEmpty(member)) return null
 
             const { agent, roles } = member
