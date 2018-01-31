@@ -1,4 +1,4 @@
-import { isNil, path, prop, pipe, values, any, forEach, either } from 'ramda'
+import { isNil, path, prop, pipe, values, any, forEach, either, map } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -49,30 +49,38 @@ export default compose(
 
         if (consumerAgent) {
           const { members } = consumerAgent
-          const queryEachMember = forEach(member => {
-            const { agentId } = member
-            queries.push({
-              service: 'agents',
-              id: agentId
-            })
-            queries.push({
-              service: 'profiles',
-              params: {
-                query: {
-                  agentId
+          const getMemberAgentIds = map(prop('agentId'))
+          const memberAgentIds = getMemberAgentIds(members)
+          queries.push({
+            service: 'agents',
+            params: {
+              query: {
+                id: {
+                  $in: memberAgentIds
                 }
               }
-            })
-            queries.push({
-              service: 'credentials',
-              params: {
-                query: {
-                  agentId
-                }
-              }
-            })
+            }
           })
-          queryEachMember(members)
+          queries.push({
+            service: 'profiles',
+            params: {
+              query: {
+                agentId: {
+                  $in: memberAgentIds
+                }
+              }
+            }
+          })
+          queries.push({
+            service: 'credentials',
+            params: {
+              query: {
+                agentId: {
+                  $in: memberAgentIds
+                }
+              }
+            }
+          })
         }
       }
 

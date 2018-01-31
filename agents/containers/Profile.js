@@ -91,8 +91,12 @@ export default compose(
       if (agentType === 'group' && !isEmpty(memberAgentIds)) {
         queries.push({
           service: 'agents',
-          id: {
-            $in: memberAgentIds
+          params: {
+            query: {
+              id: {
+                $in: memberAgentIds
+              }
+            }
           }
         })
         queries.push({
