@@ -1,7 +1,10 @@
 export default {
   container: () => ({
-    // width: '50%',
-    // minWidth: '3rem',
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1
+  }),
+  formContainer: () => ({
     display: 'flex',
     flexDirection: 'column',
     flex: 1
@@ -48,6 +51,7 @@ export default {
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
+    alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center'
   })

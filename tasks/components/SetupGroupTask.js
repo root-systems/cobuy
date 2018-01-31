@@ -35,7 +35,8 @@ export default (props) => {
         },
         agentType: 'group',
         isEditing: true,
-        agent: consumerAgent
+        agent: consumerAgent,
+        isSetupGroupTask: true
       })
     },
     {
