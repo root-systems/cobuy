@@ -47,6 +47,7 @@ export default (props) => {
           members
         },
         removeMember: (memberVal) => {
+          if (isNil(memberVal.agentId)) return
           const memberRelationship = memberRelationships[memberVal.agentId]
           actions.relationships.remove(memberRelationship.id)
         },
