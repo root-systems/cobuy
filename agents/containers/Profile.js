@@ -177,7 +177,7 @@ export default compose(
     }
   })
 )(props => {
-  const { currentProfile, relatedAgent, agentType, resourceTypes, actions, buyingGroupProfiles } = props
+  const { currentProfile, relatedAgent = {}, agentType, resourceTypes, actions, buyingGroupProfiles, memberRelationships } = props
   const { members = [] } = relatedAgent
 
   if (isNil(currentProfile)) {
@@ -189,8 +189,10 @@ export default compose(
     updateProfile: (nextProfile) => {
       actions.profiles.update(relatedAgent.profile.id, nextProfile)
     },
-    removeMember: (agentId) => {
-      actions.agents.remove(agentId)
+    removeMember: (memberVal) => {
+      if (isNil(memberVal.agentId)) return
+      const memberRelationship = memberRelationships[memberVal.agentId]
+      actions.relationships.remove(memberRelationship.id)
     },
     createMembers: (membersData) => {
       const groupMembersById = indexBy(prop('agentId'))
