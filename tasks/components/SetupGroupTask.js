@@ -46,8 +46,9 @@ export default (props) => {
         initialValues: {
           members
         },
-        removeMember: (agentId) => {
-          actions.agents.remove(agentId)
+        removeMember: (memberVal) => {
+          console.log('removeMember memberVal', memberVal)
+          // actions.relationships.remove(agentId)
         },
         createMembers: (membersData) => {
           const groupMembersById = indexBy(prop('agentId'))
