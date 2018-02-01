@@ -1,22 +1,18 @@
 import { createSelector } from 'reselect'
-import { map, filter, values, concat, isNil, isEmpty, groupBy, prop } from 'ramda'
+import { map, filter, values, concat, isNil, isEmpty, indexBy, prop } from 'ramda'
 
-import getRelationshipsState from './getRelationshipsState'
+import getRelationships from './getRelationships'
 import getRelatedAgent from './getRelatedAgent'
 
 export default createSelector(
   getRelatedAgent,
-  getRelationshipsState,
+  getRelationships,
   (relatedAgent, relationships) => {
-    console.log('getter')
     if (isNil(relatedAgent)) return []
     if (isEmpty(relationships)) return []
-    console.log('relatedAgent', relatedAgent)
-    console.log('relationships', relationships)
     const isRelated = n => n.sourceId === relatedAgent.id && n.relationshipType === 'member'
-    const memberRelationships = values(filter(isRelated, relationships))
-    const groupByTargetId = groupBy(prop('targetId'))
-    console.log('getter result', groupByTargetId(memberRelationships))
+    const memberRelationships = filter(isRelated, relationships)
+    const groupByTargetId = indexBy(prop('targetId'))
     return groupByTargetId(memberRelationships)
   }
 )
