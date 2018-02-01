@@ -18,7 +18,7 @@ const rolesToRelationships = (roles = {}) => {
 }
 
 export default (props) => {
-  const { taskPlan, actions } = props
+  const { taskPlan, actions, memberRelationships } = props
   if (isNil(taskPlan)) return null
   const { params: { consumerAgent } } = taskPlan
   if (isNil(consumerAgent)) return null
@@ -47,8 +47,10 @@ export default (props) => {
           members
         },
         removeMember: (memberVal) => {
+          console.log('memberRelationships', memberRelationships)
           console.log('removeMember memberVal', memberVal)
-          // actions.relationships.remove(agentId)
+          const memberRelationship = memberRelationships[memberVal.agentId]
+          actions.relationships.remove(memberRelationship.id)
         },
         createMembers: (membersData) => {
           const groupMembersById = indexBy(prop('agentId'))

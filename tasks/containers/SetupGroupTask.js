@@ -1,4 +1,5 @@
-import { isNil, path, prop, pipe, values, any, forEach, either, map } from 'ramda'
+import h from 'react-hyperscript'
+import { isNil, path, prop, pipe, values, any, forEach, either, map, filter, indexBy, isEmpty } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 
@@ -105,7 +106,27 @@ export default compose(
       return false
     }
   })
-)(SetupGroupTask)
+// )(SetupGroupTask)
+)(props => {
+  const { relationships, taskPlan = {} } = props
+  const { params: { consumerAgentId } } = taskPlan
+  const memberRelationships = getMemberRelationshipsForBuyingGroup(consumerAgentId)(relationships)
+  return h(SetupGroupTask, {
+    memberRelationships: memberRelationships,
+    ...props
+  })
+})
+
+const getMemberRelationshipsForBuyingGroup = (consumerAgentId) => {
+  return (relationships) => {
+    if (isNil(consumerAgentId)) return []
+    if (isEmpty(relationships)) return []
+    const isRelated = n => n.sourceId === consumerAgentId && n.relationshipType === 'member'
+    const memberRelationships = values(filter(isRelated, relationships))
+    const groupByTargetId = indexBy(prop('targetId'))
+    return groupByTargetId(memberRelationships)
+  }
+}
 
 const anyMembersAreNil = pipe(
   prop('members'),

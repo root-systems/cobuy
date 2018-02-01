@@ -8,8 +8,11 @@ export default createSelector(
   getRelatedAgent,
   getRelationshipsState,
   (relatedAgent, relationships) => {
+    console.log('getter')
     if (isNil(relatedAgent)) return []
     if (isEmpty(relationships)) return []
+    console.log('relatedAgent', relatedAgent)
+    console.log('relationships', relationships)
     const isRelated = n => n.sourceId === relatedAgent.id && n.relationshipType === 'member'
     const memberRelationships = values(filter(isRelated, relationships))
     const groupByTargetId = groupBy(prop('targetId'))

@@ -1,7 +1,8 @@
 import { createStructuredSelector } from 'reselect'
 
-import getRelationshipsByMemberAgentId from './getRelationshipsByMemberAgentId'
+// import getRelationshipsByMemberAgentId from '../../agents/getters/getRelationshipsByMemberAgentId'
+import getRelationships from '../../agents/getters/getRelationships'
 
 export default createStructuredSelector({
-  relationshipsByMemberAgentId: getRelationshipsByMemberAgentId
+  relationships: getRelationships
 })
