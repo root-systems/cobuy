@@ -63,9 +63,8 @@ function renderMembers ({ fields, meta: { error, submitFailed }, removeMember, f
               onClick: () => {
                 const memberVal = memberVals[index]
                 const { agentId } = memberVal
-                console.log('row memberVal', memberVal)
                 fields.remove(index)
-                if (not(isNil(memberVal))) removeMember(memberVal)
+                if (not(isNil(agentId))) removeMember(memberVal)
               }
             }, [
               h(FormattedMessage, {
