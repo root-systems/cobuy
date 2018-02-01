@@ -47,8 +47,6 @@ export default (props) => {
           members
         },
         removeMember: (memberVal) => {
-          console.log('memberRelationships', memberRelationships)
-          console.log('removeMember memberVal', memberVal)
           const memberRelationship = memberRelationships[memberVal.agentId]
           actions.relationships.remove(memberRelationship.id)
         },
