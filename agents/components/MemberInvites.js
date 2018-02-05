@@ -13,18 +13,6 @@ import styles from '../styles/MemberInvites'
 function renderMembers ({ fields, meta: { error, submitFailed }, removeMember, formProps }) {
   const { memberVals, styles } = formProps
 
-  // TODO: currently this is an anti-pattern as it occurs within the render cycle
-  // TODO: mikey's idea was to not push state until the first edit to the empty row
-  if (memberVals) {
-    const memberKeys = Object.keys(memberVals)
-    if (memberKeys.length > 0) {
-      const lastMember = memberVals[memberKeys[memberKeys.length - 1]]
-      if (Object.keys(lastMember).length > 0) {
-        fields.push({})
-      }
-    }
-  }
-
   return (
     h('div', {
       className: styles.fieldsContainer
@@ -76,7 +64,7 @@ function renderMembers ({ fields, meta: { error, submitFailed }, removeMember, f
                 const memberVal = memberVals[index]
                 const { agentId } = memberVal
                 fields.remove(index)
-                if (not(isNil(agentId))) removeMember(agentId)
+                if (not(isNil(agentId))) removeMember(memberVal)
               }
             }, [
               h(FormattedMessage, {
