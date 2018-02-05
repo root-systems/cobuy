@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, merge, isEmpty } from 'ramda'
+import { isNil, merge, isEmpty, filter, equals, indexBy, prop } from 'ramda'
 
 import TaskStepper from './TaskStepper'
 import Profile from '../../agents/components/Profile'
@@ -18,7 +18,7 @@ const rolesToRelationships = (roles = {}) => {
 }
 
 export default (props) => {
-  const { taskPlan, actions } = props
+  const { taskPlan, actions, memberRelationships } = props
   if (isNil(taskPlan)) return null
   const { params: { consumerAgent } } = taskPlan
   if (isNil(consumerAgent)) return null
@@ -46,11 +46,16 @@ export default (props) => {
         initialValues: {
           members
         },
-        removeMember: (agentId) => {
-          actions.agents.remove(agentId)
+        removeMember: (memberVal) => {
+          const memberRelationship = memberRelationships[memberVal.agentId]
+          actions.relationships.remove(memberRelationship.id)
         },
         createMembers: (membersData) => {
-          return membersData.members.map((member) => {
+          const groupMembersById = indexBy(prop('agentId'))
+          const initialMemberValuesById = groupMembersById(members)
+          const filterDirtyByInitialValuesComparison = memberData => !equals(memberData, initialMemberValuesById[memberData.agentId])
+          const dirtyMembers = filter(filterDirtyByInitialValuesComparison, membersData.members)
+          return dirtyMembers.map((member) => {
             if (isEmpty(member)) return null
 
             const { agent, roles } = member

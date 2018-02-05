@@ -1,5 +1,5 @@
 import h from 'react-hyperscript'
-import { isNil, path, prop, pipe, values, any, forEach, either, not, equals, isEmpty, map } from 'ramda'
+import { isNil, path, prop, pipe, values, any, forEach, either, not, equals, isEmpty, map, indexBy, filter } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose } from 'recompose'
 import { push } from 'react-router-redux'
@@ -91,8 +91,12 @@ export default compose(
       if (agentType === 'group' && !isEmpty(memberAgentIds)) {
         queries.push({
           service: 'agents',
-          id: {
-            $in: memberAgentIds
+          params: {
+            query: {
+              id: {
+                $in: memberAgentIds
+              }
+            }
           }
         })
         queries.push({
@@ -173,7 +177,8 @@ export default compose(
     }
   })
 )(props => {
-  const { currentProfile, relatedAgent, agentType, resourceTypes, actions, buyingGroupProfiles } = props
+  const { currentProfile, relatedAgent = {}, agentType, resourceTypes, actions, buyingGroupProfiles, memberRelationships } = props
+  const { members = [] } = relatedAgent
 
   if (isNil(currentProfile)) {
     return null
@@ -184,11 +189,16 @@ export default compose(
     updateProfile: (nextProfile) => {
       actions.profiles.update(relatedAgent.profile.id, nextProfile)
     },
-    removeMember: (agentId) => {
-      actions.agents.remove(agentId)
+    removeMember: (memberVal) => {
+      const memberRelationship = memberRelationships[memberVal.agentId]
+      actions.relationships.remove(memberRelationship.id)
     },
     createMembers: (membersData) => {
-      return membersData.members.map((member) => {
+      const groupMembersById = indexBy(prop('agentId'))
+      const initialMemberValuesById = groupMembersById(members)
+      const filterDirtyByInitialValuesComparison = memberData => !equals(memberData, initialMemberValuesById[memberData.agentId])
+      const dirtyMembers = filter(filterDirtyByInitialValuesComparison, membersData.members)
+      return dirtyMembers.map((member) => {
         if (isEmpty(member)) return null
 
         const { agent, roles } = member
