@@ -1,7 +1,14 @@
 const feathersKnex = require('feathers-knex')
+import { hooks as authHooks } from 'feathers-authentication'
+const { authenticate } = authHooks
 const { iff, iffElse } = require('feathers-hooks-common')
+import errors from 'feathers-errors'
 import { pipe, equals, length, isNil, isEmpty, map, any, find, not, prop } from 'ramda'
 import * as taskRecipes from '../../tasks/data/recipes'
+
+import restrictToCurrentUserGroups from '../../lib/hooks/restrictToCurrentUserGroups'
+import restrictToGroupAdmin from '../../lib/hooks/restrictToGroupAdmin'
+import restrictToOrderOrGroupAdmin from '../../lib/hooks/restrictToOrderOrGroupAdmin'
 
 module.exports = function () {
   const app = this
@@ -16,6 +23,9 @@ module.exports = function () {
 
 const hooks = {
   before: {
+    all: authenticate('jwt'),
+    find: restrictToCurrentUserGroups,
+    get: restrictToCurrentUserGroups,
     create: [
       getCurrentUser,
       iff(hasNoConsumerAgent, createConsumerAgent),
@@ -23,15 +33,18 @@ const hooks = {
       iff(hasNoSupplierRelation, createSupplierRelation),
       iff(groupHasNoAdminRelation, createGroupAdminRelation), // TODO this should be agent.create hook
       iff(userIsNotMemberOfGroup, createGroupMemberRelation), // TODO this should be agent.create hook
-      iff(hasNoAdminAgent, createAdminAgent)
-    ]
+      iff(hasNoAdminAgent, createAdminAgent),
+      restrictToGroupAdmin, // IK: this hook must run last as long as creating an order is the segue into creating groups / suppliers as per hooks above
+    ],
+    update: restrictToOrderOrGroupAdmin,
+    patch: restrictToOrderOrGroupAdmin,
+    remove: restrictToOrderOrGroupAdmin
   },
   after: {
     create: [
       iffElse(hasNotCompletedGroupOrSupplierProfile, createCompleteOrderSetupWithPreReqsTaskPlan, createCompleteOrderSetupTaskPlan)
     ]
-  },
-  error: {}
+  }
 }
 
 function getCurrentUser (hook) {

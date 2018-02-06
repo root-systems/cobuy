@@ -1,4 +1,6 @@
 const feathersKnex = require('feathers-knex')
+import { hooks as authHooks } from 'feathers-authentication'
+const { authenticate } = authHooks
 import { isEmpty, ifElse, is, assoc, prop, map, pipe, omit, __ } from 'ramda'
 const { iff, validateSchema } = require('feathers-hooks-common')
 const taskPlanSchema = require('../schemas/taskPlan')
@@ -21,6 +23,7 @@ module.exports = function () {
 
 const hooks = {
   before: {
+    all: authenticate('jwt'),
     find: [
       queryByOrder
     ],

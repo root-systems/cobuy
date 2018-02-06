@@ -9,7 +9,7 @@ module.exports = function () {
 const hooks = {
   after: {
     create: [
-      createTaskPlan
+      createTaskPlan // TODO: IK: we probably don't want this to happen after every credential create, if agents may have multiple credentials
     ]
   }
 }

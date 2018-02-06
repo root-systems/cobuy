@@ -1,4 +1,6 @@
 const feathersKnex = require('feathers-knex')
+import { hooks as authHooks } from 'feathers-authentication'
+const { authenticate } = authHooks
 const { pipe, path, isNil } = require('ramda')
 const { iff } = require('feathers-hooks-common')
 
@@ -20,6 +22,7 @@ const hasNoResourceType = pipe(
 
 const hooks = {
   before: {
+    all: authenticate('jwt'),
     create: [
       iff(hasNoResourceType,
         createResourceType
