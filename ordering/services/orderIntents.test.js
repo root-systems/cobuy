@@ -102,7 +102,7 @@ test.serial('OrderIntents.create: create new intent successfully', t => {
 
 test.serial('OrderIntents.find: may only find intents that relate to groups of current user', t => {
   // simulate client authentication by just passing the credential in params
-  const params = { credential, query: {} }
+  const params = { credential, query: {}, provider: 'rest' }
   return app.service('orderIntents').find(params)
   .then(intents => {
     const expected = [
@@ -126,7 +126,7 @@ test.serial('OrderIntents.find: may only find intents that relate to groups of c
 })
 
 test.serial('OrderIntents.find: omit unauthorised results if directly specified by orderId', t => {
-  const params = { credential, query: { orderId: 99 } }
+  const params = { credential, query: { orderId: 99 }, provider: 'rest' }
   return app.service('orderIntents').find(params)
   .then(intents => {
     t.deepEqual(intents, [])
@@ -134,7 +134,7 @@ test.serial('OrderIntents.find: omit unauthorised results if directly specified 
 })
 
 test.serial('OrderIntents.get: can get authorised result', t => {
-  const params = { credential }
+  const params = { credential, provider: 'rest' }
   // TODO: IK: figure out how to reset the incrementing id after each test
   return app.service('orderIntents').get(12, params)
   .then((intent) => {
@@ -148,7 +148,7 @@ test.serial('OrderIntents.get: can get authorised result', t => {
 })
 
 test.serial('OrderIntents.get: omit unauthorised results via get', t => {
-  const params = { credential }
+  const params = { credential, provider: 'rest' }
   return t.throws(app.service('orderIntents').get(16, params))
 })
 

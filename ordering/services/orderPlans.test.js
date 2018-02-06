@@ -86,7 +86,7 @@ test.serial('OrderPlans.create: create new plan successfully', t => {
 
 test.serial('OrderPlans.find: may only find plans that relate to groups of current user', t => {
   // simulate client authentication by just passing the credential in params
-  const params = { credential, query: {} }
+  const params = { credential, query: {}, provider: 'rest' }
   return app.service('orderPlans').find(params)
   .then(plans => {
     const expected = [
@@ -110,7 +110,7 @@ test.serial('OrderPlans.find: may only find plans that relate to groups of curre
 })
 
 test.serial('OrderPlans.find: omit unauthorised results if directly specified by orderId', t => {
-  const params = { credential, query: { orderId: 99 } }
+  const params = { credential, query: { orderId: 99 }, provider: 'rest' }
   return app.service('orderPlans').find(params)
   .then(plans => {
     t.deepEqual(plans, [])
@@ -118,7 +118,7 @@ test.serial('OrderPlans.find: omit unauthorised results if directly specified by
 })
 
 test.serial('OrderPlans.get: can get authorised result', t => {
-  const params = { credential }
+  const params = { credential, provider: 'rest' }
   // TODO: IK: figure out how to reset the incrementing id after each test
   return app.service('orderPlans').get(12, params)
   .then((plan) => {
@@ -132,15 +132,15 @@ test.serial('OrderPlans.get: can get authorised result', t => {
 })
 
 test.serial('OrderPlans.get: omit unauthorised results via get', t => {
-  const params = { credential }
+  const params = { credential, provider: 'rest' }
   return t.throws(app.service('orderPlans').get(16, params))
 })
 
-// TODO: IK: not sure how to create feathers client correctly to test authentication-related hooks for these tests below
-test.todo("OrderPlans.create: can't create new plan if external provider")
-test.todo("OrderPlans.update: can update current user plan")
-test.todo("OrderPlans.update: can't update a plan for an agentId that isn't current user id")
-test.todo("OrderPlans.patch: can patch current user plan")
-test.todo("OrderPlans.patch: can't patch a plan for an agentId that isn't current user id")
-test.todo("OrderPlans.remove: can remove current user plan")
-test.todo("OrderPlans.remove: can't remove a plan for an agentId that isn't current user id")
+// // TODO: IK: not sure how to create feathers client correctly to test authentication-related hooks for these tests below
+// test.todo("OrderPlans.create: can't create new plan if external provider")
+// test.todo("OrderPlans.update: can update current user plan")
+// test.todo("OrderPlans.update: can't update a plan for an agentId that isn't current user id")
+// test.todo("OrderPlans.patch: can patch current user plan")
+// test.todo("OrderPlans.patch: can't patch a plan for an agentId that isn't current user id")
+// test.todo("OrderPlans.remove: can remove current user plan")
+// test.todo("OrderPlans.remove: can't remove a plan for an agentId that isn't current user id")
