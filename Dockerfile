@@ -3,8 +3,10 @@ FROM node:8
 MAINTAINER Michael Williams <michael.williams@enspiral.com>
 
 USER root
-RUN mkdir /home/node/.npm-global ; \
-chown -R node:node /home/node/
+RUN \
+  mkdir /home/node/.npm-global ; \
+  mkdir /home/node/app/ ; \
+  chown -R node:node /home/node/
 ENV PATH=/home/node/.npm-global/bin:$PATH
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
@@ -14,9 +16,9 @@ WORKDIR /home/node/app
 
 ARG NODE_ENV=development
 ENV NODE_ENV $NODE_ENV
-COPY package.json /home/node/app/
-RUN npm install && npm cache clean
-COPY . /home/node/app
+COPY --chown=node:node package.json /home/node/app/
+RUN npm install && npm cache clean --force
+COPY --chown=node:node . /home/node/app
 
 CMD ["npm", "start"]
 
