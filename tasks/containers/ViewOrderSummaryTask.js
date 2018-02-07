@@ -5,7 +5,7 @@ import { compose } from 'recompose'
 import getViewOrderSummaryTaskProps from '../getters/getViewOrderSummaryTaskProps'
 import ViewOrderSummaryTask from '../components/ViewOrderSummaryTask'
 
-import { orders, orderPlans, priceSpecs, products, resourceTypes } from '../../actions'
+import { orders, orderPlans, priceSpecs, products, resourceTypes, orderIntents } from '../../actions'
 import { agents, profiles } from 'dogstack-agents/actions'
 
 import anyOrderPlansMissingPriceSpecs from '../util/anyOrderPlansMissingPriceSpecs'
@@ -21,6 +21,7 @@ export default compose(
     actions: {
       orders,
       orderPlans,
+      orderIntents,
       priceSpecs,
       products,
       resourceTypes,
@@ -30,7 +31,13 @@ export default compose(
     query: (props) => {
       var queries = []
       const { taskPlan, selected } = props
-      const { currentOrderOrderPlansByAgent } = selected
+      const { currentOrderOrderPlansByAgent, currentOrderOrderIntentsByAgent } = selected
+
+      console.log('selected on query is: ', selected)
+
+      // order has been commited/closed if order plans exist
+      const orderInfoByAgent = !isEmpty(currentOrderOrderPlansByAgent) ? currentOrderOrderPlansByAgent
+                                                                       : currentOrderOrderIntentsByAgent
 
       const getPriceSpecIds = pipe(
         values,
@@ -65,15 +72,24 @@ export default compose(
             }
           }
         })
-      }
 
-      if (!isEmpty(currentOrderOrderPlansByAgent)) {
+        queries.push({
+          service: 'orderIntents',
+          params: {
+            query: {
+              orderId
+            }
+          }
+        })
+      }
+      if (!isEmpty(orderInfoByAgent)) {
+        console.log('orderInfo is not empty')
         queries.push({
           service: 'priceSpecs',
           params: {
             query: {
               id: {
-                $in: getPriceSpecIds(currentOrderOrderPlansByAgent)
+                $in: getPriceSpecIds(orderInfoByAgent)
               }
             }
           }
@@ -91,7 +107,7 @@ export default compose(
           params: {
             query: {
               id: {
-                $in: getAgentIds(currentOrderOrderPlansByAgent)
+                $in: getAgentIds(orderInfoByAgent)
               }
             }
           }
@@ -101,33 +117,33 @@ export default compose(
           params: {
             query: {
               id: {
-                $in: getProductIds(currentOrderOrderPlansByAgent)
+                $in: getProductIds(orderInfoByAgent)
               }
             }
           }
         })
       }
 
-      if (anyOrderPlansMissingAgentProfiles(currentOrderOrderPlansByAgent)) {
+      if (anyOrderPlansMissingAgentProfiles(orderInfoByAgent)) {
         queries.push({
           service: 'profiles',
           params: {
             query: {
               agentId: {
-                $in: getAgentIds(currentOrderOrderPlansByAgent)
+                $in: getAgentIds(orderInfoByAgent)
               }
             }
           }
         })
       }
 
-      if (anyOrderPlansMissingProductResourceTypes(currentOrderOrderPlansByAgent)) {
+      if (anyOrderPlansMissingProductResourceTypes(orderInfoByAgent)) {
         queries.push({
           service: 'resourceTypes',
           params: {
             query: {
               id: {
-                $in: getResourceTypeIds(currentOrderOrderPlansByAgent)
+                $in: getResourceTypeIds(orderInfoByAgent)
               }
             }
           }
@@ -140,18 +156,22 @@ export default compose(
       if (status.isPending) return false
 
       const { taskPlan } = props.ownProps
-      const { currentOrderOrderPlansByAgent } = props.selected
+      const { currentOrderOrderPlansByAgent, currentOrderOrderIntentsByAgent } = props.selected
+
+      console.log('orderPlans: ', currentOrderOrderPlansByAgent)
+      console.log('orderIntents: ', currentOrderOrderIntentsByAgent)
 
       // wait for task plan before re-query
       if (isNil(taskPlan)) return false
 
-      if (isEmpty(currentOrderOrderPlansByAgent)) return true
-      if (anyOrderPlansMissingPriceSpecs(currentOrderOrderPlansByAgent)) return true
-      if (anyOrderPlansMissingAgents(currentOrderOrderPlansByAgent)) return true
-      if (anyOrderPlansMissingProducts(currentOrderOrderPlansByAgent)) return true
-      if (anyOrderPlansMissingAgentProfiles(currentOrderOrderPlansByAgent)) return true
-      if (anyOrderPlansMissingProductResourceTypes(currentOrderOrderPlansByAgent)) return true
-
+      console.log('is everything empty?: ', (isEmpty(currentOrderOrderPlansByAgent) && isEmpty(currentOrderOrderIntentsByAgent)))
+      if (isEmpty(currentOrderOrderPlansByAgent) && isEmpty(currentOrderOrderIntentsByAgent)) return true
+      if (anyOrderPlansMissingPriceSpecs(currentOrderOrderPlansByAgent) && anyOrderPlansMissingPriceSpecs(currentOrderOrderIntentsByAgent)) return true
+      if (anyOrderPlansMissingAgents(currentOrderOrderPlansByAgent) && anyOrderPlansMissingAgents(currentOrderOrderIntentsByAgent)) return true
+      if (anyOrderPlansMissingProducts(currentOrderOrderPlansByAgent) && anyOrderPlansMissingProducts(currentOrderOrderIntentsByAgent)) return true
+      if (anyOrderPlansMissingAgentProfiles(currentOrderOrderPlansByAgent) && anyOrderPlansMissingAgentProfiles(currentOrderOrderIntentsByAgent)) return true
+      if (anyOrderPlansMissingProductResourceTypes(currentOrderOrderPlansByAgent) && anyOrderPlansMissingProductResourceTypes(currentOrderOrderIntentsByAgent)) return true
+      
       return false
     }
   })

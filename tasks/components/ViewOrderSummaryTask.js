@@ -11,12 +11,13 @@ import anyOrderPlansMissingAgentProfiles from '../util/anyOrderPlansMissingAgent
 import anyOrderPlansMissingProductResourceTypes from '../util/anyOrderPlansMissingProductResourceTypes'
 
 export default (props) => {
-  const { currentOrderOrderPlansByAgent } = props
-  if (isEmpty(currentOrderOrderPlansByAgent)) return null
-  if (anyOrderPlansMissingPriceSpecs(currentOrderOrderPlansByAgent)) return null
-  if (anyOrderPlansMissingAgents(currentOrderOrderPlansByAgent)) return null
-  if (anyOrderPlansMissingProducts(currentOrderOrderPlansByAgent)) return null
-  if (anyOrderPlansMissingAgentProfiles(currentOrderOrderPlansByAgent)) return null
-  if (anyOrderPlansMissingProductResourceTypes(currentOrderOrderPlansByAgent)) return null
+  console.log('view order summary task props is: ', props)
+  const { currentOrderOrderPlansByAgent, currentOrderOrderIntentsByAgent } = props
+  if (isEmpty(currentOrderOrderPlansByAgent) && isEmpty(currentOrderOrderIntentsByAgent)) return null
+  if (anyOrderPlansMissingPriceSpecs(currentOrderOrderPlansByAgent) && anyOrderPlansMissingPriceSpecs(currentOrderOrderIntentsByAgent)) return null
+  if (anyOrderPlansMissingAgents(currentOrderOrderPlansByAgent) && anyOrderPlansMissingAgents(currentOrderOrderIntentsByAgent)) return null
+  if (anyOrderPlansMissingProducts(currentOrderOrderPlansByAgent) && anyOrderPlansMissingProducts(currentOrderOrderIntentsByAgent)) return null
+  if (anyOrderPlansMissingAgentProfiles(currentOrderOrderPlansByAgent) && anyOrderPlansMissingAgentProfiles(currentOrderOrderIntentsByAgent)) return null
+  if (anyOrderPlansMissingProductResourceTypes(currentOrderOrderPlansByAgent) && anyOrderPlansMissingProductResourceTypes(currentOrderOrderIntentsByAgent)) return null
   return h(OrderSummary, props)
 }
