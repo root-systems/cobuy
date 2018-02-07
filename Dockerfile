@@ -12,7 +12,7 @@ USER node
 
 WORKDIR /usr/src/app
 
-ARG NODE_ENV
+ARG NODE_ENV=development
 ENV NODE_ENV $NODE_ENV
 COPY package.json /home/node/app/
 RUN npm install && npm cache clean
@@ -20,5 +20,5 @@ COPY . /home/node/app
 
 CMD ["npm", "start"]
 
-#ARG PORT
-EXPOSE 5000
+ARG PORT=5000
+EXPOSE $PORT
