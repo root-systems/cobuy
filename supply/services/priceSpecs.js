@@ -4,6 +4,8 @@ import { hooks as authHooks } from 'feathers-authentication'
 const { authenticate } = authHooks
 import { prop, merge, difference, without, contains, isEmpty } from 'ramda'
 
+import restrictToAnyGroupAdmin from '../../lib/hooks/restrictToAnyGroupAdmin'
+
 module.exports = function () {
   const app = this
   const db = app.get('db')
@@ -103,25 +105,5 @@ function restrictToCurrentUserGroupsSuppliersProducts (hook) {
       return hook
     }
     throw new Error(`couldn't restrict ${hook.service} query correctly for method ${hook.method}`)
-  })
-}
-
-function restrictToAnyGroupAdmin (hook) {
-  // If it was an internal call then skip this hook
-  if (!hook.params.provider) {
-    return hook;
-  }
-  const { agentId } = hook.params.credential
-  return hook.app.service('relationships').find({
-    query: {
-      targetId: agentId,
-      relationshipType: 'admin'
-    }
-  })
-  .then((relationships) => {
-    if (isEmpty(relationships)) {
-      throw new errors.Forbidden(`You must be an admin of a group to execute ${hook.method} on ${hook.service}.`)
-    }
-    return hook
   })
 }

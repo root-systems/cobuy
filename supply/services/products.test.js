@@ -7,8 +7,8 @@ import feathersAuth from 'feathers-authentication'
 import feathersAuthJwt from 'feathers-authentication-jwt'
 import { isEmpty } from 'ramda'
 
-import PriceSpecs from './priceSpecs'
 import Products from './products'
+// import Orders from './orders'
 import ResourceTypes from '../../resources/services/resourceTypes'
 import agentsServices from 'dogstack-agents/service'
 
@@ -27,8 +27,8 @@ test.before(() => {
   const db = createDb(dbConfig)
   app.set('db', db)
 
-  app.configure(PriceSpecs)
   app.configure(Products)
+  // app.configure(Orders)
   app.configure(ResourceTypes)
   agentsServices.call(app)
 
@@ -60,110 +60,91 @@ test.before(() => {
       { relationshipType: 'supplier', sourceId: 3, targetId: 4 }
     ], params)
   })
-  .then(() => {
-    const params = { credential }
-    return app.service('products').create([
-      { resourceTypeId: 10, supplierAgentId: 4 },
-      { resourceTypeId: 100, supplierAgentId: 5 }
-    ], params)
-  })
 })
 
 test.beforeEach(() => {
   const params = { credential }
-  return app.service('priceSpecs').create([
-    { productId: 1, minimum: 5, price: 10, currency: 'NZD' },
-    { productId: 1, minimum: 10, price: 2, currency: 'NZD' },
-    { productId: 2, minimum: 1, price: 100, currency: 'NZD' }
+  return app.service('products').create([
+    { resourceTypeId: 10, supplierAgentId: 4 },
+    { resourceTypeId: 2, supplierAgentId: 4 },
+    { resourceTypeId: 100, supplierAgentId: 5 }
   ], params)
 })
 
 test.afterEach(() => {
-  return app.service('priceSpecs').remove(null, {})
+  return app.service('products').remove(null, {})
 })
 
-test.serial('PriceSpecs.create: create new priceSpec successfully', t => {
+test.serial('Products.create: create new product successfully', t => {
   const params = { credential, provider: 'rest' }
-  return app.service('priceSpecs').create({
-    productId: 2,
-    minimum: "23",
-    price: "10",
-    currency: 'NZD'
+  return app.service('products').create({
+    resourceTypeId: 20,
+    supplierAgentId: 23,
   }, params)
-  .then(priceSpec => {
-    t.is(priceSpec.id, 4)
-    t.is(priceSpec.productId, 2)
-    t.is(priceSpec.minimum, "23")
-    t.is(priceSpec.price, "10")
-    t.is(priceSpec.currency, 'NZD')
+  .then(product => {
+    t.is(product.id, 4)
+    t.is(product.resourceTypeId, 20)
+    t.is(product.supplierAgentId, 23)
   })
 })
 
 // TODO: IK: need a working test client that provides auth token for this test
 // can manually test by temp removing authenticate('jwt') from service
-test.serial("PriceSpecs.create: can't create new priceSpec if not a group admin", t => {
+test.serial("Products.create: can't create new product if not a group admin", t => {
   const params = { noGroupCredential, provider: 'rest' }
-  return t.throws(app.service('priceSpecs').create({
-    productId: 3,
-    minimum: "2",
-    price: "30",
-    currency: 'NZD'
+  return t.throws(app.service('products').create({
+    resourceTypeId: 3,
+    supplierAgentId: 2
   }, params))
 })
 
-test.serial('PriceSpecs.find: may only find priceSpecs that relate to products of suppliers of groups of current user', t => {
+test.serial('Products.find: may only find products that relate to suppliers of groups of current user', t => {
   const params = { credential, query: {}, provider: 'rest' }
-  return app.service('priceSpecs').find(params)
-  .then(priceSpecs => {
+  return app.service('products').find(params)
+  .then(products => {
     const expected = [
       { id: 8,
-        productId: 1,
-        minimum: "5",
-        price: "10",
-        currency: 'NZD'
+        resourceTypeId: 10,
+        supplierAgentId: 4,
       },
       { id: 9,
-        productId: 1,
-        minimum: "10",
-        price: "2",
-        currency: 'NZD'
+        resourceTypeId: 2,
+        supplierAgentId: 4,
       }
     ]
-    t.deepEqual(priceSpecs, expected)
+    t.deepEqual(products, expected)
   })
 })
 
-test.serial('PriceSpecs.find: omit unauthorised results', t => {
-  const params = { credential, query: { productId: 2 }, provider: 'rest' }
-  return app.service('priceSpecs').find(params)
-  .then(priceSpecs => {
-    t.deepEqual(priceSpecs, [])
+test.serial('Products.find: omit unauthorised results', t => {
+  const params = { credential, query: { resourceTypeId: 100 }, provider: 'rest' }
+  return app.service('products').find(params)
+  .then(products => {
+    t.deepEqual(products, [])
   })
 })
 
-test.serial('PriceSpecs.get: can get authorised result', t => {
+test.serial('Products.get: can get authorised result', t => {
   const params = { credential, provider: 'rest' }
   // TODO: IK: figure out how to reset the incrementing id after each test
-  return app.service('priceSpecs').get(14, params)
-  .then((plan) => {
-    t.is(plan.id, 14)
-    t.is(plan.productId, 1)
-    t.is(plan.minimum, "5")
-    t.is(plan.price, "10")
-    t.is(plan.currency, "NZD")
+  return app.service('products').get(14, params)
+  .then((product) => {
+    t.is(product.id, 14)
+    t.is(product.resourceTypeId, 10)
+    t.is(product.supplierAgentId, 4)
   })
 })
 
-test.serial('PriceSpecs.get: omit unauthorised results via get', t => {
+test.serial('Products.get: omit unauthorised results via get', t => {
   const params = { credential, provider: 'rest' }
-  return t.throws(app.service('priceSpecs').get(19, params))
+  return t.throws(app.service('products').get(19, params))
 })
 
 // TODO: IK: not sure how to create feathers client correctly to test authentication-related hooks for these tests below
-// test.todo("PriceSpecs.create: can't create new plan if external provider")
-// test.todo("PriceSpecs.update: can update current user plan")
-// test.todo("PriceSpecs.update: can't update a plan for an agentId that isn't current user id")
-// test.todo("PriceSpecs.patch: can patch current user plan")
-// test.todo("PriceSpecs.patch: can't patch a plan for an agentId that isn't current user id")
-// test.todo("PriceSpecs.remove: can remove current user plan")
-// test.todo("PriceSpecs.remove: can't remove a plan for an agentId that isn't current user id")
+// test.todo("Products.create: can't create new product if external provider")
+// test.todo("Products.update: can update current user product")
+// test.todo("Products.update: can't update a product for an agentId that isn't current user id")
+// test.todo("Products.patch: can patch current user product")
+// test.todo("Products.patch: can't patch a product for an agentId that isn't current user id")
+// test.todo("Products.remove: can remove current user product")
+// test.todo("Products.remove: can't remove a product for an agentId that isn't current user id")
