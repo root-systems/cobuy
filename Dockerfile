@@ -10,7 +10,7 @@ ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
 USER node
 
-WORKDIR /usr/src/app
+WORKDIR /home/node/app
 
 ARG NODE_ENV=development
 ENV NODE_ENV $NODE_ENV
