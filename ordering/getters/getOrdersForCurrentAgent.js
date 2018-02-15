@@ -5,7 +5,7 @@ import getCurrentAgentGroupIds from '../../agents/getters/getCurrentAgentGroupId
 import getCurrentAgentId from 'dogstack-agents/agents/getters/getCurrentAgentId'
 import getOrders from './getOrders'
 
-const getOrdersByCurrentAgent = createSelector(
+const getOrdersForCurrentAgent = createSelector(
   getCurrentAgentGroupIds,
   getOrders,
   getCurrentAgentId,
@@ -22,4 +22,4 @@ const getOrdersByCurrentAgent = createSelector(
   }
 )
 
-export default getOrdersByCurrentAgent
+export default getOrdersForCurrentAgent
