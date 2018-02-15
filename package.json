@@ -74,7 +74,7 @@
     "dogstack": "^0.7.0",
     "dogstack-agents": "github:root-systems/dogstack-agents#far3",
     "feathers-action": "^2.4.0",
-    "feathers-action-react": "^3.0.0-pre.2",
+    "feathers-action-react": "^3.0.0-pre.3",
     "feathers-authentication-hooks": "^0.1.6",
     "feathers-errors": "^2.6.2",
     "feathers-hooks-common": "^3.0.0",

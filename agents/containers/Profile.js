@@ -26,6 +26,9 @@ export default compose(
     router: {
       push: (cid, ...args) => push(...args)
     },
+    // TODO far3
+    query: [],
+    /*
     query: (props) => {
       var queries = []
       const { currentProfile, relatedAgent, agentType, products, memberAgentIds, buyingGroupIds } = props.selected
@@ -175,6 +178,7 @@ export default compose(
 
       return false
     }
+    */
   })
 )(props => {
   const { currentProfile, relatedAgent = {}, agentType, resourceTypes, actions, buyingGroupProfiles, memberRelationships } = props

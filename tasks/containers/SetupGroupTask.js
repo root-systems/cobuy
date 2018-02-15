@@ -18,6 +18,9 @@ export default compose(
       relationships,
       credentials
     },
+    // TODO far3
+    query: []
+    /*
     // TODO can optimize `feathers-action-react` to de-dupe
     // new queries by checking if deepEqual
     query: (props) => {
@@ -105,6 +108,7 @@ export default compose(
 
       return false
     }
+    */
   })
 // )(SetupGroupTask)
 )(props => {

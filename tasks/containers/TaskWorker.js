@@ -21,6 +21,9 @@ export default compose(
         push: (cid, ...args) => push(...args)
       }
     },
+    // TODO far3
+    query: []
+    /*
     // TODO can optimize `feathers-action-react` to de-dupe
     // new queries by checking if deepEqual
     query: (props) => {
@@ -106,6 +109,7 @@ export default compose(
         actions.router.push(nextRoute)
       }
     }
+    */
   })
 )(props => {
   const { taskPlan, currentAgent, actions, setTaskWorkerId } = props

@@ -16,6 +16,9 @@ export default compose(
       relationships,
       credentials
     },
+    // TODO far3
+    query: []
+    /*
     query: (props) => {
       var queries = []
       const { currentAgent, currentAgentGroupIds } = props.selected
@@ -65,6 +68,7 @@ export default compose(
 
       return false
     }
+    */
   })
 )(props => {
   const { currentAgent, actions, currentAgentGroupProfiles } = props
