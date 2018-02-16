@@ -1,19 +1,28 @@
 import { connect } from 'feathers-action-react'
-import { isNil, forEach, isEmpty, prop, groupBy, pipe, either, values, map, unnest, uniq, props, equals } from 'ramda'
 import { push } from 'react-router-redux'
+import {
+  createSelector,
+  createStructuredSelector
+} from 'reselect'
 
 import OrderPage from '../components/OrderPage'
 import { actions as taskPlanActions } from '../../tasks/dux/plans'
 import { actions as taskWorkActions } from '../../tasks/dux/works'
 import { actions as orderActions } from '../../ordering/dux/orders'
 import { agents as agentActions, profiles as profileActions, relationships as relationshipActions } from 'dogstack-agents/actions'
-
-import getOrderPageProps from '../getters/getOrderPageProps'
+import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
 import getCurrentOrderId from '../getters/getCurrentOrderId'
+import getCurrentOrder from '../getters/getCurrentOrder'
+import getActiveParentTaskPlans from '../../tasks/getters/getActiveParentTaskPlans'
+
 import { getAgentIdsForCurrentOrder, getConsumerAgentIdForCurrentOrder } from '../getters/getOrderAgentIds'
 
 export default connect({
-  selector: getOrderPageProps,
+  selector: createStructuredSelector({
+    currentAgent: getCurrentAgent,
+    taskPlans: getActiveParentTaskPlans,
+    order: getCurrentOrder
+  }),
   actions: {
     orders: orderActions,
     taskPlans: taskPlanActions,
@@ -40,7 +49,7 @@ export default connect({
       dependencies: [
         'order'
       ],
-      params: pipe(
+      params: createSelector(
         getAgentIdsForCurrentOrder,
         (agentIds) => ({
           query: {
@@ -57,7 +66,7 @@ export default connect({
       dependencies: [
         'order'
       ],
-      params: pipe(
+      params: createSelector(
         getAgentIdsForCurrentOrder,
         (agentIds) => ({
           query: {
@@ -74,7 +83,7 @@ export default connect({
       dependencies: [
         'order'
       ],
-      params: pipe(
+      params: createSelector(
         getConsumerAgentIdForCurrentOrder,
         (consumerAgentId) => ({
           query: {
@@ -92,7 +101,7 @@ export default connect({
       dependencies: [
         'order'
       ],
-      params: pipe(
+      params: createSelector(
         getCurrentOrderId,
         (orderId) => ({
           query: {

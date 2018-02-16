@@ -1,21 +1,30 @@
 import { connect } from 'feathers-action-react'
-import { createSelector } from 'reselect'
-import { isNil, forEach, isEmpty, prop, groupBy, pipe, either, values, map, unnest, uniq, props, equals } from 'ramda'
+import { pipe, prop, values, map } from 'ramda'
+import {
+  createSelector,
+  createStructuredSelector
+} from 'reselect'
 
 import OrdersPage from '../components/OrdersPage'
 import { actions as taskPlanActions } from '../../tasks/dux/plans'
 import { actions as taskWorkActions } from '../../tasks/dux/works'
 import { actions as orderActions } from '../../ordering/dux/orders'
 import { agents as agentActions, profiles as profileActions, relationships as relationshipActions } from 'dogstack-agents/actions'
-
-import getOrdersPageProps from '../getters/getOrdersPageProps'
+import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
+import getActiveParentTaskPlans from '../../tasks/getters/getActiveParentTaskPlans'
 import getOrdersForCurrentAgent from '../getters/getOrdersForCurrentAgent'
+import getOrders from '../getters/getOrders'
 import { getAgentIdsForCurrentAgentOrders, getConsumerAgentIdsForCurrentAgentOrders } from '../getters/getOrderAgentIds'
 
 const getIds = pipe(values, map(prop('id')))
 
 export default connect({
-  selector: getOrdersPageProps,
+  selector: createStructuredSelector({
+    currentAgent: getCurrentAgent,
+    taskPlans: getActiveParentTaskPlans,
+    orders: getOrdersForCurrentAgent,
+    allOrders: getOrders
+  }),
   actions: {
     orders: orderActions,
     taskPlans: taskPlanActions,
@@ -36,7 +45,7 @@ export default connect({
       dependencies: [
         'orders'
       ],
-      params: pipe(
+      params: createSelector(
         getAgentIdsForCurrentAgentOrders,
         (agentIds) => ({
           query: {
@@ -53,7 +62,7 @@ export default connect({
       dependencies: [
         'orders'
       ],
-      params: pipe(
+      params: createSelector(
         getAgentIdsForCurrentAgentOrders,
         (agentIds) => ({
           query: {
@@ -70,7 +79,7 @@ export default connect({
       dependencies: [
         'orders'
       ],
-      params: pipe(
+      params: createSelector(
         getConsumerAgentIdsForCurrentAgentOrders,
         (consumerAgentIds) => ({
           query: {
@@ -90,16 +99,18 @@ export default connect({
       dependencies: [
         'orders'
       ],
-      params: pipe(
+      params: createSelector(
         getOrdersForCurrentAgent,
-        getIds,
-        (orderIds) => ({
-          query: {
-            orderId: {
-              $in: orderIds
+        pipe(
+          getIds,
+          (orderIds) => ({
+            query: {
+              orderId: {
+                $in: orderIds
+              }
             }
-          }
-        })
+          })
+        )
       )
     },
     {
