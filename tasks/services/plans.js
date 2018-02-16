@@ -2,7 +2,7 @@ const feathersKnex = require('feathers-knex')
 import { hooks as authHooks } from 'feathers-authentication'
 const { authenticate } = authHooks
 import { isEmpty, ifElse, is, assoc, prop, map, pipe, omit, __ } from 'ramda'
-const { iff, validateSchema } = require('feathers-hooks-common')
+const { iff, validateSchema, disallow } = require('feathers-hooks-common')
 const taskPlanSchema = require('../schemas/taskPlan')
 import ajv from '../../app/schemas'
 import * as taskRecipes from '../../tasks/data/recipes'
@@ -20,6 +20,16 @@ module.exports = function () {
   app.use(name, feathersKnex(options))
   app.service(name).hooks(hooks)
 }
+
+/*
+all: authenticate('jwt'),
+find: restrictToCurrentUserGroupsSuppliers,
+get: restrictToCurrentUserGroupsSuppliers,
+create: restrictToCurrentAgentOrGroupAdmin
+update: restrictToAnyGroupAdmin,
+patch: restrictToAnyGroupAdmin,
+remove: restrictToAnyGroupAdmin
+*/
 
 const hooks = {
   before: {
