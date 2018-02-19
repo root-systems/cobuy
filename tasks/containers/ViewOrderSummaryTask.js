@@ -27,6 +27,9 @@ export default compose(
       agents,
       profiles
     },
+    // TODO far3
+    query: []
+    /*
     query: (props) => {
       var queries = []
       const { taskPlan, selected } = props
@@ -154,5 +157,6 @@ export default compose(
 
       return false
     }
+    */
   })
 )(ViewOrderSummaryTask)

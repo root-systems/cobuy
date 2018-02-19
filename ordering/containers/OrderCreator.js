@@ -28,6 +28,9 @@ export default compose(
       relationships,
       profiles
     },
+    // TODO far3
+    query: []
+    /*
     query: (props, status) => {
       var queries = []
       const { selected } = props
@@ -98,6 +101,7 @@ export default compose(
 
       return false
     }
+    */
   })
 )(OrderCreatorContainer)
 

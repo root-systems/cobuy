@@ -40,6 +40,9 @@ export default compose(
         push: (cid, ...args) => push(...args)
       }
     },
+    // TODO far3
+    query: []
+    /*
     query: (props) => {
       var queries = []
       const { taskPlan, selected } = props
@@ -161,6 +164,7 @@ export default compose(
 
       return false
     }
+    */
   })
 )(CastIntentTask)
 

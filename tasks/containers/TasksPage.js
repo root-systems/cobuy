@@ -12,6 +12,9 @@ export default connect({
     taskPlans: taskPlanActions,
     taskWorks: taskWorkActions
   },
+  // TODO far3
+  query: []
+  /*
   query: (props) => {
     var queries = []
     const { currentAgent } = props.selected
@@ -41,6 +44,7 @@ export default connect({
     if (currentAgent && hasNotQueriedForTaskPlans(status)) return true
     return false
   }
+  */
 })(TasksPage)
 
 const hasNotQueriedForTaskPlans = pipe(

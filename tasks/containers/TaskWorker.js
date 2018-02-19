@@ -1,17 +1,28 @@
 import h from 'react-hyperscript'
-import { isNil, pipe, filter, keys, length, gte, propEq, not, __ } from 'ramda'
+import { ifElse, isNil, pipe, prop, map, not } from 'ramda'
 import { connect as connectFeathers } from 'feathers-action-react'
 import { compose, lifecycle, withState, withHandlers } from 'recompose'
 import { push } from 'react-router-redux'
+import {
+  createSelector,
+  createStructuredSelector
+} from 'reselect'
 
+import TaskWorker from '../components/TaskWorker'
 import { actions as taskPlans } from '../dux/plans'
 import { actions as taskWorks } from '../dux/works'
-import getTaskWorkerProps from '../getters/getTaskWorkerProps'
-import TaskWorker from '../components/TaskWorker'
+import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
+import getCurrentTaskPlanId from '../getters/getCurrentTaskPlanId'
+import getCurrentTaskPlan from '../getters/getCurrentTaskPlan'
+import getFeathersData from '../getters/getFeathersData'
 
 export default compose(
   connectFeathers({
-    selector: getTaskWorkerProps,
+    selector: createStructuredSelector({
+      taskPlan: getCurrentTaskPlan,
+      currentAgent: getCurrentAgent,
+      feathersData: getFeathersData
+    }),
     actions: {
       taskPlans,
       taskWorks,
@@ -21,64 +32,64 @@ export default compose(
         push: (cid, ...args) => push(...args)
       }
     },
-    // TODO can optimize `feathers-action-react` to de-dupe
-    // new queries by checking if deepEqual
-    query: (props) => {
-      const { taskPlanId } = props.match.params
-      const { taskPlan } = props.selected
-      var queries = [
-        {
-          service: 'taskPlans',
-          id: taskPlanId
-        },
-        {
-          service: 'taskPlans',
-          params: {
+    // TODO far3 handle case where navigate to same page with new params
+    // https://github.com/root-systems/feathers-action-react/pull/8#issuecomment-365826271
+    query: [
+      {
+        name: 'parentTaskPlan',
+        service: 'taskPlans',
+        id: getCurrentTaskPlanId
+      },
+      {
+        name: 'childTaskPlans',
+        service: 'taskPlans',
+        params: createSelector(
+          getCurrentTaskPlanId,
+          (taskPlanId) => ({
             query: {
               parentTaskPlanId: taskPlanId
             }
-          }
-        },
-        {
-          service: 'taskWorks',
-          params: {
+          })
+        )
+      },
+      {
+        name: 'parentTaskWorks',
+        service: 'taskWorks',
+        params: createSelector(
+          getCurrentTaskPlanId,
+          (taskPlanId) => ({
             query: {
               taskPlanId
             }
-          }
-        }
-      ]
-
-      // once we have the task work, query for the child task works
-      const { taskWork } = taskPlan || {}
-      if (taskWork) {
-        queries.push({
-          service: 'taskWorks',
-          params: {
-            query: {
-              parentTaskWorkId: taskWork.id
-            }
-          }
-        })
+          })
+        )
+      },
+      {
+        name: 'childTaskWorks',
+        service: 'taskWorks',
+        dependencies: [
+          'childTaskPlans',
+        ],
+        params: createSelector(
+          getCurrentTaskPlan,
+          ifElse(
+            isNil,
+            () => null,
+            pipe(
+              prop('childTaskPlans'),
+              map(prop('id')),
+              (childTaskPlanIds) => ({
+                query: {
+                  taskPlanId: {
+                    $in: childTaskPlanIds
+                  }
+                }
+              })
+            )
+          )
+        )
       }
-
-      return queries
-    },
-    shouldQueryAgain: (props, status) => {
-      if (status.isPending) return false
-
-      const { taskPlan } = props.selected
-
-      // wait for task plan before re-query
-      if (isNil(taskPlan)) return false
-
-      // re-query when we haven't gotten back taskWork
-      const { taskWork } = taskPlan
-
-      if (not(hasQueriedTaskWorks(status.requests))) return true
-
-      return false
-    }
+    ]
   }),
   withState('createTaskWorkerCid', 'editTaskWorkerCid', null),
   withHandlers({
@@ -149,10 +160,3 @@ export default compose(
     setTaskWorkerId(actions.taskWorks.create(taskWork))
   }
 })
-
-const hasQueriedTaskWorks = pipe(
-  filter(propEq('service', 'taskWorks')),
-  keys,
-  length,
-  gte(__, 1)
-)

@@ -12,8 +12,6 @@ export default compose(
     actions: {
       profiles
     },
-    query: (props) => {
-      return []
-    }
+    query: []
   })
 )(CreateProfileTask)

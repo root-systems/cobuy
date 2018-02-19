@@ -18,6 +18,9 @@ export default compose(
       orders,
       profiles
     },
+    // TODO far3
+    query: [],
+    /*
     query: (props) => {
       var queries = []
 
@@ -63,5 +66,6 @@ export default compose(
 
       return false
     }
+    */
   })
 )(CloseOrderTask)

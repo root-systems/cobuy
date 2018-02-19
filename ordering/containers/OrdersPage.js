@@ -1,28 +1,30 @@
 import { connect } from 'feathers-action-react'
-import { isNil, forEach, isEmpty, prop, groupBy, pipe, either, values, map, unnest, uniq, props, equals } from 'ramda'
+import { pipe, prop, values, map } from 'ramda'
+import {
+  createSelector,
+  createStructuredSelector
+} from 'reselect'
 
 import OrdersPage from '../components/OrdersPage'
 import { actions as taskPlanActions } from '../../tasks/dux/plans'
 import { actions as taskWorkActions } from '../../tasks/dux/works'
 import { actions as orderActions } from '../../ordering/dux/orders'
 import { agents as agentActions, profiles as profileActions, relationships as relationshipActions } from 'dogstack-agents/actions'
-import getOrdersPageProps from '../getters/getOrdersPageProps'
+import getCurrentAgent from 'dogstack-agents/agents/getters/getCurrentAgent'
+import getActiveParentTaskPlans from '../../tasks/getters/getActiveParentTaskPlans'
+import getOrdersForCurrentAgent from '../getters/getOrdersForCurrentAgent'
+import getOrders from '../getters/getOrders'
+import { getAgentIdsForCurrentAgentOrders, getConsumerAgentIdsForCurrentAgentOrders } from '../getters/getOrderAgentIds'
 
-const getConsumerAgentIdsFromOrders = pipe(
-  values,
-  map(prop('consumerAgentId')),
-  uniq
-)
-const getAgentIdsFromOrders = pipe(
-  values,
-  map(props(['consumerAgentId', 'supplierAgentId', 'adminAgentId'])),
-  unnest,
-  uniq
-)
 const getIds = pipe(values, map(prop('id')))
 
 export default connect({
-  selector: getOrdersPageProps,
+  selector: createStructuredSelector({
+    currentAgent: getCurrentAgent,
+    taskPlans: getActiveParentTaskPlans,
+    orders: getOrdersForCurrentAgent,
+    allOrders: getOrders
+  }),
   actions: {
     orders: orderActions,
     taskPlans: taskPlanActions,
@@ -31,42 +33,55 @@ export default connect({
     profiles: profileActions,
     relationships: relationshipActions
   },
-  query: (props) => {
-    var queries = []
-    const { allOrders: orders } = props.selected
-
-    queries.push({
-      service: 'orders'
-    })
-
-    if (!isEmpty(orders)) {
-      const agentIds = getAgentIdsFromOrders(orders)
-
-      queries.push({
-        service: 'agents',
-        params: {
+  query: [
+    {
+      name: 'orders',
+      service: 'orders',
+      params: {}
+    },
+    {
+      name: 'orderAgents',
+      service: 'agents',
+      dependencies: [
+        'orders'
+      ],
+      params: createSelector(
+        getAgentIdsForCurrentAgentOrders,
+        (agentIds) => ({
           query: {
             id: {
               $in: agentIds
             }
           }
-        }
-      })
-      queries.push({
-        service: 'profiles',
-        params: {
+        })
+      ),
+    },
+    {
+      name: 'orderAgentProfiles',
+      service: 'profiles',
+      dependencies: [
+        'orders'
+      ],
+      params: createSelector(
+        getAgentIdsForCurrentAgentOrders,
+        (agentIds) => ({
           query: {
             agentId: {
               $in: agentIds
             }
           }
-        }
-      })
-
-      const consumerAgentIds = getConsumerAgentIdsFromOrders(orders)
-      queries.push({
-        service: 'relationships',
-        params: {
+        })
+      )
+    },
+    {
+      name: 'orderRelationships',
+      service: 'relationships',
+      dependencies: [
+        'orders'
+      ],
+      params: createSelector(
+        getConsumerAgentIdsForCurrentAgentOrders,
+        (consumerAgentIds) => ({
           query: {
             sourceId: {
               $in: consumerAgentIds
@@ -75,56 +90,40 @@ export default connect({
               $in: ['member', 'admin', 'supplier']
             }
           }
-        }
-      })
-
-      const orderIds = getIds(orders)
-
-      queries.push({
-        service: 'taskPlans',
-        params: {
-          query: {
-            orderId: {
-              $in: orderIds
+        })
+      )
+    },
+    {
+      name: 'orderTasksPlans',
+      service: 'taskPlans',
+      dependencies: [
+        'orders'
+      ],
+      params: createSelector(
+        getOrdersForCurrentAgent,
+        pipe(
+          getIds,
+          (orderIds) => ({
+            query: {
+              orderId: {
+                $in: orderIds
+              }
             }
-          }
-        }
-      })
-
+          })
+        )
+      )
+    },
+    {
+      name: 'orderTaskWorks',
+      service: 'taskWorks',
+      dependencies: [
+        'orders'
+      ],
       // TODO search for only relevant task works
-      queries.push({
-        service: 'taskWorks',
-        params: {
-          query: {
-          }
+      params: {
+        query: {
         }
-      })
+      }
     }
-    return queries
-  },
-  shouldQueryAgain: (props, status, prevProps) => {
-    if (status.isPending) return false
-    const { allOrders: orders } = props.selected
-    const orderIds = getIds(orders)
-    if (!isEmpty(orders) && hasNotQueriedForRelated(status)) return true
-    const agentIds = getAgentIdsFromOrders(orders)
-    const { allOrders: prevOrders } = prevProps.selected
-    const prevOrderIds = getIds(prevOrders)
-    const prevAgentIds = getAgentIdsFromOrders(prevOrders)
-    if (!equals(agentIds, prevAgentIds)) return true
-    if (!equals(orderIds, prevOrderIds)) return true
-    return false
-  }
+  ]
 })(OrdersPage)
-
-const hasNotQueriedForRelated = pipe(
-  prop('requests'),
-  values,
-  groupBy(prop('service')),
-  either(
-    pipe(prop('taskPlans'), either(isNil, isEmpty)),
-    pipe(prop('taskWorks'), either(isNil, isEmpty)),
-    pipe(prop('agents'), either(isNil, isEmpty)),
-    pipe(prop('profiles'), either(isNil, isEmpty))
-  )
-)
